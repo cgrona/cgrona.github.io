@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="0x01 IP（IPv4）IP地址是唯一的标识，分为a、b、c、d四个字段，形式为X.X.X.X，每个字段都由32位的二进制数字构成，所以每个字段范围都是0-255（但我们可以使用的IP不包括0和255） 1如：10.2.1.1 、 192.168.1.1    0x02 子网掩码 局域网通信规则：在同一局域网中，所有的IP必须在同一网段中才可以互相通信 IP地址构成：网络位+主机位（网络位相同的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IP地址详解">
+<meta property="og:url" content="http://example.com/2022/01/09/study/index.html">
+<meta property="og:site_name" content="cgrona的博客">
+<meta property="og:description" content="0x01 IP（IPv4）IP地址是唯一的标识，分为a、b、c、d四个字段，形式为X.X.X.X，每个字段都由32位的二进制数字构成，所以每个字段范围都是0-255（但我们可以使用的IP不包括0和255） 1如：10.2.1.1 、 192.168.1.1    0x02 子网掩码 局域网通信规则：在同一局域网中，所有的IP必须在同一网段中才可以互相通信 IP地址构成：网络位+主机位（网络位相同的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/D:/Blog/source_posts/study/1.png">
+<meta property="article:published_time" content="2022-01-09T15:02:12.000Z">
+<meta property="article:modified_time" content="2022-01-09T15:16:11.076Z">
+<meta property="article:author" content="cgrona">
+<meta property="article:tag" content="基础知识和笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/D:/Blog/source_posts/study/1.png">
+
+<link rel="canonical" href="http://example.com/2022/01/09/study/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>IP地址详解 | cgrona的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">cgrona的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个沉淀知识的地方</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/09/study/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="cgrona">
+      <meta itemprop="description" content="选择有时候比努力更重要">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="cgrona的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          IP地址详解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-01-09 23:02:12 / 修改时间：23:16:11" itemprop="dateCreated datePublished" datetime="2022-01-09T23:02:12+08:00">2022-01-09</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="0x01-IP（IPv4）"><a href="#0x01-IP（IPv4）" class="headerlink" title="0x01 IP（IPv4）"></a>0x01 IP（IPv4）</h1><p>IP地址是唯一的标识，分为a、b、c、d四个字段，形式为X.X.X.X，每个字段都由32位的二进制数字构成，所以每个字段范围都是0-255（但我们可以使用的IP不包括0和255）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如：10.2.1.1 、 192.168.1.1</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="0x02-子网掩码"><a href="#0x02-子网掩码" class="headerlink" title="0x02 子网掩码"></a>0x02 子网掩码</h1><ol>
+<li><strong>局域网通信规则</strong>：在同一局域网中，所有的IP必须在同一网段中才可以互相通信</li>
+<li><strong>IP地址构成</strong>：网络位+主机位（网络位相同的IP地址，属于同一网段）</li>
+<li><strong>子网掩码</strong>：每一个IP地址必须配一个子网掩码，用来确定IP地址的网络位</li>
+</ol>
+<p><strong>子网掩码如何确定网络位</strong>：与<strong>255</strong>对应的数字为<strong>网络位</strong>，与<strong>0</strong>对应的数字为<strong>主机位</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">255.0.0.0  、 255.255.0.0  、 255.255.255.0</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">如：</span><br><span class="line"></span><br><span class="line">10.1.1.1   255.0.0.0</span><br><span class="line">则10.1.1.1属于10.0.0.0这个网段，主机名字叫1.1.1</span><br><span class="line"></span><br><span class="line">10.1.1.1   255.255.0.0</span><br><span class="line">则10.1.1.1属于10.1.0.0这个网段，主机名字叫1.1</span><br><span class="line"></span><br><span class="line">10.1.1.1   255.255.255.0</span><br><span class="line">则10.1.1.1属于10.1.1.0这个网段，主机名字叫1</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="0x03-IP地址详解"><a href="#0x03-IP地址详解" class="headerlink" title="0x03 IP地址详解"></a>0x03 IP地址详解</h1><p>IP地址分为五大类（以IP地址的第一位进行区分）</p>
+<ul>
+<li><p><strong>A类</strong>：    <strong>1-126</strong>  默认子网掩码：255.0.0.0</p>
+</li>
+<li><p><strong>B类</strong>：<strong>128-191</strong>  默认子网掩码：255.255.0.0</p>
+</li>
+<li><p><strong>C类</strong>：<strong>192-223</strong>  默认子网掩码：255.255.255.0</p>
+</li>
+<li><p><strong>D类</strong>：<strong>224-239</strong>  组播地址</p>
+</li>
+<li><p><strong>E类</strong>：<strong>240-254</strong>   科研使用</p>
+</li>
+</ul>
+<p>注：</p>
+<p>1、目前我们可以使用的只有A、B、C 三类</p>
+<p>2、A、B、C 三类的子网掩码可以修改</p>
+<h3 id="1x01-127开头"><a href="#1x01-127开头" class="headerlink" title="1x01 127开头"></a>1x01 127开头</h3><p>这个开头只有一个地址：<strong>127.0.0.1：</strong>本地回环地址（永远代表自己）</p>
+<p>Ping这个地址代表跟自己通信（Ping它等于Ping自己）</p>
+<h3 id="1x02-广播地址"><a href="#1x02-广播地址" class="headerlink" title="1x02 广播地址"></a>1x02 广播地址</h3><p>主机位上全为255即为广播地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">如：</span><br><span class="line">10.1.1.1  255.255.0.0</span><br><span class="line">这个IP属于10.1.0.0这个网段，那么把主机位、或者说0这个位置全都换成255就是广播地址:10.1.255.255就是这个IP的广播地址</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="0x04-网关"><a href="#0x04-网关" class="headerlink" title="0x04 网关"></a>0x04 网关</h1><p><strong>网关（Gateway）</strong>：网络的出口，可以使不在同一个网段的IP通信，一般在路由器上</p>
+<p>通俗来讲就是访问互联网的通道</p>
+<p>路由器：可用连接内外网的设备</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">主机与主机之间互相通信:</span><br><span class="line">	首先判断目标IP地址与自己是否处在同一网段</span><br><span class="line">	若在同一网段，则直接发出去，而不找网关</span><br><span class="line">	若不在同一网段，则直接发包给网关</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="0x05-DNS"><a href="#0x05-DNS" class="headerlink" title="0x05 DNS"></a>0x05 DNS</h1><p>DNS：Domain Name Service 域名服务</p>
+<p>用于<strong>解析网站域名</strong></p>
+<p>通过浏览器使用域名访问互联网：</p>
+<ul>
+<li><p>浏览器会先找是否有本地缓存（也就是之前是否访问过该网站）</p>
+</li>
+<li><p>接着会找位于 C 盘的本地解析文件（host文件）</p>
+</li>
+<li><p>本地没有的话，浏览器会向DNS服务器发起解析请求</p>
+</li>
+</ul>
+<p>若直接访问 IP 地址的话则不需要DNS服务</p>
+<p>通过命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nslookup www.baidu.com</span><br></pre></td></tr></table></figure>
+
+<p>可以查询该网址的 IP 地址以及帮你进行解析的 DNS </p>
+<p><img src="/D:/Blog\source_posts\study\1.png"></p>
+<h1 id="0x06-网络测试命令"><a href="#0x06-网络测试命令" class="headerlink" title="0x06 网络测试命令"></a>0x06 网络测试命令</h1><ul>
+<li><p>如何查看IP地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ipconfig # 查看IP地址基本信息</span><br><span class="line">ipconfig /all # 查看IP地址详细信息</span><br></pre></td></tr></table></figure></li>
+<li><p>测试网络连通性</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ping 目标IP地址 # 测试网络连通性，有回复即为可以成功通信</span><br><span class="line">ping -t 目标IP地址 # 一直ping</span><br><span class="line">ping -n 目标IP地址 # 修改ping包的数量</span><br><span class="line"></span><br><span class="line">注:若ping不通，可能对方不在线，或者对方开着防火墙</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/" rel="tag"># 基础知识和笔记</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/01/09/post-2/" rel="prev" title="解析漏洞">
+      <i class="fa fa-chevron-left"></i> 解析漏洞
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/01/09/study-1/" rel="next" title="git clone出错">
+      git clone出错 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-IP%EF%BC%88IPv4%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">0x01 IP（IPv4）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text">0x02 子网掩码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-IP%E5%9C%B0%E5%9D%80%E8%AF%A6%E8%A7%A3"><span class="nav-number">3.</span> <span class="nav-text">0x03 IP地址详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1x01-127%E5%BC%80%E5%A4%B4"><span class="nav-number">3.0.1.</span> <span class="nav-text">1x01 127开头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1x02-%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80"><span class="nav-number">3.0.2.</span> <span class="nav-text">1x02 广播地址</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04-%E7%BD%91%E5%85%B3"><span class="nav-number">4.</span> <span class="nav-text">0x04 网关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x05-DNS"><span class="nav-number">5.</span> <span class="nav-text">0x05 DNS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x06-%E7%BD%91%E7%BB%9C%E6%B5%8B%E8%AF%95%E5%91%BD%E4%BB%A4"><span class="nav-number">6.</span> <span class="nav-text">0x06 网络测试命令</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">cgrona</p>
+  <div class="site-description" itemprop="description">选择有时候比努力更重要</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+        <link rel="stylesheet" href="./live2d/live2d/css/live2d.css" />
+    <div id="landlord">
+        <div class="message" style="opacity:0"></div>
+        <canvas id="live2d" width="250" height="370" class="live2d"></canvas>
+    </div>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript">
+        var message_Path = '/live2d/'
+        var home_Path = 'https://your.com/'
+    </script>
+    <script type="text/javascript" src="./live2d/live2d/js/live2d.js"></script>
+    <script type="text/javascript" src="./live2d/live2d/js/message.js"></script>
+    <script type="text/javascript">
+        loadlive2d("live2d", "./live2d/live2d/model/z16/assets/z16.model.json");
+    </script>
+    <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">cgrona</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
