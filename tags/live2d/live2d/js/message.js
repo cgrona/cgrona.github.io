@@ -72,7 +72,7 @@ initTips();
         // }else if (domain == 'google') {
             // text = '嗨！ 来自 谷歌搜索 的朋友！<br>欢迎访问<span style="color:#0099cc;">「 ' + document.title.split(' - ')[0] + ' 」</span>';
         // }
-		text = '你好呀！';
+		text = '欢迎阅读<span style="color:#0099cc;">「 ' + document.title.split(' - ')[0] + ' 」</span>';
     }
 	else {
         if (window.location.href == `${home_Path}`) { //主页URL判断，需要斜杠结尾
