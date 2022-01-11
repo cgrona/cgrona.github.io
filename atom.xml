@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-01-11T10:42:41.202Z</updated>
+  <updated>2022-01-11T13:12:16.042Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,11 +17,24 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>read-1.2</title>
+    <link href="http://example.com/2022/01/11/read-1.2/"/>
+    <id>http://example.com/2022/01/11/read-1.2/</id>
+    <published>2022-01-11T13:12:15.000Z</published>
+    <updated>2022-01-11T13:12:16.042Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>《计算机网络自顶向下方法》（计算机网络和因特网）（1）</title>
-    <link href="http://example.com/2022/01/11/read/"/>
-    <id>http://example.com/2022/01/11/read/</id>
+    <link href="http://example.com/2022/01/11/read-1.1/"/>
+    <id>http://example.com/2022/01/11/read-1.1/</id>
     <published>2022-01-11T07:46:51.000Z</published>
-    <updated>2022-01-11T10:42:41.202Z</updated>
+    <updated>2022-01-11T13:10:44.674Z</updated>
     
     
       
