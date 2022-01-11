@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>cgrona&#39;blog</title>
+  
+  <subtitle>一个沉淀知识的地方</subtitle>
+  <link href="http://example.com/atom.xml" rel="self"/>
+  
+  <link href="http://example.com/"/>
+  <updated>2022-01-10T03:36:45.639Z</updated>
+  <id>http://example.com/</id>
+  
+  <author>
+    <name>cgrona</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Failed to load resource</title>
+    <link href="http://example.com/2022/01/10/study-3/"/>
+    <id>http://example.com/2022/01/10/study-3/</id>
+    <published>2022-01-10T02:11:05.000Z</published>
+    <updated>2022-01-10T03:36:45.639Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;最近搭博客想弄一个live2d的人物出来玩，于是去网上尝试了各种办法，眼看着就要成功&lt;/p&gt;
+&lt;p&gt;但是 你知道的，&lt;del&gt;没有bug的程序不是一个好程序&lt;/del&gt;，不会修bug的程序员不是一个好程序员&lt;/p&gt;
+&lt;p&gt;bug们想尽各种办法出现，只为了锻炼我们的能力&lt;/p</summary>
+      
+    
+    
+    
+    
+    <category term="基础知识和笔记" scheme="http://example.com/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>求斜渐近线</title>
+    <link href="http://example.com/2022/01/10/math/"/>
+    <id>http://example.com/2022/01/10/math/</id>
+    <published>2022-01-10T01:32:50.000Z</published>
+    <updated>2022-01-10T01:51:39.247Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;script type=&quot;math/tex; mode=display&quot;&gt;
+如果\lim\limits_{n \to \infty} [f(x)-kx-b]=0，则y=kx+b是曲线的斜渐近线&lt;/script&gt;&lt;hr&gt;
+&lt;script type=&quot;math/tex; mode=</summary>
+      
+    
+    
+    
+    
+    <category term="高数笔记" scheme="http://example.com/tags/%E9%AB%98%E6%95%B0%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>NTFS权限</title>
+    <link href="http://example.com/2022/01/09/study-2/"/>
+    <id>http://example.com/2022/01/09/study-2/</id>
+    <published>2022-01-09T15:17:40.000Z</published>
+    <updated>2022-01-09T15:22:50.983Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;0x01-NTFS权限概述&quot;&gt;&lt;a href=&quot;#0x01-NTFS权限概述&quot; class=&quot;headerlink&quot; title=&quot;0x01 NTFS权限概述&quot;&gt;&lt;/a&gt;0x01 NTFS权限概述&lt;/h1&gt;&lt;ol&gt;
+&lt;li&gt;通过设置NTFS权限，实现不同的用户访问</summary>
+      
+    
+    
+    
+    
+    <category term="基础知识和笔记" scheme="http://example.com/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>git clone出错</title>
+    <link href="http://example.com/2022/01/09/study-1/"/>
+    <id>http://example.com/2022/01/09/study-1/</id>
+    <published>2022-01-09T15:12:22.000Z</published>
+    <updated>2022-01-09T15:17:16.073Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h4 id=&quot;输入：&quot;&gt;&lt;a href=&quot;#输入：&quot; class=&quot;headerlink&quot; title=&quot;输入：&quot;&gt;&lt;/a&gt;输入：&lt;/h4&gt;&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;</summary>
+      
+    
+    
+    
+    
+    <category term="基础知识和笔记" scheme="http://example.com/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>IP地址详解</title>
+    <link href="http://example.com/2022/01/09/study/"/>
+    <id>http://example.com/2022/01/09/study/</id>
+    <published>2022-01-09T15:02:12.000Z</published>
+    <updated>2022-01-10T02:09:50.854Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;0x01-IP（IPv4）&quot;&gt;&lt;a href=&quot;#0x01-IP（IPv4）&quot; class=&quot;headerlink&quot; title=&quot;0x01 IP（IPv4）&quot;&gt;&lt;/a&gt;0x01 IP（IPv4）&lt;/h1&gt;&lt;p&gt;IP地址是唯一的标识，分为a、b、c、d四个字段，形</summary>
+      
+    
+    
+    
+    
+    <category term="基础知识和笔记" scheme="http://example.com/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>解析漏洞</title>
+    <link href="http://example.com/2022/01/09/post-2/"/>
+    <id>http://example.com/2022/01/09/post-2/</id>
+    <published>2022-01-09T03:56:57.000Z</published>
+    <updated>2022-01-09T03:58:00.163Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;0x01-IIS5-x-6-0解析漏洞&quot;&gt;&lt;a href=&quot;#0x01-IIS5-x-6-0解析漏洞&quot; class=&quot;headerlink&quot; title=&quot;0x01 IIS5.x/6.0解析漏洞&quot;&gt;&lt;/a&gt;0x01 IIS5.x/6.0解析漏洞&lt;/h1&gt;&lt;p&gt;II</summary>
+      
+    
+    
+    
+    
+    <category term="搞渗透" scheme="http://example.com/tags/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>.htaccess文件上传漏洞</title>
+    <link href="http://example.com/2022/01/09/post-3/"/>
+    <id>http://example.com/2022/01/09/post-3/</id>
+    <published>2022-01-09T03:01:04.000Z</published>
+    <updated>2022-01-09T04:04:06.190Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;&lt;strong&gt;.htaccess&lt;/strong&gt;文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以实现：网页301重定向、自定义404页面、改文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功</summary>
+      
+    
+    
+    
+    
+    <category term="搞渗透" scheme="http://example.com/tags/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MySQL简单手工注入</title>
+    <link href="http://example.com/2022/01/08/post-1/"/>
+    <id>http://example.com/2022/01/08/post-1/</id>
+    <published>2022-01-08T15:10:11.000Z</published>
+    <updated>2022-01-10T02:18:33.780Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;题目是墨者里的一道入门题&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2022/01/08/post-1/1.png&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt;访问靶场，找到有注入点的地方&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2022/01/08/post-1/2.png&quot; alt&gt;&lt;/p&gt;
+&lt;h</summary>
+      
+    
+    
+    
+    
+    <category term="搞渗透" scheme="http://example.com/tags/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>2021 GUET梦极光杯</title>
+    <link href="http://example.com/2022/01/08/post/"/>
+    <id>http://example.com/2022/01/08/post/</id>
+    <published>2022-01-08T14:26:28.000Z</published>
+    <updated>2022-01-10T05:15:17.416Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;有一道web题，源码如下：&lt;/p&gt;
+&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/s</summary>
+      
+    
+    
+    
+    
+    <category term="搞渗透" scheme="http://example.com/tags/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
+    
+  </entry>
+  
+</feed>
