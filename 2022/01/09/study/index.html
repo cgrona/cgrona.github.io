@@ -29,7 +29,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/2022/01/09/study/1.png">
 <meta property="article:published_time" content="2022-01-09T15:02:12.000Z">
-<meta property="article:modified_time" content="2022-01-11T07:37:32.181Z">
+<meta property="article:modified_time" content="2022-01-11T10:34:43.544Z">
 <meta property="article:author" content="cgrona">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2022/01/09/study/1.png">
@@ -190,7 +190,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-11 15:37:32" itemprop="dateModified" datetime="2022-01-11T15:37:32+08:00">2022-01-11</time>
+                <time title="修改时间：2022-01-11 18:34:43" itemprop="dateModified" datetime="2022-01-11T18:34:43+08:00">2022-01-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -238,9 +238,9 @@
 <p>注：</p>
 <p>1、目前我们可以使用的只有A、B、C 三类</p>
 <p>2、A、B、C 三类的子网掩码可以修改</p>
-<h3 id="1x01-127开头"><a href="#1x01-127开头" class="headerlink" title="1x01 127开头"></a>1x01 127开头</h3><p>这个开头只有一个地址：<strong>127.0.0.1：</strong>本地回环地址（永远代表自己）</p>
+<h2 id="3-1-127开头"><a href="#3-1-127开头" class="headerlink" title="3.1 127开头"></a>3.1 127开头</h2><p>这个开头只有一个地址：<strong>127.0.0.1：</strong>本地回环地址（永远代表自己）</p>
 <p>Ping这个地址代表跟自己通信（Ping它等于Ping自己）</p>
-<h3 id="1x02-广播地址"><a href="#1x02-广播地址" class="headerlink" title="1x02 广播地址"></a>1x02 广播地址</h3><p>主机位上全为255即为广播地址</p>
+<h2 id="3-2-广播地址"><a href="#3-2-广播地址" class="headerlink" title="3.2 广播地址"></a>3.2 广播地址</h2><p>主机位上全为255即为广播地址</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">如：</span><br><span class="line">10.1.1.1  255.255.0.0</span><br><span class="line">这个IP属于10.1.0.0这个网段，那么把主机位、或者说0这个位置全都换成255就是广播地址:10.1.255.255就是这个IP的广播地址</span><br></pre></td></tr></table></figure>
 <h1 id="0x04-网关"><a href="#0x04-网关" class="headerlink" title="0x04 网关"></a>0x04 网关</h1><p><strong>网关（Gateway）</strong>：网络的出口，可以使不在同一个网段的IP通信，一般在路由器上</p>
 <p>通俗来讲就是访问互联网的通道</p>
@@ -349,7 +349,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-IP%EF%BC%88IPv4%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">0x01 IP（IPv4）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text">0x02 子网掩码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-IP%E5%9C%B0%E5%9D%80%E8%AF%A6%E8%A7%A3"><span class="nav-number">3.</span> <span class="nav-text">0x03 IP地址详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1x01-127%E5%BC%80%E5%A4%B4"><span class="nav-number">3.0.1.</span> <span class="nav-text">1x01 127开头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1x02-%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80"><span class="nav-number">3.0.2.</span> <span class="nav-text">1x02 广播地址</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04-%E7%BD%91%E5%85%B3"><span class="nav-number">4.</span> <span class="nav-text">0x04 网关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x05-DNS"><span class="nav-number">5.</span> <span class="nav-text">0x05 DNS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x06-%E7%BD%91%E7%BB%9C%E6%B5%8B%E8%AF%95%E5%91%BD%E4%BB%A4"><span class="nav-number">6.</span> <span class="nav-text">0x06 网络测试命令</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-IP%EF%BC%88IPv4%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">0x01 IP（IPv4）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text">0x02 子网掩码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-IP%E5%9C%B0%E5%9D%80%E8%AF%A6%E8%A7%A3"><span class="nav-number">3.</span> <span class="nav-text">0x03 IP地址详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-127%E5%BC%80%E5%A4%B4"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 127开头</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 广播地址</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04-%E7%BD%91%E5%85%B3"><span class="nav-number">4.</span> <span class="nav-text">0x04 网关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x05-DNS"><span class="nav-number">5.</span> <span class="nav-text">0x05 DNS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x06-%E7%BD%91%E7%BB%9C%E6%B5%8B%E8%AF%95%E5%91%BD%E4%BB%A4"><span class="nav-number">6.</span> <span class="nav-text">0x06 网络测试命令</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -363,14 +363,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>

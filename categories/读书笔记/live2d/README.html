@@ -1,0 +1,63 @@
+<p>原项目出自一个大佬的博客，猫与向日葵。<a href="https://imjad.cn/archives/lab/add-dynamic-poster-girl-with-live2d-to-your-blog-02" title="阅读原文">阅读原文</a><br>本文对于原文和原作有删改。  </p>
+<p>嘛，不少人对这个 Live2D 看板娘很感兴趣呢！<br>纷纷让我写文章，而学长也是懒癌晚期，一直拖到现在 ~</p>
+<p>好了，还是准备开始我们的教程吧！<br>俗话说：“授人以鱼不如授人以渔”，但是说这个“渔”比较难教，还是给条“鱼”你完事了。</p>
+<h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><p>首先到我的 <a href="https://github.com/galnetwen/Live2D" title="Github">Github</a> 去下载整理后的 Live2D 代码，毕竟整理后的话好下手 ~</p>
+<p>下载后解压代码到你的博客网站根目录去。（目录位置可以自定义）</p>
+<p>然后把解压出来的文件夹改名为：live2d 。</p>
+<h3 id="正式开工"><a href="#正式开工" class="headerlink" title="正式开工"></a>正式开工</h3><p>在你博客程序头部文件（header）引入界面样式，在 head 标签内插入如下代码：</p>
+<pre><code class="html">&lt;link rel=&quot;stylesheet&quot; href=&quot;/live2d/css/live2d.css&quot; /&gt;
+</code></pre>
+<p>在 body 标签内合适的位置插入 Live2D 看板娘的元素，按照 Html 书写规范写 ~</p>
+<pre><code class="html">&lt;div id=&quot;landlord&quot;&gt;
+    &lt;div class=&quot;message&quot; style=&quot;opacity:0&quot;&gt;&lt;/div&gt;
+    &lt;canvas id=&quot;live2d&quot; width=&quot;280&quot; height=&quot;250&quot; class=&quot;live2d&quot;&gt;&lt;/canvas&gt;
+    &lt;div class=&quot;hide-button&quot;&gt;隐藏&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>在你博客程序页脚文件（footer）引入脚本，在 body 标签结束前插入如下代码：</p>
+<pre><code class="html">&lt;script type=&quot;text/javascript&quot;&gt;
+    var message_Path = &#39;/live2d/&#39;
+    var home_Path = &#39;https://haremu.com/&#39;  //此处修改为你的域名，必须带斜杠
+&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;/live2d/js/live2d.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;/live2d/js/message.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    loadlive2d(&quot;live2d&quot;, &quot;/live2d/model/tia/model.json&quot;);
+&lt;/script&gt;
+</code></pre>
+<p>鼠标放在页面某个元素上时，需要 Live2D 看板娘提示的请修改 message.json 文件。</p>
+<p><strong>示例：</strong></p>
+<pre><code class="json">{
+    &quot;mouseover&quot;: [
+        {
+            &quot;selector&quot;: &quot;.title a&quot;,  //此处修改为你页面元素的标签名
+            &quot;text&quot;: [&quot;要看看 {text} 么？&quot;]  //此处修改为你需要提示的文字
+        },
+        {
+            &quot;selector&quot;: &quot;#searchbox&quot;,
+            &quot;text&quot;: [&quot;在找什么东西呢，需要帮忙吗？&quot;]
+        }
+    ],
+    &quot;click&quot;: [  //此处是 Live2D 看板娘的触摸事件提示
+        {
+            &quot;selector&quot;: &quot;#landlord #live2d&quot;,
+            &quot;text&quot;: [&quot;不要动手动脚的！快把手拿开~~&quot;, &quot;真…真的是不知羞耻！&quot;,&quot;Hentai！&quot;, &quot;再摸的话我可要报警了！⌇●﹏●⌇&quot;, &quot;110吗，这里有个变态一直在摸我(ó﹏ò｡)&quot;]
+        }
+    ]
+}
+</code></pre>
+<p>然后，刷新你的博客页面，看看效果吧！</p>
+<p>注意路径别弄错了噢 ~<br>PHP 程序推荐使用主题函数获取绝对路径。</p>
+<p><strong>问：“为什么这个 Live2D 没有换装功能哎？”</strong><br><strong>答：“自己研究去。”</strong></p>
+<p><del>其实，就是动态改变 model.json 内的服装字段，达到随机服装的效果……</del></p>
+<h3 id="模型欣赏"><a href="#模型欣赏" class="headerlink" title="模型欣赏"></a>模型欣赏</h3><p><img src="https://haremu.com/wp-content/uploads/2017/12/QQ%E6%88%AA%E5%9B%BE20171202210923.png"><br><img src="https://haremu.com/wp-content/uploads/2017/12/QQ%E6%88%AA%E5%9B%BE20171202210951.png"></p>
+<h3 id="模型说明"><a href="#模型说明" class="headerlink" title="模型说明"></a>模型说明</h3><blockquote>
+<p>Live2D 并不是一种先进的技术，它产生的效果，都是用基本的平移、旋转、透明、曲面变形等操作实现的。<br>最终的效果与贴图关系很大，而每一个动作，都需要制作师的精细调整。<br>这是一个需要消耗大量时间精力的过程，因此质量好的模型并不多，质量好的也一般是在游戏中，版权受到保护，<strong>不能随意使用</strong>。</p>
+</blockquote>
+<p>本文章中所用模型解包自 <a href="https://play.google.com/store/apps/details?id=com.sinsiroad.potionmaker&hl=zh_CN" title="药水制作师">药水制作师</a> 手机游戏，版权归该官方所有。<br>（没错，我也安利下这款 <del>萝莉控</del> 游戏。啪！）<br><img src="https://haremu.com/wp-content/uploads/2017/11/%E6%BB%91%E7%A8%BD%E6%89%93%E8%84%B8.png"></p>
+<h3 id="更新日志"><a href="#更新日志" class="headerlink" title="更新日志"></a>更新日志</h3><p><strong>2017.12.30</strong></p>
+<ul>
+<li>主程序更新至原博主版本，添加了跨域画布支持；服装字段支持使用绝对地址，服装可以使用外部地址了，比如 CDN ，支持 SSL链接 。</li>
+<li>消息提示程序一些细节修改，一言 API 修改为 <a href="http://hitokoto.cn/" title="http://hitokoto.cn">http://hitokoto.cn</a> 官方。</li>
+<li>添加一个 Live2D 元素的隐藏按钮，隐藏后，需要刷新页面才能出现，因为按钮也被隐藏了 ~</li>
+</ul>

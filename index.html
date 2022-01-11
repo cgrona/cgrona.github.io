@@ -155,6 +155,106 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/11/read/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="cgrona">
+      <meta itemprop="description" content="选择有时候比努力更重要">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="cgrona'blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/11/read/" class="post-title-link" itemprop="url">《计算机网络自顶向下方法》（计算机网络和因特网）（1）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-01-11 15:46:51 / 修改时间：18:39:04" itemprop="dateCreated datePublished" datetime="2022-01-11T15:46:51+08:00">2022-01-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="0x01-什么是因特网？"><a href="#0x01-什么是因特网？" class="headerlink" title="0x01 什么是因特网？"></a>0x01 什么是因特网？</h1><h2 id="具体构成描述"><a href="#具体构成描述" class="headerlink" title="具体构成描述"></a>具体构成描述</h2><p>因特网是一个世界范围的计算机网络，即它是一个互联了遍及全世界数十亿计算设备的网络。</p>
+<p>​        不久之前，这些计算设备大多数传统PC、服务器等等，然而现在有越来越多的非传统因特网设备与因特网相连，如智能手机、电视、游戏机、家用电器、手表等。</p>
+<p>用因特网术语来说，这些设备都成为<strong>主机（host）</strong>或者<strong>端系统（end system）</strong></p>
+<ul>
+<li>端系统通过<strong>通信链路（communication link）</strong>和<strong>分组交换机（packet switch）</strong>连接到一起</li>
+<li>一台端系统要向另一台端系统发送数据时，发送端系统将数据分段，并为每段加上首部字节。由此形成的信息包成为<strong>分组（packet）</strong></li>
+<li>分组交换机：当今最著名的两种类型是<strong>路由器（router）</strong>和<strong>链路层交换机（link-layer switch）</strong></li>
+<li>从发送端系统到接收端系统，一个分组所经历的一系列通信链路和分组交换机成为通过该网络的<strong>路径（path）</strong></li>
+<li>端系统通过<strong>因特网服务提供商（Internet Service Provider，ISP）</strong>接入因特网<ul>
+<li>每个 ISP 自身就是一个由多台分组交换机和多段通信链路组成的网络</li>
+<li>各 ISP 为端系统提供了各种不同类型的网络接入</li>
+<li>ISP 也为内容提供者提供因特网接入服务，将Web站点和视频服务器直接连入因特网</li>
+<li>因特网就是将端系统彼此互联，因此为端系统提供接入服务的 ISP 也必须互联</li>
+</ul>
+</li>
+<li>端系统、分组交换机和其他因特网部件都要运行一系列<strong>协议（protocol）</strong>，这些协议控制因特网中信息的接收和发送</li>
+<li><strong>TCP（Transmission Control Protocol，传输控制协议）</strong>和<strong>IP（Internet protocol，国际协议）</strong>是因特网中两个最为重要的协议<ul>
+<li>IP 协议定义了在路由器和端系统之间发送和接收的分组格式</li>
+<li>因特网的主要协议统称为 <strong>TCP</strong>/<strong>IP</strong> </li>
+</ul>
+</li>
+</ul>
+<h2 id="服务描述"><a href="#服务描述" class="headerlink" title="服务描述"></a>服务描述</h2><p>​        从为应用程序提供服务的基础设施的角度来描述因特网</p>
+<p>​        因特网应用包括移动智能手机和平板电脑应用程序，其中包括即时讯息、来自云的音乐流、电影和电视流、在线社交网络以及多人游戏，因为这些应用程序涉及多个交换数据端系统，故它们被称为<strong>分布式应用程序（distributed application）</strong></p>
+<p>​        运行在不同端系统上的软件需要互相发送数据，此时我们碰到一个核心问题：运行在一个端系统上的应用程序怎样才能指令因特网向运行在另一个端系统上的软件发送数据呢？</p>
+<p>​        与因特网相连的端系统提供了一个<strong>套接字接口（socket interface）</strong>，该接口规定了运行在一个端系统上的程序请求因特网基础设施向运行在另一个端系统上的特定目的地程序交付数据的方式</p>
+<p>通俗来讲它就是一套发送程序必须遵循的规则集合，因此因特网能够将数据交付给目的地</p>
+<p>这种规则就像你寄信需要遵循的规则，邮政服务有自己的“邮政服务接口”或一套规则，你必须遵循，这样邮政服务才能将信件成功送达。同理，因特网也有一个发送数据的程序必须遵循的套接字接口，使因特网向接收数据的程序交付数据</p>
+<h2 id="什么是协议？"><a href="#什么是协议？" class="headerlink" title="什么是协议？"></a>什么是协议？</h2><h3 id="人类活动的类比"><a href="#人类活动的类比" class="headerlink" title="人类活动的类比"></a>人类活动的类比</h3><p>​        人类协议要求一方首先进行问候（如：你好），以开始与另一个人的通信。对 “你好” 的典型响应是返回一个 ”你好“ 报文，此时发话者可以继续向此人进行提问。而如果对 ”你好“ 的响应是 ”我没空“ 或某些不合时宜的回答，这就表明了一个勉强的或不能进行的通信，在此情况下，按照人类协议，发话者就不能再继续提问了。显然，发送和接收的报文、以及这些报文发送和接收所采取的动作，这些在一个人类协议中起到了核心作用。</p>
+<p>​        如果人们使用不同的协议（例如：一人理解这句话的意思，但另一人不理解），这些协议就不能交互，因而不能完成有用的工作。在网络中这个道理同样成立，即为了完成一项工作，要求两个（或多个）通信实体运行相同的协议。</p>
+<h3 id="网络协议"><a href="#网络协议" class="headerlink" title="网络协议"></a>网络协议</h3><p>​        网络协议类似于人类协议，除了交换报文和采取动作的实体是某些设备（计算机、智能手机、路由器等）的硬件或软件组件</p>
+<p>​        当你向一个Web服务器发出请求（即你在Web服务器中键入一个网页的URL），首先、你的计算机将向该Web服务器发送一条连接请求报文，并等待应答。若该Web服务器最终能接收到连接请求报文，就会返回一条连接响应报文。得知请求Web文档正常以后，计算机则在一条GET报文中发送要从这台web服务器上取回的网页名字。最后、web服务器向计算机返回该web网页（文件）。</p>
+<p>​        <strong>协议（protocol）</strong>定义了在两个或多个通信实体之间交换的报文的格式和顺序，以及报文发送 和/或 接收一条报文或其他事件所采取的动作。</p>
+<h1 id="0x02-网络边缘"><a href="#0x02-网络边缘" class="headerlink" title="0x02 网络边缘"></a>0x02 网络边缘</h1>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/10/study-3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -628,7 +728,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-11 15:37:32" itemprop="dateModified" datetime="2022-01-11T15:37:32+08:00">2022-01-11</time>
+                <time title="修改时间：2022-01-11 18:34:43" itemprop="dateModified" datetime="2022-01-11T18:34:43+08:00">2022-01-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -676,9 +776,9 @@
 <p>注：</p>
 <p>1、目前我们可以使用的只有A、B、C 三类</p>
 <p>2、A、B、C 三类的子网掩码可以修改</p>
-<h3 id="1x01-127开头"><a href="#1x01-127开头" class="headerlink" title="1x01 127开头"></a>1x01 127开头</h3><p>这个开头只有一个地址：<strong>127.0.0.1：</strong>本地回环地址（永远代表自己）</p>
+<h2 id="3-1-127开头"><a href="#3-1-127开头" class="headerlink" title="3.1 127开头"></a>3.1 127开头</h2><p>这个开头只有一个地址：<strong>127.0.0.1：</strong>本地回环地址（永远代表自己）</p>
 <p>Ping这个地址代表跟自己通信（Ping它等于Ping自己）</p>
-<h3 id="1x02-广播地址"><a href="#1x02-广播地址" class="headerlink" title="1x02 广播地址"></a>1x02 广播地址</h3><p>主机位上全为255即为广播地址</p>
+<h2 id="3-2-广播地址"><a href="#3-2-广播地址" class="headerlink" title="3.2 广播地址"></a>3.2 广播地址</h2><p>主机位上全为255即为广播地址</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">如：</span><br><span class="line">10.1.1.1  255.255.0.0</span><br><span class="line">这个IP属于10.1.0.0这个网段，那么把主机位、或者说0这个位置全都换成255就是广播地址:10.1.255.255就是这个IP的广播地址</span><br></pre></td></tr></table></figure>
 <h1 id="0x04-网关"><a href="#0x04-网关" class="headerlink" title="0x04 网关"></a>0x04 网关</h1><p><strong>网关（Gateway）</strong>：网络的出口，可以使不在同一个网段的IP通信，一般在路由器上</p>
 <p>通俗来讲就是访问互联网的通道</p>
@@ -1184,14 +1284,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
