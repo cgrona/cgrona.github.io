@@ -178,10 +178,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-01-11 21:12:15 / 修改时间：23:43:40" itemprop="dateCreated datePublished" datetime="2022-01-11T21:12:15+08:00">2022-01-11</time>
+              <time title="创建时间：2022-01-11 21:12:15" itemprop="dateCreated datePublished" datetime="2022-01-11T21:12:15+08:00">2022-01-11</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-12 16:33:07" itemprop="dateModified" datetime="2022-01-12T16:33:07+08:00">2022-01-12</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -209,7 +215,25 @@
 <h2 id="2-1-接入网"><a href="#2-1-接入网" class="headerlink" title="2.1 接入网"></a>2.1 接入网</h2><p><strong>接入网</strong>指将端系统物理连接到其<strong>边缘路由器（edge router）</strong>的网络</p>
 <p>边缘路由器是端系统到任何其他远程端系统的路径上的第一台路由器</p>
 <h3 id="1、家庭接入：DSL、电缆、FTTH、拨号和卫星"><a href="#1、家庭接入：DSL、电缆、FTTH、拨号和卫星" class="headerlink" title="1、家庭接入：DSL、电缆、FTTH、拨号和卫星"></a>1、家庭接入：DSL、电缆、FTTH、拨号和卫星</h3><ul>
-<li>宽带住宅接入有两种最流行的类型：<strong>数字用户线（Digital Subscriber Line，DSL）</strong>和电缆</li>
+<li><p>宽带住宅接入有两种最流行的类型：<strong>数字用户线（Digital Subscriber Line，DSL）</strong>和电缆</p>
+<ul>
+<li><p>每个用户的DSL调制解调器使用现有的电话线与位于电话公司的本地中心局（CO）中的数字用户线接入复用器（DSLAM）交换数据</p>
+</li>
+<li><p>家庭的DSL调制解调器得到数字数据后将其转换为高频音，以通过电话线传输给本地中心局，然后在DSLAM处被转换回数字形式</p>
+</li>
+<li><p>家庭电话线用不同的频率进行编码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">高速下行信道，位于50kHz到1MHz频段</span><br><span class="line">中速上行信道，位于4kHz到50kHz频段</span><br><span class="line">普通的双向电话信道，位于0到4kHz频段</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用户一侧，一个分配器把到达家庭的数据信号和电话信号分隔开，并将数据信号转发给DSL调制解调器；电话公司一侧，在本地中心局，DSLAM把数据和电话信号分隔开，并将数据发给因特网</p>
+<p><img src="/2022/01/11/read-1.2/1.png" alt></p>
+</li>
+</ul>
+</li>
+<li><p>DSL利用电话公司现有的本地电话基础设施，而<strong>电缆因特网接入（cable Internet access）</strong>利用了有线电视公司现有的有线电视基础设施</p>
+<ul>
+<li></li>
+</ul>
+</li>
 </ul>
 
       
