@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="有一道web题，源码如下： 123456789101112131415 &lt;?phperror_reporting(0);highlight_file(__FILE__);if (isset($_POST[&amp;#x27;code&amp;#x27;])) &amp;#123;    $code &#x3D; $_POST[&amp;#x27;code&amp;#x27;];    if (!preg_match(&quot;&#x2F;[A-Za">
@@ -28,7 +28,7 @@
 <meta property="og:description" content="有一道web题，源码如下： 123456789101112131415 &lt;?phperror_reporting(0);highlight_file(__FILE__);if (isset($_POST[&amp;#x27;code&amp;#x27;])) &amp;#123;    $code &#x3D; $_POST[&amp;#x27;code&amp;#x27;];    if (!preg_match(&quot;&#x2F;[A-Za">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-01-08T14:26:28.000Z">
-<meta property="article:modified_time" content="2022-01-11T07:37:10.502Z">
+<meta property="article:modified_time" content="2022-01-13T13:55:04.642Z">
 <meta property="article:author" content="cgrona">
 <meta name="twitter:card" content="summary">
 
@@ -75,6 +75,12 @@
   .use-motion .logo-line-after i { right: initial; }
   </style>
 </noscript>
+
+
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/clicklove.js"></script>
+
 
 <link rel="alternate" href="/atom.xml" title="CGRONA" type="application/atom+xml">
 </head>
@@ -188,7 +194,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-11 15:37:10" itemprop="dateModified" datetime="2022-01-11T15:37:10+08:00">2022-01-11</time>
+                <time title="修改时间：2022-01-13 21:55:04" itemprop="dateModified" datetime="2022-01-13T21:55:04+08:00">2022-01-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -214,6 +220,7 @@
         <p>有一道web题，源码如下：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>])) &#123;</span><br><span class="line">    <span class="variable">$code</span> = <span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span> (!preg_match(<span class="string">&quot;/[A-Za-z0-9;()]/&quot;</span>, <span class="variable">$code</span>)) &#123;</span><br><span class="line">        ob_start();</span><br><span class="line">        <span class="keyword">eval</span>(<span class="string">&quot;echo &quot;</span> . <span class="variable">$code</span> . <span class="string">&quot;;&quot;</span>);</span><br><span class="line">        <span class="variable">$output</span> = ob_get_contents();</span><br><span class="line">        ob_clean();</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$output</span> === <span class="string">&quot;guetctf&quot;</span>) &#123;</span><br><span class="line">            <span class="keyword">echo</span> getenv(<span class="string">&quot;FLAG&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>很明显可以看到我们要构造 <strong>‘ code=guetctf ’</strong> 才能解开，但是正则表达式把所有的字母和数字都过滤掉了，因此我们要通过其他方法来进行绕过</p>
+<span id="more"></span>
 <h3 id="一、异或"><a href="#一、异或" class="headerlink" title="一、异或"></a>一、异或</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$myfile</span> = fopen(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line"><span class="variable">$contents</span>=<span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span>=<span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">256</span>; <span class="variable">$i</span>++) &#123; </span><br><span class="line">	<span class="keyword">for</span> (<span class="variable">$j</span>=<span class="number">0</span>; <span class="variable">$j</span> &lt;<span class="number">256</span> ; <span class="variable">$j</span>++) &#123; </span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$i</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$j</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="variable">$preg</span> = <span class="string">&#x27;/[A-Za-z0-9;()]/i&#x27;</span>; <span class="comment">//可以根据题目给的正则表达式进行修改</span></span><br><span class="line">		<span class="keyword">if</span>(preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_i</span>))||preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_j</span>)))&#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">               &#125;</span><br><span class="line">  </span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="variable">$a</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_i</span>;</span><br><span class="line">		<span class="variable">$b</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_j</span>;</span><br><span class="line">		<span class="variable">$c</span>=(urldecode(<span class="variable">$a</span>)^urldecode(<span class="variable">$b</span>));</span><br><span class="line">		<span class="keyword">if</span> (ord(<span class="variable">$c</span>)&gt;=<span class="number">32</span>&amp;ord(<span class="variable">$c</span>)&lt;=<span class="number">126</span>) &#123;</span><br><span class="line">			<span class="variable">$contents</span>=<span class="variable">$contents</span>.<span class="variable">$c</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$a</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$b</span>.<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">fwrite(<span class="variable">$myfile</span>,<span class="variable">$contents</span>);</span><br><span class="line">fclose(<span class="variable">$myfile</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>将上面的php脚本运行之后生成一个txt文档，里面包含了所有字符的异或构造结果 </p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">arg</span>):</span></span><br><span class="line">    s1 = <span class="string">&quot;&quot;</span></span><br><span class="line">    s2 = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> arg:</span><br><span class="line">        f = <span class="built_in">open</span>(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;r&quot;</span>)</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            t = f.readline()</span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">&quot;&quot;</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> t[<span class="number">0</span>] == i:</span><br><span class="line">                s1 += t[<span class="number">2</span>:<span class="number">5</span>]</span><br><span class="line">                s2 += t[<span class="number">6</span>:<span class="number">9</span>]</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        f.close()</span><br><span class="line">    output = <span class="string">&quot;\&quot;&quot;</span> + s1 + <span class="string">&quot;\&quot;^\&quot;&quot;</span> + s2 + <span class="string">&quot;\&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    param = action(<span class="built_in">input</span>(<span class="string">&quot;\nyour input：&quot;</span>))</span><br><span class="line">    <span class="built_in">print</span>(param)</span><br></pre></td></tr></table></figure>
@@ -344,21 +351,16 @@
     </main>
 
     <footer class="footer">
-        <link rel="stylesheet" href="./live2d/live2d/css/live2d.css" />
-    <div id="landlord">
-        <div class="message" style="opacity:0"></div>
-        <canvas id="live2d" width="250" height="370" class="live2d"></canvas>
-    </div>
-    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
-    <script type="text/javascript">
-        var message_Path = '/live2d/'
-        var home_Path = 'https://your.com/'
-    </script>
-    <script type="text/javascript" src="./live2d/live2d/js/live2d.js"></script>
-    <script type="text/javascript" src="./live2d/live2d/js/message.js"></script>
-    <script type="text/javascript">
-        loadlive2d("live2d", "./live2d/live2d/model/z16/assets/z16.model.json");
-    </script>
+      <link rel="stylesheet" href="/live2dw/lib/live2d.css" />
+      <div id="landlord">
+      <div class="message" style="opacity:0"></div>
+      </div>
+      <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript">
+    var message_Path = '/live2dw/lib/'
+    var home_Path = 'https://cgrona.github.io/'
+</script>
+      <script type="text/javascript" src="/live2dw/lib/message.js"></script>
     <div class="footer-inner">
         
 
@@ -429,13 +431,11 @@
 
   
 
-  <script type="text/javascript" src="./lib/clipboard/clipboard.min.js"></script>
-<script type="text/javascript" src="./js/custom.js"></script>
-</body>
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"left","width":260,"height":433.3},"mobile":{"show":true}});</script></body>
 </html>
 
-<!-- 页面点击小红心 -->
-<script type="text/javascript" src="./js/src/clicklove.js"></script>
 
 <!--浏览器搞笑标题-->
 <script type="text/javascript" src="/js/FunnyTitle.js"></script>
