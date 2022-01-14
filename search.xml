@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>求斜渐近线</title>
-    <url>/tree/pages/2022/01/10/math/</url>
+    <url>/2022/01/10/math/</url>
     <content><![CDATA[<script type="math/tex; mode=display">
 如果\lim\limits_{n \to \infty} [f(x)-kx-b]=0，则y=kx+b是曲线的斜渐近线</script><hr>
 <script type="math/tex; mode=display">
@@ -13,7 +13,7 @@
   </entry>
   <entry>
     <title>《计算机网络自顶向下方法》（计算机网络和因特网）（1）</title>
-    <url>/tree/pages/2022/01/11/read-1.1/</url>
+    <url>/2022/01/11/read-1.1/</url>
     <content><![CDATA[<h1 id="0x01-什么是因特网？"><a href="#0x01-什么是因特网？" class="headerlink" title="0x01 什么是因特网？"></a>0x01 什么是因特网？</h1><h2 id="1-1-具体构成描述"><a href="#1-1-具体构成描述" class="headerlink" title="1.1 具体构成描述"></a>1.1 具体构成描述</h2><p>因特网是一个世界范围    的计算机网络，即它是一个互联了遍及全世界数十亿计算设备的网络。</p>
 <p>​        不久之前，这些计算设备大多数传统PC、服务器等等，然而现在有越来越多的非传统因特网设备与因特网相连，如智能手机、电视、游戏机、家用电器、手表等。</p>
 <p>用因特网术语来说，这些设备都成为<strong>主机（host）</strong>或者<strong>端系统（end system）</strong></p>
@@ -54,18 +54,8 @@
       </categories>
   </entry>
   <entry>
-    <title>git clone出错</title>
-    <url>/tree/pages/2022/01/09/study-1/</url>
-    <content><![CDATA[<h4 id="输入："><a href="#输入：" class="headerlink" title="输入："></a>输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> http.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> https.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br></pre></td></tr></table></figure>
-<h4 id="如果无效则输入："><a href="#如果无效则输入：" class="headerlink" title="如果无效则输入："></a>如果无效则输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> --unset http.proxy</span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> --unset https.proxy</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>基础知识和笔记</category>
-      </categories>
-  </entry>
-  <entry>
     <title>《计算机网络自顶向下方法》（计算机网络和因特网）（2）</title>
-    <url>/tree/pages/2022/01/11/read-1.2/</url>
+    <url>/2022/01/11/read-1.2/</url>
     <content><![CDATA[<h1 id="0x02-网络边缘"><a href="#0x02-网络边缘" class="headerlink" title="0x02 网络边缘"></a>0x02 网络边缘</h1><p>回想前一节计算机网络的术语，通常把与因特网相连的计算机和其他设备成为端系统，之所以称为端系统，因为它们位于因特网的边缘</p>
 <p>端系统也称为主机（host），因为它们容纳（即运行）应用程序</p>
 <p>主机有时又被进一步划分为两类：<strong>客户（client）</strong>和<strong>服务器（server）</strong>，客户通常是桌面PC、智能手机等，而服务器通常是更为强大的机器，用于存储和发布Web页面、流视频、中继电子邮件等</p>
@@ -117,8 +107,18 @@
       </categories>
   </entry>
   <entry>
+    <title>git clone出错</title>
+    <url>/2022/01/09/study-1/</url>
+    <content><![CDATA[<h4 id="输入："><a href="#输入：" class="headerlink" title="输入："></a>输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> http.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> https.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br></pre></td></tr></table></figure>
+<h4 id="如果无效则输入："><a href="#如果无效则输入：" class="headerlink" title="如果无效则输入："></a>如果无效则输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> --unset http.proxy</span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> --unset https.proxy</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>基础知识和笔记</category>
+      </categories>
+  </entry>
+  <entry>
     <title>NTFS权限</title>
-    <url>/tree/pages/2022/01/09/study-2/</url>
+    <url>/2022/01/09/study-2/</url>
     <content><![CDATA[<h1 id="0x01-NTFS权限概述"><a href="#0x01-NTFS权限概述" class="headerlink" title="0x01 NTFS权限概述"></a>0x01 NTFS权限概述</h1><ol>
 <li>通过设置NTFS权限，实现不同的用户访问不同的权限</li>
 <li>分配了正确的访问权限后，用户才能访问其资源</li>
@@ -240,7 +240,7 @@
   </entry>
   <entry>
     <title>Failed to load resource</title>
-    <url>/tree/pages/2022/01/10/study-3/</url>
+    <url>/2022/01/10/study-3/</url>
     <content><![CDATA[<p>最近搭博客想弄一个live2d的人物出来玩，于是去网上尝试了各种办法，眼看着就要成功</p>
 <p>但是 你知道的，<del>没有bug的程序不是一个好程序</del>，不会修bug的程序员不是一个好程序员</p>
 <p>bug们想尽各种办法出现，只为了锻炼我们的能力</p>
@@ -281,7 +281,7 @@
   </entry>
   <entry>
     <title>IP地址详解</title>
-    <url>/tree/pages/2022/01/09/study/</url>
+    <url>/2022/01/09/study/</url>
     <content><![CDATA[<h1 id="0x01-IP（IPv4）"><a href="#0x01-IP（IPv4）" class="headerlink" title="0x01 IP（IPv4）"></a>0x01 IP（IPv4）</h1><p>IP地址是唯一的标识，分为a、b、c、d四个字段，形式为X.X.X.X，每个字段都由32位的二进制数字构成，所以每个字段范围都是0-255（但我们可以使用的IP不包括0和255）</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">如：10.2.1.1 、 192.168.1.1</span><br></pre></td></tr></table></figure>
 <h1 id="0x02-子网掩码"><a href="#0x02-子网掩码" class="headerlink" title="0x02 子网掩码"></a>0x02 子网掩码</h1><ol>
@@ -346,7 +346,7 @@
   </entry>
   <entry>
     <title>MySQL简单手工注入</title>
-    <url>/tree/pages/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/</url>
+    <url>/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/</url>
     <content><![CDATA[<p>题目是墨者里的一道入门题</p>
 <p><img src="/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/1.png" alt></p>
 <p>访问靶场，找到有注入点的地方</p>
@@ -396,7 +396,7 @@
   </entry>
   <entry>
     <title>解析漏洞</title>
-    <url>/tree/pages/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-2/</url>
+    <url>/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-2/</url>
     <content><![CDATA[<h1 id="0x01-IIS5-x-6-0解析漏洞"><a href="#0x01-IIS5-x-6-0解析漏洞" class="headerlink" title="0x01 IIS5.x/6.0解析漏洞"></a>0x01 IIS5.x/6.0解析漏洞</h1><p>IIS6.0解析利用的方法有两种：</p>
 <ol>
 <li><p><strong>目录解析</strong></p>
@@ -447,7 +447,7 @@
   </entry>
   <entry>
     <title>.htaccess文件上传漏洞</title>
-    <url>/tree/pages/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-3/</url>
+    <url>/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-3/</url>
     <content><![CDATA[<p><strong>.htaccess</strong>文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以实现：网页301重定向、自定义404页面、改文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。</p>
 <p>需要用到的代码如下：</p>
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span></span><br><span class="line">SetHandler application/x-httpd-php</span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure>
@@ -465,7 +465,7 @@
   </entry>
   <entry>
     <title>2021 GUET梦极光杯</title>
-    <url>/tree/pages/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F/</url>
+    <url>/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F/</url>
     <content><![CDATA[<p>有一道web题，源码如下：</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>])) &#123;</span><br><span class="line">    <span class="variable">$code</span> = <span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span> (!preg_match(<span class="string">&quot;/[A-Za-z0-9;()]/&quot;</span>, <span class="variable">$code</span>)) &#123;</span><br><span class="line">        ob_start();</span><br><span class="line">        <span class="keyword">eval</span>(<span class="string">&quot;echo &quot;</span> . <span class="variable">$code</span> . <span class="string">&quot;;&quot;</span>);</span><br><span class="line">        <span class="variable">$output</span> = ob_get_contents();</span><br><span class="line">        ob_clean();</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$output</span> === <span class="string">&quot;guetctf&quot;</span>) &#123;</span><br><span class="line">            <span class="keyword">echo</span> getenv(<span class="string">&quot;FLAG&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>很明显可以看到我们要构造 <strong>‘ code=guetctf ’</strong> 才能解开，但是正则表达式把所有的字母和数字都过滤掉了，因此我们要通过其他方法来进行绕过</p>
