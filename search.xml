@@ -156,7 +156,7 @@
 </li>
 <li>陆地无线电信道大致分为三类：一类运行在很短距离（如1m或2m）；另一类运行在局域，通常跨越数十到几百米；第三类运行在广域，跨越数万米</li>
 </ul>
-<h3 id="5、卫星无线电信道"><a href="#5、卫星无线电信道" class="headerlink" title="5、卫星无线电信道"></a>5、卫星无线电信道</h3><p>一颗通信卫星连接地球上的两个或多个微波发射器/接收器，它们被称为地面站。该卫星在一个频段上接收传输，使用一个转发器再生信号，并在另一个频率上发射信号。通信中尝试用两类卫星：<strong>同步卫星（geostationary satellite）</strong>和<strong>近地轨道（Low-Earth Orbiting，LEO）</strong>卫星</p>
+<h3 id="5、卫星无线电信道"><a href="#5、卫星无线电信道" class="headerlink" title="5、卫星无线电信道"></a>5、卫星无线电信道</h3><p>一颗通信卫星连接地球上的两个或多个微波发射器/接收器，它们被称为地面站。该卫星在一个频段上接收传输，使用一个转发器再生信号，并在另一个频率上发射信号。通信中尝试用两类卫星：<strong>同步卫星（geostationary satellite）</strong>和<strong>近地轨道（Low-Earth Orbiting，LEO）</strong>卫星。</p>
 ]]></content>
       <categories>
         <category>读书笔记</category>
