@@ -6,7 +6,7 @@
   <link href="https://cgrona.github.io/atom.xml" rel="self"/>
   
   <link href="https://cgrona.github.io/"/>
-  <updated>2022-01-13T13:54:16.935Z</updated>
+  <updated>2022-01-17T08:59:53.416Z</updated>
   <id>https://cgrona.github.io/</id>
   
   <author>
@@ -21,11 +21,11 @@
     <link href="https://cgrona.github.io/2022/01/11/read-1.2/"/>
     <id>https://cgrona.github.io/2022/01/11/read-1.2/</id>
     <published>2022-01-11T13:12:15.000Z</published>
-    <updated>2022-01-13T13:54:16.935Z</updated>
+    <updated>2022-01-17T08:59:53.416Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;0x02-网络边缘&quot;&gt;&lt;a href=&quot;#0x02-网络边缘&quot; class=&quot;headerlink&quot; title=&quot;0x02 网络边缘&quot;&gt;&lt;/a&gt;0x02 网络边缘&lt;/h1&gt;&lt;p&gt;回想前一节计算机网络的术语，通常把与因特网相连的计算机和其他设备成为端系统，之所以称为端系统，因为它们位于因特网的边缘&lt;/p&gt;
-&lt;p&gt;端系统也称为主机（host），因为它们容纳（即运行）应用程序&lt;/p&gt;
+&lt;p&gt;端系统也称为&lt;u&gt;主机（host）&lt;/u&gt;，因为它们容纳（即运行）应用程序&lt;/p&gt;
 &lt;p&gt;主机有时又被进一步划分为两类：&lt;strong&gt;客户（client）&lt;/strong&gt;和&lt;strong&gt;服务器（server）&lt;/strong&gt;，客户通常是桌面PC、智能手机等，而服务器通常是更为强大的机器，用于存储和发布Web页面、流视频、中继电子邮件等&lt;/p&gt;
 &lt;h2 id=&quot;2-1-接入网&quot;&gt;&lt;a href=&quot;#2-1-接入网&quot; class=&quot;headerlink&quot; title=&quot;2.1 接入网&quot;&gt;&lt;/a&gt;2.1 接入网&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;接入网&lt;/strong&gt;指将端系统物理连接到其&lt;strong&gt;边缘路由器（edge router）&lt;/strong&gt;的网络&lt;/p&gt;
 &lt;p&gt;边缘路由器是端系统到任何其他远程端系统的路径上的第一台路由器&lt;/p&gt;

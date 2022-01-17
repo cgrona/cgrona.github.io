@@ -57,7 +57,7 @@
     <title>《计算机网络自顶向下方法》（计算机网络和因特网）（2）</title>
     <url>/2022/01/11/read-1.2/</url>
     <content><![CDATA[<h1 id="0x02-网络边缘"><a href="#0x02-网络边缘" class="headerlink" title="0x02 网络边缘"></a>0x02 网络边缘</h1><p>回想前一节计算机网络的术语，通常把与因特网相连的计算机和其他设备成为端系统，之所以称为端系统，因为它们位于因特网的边缘</p>
-<p>端系统也称为主机（host），因为它们容纳（即运行）应用程序</p>
+<p>端系统也称为<u>主机（host）</u>，因为它们容纳（即运行）应用程序</p>
 <p>主机有时又被进一步划分为两类：<strong>客户（client）</strong>和<strong>服务器（server）</strong>，客户通常是桌面PC、智能手机等，而服务器通常是更为强大的机器，用于存储和发布Web页面、流视频、中继电子邮件等</p>
 <h2 id="2-1-接入网"><a href="#2-1-接入网" class="headerlink" title="2.1 接入网"></a>2.1 接入网</h2><p><strong>接入网</strong>指将端系统物理连接到其<strong>边缘路由器（edge router）</strong>的网络</p>
 <p>边缘路由器是端系统到任何其他远程端系统的路径上的第一台路由器</p>
@@ -65,7 +65,7 @@
 <li><p>宽带住宅接入有两种最流行的类型：<strong>数字用户线（Digital Subscriber Line，DSL）</strong>和电缆</p>
 <span id="more"></span>
 <ul>
-<li><p>每个用户的DSL调制解调器使用现有的电话线与位于电话公司的本地中心局（CO）中的数字用户线接入复用器（DSLAM）交换数据</p>
+<li><p>每个用户的DSL调制解调器使用现有的电话线与位于电话公司的本地中心局（CO）中的数字用户线接入<u>复用器（DSLAM）</u>交换数据</p>
 </li>
 <li><p>家庭的DSL调制解调器得到数字数据后将其转换为高频音，以通过电话线传输给本地中心局，然后在DSLAM处被转换回数字形式</p>
 </li>
@@ -79,9 +79,9 @@
 </li>
 <li><p>DSL利用电话公司现有的本地电话基础设施，而<strong>电缆因特网接入（cable Internet access）</strong>利用了有线电视公司现有的有线电视基础设施</p>
 <ul>
-<li><p>电缆因特网接入需要特殊的调制解调器，称为电缆调制解调器（cable modem）,它通常通过一个以太网端口连接到家庭PC</p>
+<li><p>电缆因特网接入需要特殊的调制解调器，称为<u>电缆调制解调器（cable modem）</u>,它通常通过一个以太网端口连接到家庭PC</p>
 </li>
-<li><p>在电缆头端，电缆调制解调器端接系统（Cable Modem Termination System，CMTS）与DSL网络的DSLAM具有类似的功能，即将来自许多下行家庭中的电缆调制解调器发送的模拟信号转换回数字形式</p>
+<li><p>在电缆头端，<u>电缆调制解调器端接系统（Cable Modem Termination System，CMTS）</u>与DSL网络的DSLAM具有类似的功能，即将来自许多下行家庭中的电缆调制解调器发送的模拟信号转换回数字形式</p>
 <p><img src="/2022/01/11/read-1.2/2.png" alt></p>
 </li>
 <li><p>如同DSL，上行信道分配的传输速率通常比下行信道的稿</p>
@@ -92,13 +92,30 @@
 </li>
 <li><p>提供更高速率的新兴技术是<strong>光纤到户（Fiber To The Home，FTTH）</strong></p>
 <ul>
-<li>顾名思义，FTTH就是从本地中心局直接到家庭提供了一条光纤路径</li>
-<li>从中心局出来的每根光纤实际上由许多家庭共享，直到相对接近这些家庭的位置，改光纤才分成每户一根光纤。进行这种分配由两种光纤分布体系结构：有源光纤网络（Active Optical Network，AON）和无源光纤网络（Passive Optical Network，PON）<ol>
-<li>AON：AON本质上就是交换以太网</li>
-<li>PON：</li>
+<li><p>顾名思义，FTTH就是从本地中心局直接到家庭提供了一条光纤路径</p>
+</li>
+<li><p>从中心局出来的每根光纤实际上由许多家庭共享，直到相对接近这些家庭的位置，改光纤才分成每户一根光纤。进行这种分配由两种光纤分布体系结构：<u>有源光纤网络（Active Optical Network，AON）</u>和<u>无源光纤网络（Passive Optical Network，PON）</u></p>
+<ol>
+<li><p>AON：AON本质上就是交换以太网</p>
+</li>
+<li><p>PON：每个家庭具有一个<u>光纤网络端接器（Optical Network Terminator，ONT）</u>，它由专门的光纤连接到邻近的<u>分配器（splitter）</u>。分配器把一些家庭集结到一根共享的光纤，该光纤再连接到本地电话和公司的中心局中的<u>光纤线路端接器（Optical Line Terminator，OLT）</u>。OLT提供了光信号和电信号的转换，经过本地电话公司路由器与因特网相连。在家庭中，用户将一台家庭路由器与ONT相连，并经过这台家庭路由器接入因特网：</p>
+<p><img src="/2022/01/11/read-1.2/3.png" alt></p>
+</li>
 </ol>
 </li>
 </ul>
+</li>
+</ul>
+<h3 id="2、企业（和家庭）接入：以太网和WiFi"><a href="#2、企业（和家庭）接入：以太网和WiFi" class="headerlink" title="2、企业（和家庭）接入：以太网和WiFi"></a>2、企业（和家庭）接入：以太网和WiFi</h3><ul>
+<li><p>在越来越多的环境里，使用<u>局域网（LAN）</u>将端系统连接到边缘路由器</p>
+</li>
+<li><p>到目前为止，以太网是公司、大学和家庭网络中最为流行的接入技术</p>
+<p><img src="/2022/01/11/read-1.2/4.png" alt></p>
+</li>
+<li><p>在无线LAN环境中，无线用户从一个接入点 发送 / 接收 分组，该接入点与企业网相连，企业网再与有线因特网相连。基于IEEE 802.11技术的无线LAN接入，更通俗地称为WiFi，目前几乎无所不在</p>
+</li>
+<li><p>今天许多家庭将宽带住宅接入（即电缆调制解调器或DSL）与廉价的无线局域网技术结合起来，以产生强大的家用网络</p>
+<p><img src="/2022/01/11/read-1.2/5.png" alt></p>
 </li>
 </ul>
 ]]></content>
