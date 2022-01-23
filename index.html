@@ -1,1449 +1,335 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/hutao.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/hutao.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/hutao.png">
-  <link rel="mask-icon" href="/images/hutao.png" color="#222">
-
-<link rel="stylesheet" href="/css/main.css">
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
-
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"cgrona.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
-  </script>
-
-  <meta name="description" content="选择有时候比努力更重要">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>风清竹喧 - 一个沉淀知识的地方</title><meta name="author" content="cgrona"><meta name="copyright" content="cgrona"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="选择有时候比努力更重要">
 <meta property="og:type" content="website">
 <meta property="og:title" content="风清竹喧">
 <meta property="og:url" content="https://cgrona.github.io/index.html">
 <meta property="og:site_name" content="风清竹喧">
 <meta property="og:description" content="选择有时候比努力更重要">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cgrona.github.io/img/head.png">
 <meta property="article:author" content="cgrona">
 <meta name="twitter:card" content="summary">
-
-<link rel="canonical" href="https://cgrona.github.io/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : true,
-    isPost : false,
-    lang   : 'zh-CN'
-  };
-</script>
-
-  <title>风清竹喧</title>
-  
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
+<meta name="twitter:image" content="https://cgrona.github.io/img/head.png"><link rel="shortcut icon" href="/img/hutao.png"><link rel="canonical" href="https://cgrona.github.io/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '风清竹喧',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2022-01-23 14:01:49'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
   }
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
 
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
 
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
 
-<!-- 页面点击小红心 -->
-<script type="text/javascript" src="/js/clicklove.js"></script>
-
-
-<link rel="alternate" href="/atom.xml" title="风清竹喧" type="application/atom+xml">
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">风清竹喧</h1>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-      <p class="site-subtitle" itemprop="description">一个沉淀知识的地方</p>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
-        <i class="fa fa-search fa-fw fa-lg"></i>
-    </div>
-  </div>
-</div>
-
-
-
-
-<nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
-
-  </li>
-        <li class="menu-item menu-item-schedule">
-
-    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
-
-  </li>
-      <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
-        </a>
-      </li>
-  </ul>
-</nav>
-
-
-
-  <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
-  <span class="search-icon">
-    <i class="fa fa-search"></i>
-  </span>
-  <div class="search-input-container">
-    <input autocomplete="off" autocapitalize="off"
-           placeholder="搜索..." spellcheck="false"
-           type="search" class="search-input">
-  </div>
-  <span class="popup-btn-close">
-    <i class="fa fa-times-circle"></i>
-  </span>
-</div>
-<div id="search-result">
-  <div id="no-result">
-    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
-  </div>
-</div>
-
-    </div>
-  </div>
-
-</div>
-    </header>
-
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
     
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/mycss.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="风清竹喧" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/head.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('/img/8.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">风清竹喧</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">风清竹喧</h1><div id="site-subtitle"><span id="subtitle"></span></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left"><a href="/2022/01/22/read-1-3/" title="《计算机网络自顶向下方法》（计算机网络和因特网）（3）"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《计算机网络自顶向下方法》（计算机网络和因特网）（3）"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/01/22/read-1-3/" title="《计算机网络自顶向下方法》（计算机网络和因特网）（3）">《计算机网络自顶向下方法》（计算机网络和因特网）（3）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-22T10:49:36.000Z" title="发表于 2022-01-22 18:49:36">2022-01-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span></div><div class="content">0x03 网络核心通过网络链路和交换机移动数据有两种方法：分组交换（packet switching）和电路交换（circuit switching）
+一、分组交换
+为了从源端系统向目的端系统发送一个报文（message），源将长报文划分为较小的数据块，称之为分组（packet）
+在源和目的地之间，每个分组都通过通信链路和分组交换机（packet switch）传送。（交换机主要有两类：路由器（router）和链路层交换机（link-layer switch））
+
+3.1 存储转发传输
+多数分组交换机在链路的输入端使用存储转发传输（store-and-forward transmission）机制
+存储转发传输是指在交换机能够开始向输出链路传输该分组的第一个比特之前，必须接收到整个分组
+
+3.2 排队时延和分组丢失
+每台分组交换机有多条链路与之相连，对于每条相连的链路，该分组交换机具有一个输出缓存（output buffer），它用于存储路由器准备发往那条链路的分组
+如果到达的分组需要传输到某条链路，但发现该链路正忙于传输其他分组，该到达分组必须在输出缓存中等待，这时就会出现排队时延（ ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/01/11/read-1.2/" title="《计算机网络自顶向下方法》（计算机网络和因特网）（2）"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《计算机网络自顶向下方法》（计算机网络和因特网）（2）"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/01/11/read-1.2/" title="《计算机网络自顶向下方法》（计算机网络和因特网）（2）">《计算机网络自顶向下方法》（计算机网络和因特网）（2）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-11T13:12:15.000Z" title="发表于 2022-01-11 21:12:15">2022-01-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></span></div><div class="content">0x02 网络边缘回想前一节计算机网络的术语，通常把与因特网相连的计算机和其他设备成为端系统，之所以称为端系统，因为它们位于因特网的边缘
+端系统也称为主机（host），因为它们容纳（即运行）应用程序
+主机有时又被进一步划分为两类：客户（client）和服务器（server），客户通常是桌面PC、智能手机等，而服务器通常是更为强大的机器，用于存储和发布Web页面、流视频、中继电子邮件等
+一、接入网接入网指将端系统物理连接到其边缘路由器（edge router）的网络
+边缘路由器是端系统到任何其他远程端系统的路径上的第一台路由器
+1、家庭接入：DSL、电缆、FTTH、拨号和卫星
+宽带住宅接入有两种最流行的类型：数字用户线（Digital Subscriber Line，DSL）和电缆
 
 
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
+每个用户的DSL调制解调器使用现有的电话线与位于电话公司的本地中心局（CO）中的数字用户线接入复用器（DSLAM）交换数据
 
-          <div class="content index posts-expand">
+家庭的DSL调制解调器得到数字数据后将其转换为高频音，以通过电话线传输给本地中心局，然后在DSLAM处被转换回数字形式
+
+家庭电话线用不同的频率进行编码：
+123高速下行信道，位于 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/01/11/read-1.1/" title="《计算机网络自顶向下方法》（计算机网络和因特网）（1）"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《计算机网络自顶向下方法》（计算机网络和因特网）（1）"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/01/11/read-1.1/" title="《计算机网络自顶向下方法》（计算机网络和因特网）（1）">《计算机网络自顶向下方法》（计算机网络和因特网）（1）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-11T07:46:51.000Z" title="发表于 2022-01-11 15:46:51">2022-01-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></span></div><div class="content">0x01 什么是因特网？1.1 具体构成描述因特网是一个世界范围    的计算机网络，即它是一个互联了遍及全世界数十亿计算设备的网络。
+​        不久之前，这些计算设备大多数传统PC、服务器等等，然而现在有越来越多的非传统因特网设备与因特网相连，如智能手机、电视、游戏机、家用电器、手表等。
+用因特网术语来说，这些设备都成为主机（host）或者端系统（end system）
+
+
+端系统通过通信链路（communication link）和分组交换机（packet switch）连接到一起
+一台端系统要向另一台端系统发送数据时，发送端系统将数据分段，并为每段加上首部字节。由此形成的信息包成为分组（packet）
+分组交换机：当今最著名的两种类型是路由器（router）和链路层交换机（link-layer switch）
+从发送端系统到接收端系统，一个分组所经历的一系列通信链路和分组交换机成为通过该网络的路径（path）
+端系统通过因特网服务提供商（Internet Service Provider，ISP）接入因特网
+每个 ISP 自身就是一个由多台分组交换机和多段通信链路组成的网 ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/01/10/study-3/" title="Failed to load resource"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Failed to load resource"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/01/10/study-3/" title="Failed to load resource">Failed to load resource</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-10T02:11:05.000Z" title="发表于 2022-01-10 10:11:05">2022-01-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/">基础知识和笔记</a></span></div><div class="content">最近搭博客想弄一个live2d的人物出来玩，于是去网上尝试了各种办法，眼看着就要成功
+但是 你知道的，没有bug的程序不是一个好程序，不会修bug的程序员不是一个好程序员
+bug们想尽各种办法出现，只为了锻炼我们的能力
+
+比如：
+
+
+在我这里他们是同一种错误，只是不同的浏览器而已
+
+
+我在网上看了无数的文章，参考了无数的方法，都不太行，只能说不是我报错的类型
+看着这些404 not found 我觉得很大可能是路径问题
+加上很多文章也说路径问题
+于是进行了修改：
+1&lt;link rel=&quot;stylesheet&quot; href=&quot;live2d/live2d/css/live2d.css&quot; /&gt;
+更改后：
+1&lt;link rel=&quot;stylesheet&quot; href=&quot;./live2d/live2d/css/live2d.css&quot; /&gt;
+有点作用，’ ./ ‘ 表示当前目录，它找得到这个css文件了，但是其他网页怎么办，难不成每个网页都配一个这个文件夹？
+于是我改成绝对路径：
+1&lt;link  ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/01/10/math/" title="求斜渐近线"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="求斜渐近线"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/01/10/math/" title="求斜渐近线">求斜渐近线</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-10T01:32:50.000Z" title="发表于 2022-01-10 09:32:50">2022-01-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%AB%98%E6%95%B0%E7%AC%94%E8%AE%B0/">高数笔记</a></span></div><div class="content">
+如果\lim\limits_{n \to \infty} [f(x)-kx-b]=0，则y=kx+b是曲线的斜渐近线
+
+求法：\lim\limits_{n \to \infty} \cfrac{f(x)}{x} = k，且\lim\limits_{n \to \infty} f(x)-kx=b，斜渐近线为y=kx+b</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/01/09/study-2/" title="NTFS权限"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="NTFS权限"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/01/09/study-2/" title="NTFS权限">NTFS权限</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-09T15:17:40.000Z" title="发表于 2022-01-09 23:17:40">2022-01-09</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/">基础知识和笔记</a></span></div><div class="content">0x01 NTFS权限概述
+通过设置NTFS权限，实现不同的用户访问不同的权限
+分配了正确的访问权限后，用户才能访问其资源
+设置权限防止资源被篡改、删除
+
+0x02 文件系统概述文件系统即在外部存储设备上组织文件的方法
+常见的文件系统:
+123FAT     WindowsNTFS    WindowsEXT     Linux常见
+
+0x03 NTFS文件系统特点
+提高磁盘读写性能
+可靠性
+加密文件系统
+访问控制列表（ACL）（设置权限）
+
+
+磁盘利用率
+压缩
+磁盘配额（管理服务器）
+
+
+支持单个文件大于4GB
+
+0x04 修改NTFS权限4.1 修改权限继承
+作用：取消后，可以任意修改权限列表
+方法：文件夹右键属性—-安全—-高级—-去掉第一个对号—-选择复制即可
+
+4.2 文件及文件权限
+
+
+
+文件权限
+权限内容
+
+
+
+
+完全控制
+拥有读取、写入、修改、删除文件、特殊的权限
+
+
+修改
+拥有读取、写入、修改、删除文件的权限
+
+
+读取和执行
+拥有读取、执行文件的权限
+
+
+读取
+拥有读取文件的权限
+
+
+写入
+拥有修改文件内容的权限
+
+
+特殊权限
+控制文件权限列表的权限
+
+
+
+
+
+
+
+
+ ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/01/09/study-1/" title="git clone出错"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="git clone出错"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/01/09/study-1/" title="git clone出错">git clone出错</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-09T15:12:22.000Z" title="发表于 2022-01-09 23:12:22">2022-01-09</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/">基础知识和笔记</a></span></div><div class="content">输入：123git config --global http.proxy http://127.0.0.1:1080git config --global https.proxy http://127.0.0.1:1080
+如果无效则输入：123git config --global --unset http.proxygit config --global --unset https.proxy
+</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/01/09/study/" title="IP地址详解"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="IP地址详解"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/01/09/study/" title="IP地址详解">IP地址详解</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-09T15:02:12.000Z" title="发表于 2022-01-09 23:02:12">2022-01-09</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/">基础知识和笔记</a></span></div><div class="content">0x01 IP（IPv4）IP地址是唯一的标识，分为a、b、c、d四个字段，形式为X.X.X.X，每个字段都由32位的二进制数字构成，所以每个字段范围都是0-255（但我们可以使用的IP不包括0和255）
+1如：10.2.1.1 、 192.168.1.1
+0x02 子网掩码
+局域网通信规则：在同一局域网中，所有的IP必须在同一网段中才可以互相通信
+IP地址构成：网络位+主机位（网络位相同的IP地址，属于同一网段）
+子网掩码：每一个IP地址必须配一个子网掩码，用来确定IP地址的网络位
+
+子网掩码如何确定网络位：与255对应的数字为网络位，与0对应的数字为主机位
+
+1255.0.0.0  、 255.255.0.0  、 255.255.255.0
+12345678910如：10.1.1.1   255.0.0.0则10.1.1.1属于10.0.0.0这个网段，主机名字叫1.1.110.1.1.1   255.255.0.0则10.1.1.1属于10.1.0.0这个网段，主机名字叫1.110.1.1.1   255.255.255.0则10.1.1.1属于10.1.1.0这个网段，主机名 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-2/" title="解析漏洞"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="解析漏洞"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-2/" title="解析漏洞">解析漏洞</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-09T03:56:57.000Z" title="发表于 2022-01-09 11:56:57">2022-01-09</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%90%9E%E6%B8%97%E9%80%8F/">搞渗透</a></span></div><div class="content">0x01 IIS5.x/6.0解析漏洞IIS6.0解析利用的方法有两种：
+
+目录解析
+在网站下建立文件夹名字为.asp、.asa的文件夹，其目录内的任何扩展名的文件都别IIS当作asp文件来解析并执行。例如创建目录pamela.asp，那么pamela.asp / 1.jpg将被当作asp文件来执行。
+
+文件解析
+在IIS6.0下，分号后面的不被解析，也就是说pamela.asp;.jpg会被服务器看成是pamela.asp，还有        IIS6.0默认的可执行文件除了asp还包括这三种:
+
+
+123pamela.asapamela.cerpamela.cdx
+
+0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞在默认Fast-CGI开启状况下，上传一个名字为pamela.jpg，内容为
+123&lt;?PHPfputs(fopen(&#x27;shell.php&#x27;,&#x27;w&#x27;),&#x27;&lt;?php eval(&amp;_POST[cmd])?&gt;&#x27;);?&gt;
+的文件，然后访问pamela.jpg/ ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-3/" title=".htaccess文件上传漏洞"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt=".htaccess文件上传漏洞"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-3/" title=".htaccess文件上传漏洞">.htaccess文件上传漏洞</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-09T03:01:04.000Z" title="发表于 2022-01-09 11:01:04">2022-01-09</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%90%9E%E6%B8%97%E9%80%8F/">搞渗透</a></span></div><div class="content">.htaccess文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以实现：网页301重定向、自定义404页面、改文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。
+需要用到的代码如下：
+123&lt;FilesMatch &quot;cimer&quot;&gt;SetHandler application/x-httpd-php&lt;/FilesMatch&gt;
+通过.htaccess文件，调用php的解析器解析一个文件名只要包含”cimer”这个字符串的任意文件。这个”cimer”的内容如果是一句话木马，即可利用中国菜刀进行连接。
+
+实战意义：
+如果存在可以上传.htaccess文件，就可以直接利用规则解析
+如果存在修改.htaccess文件权限，修改解析规则
+
+注意：.htaccess文件不能起名字，他就是.htaccess文件，如果你将他改为4.htaccess或者其他的什么名字是不可以的，无法解析。在实战中有可能上传上去这个文件会被自动重命名，被重命名了就不可以了。
+</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/head.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">cgrona</div><div class="author-info__description">选择有时候比努力更重要</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/01/22/read-1-3/" title="《计算机网络自顶向下方法》（计算机网络和因特网）（3）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《计算机网络自顶向下方法》（计算机网络和因特网）（3）"/></a><div class="content"><a class="title" href="/2022/01/22/read-1-3/" title="《计算机网络自顶向下方法》（计算机网络和因特网）（3）">《计算机网络自顶向下方法》（计算机网络和因特网）（3）</a><time datetime="2022-01-22T10:49:36.000Z" title="发表于 2022-01-22 18:49:36">2022-01-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/01/11/read-1.2/" title="《计算机网络自顶向下方法》（计算机网络和因特网）（2）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《计算机网络自顶向下方法》（计算机网络和因特网）（2）"/></a><div class="content"><a class="title" href="/2022/01/11/read-1.2/" title="《计算机网络自顶向下方法》（计算机网络和因特网）（2）">《计算机网络自顶向下方法》（计算机网络和因特网）（2）</a><time datetime="2022-01-11T13:12:15.000Z" title="发表于 2022-01-11 21:12:15">2022-01-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/01/11/read-1.1/" title="《计算机网络自顶向下方法》（计算机网络和因特网）（1）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《计算机网络自顶向下方法》（计算机网络和因特网）（1）"/></a><div class="content"><a class="title" href="/2022/01/11/read-1.1/" title="《计算机网络自顶向下方法》（计算机网络和因特网）（1）">《计算机网络自顶向下方法》（计算机网络和因特网）（1）</a><time datetime="2022-01-11T07:46:51.000Z" title="发表于 2022-01-11 15:46:51">2022-01-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/01/10/study-3/" title="Failed to load resource"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Failed to load resource"/></a><div class="content"><a class="title" href="/2022/01/10/study-3/" title="Failed to load resource">Failed to load resource</a><time datetime="2022-01-10T02:11:05.000Z" title="发表于 2022-01-10 10:11:05">2022-01-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/01/10/math/" title="求斜渐近线"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="求斜渐近线"/></a><div class="content"><a class="title" href="/2022/01/10/math/" title="求斜渐近线">求斜渐近线</a><time datetime="2022-01-10T01:32:50.000Z" title="发表于 2022-01-10 09:32:50">2022-01-10</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
             
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cgrona.github.io/2022/01/22/read-1-3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="cgrona">
-      <meta itemprop="description" content="选择有时候比努力更重要">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="风清竹喧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/22/read-1-3/" class="post-title-link" itemprop="url">《计算机网络自顶向下方法》（计算机网络和因特网）（3）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-01-22 18:49:36 / 修改时间：20:49:24" itemprop="dateCreated datePublished" datetime="2022-01-22T18:49:36+08:00">2022-01-22</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="0x03-网络核心"><a href="#0x03-网络核心" class="headerlink" title="0x03 网络核心"></a>0x03 网络核心</h1><p>通过网络链路和交换机移动数据有两种方法：<strong>分组交换</strong>（packet switching）和<strong>电路交换</strong>（circuit switching）</p>
-<h2 id="一、分组交换"><a href="#一、分组交换" class="headerlink" title="一、分组交换"></a>一、分组交换</h2><ul>
-<li>为了从源端系统向目的端系统发送一个<strong>报文</strong>（message），源将长报文划分为较小的数据块，称之为<strong>分组</strong>（packet）</li>
-<li>在源和目的地之间，每个分组都通过通信链路和<strong>分组交换机</strong>（packet switch）传送。（交换机主要有两类：<strong>路由器</strong>（router）和<strong>链路层交换机</strong>（link-layer switch））</li>
-</ul>
-<h3 id="3-1-存储转发传输"><a href="#3-1-存储转发传输" class="headerlink" title="3.1 存储转发传输"></a>3.1 存储转发传输</h3><ul>
-<li>多数分组交换机在链路的输入端使用<strong>存储转发传输</strong>（store-and-forward transmission）机制</li>
-<li>存储转发传输是指在交换机能够开始向输出链路传输该分组的第一个比特之前，必须接收到整个分组</li>
-</ul>
-<h3 id="3-2-排队时延和分组丢失"><a href="#3-2-排队时延和分组丢失" class="headerlink" title="3.2 排队时延和分组丢失"></a>3.2 排队时延和分组丢失</h3><ul>
-<li>每台分组交换机有多条链路与之相连，对于每条相连的链路，该分组交换机具有一个<strong>输出缓存</strong>（output buffer），它用于存储路由器准备发往那条链路的分组</li>
-<li>如果到达的分组需要传输到某条链路，但发现该链路正忙于传输其他分组，该到达分组必须在输出缓存中等待，这时就会出现<strong>排队时延</strong>（queuing delay）</li>
-<li>因为缓存空间的大小是有限的，一个到达的分组可能发现该缓存已被其他等待传输的分组完全充满了。此时，将出现<strong>分组丢失（丢包）</strong>（packet loss），到达的分组或已经排队的分组之一将被丢弃</li>
-</ul>
-<h3 id="3-3-转发表和路由选择协议"><a href="#3-3-转发表和路由选择协议" class="headerlink" title="3.3 转发表和路由选择协议"></a>3.3 转发表和路由选择协议</h3><ul>
-<li>每台路由器具有一个<strong>转发表</strong>（forwarding table），用于将目的地址（或目的地址的一部分）映射称为输出链路</li>
-<li>当某分组到达一台路由器时，路由器检查该地址，并用这个目的地址搜索其转发表，以发现适当的出链路。路由器则将分组导向该出链路</li>
-<li>因特网具有一些特殊的<strong>路由选择协议</strong>（routing protocol），用于自动地设置这些转发表</li>
-</ul>
-<h2 id="二、电路交换"><a href="#二、电路交换" class="headerlink" title="二、电路交换"></a>二、电路交换</h2><ul>
-<li><p>在电路交换网络中，端系统间通信会话期间，预留了端系统间沿路径通信所需要的资源（缓存，链路传输速率）。而在分组交换网络中，这些资源则不是预留的</p>
-</li>
-<li><p>当两台主机要通信时，该网络在两台主机之间创建一条专用的<strong>端到端连接</strong>（end-to-end connection）</p>
-</li>
-<li><p>如图1-13，这条专用的端到端连接使用第一条链路中的第二条电路喝第二条链路中的第四条电路</p>
-<p><img src="/2022/01/22/read-1-3/1.png" alt></p>
-</li>
-<li><p>因为每条链路具有4条电路，对于由端到端连接所使用的每条链路而言，该连接在连接期间获得链路总传输总量的$\frac{1}{4}$。例如，如果两台邻近交换机之间每条链路具有1Mbps传输速率，则每个端到端电路交换连接获得250kbps专用的传输速率</p>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cgrona.github.io/2022/01/11/read-1.2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="cgrona">
-      <meta itemprop="description" content="选择有时候比努力更重要">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="风清竹喧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/11/read-1.2/" class="post-title-link" itemprop="url">《计算机网络自顶向下方法》（计算机网络和因特网）（2）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-11 21:12:15" itemprop="dateCreated datePublished" datetime="2022-01-11T21:12:15+08:00">2022-01-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-17 19:35:17" itemprop="dateModified" datetime="2022-01-17T19:35:17+08:00">2022-01-17</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.7k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="0x02-网络边缘"><a href="#0x02-网络边缘" class="headerlink" title="0x02 网络边缘"></a>0x02 网络边缘</h1><p>回想前一节计算机网络的术语，通常把与因特网相连的计算机和其他设备成为端系统，之所以称为端系统，因为它们位于因特网的边缘</p>
-<p>端系统也称为<u>主机（host）</u>，因为它们容纳（即运行）应用程序</p>
-<p>主机有时又被进一步划分为两类：<strong>客户（client）</strong>和<strong>服务器（server）</strong>，客户通常是桌面PC、智能手机等，而服务器通常是更为强大的机器，用于存储和发布Web页面、流视频、中继电子邮件等</p>
-<h2 id="一、接入网"><a href="#一、接入网" class="headerlink" title="一、接入网"></a>一、接入网</h2><p><strong>接入网</strong>指将端系统物理连接到其<strong>边缘路由器（edge router）</strong>的网络</p>
-<p>边缘路由器是端系统到任何其他远程端系统的路径上的第一台路由器</p>
-<h3 id="1、家庭接入：DSL、电缆、FTTH、拨号和卫星"><a href="#1、家庭接入：DSL、电缆、FTTH、拨号和卫星" class="headerlink" title="1、家庭接入：DSL、电缆、FTTH、拨号和卫星"></a>1、家庭接入：DSL、电缆、FTTH、拨号和卫星</h3><ul>
-<li><p>宽带住宅接入有两种最流行的类型：<strong>数字用户线（Digital Subscriber Line，DSL）</strong>和电缆</p></li></ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/01/11/read-1.2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cgrona.github.io/2022/01/11/read-1.1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="cgrona">
-      <meta itemprop="description" content="选择有时候比努力更重要">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="风清竹喧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/11/read-1.1/" class="post-title-link" itemprop="url">《计算机网络自顶向下方法》（计算机网络和因特网）（1）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-11 15:46:51" itemprop="dateCreated datePublished" datetime="2022-01-11T15:46:51+08:00">2022-01-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-13 21:54:00" itemprop="dateModified" datetime="2022-01-13T21:54:00+08:00">2022-01-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="0x01-什么是因特网？"><a href="#0x01-什么是因特网？" class="headerlink" title="0x01 什么是因特网？"></a>0x01 什么是因特网？</h1><h2 id="1-1-具体构成描述"><a href="#1-1-具体构成描述" class="headerlink" title="1.1 具体构成描述"></a>1.1 具体构成描述</h2><p>因特网是一个世界范围    的计算机网络，即它是一个互联了遍及全世界数十亿计算设备的网络。</p>
-<p>​        不久之前，这些计算设备大多数传统PC、服务器等等，然而现在有越来越多的非传统因特网设备与因特网相连，如智能手机、电视、游戏机、家用电器、手表等。</p>
-<p>用因特网术语来说，这些设备都成为<strong>主机（host）</strong>或者<strong>端系统（end system）</strong></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/01/11/read-1.1/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cgrona.github.io/2022/01/10/study-3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="cgrona">
-      <meta itemprop="description" content="选择有时候比努力更重要">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="风清竹喧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/10/study-3/" class="post-title-link" itemprop="url">Failed to load resource</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-10 10:11:05" itemprop="dateCreated datePublished" datetime="2022-01-10T10:11:05+08:00">2022-01-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-13 21:54:56" itemprop="dateModified" datetime="2022-01-13T21:54:56+08:00">2022-01-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">基础知识和笔记</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>987</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>最近搭博客想弄一个live2d的人物出来玩，于是去网上尝试了各种办法，眼看着就要成功</p>
-<p>但是 你知道的，<del>没有bug的程序不是一个好程序</del>，不会修bug的程序员不是一个好程序员</p>
-<p>bug们想尽各种办法出现，只为了锻炼我们的能力</p>
-<p><img src="/2022/01/10/study-3/3.jpg" alt></p>
-<p>比如：</p>
-<p><img src="/2022/01/10/study-3/1.png" alt></p>
-<p><img src="/2022/01/10/study-3/2.png" alt></p>
-<p>在我这里他们是同一种错误，只是不同的浏览器而已</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/01/10/study-3/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cgrona.github.io/2022/01/10/math/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="cgrona">
-      <meta itemprop="description" content="选择有时候比努力更重要">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="风清竹喧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/10/math/" class="post-title-link" itemprop="url">求斜渐近线</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-10 09:32:50" itemprop="dateCreated datePublished" datetime="2022-01-10T09:32:50+08:00">2022-01-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-11 21:48:15" itemprop="dateModified" datetime="2022-01-11T21:48:15+08:00">2022-01-11</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%AB%98%E6%95%B0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">高数笔记</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>146</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <script type="math/tex; mode=display">
-如果\lim\limits_{n \to \infty} [f(x)-kx-b]=0，则y=kx+b是曲线的斜渐近线</script><hr>
-<script type="math/tex; mode=display">
-求法：\lim\limits_{n \to \infty} \cfrac{f(x)}{x} = k，且\lim\limits_{n \to \infty} f(x)-kx=b，斜渐近线为y=kx+b</script>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cgrona.github.io/2022/01/09/study-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="cgrona">
-      <meta itemprop="description" content="选择有时候比努力更重要">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="风清竹喧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/09/study-2/" class="post-title-link" itemprop="url">NTFS权限</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-09 23:17:40" itemprop="dateCreated datePublished" datetime="2022-01-09T23:17:40+08:00">2022-01-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-13 21:54:45" itemprop="dateModified" datetime="2022-01-13T21:54:45+08:00">2022-01-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">基础知识和笔记</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="0x01-NTFS权限概述"><a href="#0x01-NTFS权限概述" class="headerlink" title="0x01 NTFS权限概述"></a>0x01 NTFS权限概述</h1><ol>
-<li>通过设置NTFS权限，实现不同的用户访问不同的权限</li>
-<li>分配了正确的访问权限后，用户才能访问其资源</li>
-<li>设置权限防止资源被篡改、删除</li>
-</ol>
-<h1 id="0x02-文件系统概述"><a href="#0x02-文件系统概述" class="headerlink" title="0x02 文件系统概述"></a>0x02 文件系统概述</h1><p>文件系统即在外部存储设备上组织文件的方法</p>
-<p>常见的文件系统:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">FAT     Windows</span><br><span class="line">NTFS    Windows</span><br><span class="line">EXT     Linux常见</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/01/09/study-2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cgrona.github.io/2022/01/09/study-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="cgrona">
-      <meta itemprop="description" content="选择有时候比努力更重要">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="风清竹喧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/09/study-1/" class="post-title-link" itemprop="url">git clone出错</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-09 23:12:22" itemprop="dateCreated datePublished" datetime="2022-01-09T23:12:22+08:00">2022-01-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-11 15:37:36" itemprop="dateModified" datetime="2022-01-11T15:37:36+08:00">2022-01-11</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">基础知识和笔记</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>183</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="输入："><a href="#输入：" class="headerlink" title="输入："></a>输入：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> http.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> https.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br></pre></td></tr></table></figure>
-<h4 id="如果无效则输入："><a href="#如果无效则输入：" class="headerlink" title="如果无效则输入："></a>如果无效则输入：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> --unset http.proxy</span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> --unset https.proxy</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cgrona.github.io/2022/01/09/study/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="cgrona">
-      <meta itemprop="description" content="选择有时候比努力更重要">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="风清竹喧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/09/study/" class="post-title-link" itemprop="url">IP地址详解</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-09 23:02:12" itemprop="dateCreated datePublished" datetime="2022-01-09T23:02:12+08:00">2022-01-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-13 21:54:29" itemprop="dateModified" datetime="2022-01-13T21:54:29+08:00">2022-01-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">基础知识和笔记</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.4k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="0x01-IP（IPv4）"><a href="#0x01-IP（IPv4）" class="headerlink" title="0x01 IP（IPv4）"></a>0x01 IP（IPv4）</h1><p>IP地址是唯一的标识，分为a、b、c、d四个字段，形式为X.X.X.X，每个字段都由32位的二进制数字构成，所以每个字段范围都是0-255（但我们可以使用的IP不包括0和255）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如：10.2.1.1 、 192.168.1.1</span><br></pre></td></tr></table></figure>
-<h1 id="0x02-子网掩码"><a href="#0x02-子网掩码" class="headerlink" title="0x02 子网掩码"></a>0x02 子网掩码</h1><ol>
-<li><strong>局域网通信规则</strong>：在同一局域网中，所有的IP必须在同一网段中才可以互相通信</li>
-<li><strong>IP地址构成</strong>：网络位+主机位（网络位相同的IP地址，属于同一网段）</li>
-<li><strong>子网掩码</strong>：每一个IP地址必须配一个子网掩码，用来确定IP地址的网络位</li>
-</ol>
-<p><strong>子网掩码如何确定网络位</strong>：与<strong>255</strong>对应的数字为<strong>网络位</strong>，与<strong>0</strong>对应的数字为<strong>主机位</strong></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/01/09/study/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cgrona.github.io/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="cgrona">
-      <meta itemprop="description" content="选择有时候比努力更重要">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="风清竹喧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-2/" class="post-title-link" itemprop="url">解析漏洞</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-09 11:56:57" itemprop="dateCreated datePublished" datetime="2022-01-09T11:56:57+08:00">2022-01-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-13 21:55:14" itemprop="dateModified" datetime="2022-01-13T21:55:14+08:00">2022-01-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%90%9E%E6%B8%97%E9%80%8F/" itemprop="url" rel="index"><span itemprop="name">搞渗透</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="0x01-IIS5-x-6-0解析漏洞"><a href="#0x01-IIS5-x-6-0解析漏洞" class="headerlink" title="0x01 IIS5.x/6.0解析漏洞"></a>0x01 IIS5.x/6.0解析漏洞</h1><p>IIS6.0解析利用的方法有两种：</p>
-<ol>
-<li><p><strong>目录解析</strong></p>
-<p>在网站下建立文件夹名字为.<strong>asp</strong>、.<strong>asa</strong>的文件夹，其目录内的任何扩展名的文件都别IIS当作asp文件来解析并执行。例如创建目录<strong>pamela.asp</strong>，那么<strong>pamela.asp / 1.jpg</strong>将被当作asp文件来执行。</p>
-</li>
-<li><p><strong>文件解析</strong></p>
-<p>在IIS6.0下，分号后面的不被解析，也就是说pamela.asp;.jpg会被服务器看成是pamela.asp，还有        IIS6.0默认的可执行文件除了asp还包括这三种:</p>
-</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pamela.asa</span><br><span class="line">pamela.cer</span><br><span class="line">pamela.cdx</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cgrona.github.io/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="cgrona">
-      <meta itemprop="description" content="选择有时候比努力更重要">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="风清竹喧">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-3/" class="post-title-link" itemprop="url">.htaccess文件上传漏洞</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-09 11:01:04" itemprop="dateCreated datePublished" datetime="2022-01-09T11:01:04+08:00">2022-01-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-13 21:55:21" itemprop="dateModified" datetime="2022-01-13T21:55:21+08:00">2022-01-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%90%9E%E6%B8%97%E9%80%8F/" itemprop="url" rel="index"><span itemprop="name">搞渗透</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>476</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong>.htaccess</strong>文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以实现：网页301重定向、自定义404页面、改文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。</p>
-<p>需要用到的代码如下：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span></span><br><span class="line">SetHandler application/x-httpd-php</span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>通过.htaccess文件，调用php的解析器解析一个文件名只要包含”cimer”这个字符串的任意文件。这个”cimer”的内容如果是一句话木马，即可利用中国菜刀进行连接。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-3/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
-
-
-
-          </div>
-          
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
-        </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">cgrona</p>
-  <div class="site-description" itemprop="description">选择有时候比努力更重要</div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">12</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">5</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-        <a href="https://github.com/cgrona" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;cgrona" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="mailto:1549692438cgrona@gmail.com" title="E-Mail → mailto:1549692438cgrona@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
-      </span>
-  </div>
-
-
-
-
-      </div>
-        <div class="back-to-top motion-element">
-          <i class="fa fa-arrow-up"></i>
-          <span>0%</span>
-        </div>
-
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <link rel="stylesheet" href="/live2dw/lib/live2d.css" />
-      <div id="landlord">
-      <div class="message" style="opacity:0"></div>
-      </div>
-      <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
-<script type="text/javascript">
-    var message_Path = '/live2dw/lib/'
-    var home_Path = 'https://cgrona.github.io/'
-</script>
-      <script type="text/javascript" src="/live2dw/lib/message.js"></script>
-    <div class="footer-inner">
-        
-
-        
-
-<div class="copyright">
-  
-  &copy; 
-  <span itemprop="copyrightYear">2022</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">cgrona</span>
-    <span class="post-meta-divider">|</span>
-    <span class="post-meta-item-icon">
-      <i class="fa fa-chart-area"></i>
-    </span>
-      <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">14k</span>
-    <span class="post-meta-divider">|</span>
-    <span class="post-meta-item-icon">
-      <i class="fa fa-coffee"></i>
-    </span>
-      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">13 分钟</span>
-</div>
-
-        
-
-
-
-
-
-
-
-
-      </div>
-    </footer>
-  </div>
-
-  
-  <script src="/lib/anime.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
-  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/pisces.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-
-
-
-  
-
-
-
-
-  
-<script src="/js/local-search.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"><span class="card-category-list-name">基础知识和笔记</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><span class="card-category-list-name">学习笔记</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"><span class="card-category-list-name">搞渗透</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"><span class="card-category-list-name">读书笔记</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%AB%98%E6%95%B0%E7%AC%94%E8%AE%B0/"><span class="card-category-list-name">高数笔记</span><span class="card-category-list-count">1</span></a></li>
+            </ul></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/01/"><span class="card-archive-list-date">一月 2022</span><span class="card-archive-list-count">12</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">12</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2022-01-23T06:01:49.000Z"></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By cgrona</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>function subtitleType () {
+  if (true) { 
+    window.typed = new Typed("#subtitle", {
+      strings: ["心无物欲，即是秋空霁海","坐有琴书，便成石室丹丘","面朝大海，春暖花开","一个沉淀知识的地方"],
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50
+    })
   } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
+    document.getElementById("subtitle").innerHTML = '心无物欲，即是秋空霁海'
   }
-</script>
+}
 
-    
-
-  
-
-  
-
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"left","width":260,"height":433.3},"mobile":{"show":true}});</script></body>
-</html>
-
-
-<!--浏览器搞笑标题-->
-<script type="text/javascript" src="/js/FunnyTitle.js"></script>
+if (true) {
+  if (typeof Typed === 'function') {
+    subtitleType()
+  } else {
+    getScript('https://cdn.jsdelivr.net/npm/typed.js/lib/typed.min.js').then(subtitleType)
+  }
+} else {
+  subtitleType()
+}</script></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="/%5Bobject%20Object%5D"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"left","width":260,"height":433.3},"mobile":{"show":true}});</script></body></html>
