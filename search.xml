@@ -10,6 +10,9 @@
       <categories>
         <category>高数笔记</category>
       </categories>
+      <tags>
+        <tag>math</tag>
+      </tags>
   </entry>
   <entry>
     <title>《计算机网络自顶向下方法》（计算机网络和因特网）（3）</title>
@@ -48,6 +51,9 @@
       <categories>
         <category>学习笔记</category>
       </categories>
+      <tags>
+        <tag>read</tag>
+      </tags>
   </entry>
   <entry>
     <title>《计算机网络自顶向下方法》（计算机网络和因特网）（1）</title>
@@ -90,6 +96,9 @@
       <categories>
         <category>读书笔记</category>
       </categories>
+      <tags>
+        <tag>read</tag>
+      </tags>
   </entry>
   <entry>
     <title>《计算机网络自顶向下方法》（计算机网络和因特网）（2）</title>
@@ -199,6 +208,9 @@
       <categories>
         <category>读书笔记</category>
       </categories>
+      <tags>
+        <tag>read</tag>
+      </tags>
   </entry>
   <entry>
     <title>git clone出错</title>
@@ -209,6 +221,9 @@
       <categories>
         <category>基础知识和笔记</category>
       </categories>
+      <tags>
+        <tag>learn</tag>
+      </tags>
   </entry>
   <entry>
     <title>NTFS权限</title>
@@ -331,6 +346,9 @@
       <categories>
         <category>基础知识和笔记</category>
       </categories>
+      <tags>
+        <tag>learn</tag>
+      </tags>
   </entry>
   <entry>
     <title>Failed to load resource</title>
@@ -372,6 +390,9 @@
       <categories>
         <category>基础知识和笔记</category>
       </categories>
+      <tags>
+        <tag>learn</tag>
+      </tags>
   </entry>
   <entry>
     <title>IP地址详解</title>
@@ -437,6 +458,9 @@
       <categories>
         <category>基础知识和笔记</category>
       </categories>
+      <tags>
+        <tag>learn</tag>
+      </tags>
   </entry>
   <entry>
     <title>MySQL简单手工注入</title>
@@ -487,6 +511,9 @@
       <categories>
         <category>搞渗透</category>
       </categories>
+      <tags>
+        <tag>sql注入</tag>
+      </tags>
   </entry>
   <entry>
     <title>解析漏洞</title>
@@ -538,6 +565,9 @@
       <categories>
         <category>搞渗透</category>
       </categories>
+      <tags>
+        <tag>文件上传</tag>
+      </tags>
   </entry>
   <entry>
     <title>.htaccess文件上传漏洞</title>
@@ -556,6 +586,9 @@
       <categories>
         <category>搞渗透</category>
       </categories>
+      <tags>
+        <tag>文件上传</tag>
+      </tags>
   </entry>
   <entry>
     <title>2021 GUET梦极光杯</title>
@@ -577,5 +610,8 @@
       <categories>
         <category>搞渗透</category>
       </categories>
+      <tags>
+        <tag>web</tag>
+      </tags>
   </entry>
 </search>

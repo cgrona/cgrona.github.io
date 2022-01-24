@@ -6,7 +6,7 @@
   <link href="https://cgrona.github.io/atom.xml" rel="self"/>
   
   <link href="https://cgrona.github.io/"/>
-  <updated>2022-01-22T12:49:24.025Z</updated>
+  <updated>2022-01-24T07:19:43.365Z</updated>
   <id>https://cgrona.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://cgrona.github.io/2022/01/22/read-1-3/"/>
     <id>https://cgrona.github.io/2022/01/22/read-1-3/</id>
     <published>2022-01-22T10:49:36.000Z</published>
-    <updated>2022-01-22T12:49:24.025Z</updated>
+    <updated>2022-01-24T07:19:43.365Z</updated>
     
     
       
@@ -34,6 +34,8 @@
     <category term="学习笔记" scheme="https://cgrona.github.io/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
+    <category term="read" scheme="https://cgrona.github.io/tags/read/"/>
+    
   </entry>
   
   <entry>
@@ -41,7 +43,7 @@
     <link href="https://cgrona.github.io/2022/01/11/read-1.2/"/>
     <id>https://cgrona.github.io/2022/01/11/read-1.2/</id>
     <published>2022-01-11T13:12:15.000Z</published>
-    <updated>2022-01-17T11:35:17.815Z</updated>
+    <updated>2022-01-24T07:20:03.374Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;0x02-网络边缘&quot;&gt;&lt;a href=&quot;#0x02-网络边缘&quot; class=&quot;headerlink&quot; title=&quot;0x02 网络边缘&quot;&gt;&lt;/a&gt;0x02 网络边缘&lt;/h1&gt;&lt;p&gt;回想前一节计算机网络的术语，通常把与因特网相连的计算机和其他设备成为端系统，之所以称为端系统，因为它们位于因特网的边缘&lt;/p&gt;
@@ -57,6 +59,8 @@
     <category term="读书笔记" scheme="https://cgrona.github.io/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
     
     
+    <category term="read" scheme="https://cgrona.github.io/tags/read/"/>
+    
   </entry>
   
   <entry>
@@ -64,7 +68,7 @@
     <link href="https://cgrona.github.io/2022/01/11/read-1.1/"/>
     <id>https://cgrona.github.io/2022/01/11/read-1.1/</id>
     <published>2022-01-11T07:46:51.000Z</published>
-    <updated>2022-01-13T13:54:00.870Z</updated>
+    <updated>2022-01-24T07:19:55.677Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;0x01-什么是因特网？&quot;&gt;&lt;a href=&quot;#0x01-什么是因特网？&quot; class=&quot;headerlink&quot; title=&quot;0x01 什么是因特网？&quot;&gt;&lt;/a&gt;0x01 什么是因特网？&lt;/h1&gt;&lt;h2 id=&quot;1-1-具体构成描述&quot;&gt;&lt;a href=&quot;#1-1-具体构成描述&quot; class=&quot;headerlink&quot; title=&quot;1.1 具体构成描述&quot;&gt;&lt;/a&gt;1.1 具体构成描述&lt;/h2&gt;&lt;p&gt;因特网是一个世界范围    的计算机网络，即它是一个互联了遍及全世界数十亿计算设备的网络。&lt;/p&gt;
@@ -76,6 +80,8 @@
     <category term="读书笔记" scheme="https://cgrona.github.io/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
     
     
+    <category term="read" scheme="https://cgrona.github.io/tags/read/"/>
+    
   </entry>
   
   <entry>
@@ -83,7 +89,7 @@
     <link href="https://cgrona.github.io/2022/01/10/study-3/"/>
     <id>https://cgrona.github.io/2022/01/10/study-3/</id>
     <published>2022-01-10T02:11:05.000Z</published>
-    <updated>2022-01-13T13:54:56.013Z</updated>
+    <updated>2022-01-24T07:20:20.551Z</updated>
     
     
     <summary type="html">&lt;p&gt;最近搭博客想弄一个live2d的人物出来玩，于是去网上尝试了各种办法，眼看着就要成功&lt;/p&gt;
@@ -100,6 +106,8 @@
     <category term="基础知识和笔记" scheme="https://cgrona.github.io/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"/>
     
     
+    <category term="learn" scheme="https://cgrona.github.io/tags/learn/"/>
+    
   </entry>
   
   <entry>
@@ -107,7 +115,7 @@
     <link href="https://cgrona.github.io/2022/01/10/math/"/>
     <id>https://cgrona.github.io/2022/01/10/math/</id>
     <published>2022-01-10T01:32:50.000Z</published>
-    <updated>2022-01-11T13:48:15.921Z</updated>
+    <updated>2022-01-24T07:25:23.553Z</updated>
     
     
       
@@ -122,6 +130,8 @@
     <category term="高数笔记" scheme="https://cgrona.github.io/categories/%E9%AB%98%E6%95%B0%E7%AC%94%E8%AE%B0/"/>
     
     
+    <category term="math" scheme="https://cgrona.github.io/tags/math/"/>
+    
   </entry>
   
   <entry>
@@ -129,7 +139,7 @@
     <link href="https://cgrona.github.io/2022/01/09/study-2/"/>
     <id>https://cgrona.github.io/2022/01/09/study-2/</id>
     <published>2022-01-09T15:17:40.000Z</published>
-    <updated>2022-01-13T13:54:45.244Z</updated>
+    <updated>2022-01-24T07:20:17.666Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;0x01-NTFS权限概述&quot;&gt;&lt;a href=&quot;#0x01-NTFS权限概述&quot; class=&quot;headerlink&quot; title=&quot;0x01 NTFS权限概述&quot;&gt;&lt;/a&gt;0x01 NTFS权限概述&lt;/h1&gt;&lt;ol&gt;
@@ -146,6 +156,8 @@
     <category term="基础知识和笔记" scheme="https://cgrona.github.io/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"/>
     
     
+    <category term="learn" scheme="https://cgrona.github.io/tags/learn/"/>
+    
   </entry>
   
   <entry>
@@ -153,7 +165,7 @@
     <link href="https://cgrona.github.io/2022/01/09/study-1/"/>
     <id>https://cgrona.github.io/2022/01/09/study-1/</id>
     <published>2022-01-09T15:12:22.000Z</published>
-    <updated>2022-01-11T07:37:36.051Z</updated>
+    <updated>2022-01-24T07:20:13.218Z</updated>
     
     
       
@@ -166,6 +178,8 @@
     <category term="基础知识和笔记" scheme="https://cgrona.github.io/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"/>
     
     
+    <category term="learn" scheme="https://cgrona.github.io/tags/learn/"/>
+    
   </entry>
   
   <entry>
@@ -173,7 +187,7 @@
     <link href="https://cgrona.github.io/2022/01/09/study/"/>
     <id>https://cgrona.github.io/2022/01/09/study/</id>
     <published>2022-01-09T15:02:12.000Z</published>
-    <updated>2022-01-13T13:54:29.860Z</updated>
+    <updated>2022-01-24T07:20:23.264Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;0x01-IP（IPv4）&quot;&gt;&lt;a href=&quot;#0x01-IP（IPv4）&quot; class=&quot;headerlink&quot; title=&quot;0x01 IP（IPv4）&quot;&gt;&lt;/a&gt;0x01 IP（IPv4）&lt;/h1&gt;&lt;p&gt;IP地址是唯一的标识，分为a、b、c、d四个字段，形式为X.X.X.X，每个字段都由32位的二进制数字构成，所以每个字段范围都是0-255（但我们可以使用的IP不包括0和255）&lt;/p&gt;
@@ -190,6 +204,8 @@
     <category term="基础知识和笔记" scheme="https://cgrona.github.io/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"/>
     
     
+    <category term="learn" scheme="https://cgrona.github.io/tags/learn/"/>
+    
   </entry>
   
   <entry>
@@ -197,7 +213,7 @@
     <link href="https://cgrona.github.io/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-2/"/>
     <id>https://cgrona.github.io/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-2/</id>
     <published>2022-01-09T03:56:57.000Z</published>
-    <updated>2022-01-13T13:55:14.037Z</updated>
+    <updated>2022-01-24T07:21:00.171Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;0x01-IIS5-x-6-0解析漏洞&quot;&gt;&lt;a href=&quot;#0x01-IIS5-x-6-0解析漏洞&quot; class=&quot;headerlink&quot; title=&quot;0x01 IIS5.x/6.0解析漏洞&quot;&gt;&lt;/a&gt;0x01 IIS5.x/6.0解析漏洞&lt;/h1&gt;&lt;p&gt;IIS6.0解析利用的方法有两种：&lt;/p&gt;
@@ -216,6 +232,8 @@
     <category term="搞渗透" scheme="https://cgrona.github.io/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
     
     
+    <category term="文件上传" scheme="https://cgrona.github.io/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/"/>
+    
   </entry>
   
   <entry>
@@ -223,7 +241,7 @@
     <link href="https://cgrona.github.io/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-3/"/>
     <id>https://cgrona.github.io/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-3/</id>
     <published>2022-01-09T03:01:04.000Z</published>
-    <updated>2022-01-13T13:55:21.262Z</updated>
+    <updated>2022-01-24T07:21:12.235Z</updated>
     
     
     <summary type="html">&lt;p&gt;&lt;strong&gt;.htaccess&lt;/strong&gt;文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以实现：网页301重定向、自定义404页面、改文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。&lt;/p&gt;
@@ -236,6 +254,8 @@
     <category term="搞渗透" scheme="https://cgrona.github.io/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
     
     
+    <category term="文件上传" scheme="https://cgrona.github.io/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/"/>
+    
   </entry>
   
   <entry>
@@ -243,7 +263,7 @@
     <link href="https://cgrona.github.io/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/"/>
     <id>https://cgrona.github.io/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/</id>
     <published>2022-01-08T15:10:11.000Z</published>
-    <updated>2022-01-13T13:55:09.601Z</updated>
+    <updated>2022-01-24T07:20:49.137Z</updated>
     
     
     <summary type="html">&lt;p&gt;题目是墨者里的一道入门题&lt;/p&gt;
@@ -263,6 +283,8 @@
     <category term="搞渗透" scheme="https://cgrona.github.io/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
     
     
+    <category term="sql注入" scheme="https://cgrona.github.io/tags/sql%E6%B3%A8%E5%85%A5/"/>
+    
   </entry>
   
   <entry>
@@ -270,7 +292,7 @@
     <link href="https://cgrona.github.io/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
     <id>https://cgrona.github.io/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F/</id>
     <published>2022-01-08T14:26:28.000Z</published>
-    <updated>2022-01-13T13:55:04.642Z</updated>
+    <updated>2022-01-24T07:21:18.674Z</updated>
     
     
     <summary type="html">&lt;p&gt;有一道web题，源码如下：&lt;/p&gt;
@@ -281,6 +303,8 @@
     
     <category term="搞渗透" scheme="https://cgrona.github.io/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
     
+    
+    <category term="web" scheme="https://cgrona.github.io/tags/web/"/>
     
   </entry>
   
