@@ -6,7 +6,7 @@
   <link href="https://cgrona.github.io/atom.xml" rel="self"/>
   
   <link href="https://cgrona.github.io/"/>
-  <updated>2022-01-24T07:19:43.365Z</updated>
+  <updated>2022-01-24T10:14:08.622Z</updated>
   <id>https://cgrona.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://cgrona.github.io/2022/01/22/read-1-3/"/>
     <id>https://cgrona.github.io/2022/01/22/read-1-3/</id>
     <published>2022-01-22T10:49:36.000Z</published>
-    <updated>2022-01-24T07:19:43.365Z</updated>
+    <updated>2022-01-24T10:14:08.622Z</updated>
     
     
       
@@ -35,6 +35,8 @@
     
     
     <category term="read" scheme="https://cgrona.github.io/tags/read/"/>
+    
+    <category term="learn" scheme="https://cgrona.github.io/tags/learn/"/>
     
   </entry>
   

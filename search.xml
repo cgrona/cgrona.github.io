@@ -47,12 +47,13 @@
 <li><p>因为每条链路具有4条电路，对于由端到端连接所使用的每条链路而言，该连接在连接期间获得链路总传输总量的$\frac{1}{4}$。例如，如果两台邻近交换机之间每条链路具有1Mbps传输速率，则每个端到端电路交换连接获得250kbps专用的传输速率</p>
 </li>
 </ul>
-]]></content>
+<h2 id="三、网络的网络"><a href="#三、网络的网络" class="headerlink" title="三、网络的网络"></a>三、网络的网络</h2>]]></content>
       <categories>
         <category>学习笔记</category>
       </categories>
       <tags>
         <tag>read</tag>
+        <tag>learn</tag>
       </tags>
   </entry>
   <entry>
