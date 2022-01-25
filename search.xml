@@ -214,19 +214,6 @@
       </tags>
   </entry>
   <entry>
-    <title>git clone出错</title>
-    <url>/2022/01/09/study-1/</url>
-    <content><![CDATA[<h4 id="输入："><a href="#输入：" class="headerlink" title="输入："></a>输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> http.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> https.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br></pre></td></tr></table></figure>
-<h4 id="如果无效则输入："><a href="#如果无效则输入：" class="headerlink" title="如果无效则输入："></a>如果无效则输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> --unset http.proxy</span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> --unset https.proxy</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>基础知识和笔记</category>
-      </categories>
-      <tags>
-        <tag>learn</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>NTFS权限</title>
     <url>/2022/01/09/study-2/</url>
     <content><![CDATA[<h1 id="0x01-NTFS权限概述"><a href="#0x01-NTFS权限概述" class="headerlink" title="0x01 NTFS权限概述"></a>0x01 NTFS权限概述</h1><ol>
@@ -517,6 +504,40 @@
       </tags>
   </entry>
   <entry>
+    <title>git clone出错</title>
+    <url>/2022/01/09/study-1/</url>
+    <content><![CDATA[<h4 id="输入："><a href="#输入：" class="headerlink" title="输入："></a>输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> http.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> https.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br></pre></td></tr></table></figure>
+<h4 id="如果无效则输入："><a href="#如果无效则输入：" class="headerlink" title="如果无效则输入："></a>如果无效则输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> --unset http.proxy</span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> --unset https.proxy</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>基础知识和笔记</category>
+      </categories>
+      <tags>
+        <tag>learn</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>.htaccess文件上传漏洞</title>
+    <url>/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-3/</url>
+    <content><![CDATA[<p><strong>.htaccess</strong>文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以实现：网页301重定向、自定义404页面、改文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。</p>
+<p>需要用到的代码如下：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span></span><br><span class="line">SetHandler application/x-httpd-php</span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>通过.htaccess文件，调用php的解析器解析一个文件名只要包含”cimer”这个字符串的任意文件。这个”cimer”的内容如果是一句话木马，即可利用中国菜刀进行连接。</p>
+<span id="more"></span>
+<h3 id="实战意义："><a href="#实战意义：" class="headerlink" title="实战意义："></a>实战意义：</h3><ol>
+<li>如果存在可以上传.htaccess文件，就可以直接利用规则解析</li>
+<li>如果存在修改.htaccess文件权限，修改解析规则</li>
+</ol>
+<h4 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h4><p>.htaccess文件不能起名字，他就是.htaccess文件，如果你将他改为4.htaccess或者其他的什么名字是不可以的，无法解析。在实战中有可能上传上去这个文件会被自动重命名，被重命名了就不可以了。</p>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>文件上传</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>解析漏洞</title>
     <url>/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-2/</url>
     <content><![CDATA[<h1 id="0x01-IIS5-x-6-0解析漏洞"><a href="#0x01-IIS5-x-6-0解析漏洞" class="headerlink" title="0x01 IIS5.x/6.0解析漏洞"></a>0x01 IIS5.x/6.0解析漏洞</h1><p>IIS6.0解析利用的方法有两种：</p>
@@ -562,27 +583,6 @@
 <p>然后再上传shell.jpg的木马，这样shell.jpg就可解析为php文件</p>
 </li>
 </ol>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>文件上传</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>.htaccess文件上传漏洞</title>
-    <url>/2022/01/09/%E6%90%9E%E6%B8%97%E9%80%8F-3/</url>
-    <content><![CDATA[<p><strong>.htaccess</strong>文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以实现：网页301重定向、自定义404页面、改文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。</p>
-<p>需要用到的代码如下：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span></span><br><span class="line">SetHandler application/x-httpd-php</span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>通过.htaccess文件，调用php的解析器解析一个文件名只要包含”cimer”这个字符串的任意文件。这个”cimer”的内容如果是一句话木马，即可利用中国菜刀进行连接。</p>
-<span id="more"></span>
-<h3 id="实战意义："><a href="#实战意义：" class="headerlink" title="实战意义："></a>实战意义：</h3><ol>
-<li>如果存在可以上传.htaccess文件，就可以直接利用规则解析</li>
-<li>如果存在修改.htaccess文件权限，修改解析规则</li>
-</ol>
-<h4 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h4><p>.htaccess文件不能起名字，他就是.htaccess文件，如果你将他改为4.htaccess或者其他的什么名字是不可以的，无法解析。在实战中有可能上传上去这个文件会被自动重命名，被重命名了就不可以了。</p>
 ]]></content>
       <categories>
         <category>搞渗透</category>
