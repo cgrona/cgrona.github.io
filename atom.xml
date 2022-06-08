@@ -6,7 +6,7 @@
   <link href="https://cgrona.top/atom.xml" rel="self"/>
   
   <link href="https://cgrona.top/"/>
-  <updated>2022-05-24T06:51:24.481Z</updated>
+  <updated>2022-06-08T13:41:29.799Z</updated>
   <id>https://cgrona.top/</id>
   
   <author>
@@ -17,11 +17,58 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Vulnhub-DC-1渗透学习</title>
+    <link href="https://cgrona.top/2022/06/08/Vulnhub-DC-1/"/>
+    <id>https://cgrona.top/2022/06/08/Vulnhub-DC-1/</id>
+    <published>2022-06-08T07:24:10.000Z</published>
+    <updated>2022-06-08T13:41:29.799Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一、环境搭建&quot;&gt;&lt;a href=&quot;#一、环境搭建&quot; class=&quot;headerlink&quot; title=&quot;一、环境搭建&quot;&gt;&lt;/a&gt;一、环境搭建&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;攻击机：Kali-2021.3：192.168.8.105&lt;/p&gt;
+&lt;p&gt;靶机：V</summary>
+      
+    
+    
+    
+    <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
+    
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
+    
+    <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>XXE</title>
+    <link href="https://cgrona.top/2022/06/02/XXE/"/>
+    <id>https://cgrona.top/2022/06/02/XXE/</id>
+    <published>2022-06-02T02:38:05.000Z</published>
+    <updated>2022-06-04T01:50:43.023Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一、XML与XXE&quot;&gt;&lt;a href=&quot;#一、XML与XXE&quot; class=&quot;headerlink&quot; title=&quot;一、XML与XXE&quot;&gt;&lt;/a&gt;一、XML与XXE&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;XML被设计为传输和存储数据，XML文档结构包括XML声明</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>metasploit</title>
     <link href="https://cgrona.top/2022/04/24/metasploit/"/>
     <id>https://cgrona.top/2022/04/24/metasploit/</id>
     <published>2022-04-24T13:24:38.000Z</published>
-    <updated>2022-05-24T06:51:24.481Z</updated>
+    <updated>2022-06-08T07:28:11.730Z</updated>
     
     
       
@@ -37,7 +84,7 @@
     
     <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
-    <category term="渗透测似" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E4%BC%BC/"/>
+    <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
   </entry>
   
@@ -406,17 +453,13 @@
     <link href="https://cgrona.top/2022/01/09/study/"/>
     <id>https://cgrona.top/2022/01/09/study/</id>
     <published>2022-01-09T15:02:12.000Z</published>
-    <updated>2022-03-31T12:18:17.714Z</updated>
+    <updated>2022-06-08T07:46:23.351Z</updated>
     
     
-    <summary type="html">&lt;h1 id=&quot;0x01-IP（IPv4）&quot;&gt;&lt;a href=&quot;#0x01-IP（IPv4）&quot; class=&quot;headerlink&quot; title=&quot;0x01 IP（IPv4）&quot;&gt;&lt;/a&gt;0x01 IP（IPv4）&lt;/h1&gt;&lt;p&gt;IP地址是唯一的标识，分为a、b、c、d四个字段，形式为X.X.X.X，每个字段都由32位的二进制数字构成，所以每个字段范围都是0-255（但我们可以使用的IP不包括0和255）&lt;/p&gt;
-&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;如：10.2.1.1 、 192.168.1.1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h1 id=&quot;0x02-子网掩码&quot;&gt;&lt;a href=&quot;#0x02-子网掩码&quot; class=&quot;headerlink&quot; title=&quot;0x02 子网掩码&quot;&gt;&lt;/a&gt;0x02 子网掩码&lt;/h1&gt;&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;局域网通信规则&lt;/strong&gt;：在同一局域网中，所有的IP必须在同一网段中才可以互相通信&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;IP地址构成&lt;/strong&gt;：网络位+主机位（网络位相同的IP地址，属于同一网段）&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;子网掩码&lt;/strong&gt;：每一个IP地址必须配一个子网掩码，用来确定IP地址的网络位&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;strong&gt;子网掩码如何确定网络位&lt;/strong&gt;：与&lt;strong&gt;255&lt;/strong&gt;对应的数字为&lt;strong&gt;网络位&lt;/strong&gt;，与&lt;strong&gt;0&lt;/strong&gt;对应的数字为&lt;strong&gt;主机位&lt;/strong&gt;&lt;/p&gt;</summary>
+      
+      
+    <summary type="html">&lt;h1 id=&quot;0x01-IP（IPv4）&quot;&gt;&lt;a href=&quot;#0x01-IP（IPv4）&quot; class=&quot;headerlink&quot; title=&quot;0x01 IP（IPv4）&quot;&gt;&lt;/a&gt;0x01 IP（IPv4）&lt;/h1&gt;&lt;p&gt;IP地址是唯一的标识，分为a、b、c、d四个字段，形</summary>
+      
     
     
     
@@ -448,57 +491,6 @@
     <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
     <category term="文件上传" scheme="https://cgrona.top/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>.htaccess文件上传漏洞</title>
-    <link href="https://cgrona.top/2022/01/09/upload-1/"/>
-    <id>https://cgrona.top/2022/01/09/upload-1/</id>
-    <published>2022-01-09T03:01:04.000Z</published>
-    <updated>2022-03-31T12:19:23.884Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;&lt;code&gt;.htaccess&lt;/code&gt;文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以实现：网页301重定向、自定义404页面、改文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。&lt;/</summary>
-      
-    
-    
-    
-    <category term="搞渗透" scheme="https://cgrona.top/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
-    
-    
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
-    <category term="文件上传" scheme="https://cgrona.top/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL简单手工注入</title>
-    <link href="https://cgrona.top/2022/01/08/sql%E6%B3%A8%E5%85%A5/"/>
-    <id>https://cgrona.top/2022/01/08/sql%E6%B3%A8%E5%85%A5/</id>
-    <published>2022-01-08T15:10:11.000Z</published>
-    <updated>2022-03-31T12:17:30.281Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;题目是墨者里的一道入门题&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/01/08/sql%E6%B3%A8%E5%85%A5/1.png&quot; alt&gt;&lt;/p&gt;
-&lt;p&gt;访问靶场，找到有注入点的地方&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/01/08/sql%E6%B3%</summary>
-      
-    
-    
-    
-    <category term="搞渗透" scheme="https://cgrona.top/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
-    
-    
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
-    <category term="sql注入" scheme="https://cgrona.top/tags/sql%E6%B3%A8%E5%85%A5/"/>
     
   </entry>
   
