@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://cgrona.top/2022/06/02/XXE/</loc>
+    
+    <lastmod>2022-06-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://cgrona.top/2022/06/08/Vulnhub-DC-1/</loc>
     
     <lastmod>2022-06-10</lastmod>
@@ -12,15 +21,6 @@
   
   <url>
     <loc>https://cgrona.top/2022/06/09/Vulnhub-DC-2/</loc>
-    
-    <lastmod>2022-06-10</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://cgrona.top/2022/06/02/XXE/</loc>
     
     <lastmod>2022-06-10</lastmod>
     
