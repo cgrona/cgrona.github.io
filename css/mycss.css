@@ -130,3 +130,44 @@ div#category{
 #footer #footer-wrap a {
   color: var(--font-color);
 }
+
+[data-theme="dark"]
+  #aside-content .card-widget{
+      background: rgba(0, 0, 0, 0.5)!important;
+    }
+[data-theme="dark"]
+  div#post{
+    background: rgba(0, 0, 0, 0.5)!important;
+    }
+[data-theme="dark"]
+  #recent-posts > .recent-post-item{
+      background: rgba(0, 0, 0, 0.5)!important;
+    }
+[data-theme="dark"]
+  div#page{
+    background: rgba(0, 0, 0, 0.5)!important;
+    }
+[data-theme="dark"]
+ div#archive{
+      background: rgba(0, 0, 0, 0.5)!important;
+    }
+[data-theme="dark"]
+  div#tag{
+    background: rgba(0, 0, 0, 0.5)!important;
+    }
+[data-theme="dark"]
+  div#category{
+    background: rgba(0, 0, 0, 0.5)!important;
+    }
+
+@font-face{
+  font-family:'shine' ;  /* 字体名自定义即可 */
+  src:url('https://'); /* 字体文件路径 */
+  font-display : swap;
+}
+
+@font-face{
+  font-family:'black' ;  /* 字体名自定义即可 */
+  src:url('https://'); /* 字体文件路径 */
+  font-display : swap;
+}
