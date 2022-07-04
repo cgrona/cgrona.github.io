@@ -6,7 +6,7 @@
   <link href="https://cgrona.top/atom.xml" rel="self"/>
   
   <link href="https://cgrona.top/"/>
-  <updated>2022-06-11T07:27:39.487Z</updated>
+  <updated>2022-07-04T07:38:11.036Z</updated>
   <id>https://cgrona.top/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Vulnhub-DC-4渗透学习</title>
+    <link href="https://cgrona.top/2022/07/04/Vulnhub-DC-4/"/>
+    <id>https://cgrona.top/2022/07/04/Vulnhub-DC-4/</id>
+    <published>2022-07-04T05:29:09.000Z</published>
+    <updated>2022-07-04T07:38:11.036Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一、环境搭建&quot;&gt;&lt;a href=&quot;#一、环境搭建&quot; class=&quot;headerlink&quot; title=&quot;一、环境搭建&quot;&gt;&lt;/a&gt;一、环境搭建&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;攻击机：Kali-2021.3：192.168.8.105&lt;/p&gt;
+&lt;p&gt;靶机：V</summary>
+      
+    
+    
+    
+    <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
+    
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
+    
+    <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+  </entry>
   
   <entry>
     <title>Vulnhub-DC-3渗透学习</title>
@@ -42,7 +70,7 @@
     <link href="https://cgrona.top/2022/06/09/Vulnhub-DC-2/"/>
     <id>https://cgrona.top/2022/06/09/Vulnhub-DC-2/</id>
     <published>2022-06-09T04:11:26.000Z</published>
-    <updated>2022-06-10T08:34:17.359Z</updated>
+    <updated>2022-07-04T05:53:47.089Z</updated>
     
     
       
@@ -465,28 +493,6 @@
 &lt;h1 id=&quot;0x02-文件系统概述&quot;&gt;&lt;a href=&quot;#0x02-文件系统概述&quot; class=&quot;headerlink&quot; title=&quot;0x02 文件系统概述&quot;&gt;&lt;/a&gt;0x02 文件系统概述&lt;/h1&gt;&lt;p&gt;文件系统即在外部存储设备上组织文件的方法&lt;/p&gt;
 &lt;p&gt;常见的文件系统:&lt;/p&gt;
 &lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;FAT     Windows&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;NTFS    Windows&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;EXT     Linux常见&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
-    
-    
-    
-    <category term="基础知识和笔记" scheme="https://cgrona.top/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"/>
-    
-    
-    <category term="learn" scheme="https://cgrona.top/tags/learn/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>git clone出错</title>
-    <link href="https://cgrona.top/2022/01/09/study-1/"/>
-    <id>https://cgrona.top/2022/01/09/study-1/</id>
-    <published>2022-01-09T15:12:22.000Z</published>
-    <updated>2022-03-31T12:18:43.072Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h4 id=&quot;输入：&quot;&gt;&lt;a href=&quot;#输入：&quot; class=&quot;headerlink&quot; title=&quot;输入：&quot;&gt;&lt;/a&gt;输入：&lt;/h4&gt;&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;</summary>
-      
     
     
     

