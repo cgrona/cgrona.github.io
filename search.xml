@@ -611,20 +611,6 @@
       </tags>
   </entry>
   <entry>
-    <title>求斜渐近线</title>
-    <url>/2022/01/10/math/</url>
-    <content><![CDATA[<script type="math/tex; mode=display">
-如果\lim\limits_{n \to \infty} [f(x)-kx-b]=0，则y=kx+b是曲线的斜渐近线</script><hr>
-<script type="math/tex; mode=display">
-求法：\lim\limits_{n \to \infty} \cfrac{f(x)}{x} = k，且\lim\limits_{n \to \infty} f(x)-kx=b，斜渐近线为y=kx+b</script>]]></content>
-      <categories>
-        <category>高数笔记</category>
-      </categories>
-      <tags>
-        <tag>math</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>XXE</title>
     <url>/2022/06/02/XXE/</url>
     <content><![CDATA[<h1 id="一、XML与XXE"><a href="#一、XML与XXE" class="headerlink" title="一、XML与XXE"></a>一、XML与XXE</h1><blockquote>
@@ -683,6 +669,20 @@
 </li>
 </ol>
 ]]></content>
+  </entry>
+  <entry>
+    <title>求斜渐近线</title>
+    <url>/2022/01/10/math/</url>
+    <content><![CDATA[<script type="math/tex; mode=display">
+如果\lim\limits_{n \to \infty} [f(x)-kx-b]=0，则y=kx+b是曲线的斜渐近线</script><hr>
+<script type="math/tex; mode=display">
+求法：\lim\limits_{n \to \infty} \cfrac{f(x)}{x} = k，且\lim\limits_{n \to \infty} f(x)-kx=b，斜渐近线为y=kx+b</script>]]></content>
+      <categories>
+        <category>高数笔记</category>
+      </categories>
+      <tags>
+        <tag>math</tag>
+      </tags>
   </entry>
   <entry>
     <title>metasploit</title>
@@ -1675,6 +1675,60 @@
       </tags>
   </entry>
   <entry>
+    <title>解析漏洞</title>
+    <url>/2022/01/09/upload/</url>
+    <content><![CDATA[<h1 id="0x01-IIS5-x-6-0解析漏洞"><a href="#0x01-IIS5-x-6-0解析漏洞" class="headerlink" title="0x01 IIS5.x/6.0解析漏洞"></a>0x01 IIS5.x/6.0解析漏洞</h1><p>IIS6.0解析利用的方法有两种：</p>
+<ol>
+<li><p><strong>目录解析</strong></p>
+<p>在网站下建立文件夹名字为.<strong>asp</strong>、.<strong>asa</strong>的文件夹，其目录内的任何扩展名的文件都别IIS当作asp文件来解析并执行。例如创建目录<strong>pamela.asp</strong>，那么<strong>pamela.asp / 1.jpg</strong>将被当作asp文件来执行。</p>
+</li>
+<li><p><strong>文件解析</strong></p>
+<p>在IIS6.0下，分号后面的不被解析，也就是说pamela.asp;.jpg会被服务器看成是pamela.asp，还有        IIS6.0默认的可执行文件除了asp还包括这三种:</p>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pamela.asa</span><br><span class="line">pamela.cer</span><br><span class="line">pamela.cdx</span><br></pre></td></tr></table></figure>
+<h1 id="0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞"><a href="#0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞" class="headerlink" title="0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞"></a>0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞</h1><p>在默认Fast-CGI开启状况下，上传一个名字为<strong>pamela.jpg</strong>，内容为</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?PHP</span></span><br><span class="line">fputs(fopen(<span class="string">&#x27;shell.php&#x27;</span>,<span class="string">&#x27;w&#x27;</span>),<span class="string">&#x27;&lt;?php eval(&amp;_POST[cmd])?&gt;&#x27;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>的文件，然后访问<strong>pamela.jpg/.php</strong>，在这个目录下就会生成一句话木马<strong>shell.php</strong></p>
+<h1 id="0x03-Nginx-lt-8-03空字节代码执行漏洞"><a href="#0x03-Nginx-lt-8-03空字节代码执行漏洞" class="headerlink" title="0x03 Nginx&lt;8.03空字节代码执行漏洞"></a>0x03 Nginx&lt;8.03空字节代码执行漏洞</h1><ol>
+<li><p><strong>影响版本</strong>:</p>
+<p>0.5./0.6./0.7&lt;=0.7.65/0.8&lt;=0.8.37</p>
+</li>
+<li><p><strong>简介</strong></p>
+<p>Nginx在图片中嵌入php代码然后通过访问</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xxx.jpg%00.php</span><br></pre></td></tr></table></figure>
+<p>来执行其中的代码</p>
+</li>
+</ol>
+<h1 id="0x04-Apache解析漏洞"><a href="#0x04-Apache解析漏洞" class="headerlink" title="0x04 Apache解析漏洞"></a>0x04 Apache解析漏洞</h1><ol>
+<li><p><strong>背景</strong></p>
+<p>Apache是从右到左开始判断解析，如果为不可识别解析，就再往左判断。</p>
+</li>
+<li><p><strong>简介</strong></p>
+<p>比如<strong>pamela.php.owf.rar</strong> “<strong>.owf</strong>”和”<strong>.rar</strong>” 这两种后缀是 apache 不可识别解析,apache就会把<strong>pamela.php.owf.rar</strong>解析成 <strong>.php</strong></p>
+</li>
+<li><p><strong>利用</strong></p>
+<p>如何判断是不是合法的后缀就是这个漏洞的利用关键,<strong>pamela.php.rara.jpg.png…</strong>（把你知道的常见后缀都写上）去测试是否是合法后缀</p>
+</li>
+</ol>
+<h1 id="0x05-其他"><a href="#0x05-其他" class="headerlink" title="0x05 其他"></a>0x05 其他</h1><ol>
+<li><p>在Windows环境下，<strong>xx.jpg[空格]或xx.jpg</strong> 这两类文件是不允许存在的，若这样命名，Windows会默认去除空格和点，我们可以通过抓包，在文件名后加一个<strong>空格或者点</strong>来绕过黑名单，若上传成功，空格和点都会被Windows自动消除，这样也可以getshell</p>
+</li>
+<li><p>如果在apache中 <strong>.htaccess</strong>可被执行，且可被上传，那可以尝试在 .htaccess中写入：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span> </span><br><span class="line">SetHandler application/x-httpd-php </span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后再上传shell.jpg的木马，这样shell.jpg就可解析为php文件</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>文件上传</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>upload-labs</title>
     <url>/2022/01/27/upload-labs/</url>
     <content><![CDATA[<h1 id="Pass-01"><a href="#Pass-01" class="headerlink" title="Pass-01:"></a>Pass-01:</h1><p>查看源代码，不难发现，第一个属于前端<code>js</code>验证，有三种方法</p>
@@ -1748,60 +1802,6 @@
 ]]></content>
       <categories>
         <category>靶场&amp;靶机</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>文件上传</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>解析漏洞</title>
-    <url>/2022/01/09/upload/</url>
-    <content><![CDATA[<h1 id="0x01-IIS5-x-6-0解析漏洞"><a href="#0x01-IIS5-x-6-0解析漏洞" class="headerlink" title="0x01 IIS5.x/6.0解析漏洞"></a>0x01 IIS5.x/6.0解析漏洞</h1><p>IIS6.0解析利用的方法有两种：</p>
-<ol>
-<li><p><strong>目录解析</strong></p>
-<p>在网站下建立文件夹名字为.<strong>asp</strong>、.<strong>asa</strong>的文件夹，其目录内的任何扩展名的文件都别IIS当作asp文件来解析并执行。例如创建目录<strong>pamela.asp</strong>，那么<strong>pamela.asp / 1.jpg</strong>将被当作asp文件来执行。</p>
-</li>
-<li><p><strong>文件解析</strong></p>
-<p>在IIS6.0下，分号后面的不被解析，也就是说pamela.asp;.jpg会被服务器看成是pamela.asp，还有        IIS6.0默认的可执行文件除了asp还包括这三种:</p>
-</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pamela.asa</span><br><span class="line">pamela.cer</span><br><span class="line">pamela.cdx</span><br></pre></td></tr></table></figure>
-<h1 id="0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞"><a href="#0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞" class="headerlink" title="0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞"></a>0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞</h1><p>在默认Fast-CGI开启状况下，上传一个名字为<strong>pamela.jpg</strong>，内容为</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?PHP</span></span><br><span class="line">fputs(fopen(<span class="string">&#x27;shell.php&#x27;</span>,<span class="string">&#x27;w&#x27;</span>),<span class="string">&#x27;&lt;?php eval(&amp;_POST[cmd])?&gt;&#x27;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>的文件，然后访问<strong>pamela.jpg/.php</strong>，在这个目录下就会生成一句话木马<strong>shell.php</strong></p>
-<h1 id="0x03-Nginx-lt-8-03空字节代码执行漏洞"><a href="#0x03-Nginx-lt-8-03空字节代码执行漏洞" class="headerlink" title="0x03 Nginx&lt;8.03空字节代码执行漏洞"></a>0x03 Nginx&lt;8.03空字节代码执行漏洞</h1><ol>
-<li><p><strong>影响版本</strong>:</p>
-<p>0.5./0.6./0.7&lt;=0.7.65/0.8&lt;=0.8.37</p>
-</li>
-<li><p><strong>简介</strong></p>
-<p>Nginx在图片中嵌入php代码然后通过访问</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xxx.jpg%00.php</span><br></pre></td></tr></table></figure>
-<p>来执行其中的代码</p>
-</li>
-</ol>
-<h1 id="0x04-Apache解析漏洞"><a href="#0x04-Apache解析漏洞" class="headerlink" title="0x04 Apache解析漏洞"></a>0x04 Apache解析漏洞</h1><ol>
-<li><p><strong>背景</strong></p>
-<p>Apache是从右到左开始判断解析，如果为不可识别解析，就再往左判断。</p>
-</li>
-<li><p><strong>简介</strong></p>
-<p>比如<strong>pamela.php.owf.rar</strong> “<strong>.owf</strong>”和”<strong>.rar</strong>” 这两种后缀是 apache 不可识别解析,apache就会把<strong>pamela.php.owf.rar</strong>解析成 <strong>.php</strong></p>
-</li>
-<li><p><strong>利用</strong></p>
-<p>如何判断是不是合法的后缀就是这个漏洞的利用关键,<strong>pamela.php.rara.jpg.png…</strong>（把你知道的常见后缀都写上）去测试是否是合法后缀</p>
-</li>
-</ol>
-<h1 id="0x05-其他"><a href="#0x05-其他" class="headerlink" title="0x05 其他"></a>0x05 其他</h1><ol>
-<li><p>在Windows环境下，<strong>xx.jpg[空格]或xx.jpg</strong> 这两类文件是不允许存在的，若这样命名，Windows会默认去除空格和点，我们可以通过抓包，在文件名后加一个<strong>空格或者点</strong>来绕过黑名单，若上传成功，空格和点都会被Windows自动消除，这样也可以getshell</p>
-</li>
-<li><p>如果在apache中 <strong>.htaccess</strong>可被执行，且可被上传，那可以尝试在 .htaccess中写入：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span> </span><br><span class="line">SetHandler application/x-httpd-php </span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>然后再上传shell.jpg的木马，这样shell.jpg就可解析为php文件</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
       </categories>
       <tags>
         <tag>web</tag>
