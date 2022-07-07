@@ -6,7 +6,7 @@
   <link href="https://cgrona.top/atom.xml" rel="self"/>
   
   <link href="https://cgrona.top/"/>
-  <updated>2022-07-04T07:38:11.036Z</updated>
+  <updated>2022-07-07T10:55:39.545Z</updated>
   <id>https://cgrona.top/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Vulnhub-DC-5渗透学习</title>
+    <link href="https://cgrona.top/2022/07/07/Vulnhub-DC-5/"/>
+    <id>https://cgrona.top/2022/07/07/Vulnhub-DC-5/</id>
+    <published>2022-07-07T06:52:50.000Z</published>
+    <updated>2022-07-07T10:55:39.545Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一、环境搭建&quot;&gt;&lt;a href=&quot;#一、环境搭建&quot; class=&quot;headerlink&quot; title=&quot;一、环境搭建&quot;&gt;&lt;/a&gt;一、环境搭建&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;攻击机：Kali-2021.3：192.168.8.105&lt;/p&gt;
+&lt;p&gt;靶机：V</summary>
+      
+    
+    
+    
+    <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
+    
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
+    
+    <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+  </entry>
   
   <entry>
     <title>Vulnhub-DC-4渗透学习</title>
@@ -481,32 +509,6 @@
     
     
     <category term="math" scheme="https://cgrona.top/tags/math/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>NTFS权限</title>
-    <link href="https://cgrona.top/2022/01/09/study-2/"/>
-    <id>https://cgrona.top/2022/01/09/study-2/</id>
-    <published>2022-01-09T15:17:40.000Z</published>
-    <updated>2022-03-31T12:18:50.956Z</updated>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;0x01-NTFS权限概述&quot;&gt;&lt;a href=&quot;#0x01-NTFS权限概述&quot; class=&quot;headerlink&quot; title=&quot;0x01 NTFS权限概述&quot;&gt;&lt;/a&gt;0x01 NTFS权限概述&lt;/h1&gt;&lt;ol&gt;
-&lt;li&gt;通过设置NTFS权限，实现不同的用户访问不同的权限&lt;/li&gt;
-&lt;li&gt;分配了正确的访问权限后，用户才能访问其资源&lt;/li&gt;
-&lt;li&gt;设置权限防止资源被篡改、删除&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h1 id=&quot;0x02-文件系统概述&quot;&gt;&lt;a href=&quot;#0x02-文件系统概述&quot; class=&quot;headerlink&quot; title=&quot;0x02 文件系统概述&quot;&gt;&lt;/a&gt;0x02 文件系统概述&lt;/h1&gt;&lt;p&gt;文件系统即在外部存储设备上组织文件的方法&lt;/p&gt;
-&lt;p&gt;常见的文件系统:&lt;/p&gt;
-&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;FAT     Windows&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;NTFS    Windows&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;EXT     Linux常见&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
-    
-    
-    
-    <category term="基础知识和笔记" scheme="https://cgrona.top/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"/>
-    
-    
-    <category term="learn" scheme="https://cgrona.top/tags/learn/"/>
     
   </entry>
   
