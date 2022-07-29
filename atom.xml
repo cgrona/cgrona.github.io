@@ -6,7 +6,7 @@
   <link href="https://cgrona.top/atom.xml" rel="self"/>
   
   <link href="https://cgrona.top/"/>
-  <updated>2022-07-07T10:55:39.545Z</updated>
+  <updated>2022-07-29T03:26:09.980Z</updated>
   <id>https://cgrona.top/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>WinDbg使用学习</title>
+    <link href="https://cgrona.top/2022/07/29/WinDbg%E4%BD%BF%E7%94%A8%E5%AD%A6%E4%B9%A0/"/>
+    <id>https://cgrona.top/2022/07/29/WinDbg%E4%BD%BF%E7%94%A8%E5%AD%A6%E4%B9%A0/</id>
+    <published>2022-07-29T02:36:51.000Z</published>
+    <updated>2022-07-29T03:26:09.980Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一、安装WinDbg&quot;&gt;&lt;a href=&quot;#一、安装WinDbg&quot; class=&quot;headerlink&quot; title=&quot;一、安装WinDbg&quot;&gt;&lt;/a&gt;一、安装WinDbg&lt;/h1&gt;&lt;p&gt;Microsoft商店中下载安装即可，默认安装路径&lt;/p&gt;
+&lt;p&gt;&lt;code</summary>
+      
+    
+    
+    
+    <category term="基础知识和笔记" scheme="https://cgrona.top/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"/>
+    
+    
+    <category term="learn" scheme="https://cgrona.top/tags/learn/"/>
+    
+    <category term="调试" scheme="https://cgrona.top/tags/%E8%B0%83%E8%AF%95/"/>
+    
+  </entry>
   
   <entry>
     <title>Vulnhub-DC-5渗透学习</title>
@@ -49,7 +74,7 @@
     <link href="https://cgrona.top/2022/07/04/Vulnhub-DC-4/"/>
     <id>https://cgrona.top/2022/07/04/Vulnhub-DC-4/</id>
     <published>2022-07-04T05:29:09.000Z</published>
-    <updated>2022-07-04T07:38:11.036Z</updated>
+    <updated>2022-07-07T06:54:29.375Z</updated>
     
     
       
@@ -410,9 +435,9 @@
     <category term="读书笔记" scheme="https://cgrona.top/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
     
     
-    <category term="read" scheme="https://cgrona.top/tags/read/"/>
-    
     <category term="learn" scheme="https://cgrona.top/tags/learn/"/>
+    
+    <category term="read" scheme="https://cgrona.top/tags/read/"/>
     
   </entry>
   
@@ -485,30 +510,6 @@
     
     
     <category term="learn" scheme="https://cgrona.top/tags/learn/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>求斜渐近线</title>
-    <link href="https://cgrona.top/2022/01/10/math/"/>
-    <id>https://cgrona.top/2022/01/10/math/</id>
-    <published>2022-01-10T01:32:50.000Z</published>
-    <updated>2022-03-31T12:15:22.434Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;script type=&quot;math/tex; mode=display&quot;&gt;
-如果\lim\limits_{n \to \infty} [f(x)-kx-b]=0，则y=kx+b是曲线的斜渐近线&lt;/script&gt;&lt;hr&gt;
-&lt;script type=&quot;math/tex; mode=</summary>
-      
-    
-    
-    
-    <category term="高数笔记" scheme="https://cgrona.top/categories/%E9%AB%98%E6%95%B0%E7%AC%94%E8%AE%B0/"/>
-    
-    
-    <category term="math" scheme="https://cgrona.top/tags/math/"/>
     
   </entry>
   
