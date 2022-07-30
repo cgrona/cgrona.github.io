@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://cgrona.top/2022/01/27/upload-labs/</loc>
+    
+    <lastmod>2022-07-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://cgrona.top/2022/01/09/upload-1/</loc>
     
     <lastmod>2022-07-30</lastmod>
@@ -176,15 +185,6 @@
     <loc>https://cgrona.top/2022/03/19/xss/</loc>
     
     <lastmod>2022-04-18</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://cgrona.top/2022/01/27/upload-labs/</loc>
-    
-    <lastmod>2022-04-17</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
