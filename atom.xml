@@ -6,7 +6,7 @@
   <link href="https://cgrona.top/atom.xml" rel="self"/>
   
   <link href="https://cgrona.top/"/>
-  <updated>2022-07-29T03:26:09.980Z</updated>
+  <updated>2022-08-12T15:57:11.816Z</updated>
   <id>https://cgrona.top/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Vulnhub-DC-6渗透学习</title>
+    <link href="https://cgrona.top/2022/08/12/Vulnhub-DC-6/"/>
+    <id>https://cgrona.top/2022/08/12/Vulnhub-DC-6/</id>
+    <published>2022-08-12T14:22:35.000Z</published>
+    <updated>2022-08-12T15:57:11.816Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一、环境搭建&quot;&gt;&lt;a href=&quot;#一、环境搭建&quot; class=&quot;headerlink&quot; title=&quot;一、环境搭建&quot;&gt;&lt;/a&gt;一、环境搭建&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;攻击机：Kali-2021.3：192.168.11.132&lt;/p&gt;
+&lt;p&gt;靶机：</summary>
+      
+    
+    
+    
+    <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
+    
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
+    
+    <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+  </entry>
   
   <entry>
     <title>WinDbg使用学习</title>
@@ -46,7 +74,7 @@
     <link href="https://cgrona.top/2022/07/07/Vulnhub-DC-5/"/>
     <id>https://cgrona.top/2022/07/07/Vulnhub-DC-5/</id>
     <published>2022-07-07T06:52:50.000Z</published>
-    <updated>2022-07-07T10:55:39.545Z</updated>
+    <updated>2022-08-12T14:25:02.896Z</updated>
     
     
       
@@ -158,7 +186,7 @@
     <link href="https://cgrona.top/2022/06/08/Vulnhub-DC-1/"/>
     <id>https://cgrona.top/2022/06/08/Vulnhub-DC-1/</id>
     <published>2022-06-08T07:24:10.000Z</published>
-    <updated>2022-06-10T08:34:35.429Z</updated>
+    <updated>2022-08-12T14:25:19.617Z</updated>
     
     
       
@@ -484,32 +512,6 @@
     
     
     <category term="read" scheme="https://cgrona.top/tags/read/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Failed to load resource</title>
-    <link href="https://cgrona.top/2022/01/10/study-3/"/>
-    <id>https://cgrona.top/2022/01/10/study-3/</id>
-    <published>2022-01-10T02:11:05.000Z</published>
-    <updated>2022-06-10T08:30:53.715Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;最近搭博客想弄一个live2d的人物出来玩，于是去网上尝试了各种办法，眼看着就要成功&lt;/p&gt;
-&lt;p&gt;但是 你知道的，&lt;del&gt;没有bug的程序不是一个好程序&lt;/del&gt;，不会修bug的程序员不是一个好程序员&lt;/p&gt;
-&lt;p&gt;bug们想尽各种办法出现，只为了锻炼我们的能力&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/01/10/study-3/3.jpg&quot; alt&gt;&lt;/p&gt;
-&lt;p&gt;比如：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/01/10/study-3/1.png&quot; alt&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/01/10/study-3/2.png&quot; alt&gt;&lt;/p&gt;
-&lt;p&gt;在我这里他们是同一种错误，只是不同的浏览器而已&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="基础知识和笔记" scheme="https://cgrona.top/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"/>
-    
-    
-    <category term="learn" scheme="https://cgrona.top/tags/learn/"/>
     
   </entry>
   
