@@ -867,6 +867,29 @@
       </tags>
   </entry>
   <entry>
+    <title>Vulnhub-DC-8渗透学习</title>
+    <url>/2022/08/24/Vulnhub-DC-8/</url>
+    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
+<p>攻击机：Kali-2021.3：192.168.11.132</p>
+<p>靶机：Vulnhub-DC-8：192.168.11.142</p>
+</blockquote>
+<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.11.0/24</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/24/Vulnhub-DC-8/1.png" alt></p>
+<p>扫描目标端口</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.11.142</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/24/Vulnhub-DC-8/2.png" alt></p>
+]]></content>
+      <categories>
+        <category>靶场&amp;靶机</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>靶机</tag>
+        <tag>渗透测试</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Vulnhub-DC-7渗透学习</title>
     <url>/2022/08/14/Vulnhub-DC-7/</url>
     <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
@@ -978,29 +1001,6 @@
 <p><a href="https://blog.csdn.net/weixin_44214107/article/details/101123371">DC：7靶机-Walkthrough</a></p>
 <p><a href="https://zhuanlan.zhihu.com/p/60880048">Drupal drush 常用命令 - 知乎 (zhihu.com)</a></p>
 <p><a href="https://www.linuxprobe.com/gpg-encrypt-decrypt.html">使用 GPG 加密和解密文件 | 《Linux就该这么学》 (linuxprobe.com)</a></p>
-]]></content>
-      <categories>
-        <category>靶场&amp;靶机</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>靶机</tag>
-        <tag>渗透测试</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Vulnhub-DC-8渗透学习</title>
-    <url>/2022/08/24/Vulnhub-DC-8/</url>
-    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
-<p>攻击机：Kali-2021.3：192.168.11.132</p>
-<p>靶机：Vulnhub-DC-8：192.168.11.142</p>
-</blockquote>
-<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.11.0/24</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/24/Vulnhub-DC-8/1.png" alt></p>
-<p>扫描目标端口</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.11.142</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/24/Vulnhub-DC-8/2.png" alt></p>
 ]]></content>
       <categories>
         <category>靶场&amp;靶机</category>
@@ -1999,7 +1999,7 @@
 <p>payload：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="number">1</span> <span class="keyword">and</span> extractvalue(<span class="number">1</span>,concat(<span class="number">0x7e</span>,database()))	# 爆数据库</span><br></pre></td></tr></table></figure>
 <p><img src="/2022/04/17/pikachu/46.png" alt></p>
-<h2 id="8、”http-header”注入"><a href="#8、”http-header”注入" class="headerlink" title="8、”http header”注入"></a>8、”http header”注入</h2>]]></content>
+]]></content>
       <categories>
         <category>靶场&amp;靶机</category>
       </categories>
@@ -2310,6 +2310,19 @@
       </tags>
   </entry>
   <entry>
+    <title>git clone出错</title>
+    <url>/2022/01/09/study-1/</url>
+    <content><![CDATA[<h4 id="输入："><a href="#输入：" class="headerlink" title="输入："></a>输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> http.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> https.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br></pre></td></tr></table></figure>
+<h4 id="如果无效则输入："><a href="#如果无效则输入：" class="headerlink" title="如果无效则输入："></a>如果无效则输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> --unset http.proxy</span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> --unset https.proxy</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>基础知识和笔记</category>
+      </categories>
+      <tags>
+        <tag>learn</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>NTFS权限</title>
     <url>/2022/01/09/study-2/</url>
     <content><![CDATA[<h1 id="0x01-NTFS权限概述"><a href="#0x01-NTFS权限概述" class="headerlink" title="0x01 NTFS权限概述"></a>0x01 NTFS权限概述</h1><ol>
@@ -2435,10 +2448,41 @@
       </tags>
   </entry>
   <entry>
-    <title>git clone出错</title>
-    <url>/2022/01/09/study-1/</url>
-    <content><![CDATA[<h4 id="输入："><a href="#输入：" class="headerlink" title="输入："></a>输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> http.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> https.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br></pre></td></tr></table></figure>
-<h4 id="如果无效则输入："><a href="#如果无效则输入：" class="headerlink" title="如果无效则输入："></a>如果无效则输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> --unset http.proxy</span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> --unset https.proxy</span><br></pre></td></tr></table></figure>
+    <title>Failed to load resource</title>
+    <url>/2022/01/10/study-3/</url>
+    <content><![CDATA[<p>最近搭博客想弄一个live2d的人物出来玩，于是去网上尝试了各种办法，眼看着就要成功</p>
+<p>但是 你知道的，<del>没有bug的程序不是一个好程序</del>，不会修bug的程序员不是一个好程序员</p>
+<p>bug们想尽各种办法出现，只为了锻炼我们的能力</p>
+<p><img src="/2022/01/10/study-3/3.jpg" alt></p>
+<p>比如：</p>
+<p><img src="/2022/01/10/study-3/1.png" alt></p>
+<p><img src="/2022/01/10/study-3/2.png" alt></p>
+<p>在我这里他们是同一种错误，只是不同的浏览器而已</p>
+<span id="more"></span>
+<hr>
+<p>我在网上看了无数的文章，参考了无数的方法，都不太行，只能说不是我报错的类型</p>
+<p>看着这些404 not found 我觉得很大可能是路径问题</p>
+<p>加上很多文章也说路径问题</p>
+<p>于是进行了修改：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>更改后：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>有点作用，’ ./ ‘ 表示当前目录，它找得到这个css文件了，但是其他网页怎么办，难不成每个网页都配一个这个文件夹？</p>
+<p>于是我改成绝对路径：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;D:/Blog/themes/next/source/live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>但结果并不良好，还是出现了 Failed to load resource 的报错，于是我找到这个文件发现：</p>
+<p>请求网址变成了</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://localhost:4000/D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">file:///D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
+<p>你说这是什么道理（无奈）</p>
+<hr>
+<p>于是我真的给每一个网页配一份文件，搞了两天，实在没招了</p>
+<p>所以报出这两种错很大可能是路径有错，毕竟亲身经历过</p>
+<hr>
+<p>参考：</p>
+<p><a href="https://ask.csdn.net/questions/755371">https://ask.csdn.net/questions/755371</a></p>
+<p><a href="https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff">https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff</a></p>
 ]]></content>
       <categories>
         <category>基础知识和笔记</category>
@@ -2506,50 +2550,6 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ping 目标IP地址 # 测试网络连通性，有回复即为可以成功通信</span><br><span class="line">ping -t 目标IP地址 # 一直ping</span><br><span class="line">ping -n 目标IP地址 # 修改ping包的数量</span><br><span class="line"></span><br><span class="line">注:若ping不通，可能对方不在线，或者对方开着防火墙</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-]]></content>
-      <categories>
-        <category>基础知识和笔记</category>
-      </categories>
-      <tags>
-        <tag>learn</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Failed to load resource</title>
-    <url>/2022/01/10/study-3/</url>
-    <content><![CDATA[<p>最近搭博客想弄一个live2d的人物出来玩，于是去网上尝试了各种办法，眼看着就要成功</p>
-<p>但是 你知道的，<del>没有bug的程序不是一个好程序</del>，不会修bug的程序员不是一个好程序员</p>
-<p>bug们想尽各种办法出现，只为了锻炼我们的能力</p>
-<p><img src="/2022/01/10/study-3/3.jpg" alt></p>
-<p>比如：</p>
-<p><img src="/2022/01/10/study-3/1.png" alt></p>
-<p><img src="/2022/01/10/study-3/2.png" alt></p>
-<p>在我这里他们是同一种错误，只是不同的浏览器而已</p>
-<span id="more"></span>
-<hr>
-<p>我在网上看了无数的文章，参考了无数的方法，都不太行，只能说不是我报错的类型</p>
-<p>看着这些404 not found 我觉得很大可能是路径问题</p>
-<p>加上很多文章也说路径问题</p>
-<p>于是进行了修改：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>更改后：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>有点作用，’ ./ ‘ 表示当前目录，它找得到这个css文件了，但是其他网页怎么办，难不成每个网页都配一个这个文件夹？</p>
-<p>于是我改成绝对路径：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;D:/Blog/themes/next/source/live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>但结果并不良好，还是出现了 Failed to load resource 的报错，于是我找到这个文件发现：</p>
-<p>请求网址变成了</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://localhost:4000/D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
-<p>或者</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">file:///D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
-<p>你说这是什么道理（无奈）</p>
-<hr>
-<p>于是我真的给每一个网页配一份文件，搞了两天，实在没招了</p>
-<p>所以报出这两种错很大可能是路径有错，毕竟亲身经历过</p>
-<hr>
-<p>参考：</p>
-<p><a href="https://ask.csdn.net/questions/755371">https://ask.csdn.net/questions/755371</a></p>
-<p><a href="https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff">https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff</a></p>
 ]]></content>
       <categories>
         <category>基础知识和笔记</category>
