@@ -34,9 +34,9 @@
     <category term="基础知识和笔记" scheme="https://cgrona.top/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"/>
     
     
-    <category term="learn" scheme="https://cgrona.top/tags/learn/"/>
-    
     <category term="VMware" scheme="https://cgrona.top/tags/VMware/"/>
+    
+    <category term="learn" scheme="https://cgrona.top/tags/learn/"/>
     
   </entry>
   
@@ -68,7 +68,7 @@
     <link href="https://cgrona.top/2022/09/30/RCE/"/>
     <id>https://cgrona.top/2022/09/30/RCE/</id>
     <published>2022-09-30T07:16:46.000Z</published>
-    <updated>2022-10-07T08:38:16.570Z</updated>
+    <updated>2022-10-07T09:42:34.779Z</updated>
     
     
       

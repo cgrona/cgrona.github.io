@@ -160,16 +160,6 @@ div#category{
     background: rgba(0, 0, 0, 0.5)!important;
     }
 
-@font-face{
-  font-family:'shine' ;  /* 字体名自定义即可 */
-  src:url('https://'); /* 字体文件路径 */
-  font-display : swap;
-}
 
-@font-face{
-  font-family:'black' ;  /* 字体名自定义即可 */
-  src:url('https://'); /* 字体文件路径 */
-  font-display : swap;
-}
 
  
