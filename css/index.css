@@ -179,11 +179,7 @@ template {
   display: none
 }
 
-@font-face {
-    font-family: myfont;
-    src: url('https://img.cgrona.top/Kingnam-Maiyuan-2.otf') format("opentype");
-	font-display : swap;
-}
+
 
 .limit-one-line,
 #article-container .flink .flink-item-name,
