@@ -6,7 +6,7 @@
   <link href="https://cgrona.top/atom.xml" rel="self"/>
   
   <link href="https://cgrona.top/"/>
-  <updated>2022-10-04T02:56:07.292Z</updated>
+  <updated>2022-10-07T08:37:40.403Z</updated>
   <id>https://cgrona.top/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>桥接模式、NAT模式和仅主机模式</title>
+    <link href="https://cgrona.top/2022/10/07/VMnet/"/>
+    <id>https://cgrona.top/2022/10/07/VMnet/</id>
+    <published>2022-10-07T05:29:04.000Z</published>
+    <updated>2022-10-07T08:37:40.403Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一、VMware网络&quot;&gt;&lt;a href=&quot;#一、VMware网络&quot; class=&quot;headerlink&quot; title=&quot;一、VMware网络&quot;&gt;&lt;/a&gt;一、VMware网络&lt;/h1&gt;&lt;p&gt;在我们安装 VMware 虚拟机后，在 PC 网络连接中会多出两个虚拟网卡：</summary>
+      
+    
+    
+    
+    <category term="基础知识和笔记" scheme="https://cgrona.top/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"/>
+    
+    
+    <category term="learn" scheme="https://cgrona.top/tags/learn/"/>
+    
+    <category term="VMware" scheme="https://cgrona.top/tags/VMware/"/>
+    
+  </entry>
   
   <entry>
     <title>传输文件还原</title>
@@ -44,7 +68,7 @@
     <link href="https://cgrona.top/2022/09/30/RCE/"/>
     <id>https://cgrona.top/2022/09/30/RCE/</id>
     <published>2022-09-30T07:16:46.000Z</published>
-    <updated>2022-10-06T03:49:36.335Z</updated>
+    <updated>2022-10-07T08:38:16.570Z</updated>
     
     
       
@@ -55,6 +79,10 @@
     
     
     
+    <category term="搞渗透" scheme="https://cgrona.top/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
+    
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -487,31 +515,6 @@
     <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
     <category term="sql注入" scheme="https://cgrona.top/tags/sql%E6%B3%A8%E5%85%A5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>upload-labs</title>
-    <link href="https://cgrona.top/2022/01/27/upload-labs/"/>
-    <id>https://cgrona.top/2022/01/27/upload-labs/</id>
-    <published>2022-01-27T13:08:24.000Z</published>
-    <updated>2022-08-14T04:30:47.720Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;Pass-01&quot;&gt;&lt;a href=&quot;#Pass-01&quot; class=&quot;headerlink&quot; title=&quot;Pass-01:&quot;&gt;&lt;/a&gt;Pass-01:&lt;/h1&gt;&lt;p&gt;查看源代码，不难发现，第一个属于前端&lt;code&gt;js&lt;/code&gt;验证，有三种方法&lt;/p&gt;
-&lt;f</summary>
-      
-    
-    
-    
-    <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
-    
-    
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
-    <category term="文件上传" scheme="https://cgrona.top/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/"/>
     
   </entry>
   

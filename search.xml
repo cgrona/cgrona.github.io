@@ -106,12 +106,18 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo `cat /etc/passwd`;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>可以通过构造文件包含的形式读取文件，payload：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">?c=include$_GET[1];&amp;1=php://filter/read=convert.base64-encode/resource=flag.php //分号如果被过滤则可以用?&gt;代替</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">?c=include$_GET[1];&amp;1=php://filter/read=convert.base64-encode/resource=flag.php </span><br><span class="line">//分号如果被过滤则可以用?&gt;代替</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <h2 id="过滤斜杠"><a href="#过滤斜杠" class="headerlink" title="过滤斜杠/"></a>过滤斜杠/</h2><p>可以通过<code>;</code>拼接命令绕过</p>
 <p><code>cd..;cd..;cd..;cd..;cd etc;cat passwd</code></p>
 ]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+      </tags>
   </entry>
   <entry>
     <title>SSRF</title>
@@ -3097,6 +3103,39 @@
       </categories>
       <tags>
         <tag>web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>桥接模式、NAT模式和仅主机模式</title>
+    <url>/2022/10/07/VMnet/</url>
+    <content><![CDATA[<h1 id="一、VMware网络"><a href="#一、VMware网络" class="headerlink" title="一、VMware网络"></a>一、VMware网络</h1><p>在我们安装 VMware 虚拟机后，在 PC 网络连接中会多出两个虚拟网卡：</p>
+<p><img src="/2022/10/07/VMnet/1.png" alt></p>
+<p>简单说明一下 VMware 的几个虚拟设备</p>
+<ol>
+<li><strong>VMnet0</strong>：用于虚拟桥接网络下的虚拟交换机</li>
+<li><strong>VMnet1</strong>：用于虚拟 Host-Only（仅主机）网络下的虚拟交换机</li>
+<li><strong>VMnet8</strong>：用于虚拟 NAT 网络下的虚拟交换机</li>
+<li><strong>VMware NetworkAdepter VMnet1</strong>：Host 用于与 Host-Only 虚拟网络进行通信的虚拟网卡</li>
+<li><strong>VMware NetworkAdepter VMnet8</strong>：Host 用于与 NAT 虚拟网络进行通信的虚拟网卡</li>
+</ol>
+<h1 id="二、网络连接"><a href="#二、网络连接" class="headerlink" title="二、网络连接"></a>二、网络连接</h1><h2 id="1、桥接模式（Bridged-Networking）"><a href="#1、桥接模式（Bridged-Networking）" class="headerlink" title="1、桥接模式（Bridged Networking）"></a>1、桥接模式（Bridged Networking）</h2><p>桥接模式是指本地物理网卡和虚拟网卡通过 VMnet0 虚拟交换机进行桥接，那么物理网卡和虚拟网卡就相当于处于同一个网段，因此该虚拟机和 PC 是处于同一网段的：</p>
+<p><img src="/2022/10/07/VMnet/2.png" alt></p>
+<p>因此该虚拟机中的虚拟网卡可以通过 PC 中的物理网卡直接访问到外部网络，就相当于在局域网中新增了一台计算机，它可以访问这个局域网内的所有主机，大致联网过程如下图：</p>
+<p><img src="/2022/10/07/VMnet/3.png" alt></p>
+<h2 id="2、NAT模式"><a href="#2、NAT模式" class="headerlink" title="2、NAT模式"></a>2、NAT模式</h2><p>NAT（网络地址转换），使用 NAT 模式时，VMware 会通过 PC 中的 VMware NetworkAdepter VMnet8 虚拟网卡直接连接到 VMnet8 虚拟交换机上与虚拟网卡进行通信，但 VMware NetworkAdepter VMnet8 虚拟网卡仅作为 PC 和虚拟机通信的接口，虚拟机并不会通过它来联网。</p>
+<p>因此虚拟机会虚拟出一个虚拟 NAT 服务器，并将虚拟 NAT 设备和虚拟 DHCP 服务器连接到 VMnet8 虚拟交换机上，而物理网卡直接与虚拟 NAT 设备相连，这样就实现了虚拟机联网</p>
+<p><img src="/2022/10/07/VMnet/4.png" alt></p>
+<p>当虚拟机向互联网发送请求数据包时，都会经过虚拟 NAT 服务器进行处理，然后以 PC 的名义进行发送。而互联网发送的请求数据包也都会先被 PC 接收，然后交给虚拟 NAT 服务器进行处理并分发给对应的虚拟机。</p>
+<p>因此虚拟机在互联网中不必具有自己的 IP 地址，因为在互联网中，<strong>该 PC 和虚拟机是共享同一个 IP 地址</strong>，一般情况下，互联网设备也不能访问到该虚拟机。但同一个 PC 里的多个采用 NAT 模式连接的虚拟机之间是可以相互访问的，因为一台 PC 上只能够存在一个 NAT 模式的虚拟网络。</p>
+<h2 id="3、仅主机模式（Host-Only）"><a href="#3、仅主机模式（Host-Only）" class="headerlink" title="3、仅主机模式（Host-Only）"></a>3、仅主机模式（Host-Only）</h2><p>该模式其实就是 NAT 模式去除虚拟 NAT 设备，然后使用 VMware NetworkAdepter VMnet1 虚拟网卡与 VMnet1 虚拟交换机进行连接来与虚拟机通信，仅主机模式模式将虚拟机与外网隔开，使得虚拟机成为一个独立的系统，只与主机相互通讯。</p>
+<p><img src="/2022/10/07/VMnet/5.png" alt></p>
+]]></content>
+      <categories>
+        <category>基础知识和笔记</category>
+      </categories>
+      <tags>
+        <tag>learn</tag>
+        <tag>VMware</tag>
       </tags>
   </entry>
 </search>
