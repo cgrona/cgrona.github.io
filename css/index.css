@@ -181,7 +181,7 @@ template {
 
 @font-face {
     font-family: myfont;
-    src: url('/fonts/Kingnam-Maiyuan.otf') format("opentype");
+    src: url('https://img.cgrona.top/Kingnam-Maiyuan-2.otf') format("opentype");
 	font-display : swap;
 }
 
