@@ -6,7 +6,7 @@
   <link href="https://cgrona.top/atom.xml" rel="self"/>
   
   <link href="https://cgrona.top/"/>
-  <updated>2022-10-07T08:37:40.403Z</updated>
+  <updated>2022-10-30T05:02:42.839Z</updated>
   <id>https://cgrona.top/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>内网安全</title>
+    <link href="https://cgrona.top/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/"/>
+    <id>https://cgrona.top/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/</id>
+    <published>2022-10-26T04:36:40.000Z</published>
+    <updated>2022-10-30T05:02:42.839Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一、基本理论知识&quot;&gt;&lt;a href=&quot;#一、基本理论知识&quot; class=&quot;headerlink&quot; title=&quot;一、基本理论知识&quot;&gt;&lt;/a&gt;一、基本理论知识&lt;/h1&gt;&lt;h2 id=&quot;隔离区（DMZ）&quot;&gt;&lt;a href=&quot;#隔离区（DMZ）&quot; class=&quot;head</summary>
+      
+    
+    
+    
+    <category term="搞渗透" scheme="https://cgrona.top/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
+    
+    
+    <category term="learn" scheme="https://cgrona.top/tags/learn/"/>
+    
+    <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+  </entry>
   
   <entry>
     <title>桥接模式、NAT模式和仅主机模式</title>
@@ -491,30 +515,6 @@
     <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
     <category term="xss" scheme="https://cgrona.top/tags/xss/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>sql注入</title>
-    <link href="https://cgrona.top/2022/03/17/sql%E6%B3%A8%E5%85%A5-1/"/>
-    <id>https://cgrona.top/2022/03/17/sql%E6%B3%A8%E5%85%A5-1/</id>
-    <published>2022-03-17T02:27:29.000Z</published>
-    <updated>2022-08-14T04:29:57.669Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;一、报错盲注&quot;&gt;&lt;a href=&quot;#一、报错盲注&quot; class=&quot;headerlink&quot; title=&quot;一、报错盲注&quot;&gt;&lt;/a&gt;一、报错盲注&lt;/h2&gt;&lt;h3 id=&quot;1、通过updatexml报错&quot;&gt;&lt;a href=&quot;#1、通过updatexml报错&quot; class</summary>
-      
-    
-    
-    
-    <category term="搞渗透" scheme="https://cgrona.top/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
-    
-    
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
-    <category term="sql注入" scheme="https://cgrona.top/tags/sql%E6%B3%A8%E5%85%A5/"/>
     
   </entry>
   

