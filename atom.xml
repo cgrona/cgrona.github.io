@@ -6,7 +6,7 @@
   <link href="https://cgrona.top/atom.xml" rel="self"/>
   
   <link href="https://cgrona.top/"/>
-  <updated>2023-08-12T05:11:01.662Z</updated>
+  <updated>2023-08-12T08:16:32.909Z</updated>
   <id>https://cgrona.top/</id>
   
   <author>
@@ -17,11 +17,37 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>正规方程</title>
+    <link href="https://cgrona.top/2023/08/12/normal-equation/"/>
+    <id>https://cgrona.top/2023/08/12/normal-equation/</id>
+    <published>2023-08-12T08:14:13.000Z</published>
+    <updated>2023-08-12T08:16:32.909Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;什么是正规方程&lt;/h1&gt;
+&lt;p&gt;梯度下降法计算参数最优解，过程是对代价函数的每个参数求偏导，通过迭代算法一步步更新，直到收敛到全局最小值，从而得到最优参数。而&lt;strong&gt;正规方程是一次性求得最优解&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;思想：对于一个简单函数，对参数求导，</summary>
+      
+    
+    
+    
+    <category term="机器学习" scheme="https://cgrona.top/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="机器学习" scheme="https://cgrona.top/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="算法" scheme="https://cgrona.top/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
     <title>梯度下降</title>
     <link href="https://cgrona.top/2023/06/11/gradient-descent/"/>
     <id>https://cgrona.top/2023/06/11/gradient-descent/</id>
     <published>2023-06-11T07:10:08.000Z</published>
-    <updated>2023-08-12T05:11:01.662Z</updated>
+    <updated>2023-08-12T06:05:30.360Z</updated>
     
     
       
@@ -196,11 +222,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -228,11 +254,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -287,11 +313,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -319,11 +345,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -351,11 +377,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -381,11 +407,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -411,11 +437,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -461,9 +487,9 @@
     <category term="搞渗透" scheme="https://cgrona.top/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -545,34 +571,6 @@
     
     
     <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>文件包含</title>
-    <link href="https://cgrona.top/2022/03/27/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/"/>
-    <id>https://cgrona.top/2022/03/27/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/</id>
-    <published>2022-03-27T06:10:08.000Z</published>
-    <updated>2022-09-30T09:23:39.381Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h1&gt;一、什么是文件包含？&lt;/h1&gt;
-&lt;p&gt;开发人员将需要重复调用的函数全部写入一个文件中，然后对该文件进行包含，这就是文件包含。这样可以减少代码冗余，降低代码后期维护难度。&lt;/p&gt;
-&lt;p&gt;PHP的文件包含函数：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;code&gt;require&lt;/code</summary>
-      
-    
-    
-    
-    <category term="搞渗透" scheme="https://cgrona.top/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
-    
-    
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
-    <category term="文件包含" scheme="https://cgrona.top/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/"/>
     
   </entry>
   
