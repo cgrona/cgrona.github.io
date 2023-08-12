@@ -6,7 +6,7 @@
   <link href="https://cgrona.top/atom.xml" rel="self"/>
   
   <link href="https://cgrona.top/"/>
-  <updated>2023-02-27T06:11:47.484Z</updated>
+  <updated>2023-08-11T09:23:39.044Z</updated>
   <id>https://cgrona.top/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>梯度下降</title>
+    <link href="https://cgrona.top/2023/06/11/gradient-descent/"/>
+    <id>https://cgrona.top/2023/06/11/gradient-descent/</id>
+    <published>2023-06-11T07:10:08.000Z</published>
+    <updated>2023-08-11T09:23:39.044Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;损失函数与梯度下降&quot;&gt;损失函数与梯度下降&lt;/h1&gt;
+&lt;p&gt;损失函数公式示例：&lt;span class=&quot;math inline&quot;&gt;\(J\left(\theta
+_{0},\;\theta _{1}\right)=\dfrac{1}{2m}\sum ^{m}_{</summary>
+      
+    
+    
+    
+    <category term="机器学习" scheme="https://cgrona.top/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="机器学习" scheme="https://cgrona.top/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="算法" scheme="https://cgrona.top/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
   
   <entry>
     <title>CFS三层靶机内网渗透</title>
@@ -26,8 +52,9 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、靶场环境&quot;&gt;&lt;a href=&quot;#一、靶场环境&quot; class=&quot;headerlink&quot; title=&quot;一、靶场环境&quot;&gt;&lt;/a&gt;一、靶场环境&lt;/h1&gt;&lt;p&gt;这个环境是由三台机器组成的一个内网，网络拓扑图如下&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/27</summary>
+    <summary type="html">&lt;h1 id=&quot;一靶场环境&quot;&gt;一、靶场环境&lt;/h1&gt;
+&lt;p&gt;这个环境是由三台机器组成的一个内网，网络拓扑图如下&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/拓扑.png&quot;&gt;&lt;/p&gt;</summary>
       
     
     
@@ -51,7 +78,9 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、基本理论知识&quot;&gt;&lt;a href=&quot;#一、基本理论知识&quot; class=&quot;headerlink&quot; title=&quot;一、基本理论知识&quot;&gt;&lt;/a&gt;一、基本理论知识&lt;/h1&gt;&lt;h2 id=&quot;隔离区（DMZ）&quot;&gt;&lt;a href=&quot;#隔离区（DMZ）&quot; class=&quot;head</summary>
+    <summary type="html">&lt;h1 id=&quot;一基本理论知识&quot;&gt;一、基本理论知识&lt;/h1&gt;
+&lt;h2 id=&quot;隔离区dmz&quot;&gt;隔离区（DMZ）&lt;/h2&gt;
+&lt;p&gt;两个防火墙之间，为了解决安装防火墙后&lt;strong&gt;外部网络用户&lt;/strong&gt;不能访问&lt;strong&gt;内部网络服务器&lt;/strong&gt;的问题，而</summary>
       
     
     
@@ -75,7 +104,10 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、VMware网络&quot;&gt;&lt;a href=&quot;#一、VMware网络&quot; class=&quot;headerlink&quot; title=&quot;一、VMware网络&quot;&gt;&lt;/a&gt;一、VMware网络&lt;/h1&gt;&lt;p&gt;在我们安装 VMware 虚拟机后，在 PC 网络连接中会多出两个虚拟网卡：</summary>
+    <summary type="html">&lt;h1 id=&quot;一vmware网络&quot;&gt;一、VMware网络&lt;/h1&gt;
+&lt;p&gt;在我们安装 VMware 虚拟机后，在 PC 网络连接中会多出两个虚拟网卡：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2022/10/07/VMnet/1.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;简单说明一下 VMw</summary>
       
     
     
@@ -99,8 +131,10 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、配置环境&quot;&gt;&lt;a href=&quot;#一、配置环境&quot; class=&quot;headerlink&quot; title=&quot;一、配置环境&quot;&gt;&lt;/a&gt;一、配置环境&lt;/h1&gt;&lt;p&gt;将手机和PC连到同一子网下（如GUET-WiFi）&lt;/p&gt;
-&lt;p&gt;手机IP：&lt;code&gt;10.33.80.2</summary>
+    <summary type="html">&lt;h1 id=&quot;一配置环境&quot;&gt;一、配置环境&lt;/h1&gt;
+&lt;p&gt;将手机和PC连到同一子网下（如GUET-WiFi）&lt;/p&gt;
+&lt;p&gt;手机IP：&lt;code&gt;10.33.80.238&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2022/10/04/%E4%BC%A0%E8%B</summary>
       
     
     
@@ -122,8 +156,11 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、PHP命令执行函数&quot;&gt;&lt;a href=&quot;#一、PHP命令执行函数&quot; class=&quot;headerlink&quot; title=&quot;一、PHP命令执行函数&quot;&gt;&lt;/a&gt;一、PHP命令执行函数&lt;/h1&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;system()&lt;/strong&gt;</summary>
+    <summary type="html">&lt;h1 id=&quot;一php命令执行函数&quot;&gt;一、PHP命令执行函数&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;system()&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;该函数执行有回显，将执行结果输出到页面上&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;&amp;lt;?php system(&quot;who</summary>
       
     
     
@@ -145,9 +182,12 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、环境搭建&quot;&gt;&lt;a href=&quot;#一、环境搭建&quot; class=&quot;headerlink&quot; title=&quot;一、环境搭建&quot;&gt;&lt;/a&gt;一、环境搭建&lt;/h1&gt;&lt;blockquote&gt;
+    <summary type="html">&lt;h1 id=&quot;一环境搭建&quot;&gt;一、环境搭建&lt;/h1&gt;
+&lt;blockquote&gt;
 &lt;p&gt;攻击机：Kali-2021.3：192.168.11.132&lt;/p&gt;
-&lt;p&gt;靶机：</summary>
+&lt;p&gt;靶机：Vulnhub-DC-7：192.168.11.141&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 i</summary>
       
     
     
@@ -155,11 +195,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -173,9 +213,12 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、环境搭建&quot;&gt;&lt;a href=&quot;#一、环境搭建&quot; class=&quot;headerlink&quot; title=&quot;一、环境搭建&quot;&gt;&lt;/a&gt;一、环境搭建&lt;/h1&gt;&lt;blockquote&gt;
+    <summary type="html">&lt;h1 id=&quot;一环境搭建&quot;&gt;一、环境搭建&lt;/h1&gt;
+&lt;blockquote&gt;
 &lt;p&gt;攻击机：Kali-2021.3：192.168.11.132&lt;/p&gt;
-&lt;p&gt;靶机：</summary>
+&lt;p&gt;靶机：Vulnhub-DC-6：192.168.11.140&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 i</summary>
       
     
     
@@ -183,11 +226,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -201,8 +244,9 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、安装WinDbg&quot;&gt;&lt;a href=&quot;#一、安装WinDbg&quot; class=&quot;headerlink&quot; title=&quot;一、安装WinDbg&quot;&gt;&lt;/a&gt;一、安装WinDbg&lt;/h1&gt;&lt;p&gt;Microsoft商店中下载安装即可，默认安装路径&lt;/p&gt;
-&lt;p&gt;&lt;code</summary>
+    <summary type="html">&lt;h1 id=&quot;一安装windbg&quot;&gt;一、安装WinDbg&lt;/h1&gt;
+&lt;p&gt;Microsoft商店中下载安装即可，默认安装路径&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;（C:\Users\用户名\AppData\Local\Microsoft\WindowsApps）&lt;/code&gt;&lt;/p&gt;</summary>
       
     
     
@@ -226,9 +270,12 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、环境搭建&quot;&gt;&lt;a href=&quot;#一、环境搭建&quot; class=&quot;headerlink&quot; title=&quot;一、环境搭建&quot;&gt;&lt;/a&gt;一、环境搭建&lt;/h1&gt;&lt;blockquote&gt;
+    <summary type="html">&lt;h1 id=&quot;一环境搭建&quot;&gt;一、环境搭建&lt;/h1&gt;
+&lt;blockquote&gt;
 &lt;p&gt;攻击机：Kali-2021.3：192.168.8.105&lt;/p&gt;
-&lt;p&gt;靶机：V</summary>
+&lt;p&gt;靶机：Vulnhub-DC-5：192.168.8.122&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=</summary>
       
     
     
@@ -236,11 +283,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -254,9 +301,12 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、环境搭建&quot;&gt;&lt;a href=&quot;#一、环境搭建&quot; class=&quot;headerlink&quot; title=&quot;一、环境搭建&quot;&gt;&lt;/a&gt;一、环境搭建&lt;/h1&gt;&lt;blockquote&gt;
+    <summary type="html">&lt;h1 id=&quot;一环境搭建&quot;&gt;一、环境搭建&lt;/h1&gt;
+&lt;blockquote&gt;
 &lt;p&gt;攻击机：Kali-2021.3：192.168.8.105&lt;/p&gt;
-&lt;p&gt;靶机：V</summary>
+&lt;p&gt;靶机：Vulnhub-DC-4：192.168.8.168&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=</summary>
       
     
     
@@ -264,11 +314,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -282,9 +332,12 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、环境搭建&quot;&gt;&lt;a href=&quot;#一、环境搭建&quot; class=&quot;headerlink&quot; title=&quot;一、环境搭建&quot;&gt;&lt;/a&gt;一、环境搭建&lt;/h1&gt;&lt;blockquote&gt;
+    <summary type="html">&lt;h1 id=&quot;一环境搭建&quot;&gt;一、环境搭建&lt;/h1&gt;
+&lt;blockquote&gt;
 &lt;p&gt;攻击机：Kali-2021.3：192.168.8.105&lt;/p&gt;
-&lt;p&gt;靶机：V</summary>
+&lt;p&gt;靶机：Vulnhub-DC-3：192.168.8.180&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=</summary>
       
     
     
@@ -292,11 +345,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -310,9 +363,11 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、环境搭建&quot;&gt;&lt;a href=&quot;#一、环境搭建&quot; class=&quot;headerlink&quot; title=&quot;一、环境搭建&quot;&gt;&lt;/a&gt;一、环境搭建&lt;/h1&gt;&lt;blockquote&gt;
+    <summary type="html">&lt;h1 id=&quot;一环境搭建&quot;&gt;一、环境搭建&lt;/h1&gt;
+&lt;blockquote&gt;
 &lt;p&gt;攻击机：Kali-2021.3：192.168.8.105&lt;/p&gt;
-&lt;p&gt;靶机：V</summary>
+&lt;p&gt;靶机：Vulnhub-DC-2：192.168.8.222&lt;/p&gt;
+&lt;p&gt;靶机下载地址：&lt;a href=&quot;htt</summary>
       
     
     
@@ -320,11 +375,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -338,9 +393,11 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、环境搭建&quot;&gt;&lt;a href=&quot;#一、环境搭建&quot; class=&quot;headerlink&quot; title=&quot;一、环境搭建&quot;&gt;&lt;/a&gt;一、环境搭建&lt;/h1&gt;&lt;blockquote&gt;
+    <summary type="html">&lt;h1 id=&quot;一环境搭建&quot;&gt;一、环境搭建&lt;/h1&gt;
+&lt;blockquote&gt;
 &lt;p&gt;攻击机：Kali-2021.3：192.168.8.105&lt;/p&gt;
-&lt;p&gt;靶机：V</summary>
+&lt;p&gt;靶机：Vulnhub-DC-1：192.168.8.230&lt;/p&gt;
+&lt;p&gt;靶机下载地址：&lt;a href=&quot;htt</summary>
       
     
     
@@ -348,11 +405,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -366,8 +423,9 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、XML与XXE&quot;&gt;&lt;a href=&quot;#一、XML与XXE&quot; class=&quot;headerlink&quot; title=&quot;一、XML与XXE&quot;&gt;&lt;/a&gt;一、XML与XXE&lt;/h1&gt;&lt;blockquote&gt;
-&lt;p&gt;XML被设计为传输和存储数据，XML文档结构包括XML声明</summary>
+    <summary type="html">&lt;h1 id=&quot;一xml与xxe&quot;&gt;一、XML与XXE&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;XML被设计为传输和存储数据，XML文档结构包括XML声明、DTD文档类型定义（可选）、文档元素，其焦点是数据的内容，其把数据从HTML分离，是独立于软件和硬件的信息传输工具。&lt;</summary>
       
     
     
@@ -385,8 +443,10 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、metasploit框架介绍&quot;&gt;&lt;a href=&quot;#一、metasploit框架介绍&quot; class=&quot;headerlink&quot; title=&quot;一、metasploit框架介绍&quot;&gt;&lt;/a&gt;一、metasploit框架介绍&lt;/h1&gt;&lt;blockquote&gt;
-&lt;p&gt;m</summary>
+    <summary type="html">&lt;h1 id=&quot;一metasploit框架介绍&quot;&gt;一、metasploit框架介绍&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;metasploit是一款开源安全漏洞利用和测试工具，集成了各种平台上常见的溢出漏洞和流行的shellcode，并且还在持续保持更新&lt;/p&gt;
+&lt;/b</summary>
       
     
     
@@ -394,9 +454,9 @@
     <category term="搞渗透" scheme="https://cgrona.top/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -410,8 +470,10 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、搭建靶场&quot;&gt;&lt;a href=&quot;#一、搭建靶场&quot; class=&quot;headerlink&quot; title=&quot;一、搭建靶场&quot;&gt;&lt;/a&gt;一、搭建靶场&lt;/h1&gt;&lt;ol&gt;
-&lt;li&gt;去官网把靶场下载下来，&lt;a href=&quot;https://github.com/zhuifengs</summary>
+    <summary type="html">&lt;h1 id=&quot;一搭建靶场&quot;&gt;一、搭建靶场&lt;/h1&gt;
+&lt;ol type=&quot;1&quot;&gt;
+&lt;li&gt;去官网把靶场下载下来，&lt;a href=&quot;https://github.com/zhuifengshaonianhanlu/pikachu&quot;&gt;链接地址&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;将下载好</summary>
       
     
     
@@ -435,9 +497,12 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、搭建测试环境&quot;&gt;&lt;a href=&quot;#一、搭建测试环境&quot; class=&quot;headerlink&quot; title=&quot;一、搭建测试环境&quot;&gt;&lt;/a&gt;一、搭建测试环境&lt;/h1&gt;&lt;p&gt;两台虚拟机&lt;/p&gt;
+    <summary type="html">&lt;h1 id=&quot;一搭建测试环境&quot;&gt;一、搭建测试环境&lt;/h1&gt;
+&lt;p&gt;两台虚拟机&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;kali linux（攻击机）ip：192.168.1</summary>
+&lt;li&gt;kali linux（攻击机）ip：192.168.11.132&lt;/li&gt;
+&lt;li&gt;Windows 7（被攻击机）ip：192.168.11.128&lt;/li&gt;
+&lt;/</summary>
       
     
     
@@ -461,7 +526,10 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、什么是SSRF&quot;&gt;&lt;a href=&quot;#一、什么是SSRF&quot; class=&quot;headerlink&quot; title=&quot;一、什么是SSRF&quot;&gt;&lt;/a&gt;一、什么是SSRF&lt;/h1&gt;&lt;p&gt;SSRF（server-side request forgery，服务端请求伪造），</summary>
+    <summary type="html">&lt;h1 id=&quot;一什么是ssrf&quot;&gt;一、什么是SSRF&lt;/h1&gt;
+&lt;p&gt;SSRF（server-side request
+forgery，服务端请求伪造），这是一个由攻击者构造请求，服务器发起请求的安全漏洞，就是让服务器去请求你通常请求不到的东西&lt;/p&gt;
+</summary>
       
     
     
@@ -483,7 +551,10 @@
     
       
       
-    <summary type="html">&lt;h1 id=&quot;一、什么是文件包含？&quot;&gt;&lt;a href=&quot;#一、什么是文件包含？&quot; class=&quot;headerlink&quot; title=&quot;一、什么是文件包含？&quot;&gt;&lt;/a&gt;一、什么是文件包含？&lt;/h1&gt;&lt;p&gt; 开发人员将需要重复调用的函数全部写入一个文件中，然后对该文件进行包含，这就</summary>
+    <summary type="html">&lt;h1 id=&quot;一什么是文件包含&quot;&gt;一、什么是文件包含？&lt;/h1&gt;
+&lt;p&gt;开发人员将需要重复调用的函数全部写入一个文件中，然后对该文件进行包含，这就是文件包含。这样可以减少代码冗余，降低代码后期维护难度。&lt;/p&gt;
+&lt;p&gt;PHP的文件包含函数：&lt;/p&gt;
+&lt;ol type=&quot;1</summary>
       
     
     
@@ -494,28 +565,6 @@
     <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
     <category term="文件包含" scheme="https://cgrona.top/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PHP反序列化</title>
-    <link href="https://cgrona.top/2022/03/26/unserialize/"/>
-    <id>https://cgrona.top/2022/03/26/unserialize/</id>
-    <published>2022-03-26T04:37:31.000Z</published>
-    <updated>2022-08-14T04:30:31.226Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;一、什么是反序列化？&quot;&gt;&lt;a href=&quot;#一、什么是反序列化？&quot; class=&quot;headerlink&quot; title=&quot;一、什么是反序列化？&quot;&gt;&lt;/a&gt;一、什么是反序列化？&lt;/h1&gt;&lt;p&gt;首先我们要知道什么是序列化，我们在php里定义一个class，这个class</summary>
-      
-    
-    
-    
-    <category term="搞渗透" scheme="https://cgrona.top/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
-    
-    
-    <category term="反序列化" scheme="https://cgrona.top/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/"/>
     
   </entry>
   
