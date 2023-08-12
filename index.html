@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>风清竹喧</title><meta name="author" content="cgrona"><meta name="copyright" content="cgrona"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="选择有时候比努力更重要">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>风清竹喧</title><meta name="author" content="cgrona"><meta name="copyright" content="cgrona"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="选择有时候比努力更重要">
 <meta property="og:type" content="website">
 <meta property="og:title" content="风清竹喧">
 <meta property="og:url" content="https://cgrona.top/index.html">
@@ -8,10 +8,10 @@
 <meta property="og:image" content="https://cgrona.top/img/avatar.png">
 <meta property="article:author" content="cgrona">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://cgrona.top/img/avatar.png"><link rel="shortcut icon" href="/img/logo.jpg"><link rel="canonical" href="https://cgrona.top/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+<meta name="twitter:image" content="https://cgrona.top/img/avatar.png"><link rel="shortcut icon" href="/img/logo.jpg"><link rel="canonical" href="https://cgrona.top/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
   translate: undefined,
   noticeOutdate: undefined,
   highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
@@ -25,7 +25,7 @@
     post: false
   },
   runtime: '天',
-  dateSuffix: {
+  date_suffix: {
     just: '刚刚',
     min: '分钟前',
     hour: '小时前',
@@ -43,19 +43,14 @@
   },
   isPhotoFigcaption: false,
   islazyload: false,
-  isAnchor: false,
-  percent: {
-    toc: true,
-    rightside: false,
-  },
-  autoDarkmode: false
+  isAnchor: false
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: '风清竹喧',
   isPost: false,
   isHome: true,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2023-08-12 12:55:02'
+  postUpdate: '2023-08-12 13:00:03'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -112,21 +107,6 @@
       document.head.appendChild(script)
     })
   
-    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = url
-      if (id) link.id = id
-      link.onerror = reject
-      link.onload = link.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        link.onload = link.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(link)
-    })
-  
       win.activateDarkMode = function () {
         document.documentElement.setAttribute('data-theme', 'dark')
         if (document.querySelector('meta[name="theme-color"]') !== null) {
@@ -160,28 +140,7 @@
     }
     detectApple()
     })(window)</script><link rel="stylesheet" href="/css/mycss.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="风清竹喧" type="application/atom+xml">
-</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
-  const $loadingBox = document.getElementById('loading-box')
-  const $body = document.body
-  const preloader = {
-    endLoading: () => {
-      $body.style.overflow = ''
-      $loadingBox.classList.add('loaded')
-    },
-    initLoading: () => {
-      $body.style.overflow = 'hidden'
-      $loadingBox.classList.remove('loaded')
-    }
-  }
-
-  preloader.initLoading()
-  window.addEventListener('load',() => { preloader.endLoading() })
-
-  if (true) {
-    document.addEventListener('pjax:send', () => { preloader.initLoading() })
-    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
-  }
-})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('https://img.cgrona.top/Blog_img/index.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="风清竹喧"><span class="site-name">风清竹喧</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">风清竹喧</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/cgrona" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:1549692438@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left"><a href="/2023/06/11/gradient-descent/" title="梯度下降"><img class="post-bg" src="https://img.cgrona.top/Blog_img/31.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="梯度下降"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/06/11/gradient-descent/" title="梯度下降">梯度下降</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-06-11T07:10:08.000Z" title="发表于 2023-06-11 15:10:08">2023-06-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%AE%97%E6%B3%95/">算法</a></span></div><div class="content">损失函数与梯度下降
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('https://img.cgrona.top/Blog_img/index.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">风清竹喧</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">风清竹喧</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/cgrona" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:1549692438@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left"><a href="/2023/06/11/gradient-descent/" title="梯度下降"><img class="post_bg" src="https://img.cgrona.top/Blog_img/31.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="梯度下降"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/06/11/gradient-descent/" title="梯度下降">梯度下降</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-06-11T07:10:08.000Z" title="发表于 2023-06-11 15:10:08">2023-06-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%AE%97%E6%B3%95/">算法</a></span></div><div class="content">损失函数与梯度下降
 损失函数公式示例：\(J\left(\theta
 _{0},\;\theta _{1}\right)=\dfrac{1}{2m}\sum ^{m}_{i=1}\left( h_{\theta
 }\left( x^{\left( i\right) }\right) -y^{\left( i\right) }\right)
@@ -194,7 +153,7 @@ _{1}x\)
 _{j}-\alpha \dfrac{\partial}{\partial \theta _{j}}J\left(\theta
 _{0},\;\theta _{1}\right) （for\; j=0\;and\;j = 1）\)
 将损失函数代入偏导即可得到：\(\theta
-_{j}:=\theta _{j}-\alpha\dfrac{1}{m}\sum ^{m}_{i=1}\left( h_{\ ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/" title="CFS三层靶机内网渗透"><img class="post-bg" src="https://img.cgrona.top/Blog_img/30.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CFS三层靶机内网渗透"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/" title="CFS三层靶机内网渗透">CFS三层靶机内网渗透</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-02-27T06:03:14.000Z" title="发表于 2023-02-27 14:03:14">2023-02-27</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%90%9E%E6%B8%97%E9%80%8F/">搞渗透</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E9%9D%B6%E6%9C%BA/">靶机</a></span></div><div class="content">一、靶场环境
+_{j}:=\theta _{j}-\alpha\dfrac{1}{m}\sum ^{m}_{i=1}\left( h_{\ ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/" title="CFS三层靶机内网渗透"><img class="post_bg" src="https://img.cgrona.top/Blog_img/30.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CFS三层靶机内网渗透"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/" title="CFS三层靶机内网渗透">CFS三层靶机内网渗透</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-02-27T06:03:14.000Z" title="发表于 2023-02-27 14:03:14">2023-02-27</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%90%9E%E6%B8%97%E9%80%8F/">搞渗透</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E9%9D%B6%E6%9C%BA/">靶机</a></span></div><div class="content">一、靶场环境
 这个环境是由三台机器组成的一个内网，网络拓扑图如下
 
 渗透的大致流程：攻击机和Target1位于同一网段，因此先把Target1拿下，然后以Target1为跳板，攻击内网中的Target2，然后同理以Target2为跳板攻击Target3。
@@ -223,7 +182,7 @@ Target1
 ip1: 192.168.31.12
 ip2: 192.168.22.136
 宝塔登陆地址和密码：
-地址： ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全"><img class="post-bg" src="https://img.cgrona.top/Blog_img/10.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="内网安全"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">内网安全</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-10-26T04:36:40.000Z" title="发表于 2022-10-26 12:36:40">2022-10-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%90%9E%E6%B8%97%E9%80%8F/">搞渗透</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/learn/">learn</a></span></div><div class="content">一、基本理论知识
+地址： ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全"><img class="post_bg" src="https://img.cgrona.top/Blog_img/10.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="内网安全"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">内网安全</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-10-26T04:36:40.000Z" title="发表于 2022-10-26 12:36:40">2022-10-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%90%9E%E6%B8%97%E9%80%8F/">搞渗透</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/learn/">learn</a></span></div><div class="content">一、基本理论知识
 隔离区（DMZ）
 两个防火墙之间，为了解决安装防火墙后外部网络用户不能访问内部网络服务器的问题，而设立的一个非安全系统与安全系统之间的缓冲区。
 
@@ -238,7 +197,7 @@ ip2: 192.168.22.136
 这里我们把域环境和工作组区分开来是因为他们的攻击手段不同。
 工作组中的攻击手法如DNS劫持、ARP欺骗在域环境下是没有作用的。有一些攻击手段需要一些条件，这些条件在域环境下没有，相应的攻击手段就会失效。
 域控制器DC
-域控D ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/10/07/VMnet/" title="桥接模式、NAT模式和仅主机模式"><img class="post-bg" src="https://img.cgrona.top/Blog_img/18.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="桥接模式、NAT模式和仅主机模式"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/10/07/VMnet/" title="桥接模式、NAT模式和仅主机模式">桥接模式、NAT模式和仅主机模式</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-10-07T05:29:04.000Z" title="发表于 2022-10-07 13:29:04">2022-10-07</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/">基础知识和笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/VMware/">VMware</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/learn/">learn</a></span></div><div class="content">一、VMware网络
+域控D ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/10/07/VMnet/" title="桥接模式、NAT模式和仅主机模式"><img class="post_bg" src="https://img.cgrona.top/Blog_img/18.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="桥接模式、NAT模式和仅主机模式"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/10/07/VMnet/" title="桥接模式、NAT模式和仅主机模式">桥接模式、NAT模式和仅主机模式</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-10-07T05:29:04.000Z" title="发表于 2022-10-07 13:29:04">2022-10-07</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/">基础知识和笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/VMware/">VMware</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/learn/">learn</a></span></div><div class="content">一、VMware网络
 在我们安装 VMware 虚拟机后，在 PC 网络连接中会多出两个虚拟网卡：
 
 简单说明一下 VMware 的几个虚拟设备
@@ -261,7 +220,7 @@ PC 是处于同一网段的：
 
 因此该虚拟机中的虚拟网卡可以通过 PC
 中的物理网卡直接访问到外部网络，就相当于在局域网中新增了一台计算机，它可以访问这个局域网内的所有主机，大致联网过程如下图：
- ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/" title="传输文件还原"><img class="post-bg" src="https://img.cgrona.top/Blog_img/29.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="传输文件还原"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/" title="传输文件还原">传输文件还原</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-10-04T02:12:28.000Z" title="发表于 2022-10-04 10:12:28">2022-10-04</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/">基础知识和笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/learn/">learn</a></span></div><div class="content">一、配置环境
+ ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/" title="传输文件还原"><img class="post_bg" src="https://img.cgrona.top/Blog_img/29.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="传输文件还原"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/" title="传输文件还原">传输文件还原</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-10-04T02:12:28.000Z" title="发表于 2022-10-04 10:12:28">2022-10-04</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/">基础知识和笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/learn/">learn</a></span></div><div class="content">一、配置环境
 将手机和PC连到同一子网下（如GUET-WiFi）
 手机IP：10.33.80.238
 
@@ -288,7 +247,7 @@ Editor）打开该文件，找到图片的十六进制文件头（FFD8FF）
 
 然后保存，修改文件后缀名为图片格式（jpg）即可成功打开该图片
 
-</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/09/30/RCE/" title="RCE绕过"><img class="post-bg" src="https://img.cgrona.top/Blog_img/8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RCE绕过"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/09/30/RCE/" title="RCE绕过">RCE绕过</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-09-30T07:16:46.000Z" title="发表于 2022-09-30 15:16:46">2022-09-30</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%90%9E%E6%B8%97%E9%80%8F/">搞渗透</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/web/">web</a></span></div><div class="content">一、PHP命令执行函数
+</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/09/30/RCE/" title="RCE绕过"><img class="post_bg" src="https://img.cgrona.top/Blog_img/8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RCE绕过"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/09/30/RCE/" title="RCE绕过">RCE绕过</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-09-30T07:16:46.000Z" title="发表于 2022-09-30 15:16:46">2022-09-30</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%90%9E%E6%B8%97%E9%80%8F/">搞渗透</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/web/">web</a></span></div><div class="content">一、PHP命令执行函数
 
 system()
 该函数执行有回显，将执行结果输出到页面上
@@ -308,7 +267,7 @@ shell_exec()函数实际上是反引号`的变体，当禁用shell_exec时，反
 popen()
 该函数需要两个参数，一个是执行的命令，另一个是指针文件的打开方式（r |
 w）。该函数不会直接返回执行结果，而是返回一个文件指针，但命令已成功执行。
-&lt;?php popen("whoami &gt;&gt; /1.txt" ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/08/14/Vulnhub-DC-7/" title="Vulnhub-DC-7渗透学习"><img class="post-bg" src="https://img.cgrona.top/Blog_img/28.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vulnhub-DC-7渗透学习"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/08/14/Vulnhub-DC-7/" title="Vulnhub-DC-7渗透学习">Vulnhub-DC-7渗透学习</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-08-14T04:17:40.000Z" title="发表于 2022-08-14 12:17:40">2022-08-14</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/">靶场&amp;靶机</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E9%9D%B6%E6%9C%BA/">靶机</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/web/">web</a></span></div><div class="content">一、环境搭建
+&lt;?php popen("whoami &gt;&gt; /1.txt" ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/08/14/Vulnhub-DC-7/" title="Vulnhub-DC-7渗透学习"><img class="post_bg" src="https://img.cgrona.top/Blog_img/28.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vulnhub-DC-7渗透学习"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/08/14/Vulnhub-DC-7/" title="Vulnhub-DC-7渗透学习">Vulnhub-DC-7渗透学习</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-08-14T04:17:40.000Z" title="发表于 2022-08-14 12:17:40">2022-08-14</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/">靶场&amp;靶机</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E9%9D%B6%E6%9C%BA/">靶机</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/web/">web</a></span></div><div class="content">一、环境搭建
 
 攻击机：Kali-2021.3：192.168.11.132
 靶机：Vulnhub-DC-7：192.168.11.141
@@ -336,7 +295,7 @@ DC-7 引入了一些“新”概念，但我会让你弄清楚它们是什么。
 方式“外”框。 :-)
 
 作者告诉我们思维不要被限制，那就来看看这个网站的特点吧
-在这个页面的footer也就是页脚处发现一个 ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/08/12/Vulnhub-DC-6/" title="Vulnhub-DC-6渗透学习"><img class="post-bg" src="https://img.cgrona.top/Blog_img/14.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vulnhub-DC-6渗透学习"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/08/12/Vulnhub-DC-6/" title="Vulnhub-DC-6渗透学习">Vulnhub-DC-6渗透学习</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-08-12T14:22:35.000Z" title="发表于 2022-08-12 22:22:35">2022-08-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/">靶场&amp;靶机</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E9%9D%B6%E6%9C%BA/">靶机</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/web/">web</a></span></div><div class="content">一、环境搭建
+在这个页面的footer也就是页脚处发现一个 ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/08/12/Vulnhub-DC-6/" title="Vulnhub-DC-6渗透学习"><img class="post_bg" src="https://img.cgrona.top/Blog_img/14.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vulnhub-DC-6渗透学习"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/08/12/Vulnhub-DC-6/" title="Vulnhub-DC-6渗透学习">Vulnhub-DC-6渗透学习</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-08-12T14:22:35.000Z" title="发表于 2022-08-12 22:22:35">2022-08-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/">靶场&amp;靶机</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E9%9D%B6%E6%9C%BA/">靶机</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/web/">web</a></span></div><div class="content">一、环境搭建
 
 攻击机：Kali-2021.3：192.168.11.132
 靶机：Vulnhub-DC-6：192.168.11.140
@@ -365,7 +324,7 @@ DC-7 引入了一些“新”概念，但我会让你弄清楚它们是什么。
 在DC-6的官网中有个提示
 
 因此这个很有可能就是我们需要的密码
-进入目 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/07/29/WinDbg%E4%BD%BF%E7%94%A8%E5%AD%A6%E4%B9%A0/" title="WinDbg使用学习"><img class="post-bg" src="https://img.cgrona.top/Blog_img/4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WinDbg使用学习"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/07/29/WinDbg%E4%BD%BF%E7%94%A8%E5%AD%A6%E4%B9%A0/" title="WinDbg使用学习">WinDbg使用学习</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-07-29T02:36:51.000Z" title="发表于 2022-07-29 10:36:51">2022-07-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/">基础知识和笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/learn/">learn</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E8%B0%83%E8%AF%95/">调试</a></span></div><div class="content">一、安装WinDbg
+进入目 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/07/29/WinDbg%E4%BD%BF%E7%94%A8%E5%AD%A6%E4%B9%A0/" title="WinDbg使用学习"><img class="post_bg" src="https://img.cgrona.top/Blog_img/4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WinDbg使用学习"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/07/29/WinDbg%E4%BD%BF%E7%94%A8%E5%AD%A6%E4%B9%A0/" title="WinDbg使用学习">WinDbg使用学习</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-07-29T02:36:51.000Z" title="发表于 2022-07-29 10:36:51">2022-07-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/">基础知识和笔记</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/learn/">learn</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E8%B0%83%E8%AF%95/">调试</a></span></div><div class="content">一、安装WinDbg
 Microsoft商店中下载安装即可，默认安装路径
 （C:\Users\用户名\AppData\Local\Microsoft\WindowsApps）
 添加名为**_NT_SYMBOL_PATH**的系统变量，值为
@@ -398,7 +357,7 @@ lm [Options] [a Address] [m Pattern | M Pattern]
 D
 使用调试器标记语言显示输出
 
- ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/07/07/Vulnhub-DC-5/" title="Vulnhub-DC-5渗透学习"><img class="post-bg" src="https://img.cgrona.top/Blog_img/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vulnhub-DC-5渗透学习"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/07/07/Vulnhub-DC-5/" title="Vulnhub-DC-5渗透学习">Vulnhub-DC-5渗透学习</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-07-07T06:52:50.000Z" title="发表于 2022-07-07 14:52:50">2022-07-07</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/">靶场&amp;靶机</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E9%9D%B6%E6%9C%BA/">靶机</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/web/">web</a></span></div><div class="content">一、环境搭建
+ ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/07/07/Vulnhub-DC-5/" title="Vulnhub-DC-5渗透学习"><img class="post_bg" src="https://img.cgrona.top/Blog_img/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vulnhub-DC-5渗透学习"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/07/07/Vulnhub-DC-5/" title="Vulnhub-DC-5渗透学习">Vulnhub-DC-5渗透学习</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-07-07T06:52:50.000Z" title="发表于 2022-07-07 14:52:50">2022-07-07</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/">靶场&amp;靶机</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E9%9D%B6%E6%9C%BA/">靶机</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/web/">web</a></span></div><div class="content">一、环境搭建
 
 攻击机：Kali-2021.3：192.168.8.105
 靶机：Vulnhub-DC-5：192.168.8.122
@@ -437,37 +396,45 @@ D
             </div>
             <ul class="card-category-list" id="aside-cat-list">
             <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"><span class="card-category-list-name">基础知识和笔记</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"><span class="card-category-list-name">搞渗透</span><span class="card-category-list-count">13</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="card-category-list-name">机器学习</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"><span class="card-category-list-name">漏洞复现</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"><span class="card-category-list-name">读书笔记</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"><span class="card-category-list-name">靶场&靶机</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%AB%98%E6%95%B0%E7%AC%94%E8%AE%B0/"><span class="card-category-list-name">高数笔记</span><span class="card-category-list-count">1</span></a></li>
-            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 1.1em; color: #999">机器学习</a> <a href="/tags/sql%E6%B3%A8%E5%85%A5/" style="font-size: 1.17em; color: #999c9f">sql注入</a> <a href="/tags/read/" style="font-size: 1.23em; color: #999ea6">read</a> <a href="/tags/%E9%9D%B6%E5%9C%BA/" style="font-size: 1.1em; color: #999">靶场</a> <a href="/tags/%E5%A4%8D%E7%8E%B0/" style="font-size: 1.1em; color: #999">复现</a> <a href="/tags/math/" style="font-size: 1.1em; color: #999">math</a> <a href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" style="font-size: 1.1em; color: #999">文件包含</a> <a href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" style="font-size: 1.1em; color: #999">反序列化</a> <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 1.23em; color: #999ea6">文件上传</a> <a href="/tags/web/" style="font-size: 1.5em; color: #99a9bf">web</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 1.1em; color: #999">算法</a> <a href="/tags/learn/" style="font-size: 1.37em; color: #99a4b2">learn</a> <a href="/tags/xss/" style="font-size: 1.1em; color: #999">xss</a> <a href="/tags/%E9%9D%B6%E6%9C%BA/" style="font-size: 1.3em; color: #99a1ac">靶机</a> <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" style="font-size: 1.43em; color: #99a6b9">渗透测试</a> <a href="/tags/VMware/" style="font-size: 1.1em; color: #999">VMware</a> <a href="/tags/%E8%B0%83%E8%AF%95/" style="font-size: 1.1em; color: #999">调试</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span><a class="card-more-btn" href="/archives/" title="查看更多">
-    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/06/"><span class="card-archive-list-date">六月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/02/"><span class="card-archive-list-date">二月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/10/"><span class="card-archive-list-date">十月 2022</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/09/"><span class="card-archive-list-date">九月 2022</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/08/"><span class="card-archive-list-date">八月 2022</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/07/"><span class="card-archive-list-date">七月 2022</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/06/"><span class="card-archive-list-date">六月 2022</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/04/"><span class="card-archive-list-date">四月 2022</span><span class="card-archive-list-count">4</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">36</div></div><div class="webinfo-item"><div class="item-name">已运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2022-01-07T16:00:00.000Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-08-12T04:55:01.744Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023 By cgrona</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>window.typedJSFn = {
-  init: (str) => {
-    window.typed = new Typed('#subtitle', Object.assign({
-      strings: str,
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/VMware/" style="font-size: 1.1em; color: #999">VMware</a> <a href="/tags/learn/" style="font-size: 1.37em; color: #99a4b2">learn</a> <a href="/tags/math/" style="font-size: 1.1em; color: #999">math</a> <a href="/tags/read/" style="font-size: 1.23em; color: #999ea6">read</a> <a href="/tags/sql%E6%B3%A8%E5%85%A5/" style="font-size: 1.17em; color: #999c9f">sql注入</a> <a href="/tags/web/" style="font-size: 1.5em; color: #99a9bf">web</a> <a href="/tags/xss/" style="font-size: 1.1em; color: #999">xss</a> <a href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" style="font-size: 1.1em; color: #999">反序列化</a> <a href="/tags/%E5%A4%8D%E7%8E%B0/" style="font-size: 1.1em; color: #999">复现</a> <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 1.23em; color: #999ea6">文件上传</a> <a href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" style="font-size: 1.1em; color: #999">文件包含</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 1.1em; color: #999">机器学习</a> <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" style="font-size: 1.43em; color: #99a6b9">渗透测试</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 1.1em; color: #999">算法</a> <a href="/tags/%E8%B0%83%E8%AF%95/" style="font-size: 1.1em; color: #999">调试</a> <a href="/tags/%E9%9D%B6%E5%9C%BA/" style="font-size: 1.1em; color: #999">靶场</a> <a href="/tags/%E9%9D%B6%E6%9C%BA/" style="font-size: 1.3em; color: #99a1ac">靶机</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span><a class="card-more-btn" href="/archives/" title="查看更多">
+    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/06/"><span class="card-archive-list-date">六月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/02/"><span class="card-archive-list-date">二月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/10/"><span class="card-archive-list-date">十月 2022</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/09/"><span class="card-archive-list-date">九月 2022</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/08/"><span class="card-archive-list-date">八月 2022</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/07/"><span class="card-archive-list-date">七月 2022</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/06/"><span class="card-archive-list-date">六月 2022</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/04/"><span class="card-archive-list-date">四月 2022</span><span class="card-archive-list-count">4</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">36</div></div><div class="webinfo-item"><div class="item-name">已运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2022-01-07T16:00:00.000Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">43.1k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-08-12T05:00:03.116Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023 By cgrona</div><div class="icp"><a target="_blank" rel="noopener" href="http://beian.miit.gov.cn/"><img class="icp-icon" src="/img/2022002701.png"/><span>桂ICP备2022002701号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function subtitleType () {
+  if (true) { 
+    window.typed = new Typed("#subtitle", {
+      strings: ["心无物欲，即是秋空霁海","坐有琴书，便成石室丹丘","面朝大海，春暖花开","一个沉淀知识的地方"],
       startDelay: 300,
       typeSpeed: 150,
       loop: true,
-      backSpeed: 50,
-    }, null))
-  },
-  run: (subtitleType) => {
-    if (true) {
-      if (typeof Typed === 'function') {
-        subtitleType()
-      } else {
-        getScript('https://cdn.jsdelivr.net/npm/typed.js/dist/typed.umd.min.js').then(subtitleType)
-      }
-    } else {
-      subtitleType()
-    }
-  }
-}
-</script><script>function subtitleType () {
-  if (true) {
-    typedJSFn.init(["心无物欲，即是秋空霁海","坐有琴书，便成石室丹丘","面朝大海，春暖花开","一个沉淀知识的地方"])
+      backSpeed: 50
+    })
   } else {
-    document.getElementById("subtitle").textContent = "心无物欲，即是秋空霁海"
+    document.getElementById("subtitle").innerHTML = '心无物欲，即是秋空霁海'
   }
 }
-typedJSFn.run(subtitleType)</script></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+if (true) {
+  if (typeof Typed === 'function') {
+    subtitleType()
+  } else {
+    getScript('https://cdn.jsdelivr.net/npm/typed.js/lib/typed.min.js').then(subtitleType)
+  }
+} else {
+  subtitleType()
+}</script></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
 
 var pjax = new Pjax({
   elements: 'a:not([target="_blank"])',
@@ -483,6 +450,7 @@ document.addEventListener('pjax:send', function () {
   window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
   window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
 
+  typeof preloader === 'object' && preloader.initLoading()
   document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
   
   if (window.aplayers) {
@@ -515,6 +483,7 @@ document.addEventListener('pjax:complete', function () {
 
   GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
 
+  typeof chatBtnFn === 'function' && chatBtnFn()
   typeof panguInit === 'function' && panguInit()
 
   // google analytics
@@ -527,10 +496,12 @@ document.addEventListener('pjax:complete', function () {
 
   // prismjs
   typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
 })
 
 document.addEventListener('pjax:error', (e) => {
   if (e.request.status === 404) {
     pjax.loadUrl('/404.html')
   }
-})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

