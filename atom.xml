@@ -6,7 +6,7 @@
   <link href="https://cgrona.top/atom.xml" rel="self"/>
   
   <link href="https://cgrona.top/"/>
-  <updated>2023-08-14T07:15:26.444Z</updated>
+  <updated>2023-08-14T07:17:41.415Z</updated>
   <id>https://cgrona.top/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://cgrona.top/2023/06/14/logistic-regression/"/>
     <id>https://cgrona.top/2023/06/14/logistic-regression/</id>
     <published>2023-06-14T04:33:25.000Z</published>
-    <updated>2023-08-14T07:15:26.444Z</updated>
+    <updated>2023-08-14T07:17:41.415Z</updated>
     
     
       
@@ -248,11 +248,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -280,11 +280,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -339,11 +339,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -371,11 +371,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -403,11 +403,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -433,11 +433,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -463,11 +463,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -513,9 +513,9 @@
     <category term="搞渗透" scheme="https://cgrona.top/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
     
     
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
