@@ -6,7 +6,7 @@
   <link href="https://cgrona.top/atom.xml" rel="self"/>
   
   <link href="https://cgrona.top/"/>
-  <updated>2023-08-13T02:56:07.464Z</updated>
+  <updated>2023-08-14T07:15:26.444Z</updated>
   <id>https://cgrona.top/</id>
   
   <author>
@@ -17,11 +17,37 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>逻辑回归</title>
+    <link href="https://cgrona.top/2023/06/14/logistic-regression/"/>
+    <id>https://cgrona.top/2023/06/14/logistic-regression/</id>
+    <published>2023-06-14T04:33:25.000Z</published>
+    <updated>2023-08-14T07:15:26.444Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;逻辑回归函数&lt;/h1&gt;
+&lt;p&gt;逻辑回归需要将函数的取值落在 [0，1]这个区间上，那怎么样才能让这个函数取值落在 [0，1]之间呢？&lt;/p&gt;
+&lt;p&gt;逻辑（logistic）函数其实也就是经常说的 &lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex</summary>
+      
+    
+    
+    
+    <category term="机器学习" scheme="https://cgrona.top/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="机器学习" scheme="https://cgrona.top/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="算法" scheme="https://cgrona.top/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
     <title>正规方程</title>
     <link href="https://cgrona.top/2023/06/12/normal-equation/"/>
     <id>https://cgrona.top/2023/06/12/normal-equation/</id>
     <published>2023-06-12T08:14:13.000Z</published>
-    <updated>2023-08-13T02:56:07.464Z</updated>
+    <updated>2023-08-14T04:05:58.561Z</updated>
     
     
       
@@ -47,13 +73,13 @@
     <link href="https://cgrona.top/2023/06/11/gradient-descent/"/>
     <id>https://cgrona.top/2023/06/11/gradient-descent/</id>
     <published>2023-06-11T07:10:08.000Z</published>
-    <updated>2023-08-12T06:05:30.360Z</updated>
+    <updated>2023-08-14T04:01:06.570Z</updated>
     
     
       
       
-    <summary type="html">&lt;h1&gt;损失函数与梯度下降&lt;/h1&gt;
-&lt;p&gt;损失函数公式示例：&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;m</summary>
+    <summary type="html">&lt;h1&gt;代价函数与梯度下降&lt;/h1&gt;
+&lt;p&gt;代价函数公式示例：&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;m</summary>
       
     
     
@@ -222,11 +248,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
+    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
-    
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -254,11 +280,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
+    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
-    
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -313,11 +339,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
+    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
-    
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -345,11 +371,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
+    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
-    
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -377,11 +403,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
+    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
-    
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -407,11 +433,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
+    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
-    
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -437,11 +463,11 @@
     <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
     
     
+    <category term="web" scheme="https://cgrona.top/tags/web/"/>
+    
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="靶机" scheme="https://cgrona.top/tags/%E9%9D%B6%E6%9C%BA/"/>
-    
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
@@ -487,9 +513,9 @@
     <category term="搞渗透" scheme="https://cgrona.top/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
     
     
-    <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
     <category term="web" scheme="https://cgrona.top/tags/web/"/>
+    
+    <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
   </entry>
   
@@ -547,30 +573,6 @@
     <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
     <category term="复现" scheme="https://cgrona.top/tags/%E5%A4%8D%E7%8E%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SSRF</title>
-    <link href="https://cgrona.top/2022/04/04/SSRF/"/>
-    <id>https://cgrona.top/2022/04/04/SSRF/</id>
-    <published>2022-04-04T07:06:01.000Z</published>
-    <updated>2022-08-14T04:30:02.269Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h1&gt;一、什么是SSRF&lt;/h1&gt;
-&lt;p&gt;SSRF（server-side request forgery，服务端请求伪造），这是一个由攻击者构造请求，服务器发起请求的安全漏洞，就是让服务器去请求你通常请求不到的东西&lt;/p&gt;
-</summary>
-      
-    
-    
-    
-    <category term="搞渗透" scheme="https://cgrona.top/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
-    
-    
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
   </entry>
   
