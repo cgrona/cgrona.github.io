@@ -6,7 +6,7 @@
   <link href="https://cgrona.top/atom.xml" rel="self"/>
   
   <link href="https://cgrona.top/"/>
-  <updated>2023-08-14T07:17:41.415Z</updated>
+  <updated>2023-08-16T05:32:36.257Z</updated>
   <id>https://cgrona.top/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>正则化</title>
+    <link href="https://cgrona.top/2023/07/20/Regularization/"/>
+    <id>https://cgrona.top/2023/07/20/Regularization/</id>
+    <published>2023-07-20T03:32:37.000Z</published>
+    <updated>2023-08-16T05:32:36.257Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;过拟合&lt;/h1&gt;
+&lt;h2 id=&quot;什么是过拟合？&quot;&gt;什么是过拟合？&lt;/h2&gt;
+&lt;p&gt;如下图，这三个都是房屋面积与房屋售价的关系的散点图，我们用三种模型去拟合这些点。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/07/20/Regularization/1.png&quot; al</summary>
+      
+    
+    
+    
+    <category term="机器学习" scheme="https://cgrona.top/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="机器学习" scheme="https://cgrona.top/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="算法" scheme="https://cgrona.top/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
   
   <entry>
     <title>逻辑回归</title>
@@ -543,36 +570,6 @@
     <category term="web" scheme="https://cgrona.top/tags/web/"/>
     
     <category term="靶场" scheme="https://cgrona.top/tags/%E9%9D%B6%E5%9C%BA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>永恒之蓝复现</title>
-    <link href="https://cgrona.top/2022/04/12/ms17-010/"/>
-    <id>https://cgrona.top/2022/04/12/ms17-010/</id>
-    <published>2022-04-12T11:51:18.000Z</published>
-    <updated>2022-08-14T04:29:24.100Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h1&gt;一、搭建测试环境&lt;/h1&gt;
-&lt;p&gt;两台虚拟机&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;kali linux（攻击机）ip：192.168.11.132&lt;/li&gt;
-&lt;li&gt;Windows 7（被攻击机）ip：192.168.11.128&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;tips：被攻击机防火</summary>
-      
-    
-    
-    
-    <category term="漏洞复现" scheme="https://cgrona.top/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
-    <category term="复现" scheme="https://cgrona.top/tags/%E5%A4%8D%E7%8E%B0/"/>
     
   </entry>
   
