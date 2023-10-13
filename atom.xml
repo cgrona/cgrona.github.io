@@ -6,7 +6,7 @@
   <link href="https://cgrona.top/atom.xml" rel="self"/>
   
   <link href="https://cgrona.top/"/>
-  <updated>2023-08-17T06:13:12.410Z</updated>
+  <updated>2023-10-13T03:33:29.876Z</updated>
   <id>https://cgrona.top/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>图像加密</title>
+    <link href="https://cgrona.top/2023/10/13/image-encryption/"/>
+    <id>https://cgrona.top/2023/10/13/image-encryption/</id>
+    <published>2023-10-13T03:24:07.000Z</published>
+    <updated>2023-10-13T03:33:29.876Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;混沌Logistic加密&lt;/h1&gt;
+&lt;h2 id=&quot;logistic映射方程&quot;&gt;Logistic映射方程&lt;/h2&gt;
+&lt;p&gt;方程形式如下：&lt;/p&gt;
+&lt;p class=&quot;katex-block&quot;&gt;&lt;span class=&quot;katex-display&quot;&gt;&lt;span class=</summary>
+      
+    
+    
+    
+    <category term="密码学" scheme="https://cgrona.top/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"/>
+    
+    
+    <category term="算法" scheme="https://cgrona.top/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="加密" scheme="https://cgrona.top/tags/%E5%8A%A0%E5%AF%86/"/>
+    
+  </entry>
   
   <entry>
     <title>正则化</title>
@@ -543,33 +570,6 @@
     <category term="渗透测试" scheme="https://cgrona.top/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
     
     <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>pikachu</title>
-    <link href="https://cgrona.top/2022/04/17/pikachu/"/>
-    <id>https://cgrona.top/2022/04/17/pikachu/</id>
-    <published>2022-04-17T03:13:13.000Z</published>
-    <updated>2022-09-25T08:36:01.280Z</updated>
-    
-    
-      
-      
-    <summary type="html">&lt;h1&gt;一、搭建靶场&lt;/h1&gt;
-&lt;ol&gt;
-&lt;li&gt;去官网把靶场下载下来，&lt;a href=&quot;https://github.com/zhuifengshaonianhanlu/pikachu&quot;&gt;链接地址&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;将下载好的&lt;code&gt;pikachu&lt;/code&gt;文件</summary>
-      
-    
-    
-    
-    <category term="靶场&amp;靶机" scheme="https://cgrona.top/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
-    
-    
-    <category term="web" scheme="https://cgrona.top/tags/web/"/>
-    
-    <category term="靶场" scheme="https://cgrona.top/tags/%E9%9D%B6%E5%9C%BA/"/>
     
   </entry>
   
