@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>风清竹喧</title>
+  
+  
+  <link href="https://cgrona.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://cgrona.github.io/"/>
+  <updated>2024-04-08T10:53:05.409Z</updated>
+  <id>https://cgrona.github.io/</id>
+  
+  <author>
+    <name>cgrona</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>图像加密</title>
+    <link href="https://cgrona.github.io/2023/10/13/image-encryption/"/>
+    <id>https://cgrona.github.io/2023/10/13/image-encryption/</id>
+    <published>2023-10-13T03:24:07.000Z</published>
+    <updated>2024-04-08T10:53:05.409Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;混沌Logistic加密&lt;/h1&gt;
+&lt;h2 id=&quot;logistic映射方程&quot;&gt;Logistic映射方程&lt;/h2&gt;
+&lt;p&gt;方程形式如下：&lt;/p&gt;
+&lt;p class=&quot;katex-block&quot;&gt;&lt;span class=&quot;katex-display&quot;&gt;&lt;span class=</summary>
+      
+    
+    
+    
+    <category term="密码学" scheme="https://cgrona.github.io/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"/>
+    
+    
+    <category term="算法" scheme="https://cgrona.github.io/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="加密" scheme="https://cgrona.github.io/tags/%E5%8A%A0%E5%AF%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>正则化</title>
+    <link href="https://cgrona.github.io/2023/07/20/Regularization/"/>
+    <id>https://cgrona.github.io/2023/07/20/Regularization/</id>
+    <published>2023-07-20T03:32:37.000Z</published>
+    <updated>2024-04-08T10:53:06.305Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;过拟合&lt;/h1&gt;
+&lt;h2 id=&quot;什么是过拟合？&quot;&gt;什么是过拟合？&lt;/h2&gt;
+&lt;p&gt;如下图，这三个都是房屋面积与房屋售价的关系的散点图，我们用三种模型去拟合这些点。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/07/20/Regularization/1.png&quot; al</summary>
+      
+    
+    
+    
+    <category term="机器学习" scheme="https://cgrona.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="机器学习" scheme="https://cgrona.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="算法" scheme="https://cgrona.github.io/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>逻辑回归</title>
+    <link href="https://cgrona.github.io/2023/06/14/logistic-regression/"/>
+    <id>https://cgrona.github.io/2023/06/14/logistic-regression/</id>
+    <published>2023-06-14T04:33:25.000Z</published>
+    <updated>2024-04-08T10:53:05.499Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;逻辑回归函数&lt;/h1&gt;
+&lt;p&gt;逻辑回归需要将函数的取值落在 [0，1]这个区间上，那怎么样才能让这个函数取值落在 [0，1]之间呢？&lt;/p&gt;
+&lt;p&gt;逻辑（logistic）函数其实也就是经常说的 &lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex</summary>
+      
+    
+    
+    
+    <category term="机器学习" scheme="https://cgrona.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="机器学习" scheme="https://cgrona.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="算法" scheme="https://cgrona.github.io/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>正规方程</title>
+    <link href="https://cgrona.github.io/2023/06/12/normal-equation/"/>
+    <id>https://cgrona.github.io/2023/06/12/normal-equation/</id>
+    <published>2023-06-12T08:14:13.000Z</published>
+    <updated>2024-04-08T10:53:05.688Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;什么是正规方程&lt;/h1&gt;
+&lt;p&gt;梯度下降法计算参数最优解，过程是对代价函数的每个参数求偏导，通过迭代算法一步步更新，直到收敛到全局最小值，从而得到最优参数。而&lt;strong&gt;正规方程是一次性求得最优解&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;思想：对于一个简单函数，对参数求导，</summary>
+      
+    
+    
+    
+    <category term="机器学习" scheme="https://cgrona.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="机器学习" scheme="https://cgrona.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="算法" scheme="https://cgrona.github.io/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>梯度下降</title>
+    <link href="https://cgrona.github.io/2023/06/11/gradient-descent/"/>
+    <id>https://cgrona.github.io/2023/06/11/gradient-descent/</id>
+    <published>2023-06-11T07:10:08.000Z</published>
+    <updated>2024-04-08T10:53:05.358Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;代价函数与梯度下降&lt;/h1&gt;
+&lt;p&gt;代价函数公式示例：&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;m</summary>
+      
+    
+    
+    
+    <category term="机器学习" scheme="https://cgrona.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="机器学习" scheme="https://cgrona.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="算法" scheme="https://cgrona.github.io/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CFS三层靶机内网渗透</title>
+    <link href="https://cgrona.github.io/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/"/>
+    <id>https://cgrona.github.io/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/</id>
+    <published>2023-02-27T06:03:14.000Z</published>
+    <updated>2024-04-08T10:53:05.310Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;一、靶场环境&lt;/h1&gt;
+&lt;p&gt;这个环境是由三台机器组成的一个内网，网络拓扑图如下&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/%E6%8B%93%E6%89%91.png&quot; al</summary>
+      
+    
+    
+    
+    <category term="搞渗透" scheme="https://cgrona.github.io/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
+    
+    
+    <category term="渗透测试" scheme="https://cgrona.github.io/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="靶机" scheme="https://cgrona.github.io/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>内网安全</title>
+    <link href="https://cgrona.github.io/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/"/>
+    <id>https://cgrona.github.io/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/</id>
+    <published>2022-10-26T04:36:40.000Z</published>
+    <updated>2024-04-08T10:53:10.080Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;一、基本理论知识&lt;/h1&gt;
+&lt;h2 id=&quot;隔离区-dmz&quot;&gt;隔离区（DMZ）&lt;/h2&gt;
+&lt;p&gt;两个防火墙之间，为了解决安装防火墙后&lt;strong&gt;外部网络用户&lt;/strong&gt;不能访问&lt;strong&gt;内部网络服务器&lt;/strong&gt;的问题，而设立的一个非安全系统与安全系</summary>
+      
+    
+    
+    
+    <category term="搞渗透" scheme="https://cgrona.github.io/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
+    
+    
+    <category term="渗透测试" scheme="https://cgrona.github.io/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="learn" scheme="https://cgrona.github.io/tags/learn/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>桥接模式、NAT模式和仅主机模式</title>
+    <link href="https://cgrona.github.io/2022/10/07/VMnet/"/>
+    <id>https://cgrona.github.io/2022/10/07/VMnet/</id>
+    <published>2022-10-07T05:29:04.000Z</published>
+    <updated>2024-04-08T10:53:06.715Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;一、VMware网络&lt;/h1&gt;
+&lt;p&gt;在我们安装 VMware 虚拟机后，在 PC 网络连接中会多出两个虚拟网卡：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2022/10/07/VMnet/1.png&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt;简单说明一下 VMware 的几个虚拟设备&lt;/p</summary>
+      
+    
+    
+    
+    <category term="基础知识和笔记" scheme="https://cgrona.github.io/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"/>
+    
+    
+    <category term="VMware" scheme="https://cgrona.github.io/tags/VMware/"/>
+    
+    <category term="learn" scheme="https://cgrona.github.io/tags/learn/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>传输文件还原</title>
+    <link href="https://cgrona.github.io/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/"/>
+    <id>https://cgrona.github.io/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/</id>
+    <published>2022-10-04T02:12:28.000Z</published>
+    <updated>2024-04-08T10:53:10.071Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;一、配置环境&lt;/h1&gt;
+&lt;p&gt;将手机和PC连到同一子网下（如GUET-WiFi）&lt;/p&gt;
+&lt;p&gt;手机IP：&lt;code&gt;10.33.80.238&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%</summary>
+      
+    
+    
+    
+    <category term="基础知识和笔记" scheme="https://cgrona.github.io/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"/>
+    
+    
+    <category term="learn" scheme="https://cgrona.github.io/tags/learn/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>RCE绕过</title>
+    <link href="https://cgrona.github.io/2022/09/30/RCE/"/>
+    <id>https://cgrona.github.io/2022/09/30/RCE/</id>
+    <published>2022-09-30T07:16:46.000Z</published>
+    <updated>2024-04-08T10:53:06.098Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;一、PHP命令执行函数&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;system()&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;该函数执行有回显，将执行结果输出到页面上&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;&amp;lt;?php system(&amp;quot;whoami&amp;quot;);?&amp;g</summary>
+      
+    
+    
+    
+    <category term="搞渗透" scheme="https://cgrona.github.io/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
+    
+    
+    <category term="web" scheme="https://cgrona.github.io/tags/web/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Vulnhub-DC-7渗透学习</title>
+    <link href="https://cgrona.github.io/2022/08/14/Vulnhub-DC-7/"/>
+    <id>https://cgrona.github.io/2022/08/14/Vulnhub-DC-7/</id>
+    <published>2022-08-14T04:17:40.000Z</published>
+    <updated>2024-04-08T10:53:09.473Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;一、环境搭建&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;攻击机：Kali-2021.3：192.168.11.132&lt;/p&gt;
+&lt;p&gt;靶机：Vulnhub-DC-7：192.168.11.141&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1&gt;二、信息收集&lt;/h1&gt;
+&lt;p&gt;主机</summary>
+      
+    
+    
+    
+    <category term="靶场&amp;靶机" scheme="https://cgrona.github.io/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
+    
+    
+    <category term="web" scheme="https://cgrona.github.io/tags/web/"/>
+    
+    <category term="渗透测试" scheme="https://cgrona.github.io/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="靶机" scheme="https://cgrona.github.io/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Vulnhub-DC-6渗透学习</title>
+    <link href="https://cgrona.github.io/2022/08/12/Vulnhub-DC-6/"/>
+    <id>https://cgrona.github.io/2022/08/12/Vulnhub-DC-6/</id>
+    <published>2022-08-12T14:22:35.000Z</published>
+    <updated>2024-04-08T10:53:09.167Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;一、环境搭建&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;攻击机：Kali-2021.3：192.168.11.132&lt;/p&gt;
+&lt;p&gt;靶机：Vulnhub-DC-6：192.168.11.140&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1&gt;二、信息收集&lt;/h1&gt;
+&lt;p&gt;主机</summary>
+      
+    
+    
+    
+    <category term="靶场&amp;靶机" scheme="https://cgrona.github.io/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
+    
+    
+    <category term="web" scheme="https://cgrona.github.io/tags/web/"/>
+    
+    <category term="渗透测试" scheme="https://cgrona.github.io/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="靶机" scheme="https://cgrona.github.io/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>WinDbg使用学习</title>
+    <link href="https://cgrona.github.io/2022/07/29/WinDbg%E4%BD%BF%E7%94%A8%E5%AD%A6%E4%B9%A0/"/>
+    <id>https://cgrona.github.io/2022/07/29/WinDbg%E4%BD%BF%E7%94%A8%E5%AD%A6%E4%B9%A0/</id>
+    <published>2022-07-29T02:36:51.000Z</published>
+    <updated>2024-04-08T10:53:09.955Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;一、安装WinDbg&lt;/h1&gt;
+&lt;p&gt;Microsoft商店中下载安装即可，默认安装路径&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;（C:\Users\用户名\AppData\Local\Microsoft\WindowsApps）&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;添加名为**_NT_SYM</summary>
+      
+    
+    
+    
+    <category term="基础知识和笔记" scheme="https://cgrona.github.io/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/"/>
+    
+    
+    <category term="learn" scheme="https://cgrona.github.io/tags/learn/"/>
+    
+    <category term="调试" scheme="https://cgrona.github.io/tags/%E8%B0%83%E8%AF%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Vulnhub-DC-5渗透学习</title>
+    <link href="https://cgrona.github.io/2022/07/07/Vulnhub-DC-5/"/>
+    <id>https://cgrona.github.io/2022/07/07/Vulnhub-DC-5/</id>
+    <published>2022-07-07T06:52:50.000Z</published>
+    <updated>2024-04-08T10:53:08.886Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;一、环境搭建&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;攻击机：Kali-2021.3：192.168.8.105&lt;/p&gt;
+&lt;p&gt;靶机：Vulnhub-DC-5：192.168.8.122&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1&gt;二、信息收集&lt;/h1&gt;
+&lt;p&gt;主机探活</summary>
+      
+    
+    
+    
+    <category term="靶场&amp;靶机" scheme="https://cgrona.github.io/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
+    
+    
+    <category term="web" scheme="https://cgrona.github.io/tags/web/"/>
+    
+    <category term="渗透测试" scheme="https://cgrona.github.io/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="靶机" scheme="https://cgrona.github.io/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Vulnhub-DC-4渗透学习</title>
+    <link href="https://cgrona.github.io/2022/07/04/Vulnhub-DC-4/"/>
+    <id>https://cgrona.github.io/2022/07/04/Vulnhub-DC-4/</id>
+    <published>2022-07-04T05:29:09.000Z</published>
+    <updated>2024-04-08T10:53:08.445Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;一、环境搭建&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;攻击机：Kali-2021.3：192.168.8.105&lt;/p&gt;
+&lt;p&gt;靶机：Vulnhub-DC-4：192.168.8.168&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1&gt;二、信息收集&lt;/h1&gt;
+&lt;p&gt;主机探活</summary>
+      
+    
+    
+    
+    <category term="靶场&amp;靶机" scheme="https://cgrona.github.io/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
+    
+    
+    <category term="web" scheme="https://cgrona.github.io/tags/web/"/>
+    
+    <category term="渗透测试" scheme="https://cgrona.github.io/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="靶机" scheme="https://cgrona.github.io/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Vulnhub-DC-3渗透学习</title>
+    <link href="https://cgrona.github.io/2022/06/11/Vulnhub-DC-3/"/>
+    <id>https://cgrona.github.io/2022/06/11/Vulnhub-DC-3/</id>
+    <published>2022-06-11T07:26:50.000Z</published>
+    <updated>2024-04-08T10:53:07.923Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;一、环境搭建&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;攻击机：Kali-2021.3：192.168.8.105&lt;/p&gt;
+&lt;p&gt;靶机：Vulnhub-DC-3：192.168.8.180&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1&gt;二、信息收集&lt;/h1&gt;
+&lt;p&gt;主机探活</summary>
+      
+    
+    
+    
+    <category term="靶场&amp;靶机" scheme="https://cgrona.github.io/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
+    
+    
+    <category term="web" scheme="https://cgrona.github.io/tags/web/"/>
+    
+    <category term="渗透测试" scheme="https://cgrona.github.io/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="靶机" scheme="https://cgrona.github.io/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Vulnhub-DC-2渗透学习</title>
+    <link href="https://cgrona.github.io/2022/06/09/Vulnhub-DC-2/"/>
+    <id>https://cgrona.github.io/2022/06/09/Vulnhub-DC-2/</id>
+    <published>2022-06-09T04:11:26.000Z</published>
+    <updated>2024-04-08T10:53:07.503Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;一、环境搭建&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;攻击机：Kali-2021.3：192.168.8.105&lt;/p&gt;
+&lt;p&gt;靶机：Vulnhub-DC-2：192.168.8.222&lt;/p&gt;
+&lt;p&gt;靶机下载地址：&lt;a href=&quot;https://download.v</summary>
+      
+    
+    
+    
+    <category term="靶场&amp;靶机" scheme="https://cgrona.github.io/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
+    
+    
+    <category term="web" scheme="https://cgrona.github.io/tags/web/"/>
+    
+    <category term="渗透测试" scheme="https://cgrona.github.io/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="靶机" scheme="https://cgrona.github.io/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Vulnhub-DC-1渗透学习</title>
+    <link href="https://cgrona.github.io/2022/06/08/Vulnhub-DC-1/"/>
+    <id>https://cgrona.github.io/2022/06/08/Vulnhub-DC-1/</id>
+    <published>2022-06-08T07:24:10.000Z</published>
+    <updated>2024-04-08T10:53:07.141Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;一、环境搭建&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;攻击机：Kali-2021.3：192.168.8.105&lt;/p&gt;
+&lt;p&gt;靶机：Vulnhub-DC-1：192.168.8.230&lt;/p&gt;
+&lt;p&gt;靶机下载地址：&lt;a href=&quot;https://download.v</summary>
+      
+    
+    
+    
+    <category term="靶场&amp;靶机" scheme="https://cgrona.github.io/categories/%E9%9D%B6%E5%9C%BA-%E9%9D%B6%E6%9C%BA/"/>
+    
+    
+    <category term="web" scheme="https://cgrona.github.io/tags/web/"/>
+    
+    <category term="渗透测试" scheme="https://cgrona.github.io/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="靶机" scheme="https://cgrona.github.io/tags/%E9%9D%B6%E6%9C%BA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>XXE</title>
+    <link href="https://cgrona.github.io/2022/06/02/XXE/"/>
+    <id>https://cgrona.github.io/2022/06/02/XXE/</id>
+    <published>2022-06-02T02:38:05.000Z</published>
+    <updated>2024-04-08T10:53:09.976Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;一、XML与XXE&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;XML被设计为传输和存储数据，XML文档结构包括XML声明、DTD文档类型定义（可选）、文档元素，其焦点是数据的内容，其把数据从HTML分离，是独立于软件和硬件的信息传输工具。&lt;strong&gt;XXE漏洞全称XM</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>metasploit</title>
+    <link href="https://cgrona.github.io/2022/04/24/metasploit/"/>
+    <id>https://cgrona.github.io/2022/04/24/metasploit/</id>
+    <published>2022-04-24T13:24:38.000Z</published>
+    <updated>2024-04-08T10:53:05.548Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;一、metasploit框架介绍&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;metasploit是一款开源安全漏洞利用和测试工具，集成了各种平台上常见的溢出漏洞和流行的shellcode，并且还在持续保持更新&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;该工具在kali上的</summary>
+      
+    
+    
+    
+    <category term="搞渗透" scheme="https://cgrona.github.io/categories/%E6%90%9E%E6%B8%97%E9%80%8F/"/>
+    
+    
+    <category term="web" scheme="https://cgrona.github.io/tags/web/"/>
+    
+    <category term="渗透测试" scheme="https://cgrona.github.io/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+  </entry>
+  
+</feed>

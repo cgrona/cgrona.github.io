@@ -1,0 +1,431 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>内网安全 | 风清竹喧</title><meta name="keywords" content="渗透测试,learn"><meta name="author" content="cgrona"><meta name="copyright" content="cgrona"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、基本理论知识 隔离区（DMZ） 两个防火墙之间，为了解决安装防火墙后外部网络用户不能访问内部网络服务器的问题，而设立的一个非安全系统与安全系统之间的缓冲区。  该缓冲区位于企业内部网络和外部网络之间的小网络区域内。放置一些必须公开的服务器设施，如企业Web服务器（攻击点） 、FTP服务器 和论坛等。 有一些web服务器也放在内网，这样更加危险。 另一方面，通过这样一个DMZ区域，更加有效地保护">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内网安全">
+<meta property="og:url" content="https://cgrona.github.io/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/index.html">
+<meta property="og:site_name" content="风清竹喧">
+<meta property="og:description" content="一、基本理论知识 隔离区（DMZ） 两个防火墙之间，为了解决安装防火墙后外部网络用户不能访问内部网络服务器的问题，而设立的一个非安全系统与安全系统之间的缓冲区。  该缓冲区位于企业内部网络和外部网络之间的小网络区域内。放置一些必须公开的服务器设施，如企业Web服务器（攻击点） 、FTP服务器 和论坛等。 有一些web服务器也放在内网，这样更加危险。 另一方面，通过这样一个DMZ区域，更加有效地保护">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cgrona.github.io/img/10.jpg">
+<meta property="article:published_time" content="2022-10-26T04:36:40.000Z">
+<meta property="article:modified_time" content="2024-04-08T10:53:10.080Z">
+<meta property="article:author" content="cgrona">
+<meta property="article:tag" content="渗透测试">
+<meta property="article:tag" content="learn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cgrona.github.io/img/10.jpg"><link rel="shortcut icon" href="/img/logo.jpg"><link rel="canonical" href="https://cgrona.github.io/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"top-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '内网安全',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-04-08 18:53:10'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/mycss.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="风清竹喧" type="application/atom+xml">
+<link href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css" rel="stylesheet" /></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/10.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">风清竹喧</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">内网安全</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-10-26T04:36:40.000Z" title="发表于 2022-10-26 12:36:40">2022-10-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-08T10:53:10.080Z" title="更新于 2024-04-08 18:53:10">2024-04-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%90%9E%E6%B8%97%E9%80%8F/">搞渗透</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="内网安全"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>一、基本理论知识</h1>
+<h2 id="隔离区-dmz">隔离区（DMZ）</h2>
+<p>两个防火墙之间，为了解决安装防火墙后<strong>外部网络用户</strong>不能访问<strong>内部网络服务器</strong>的问题，而设立的一个非安全系统与安全系统之间的缓冲区。</p>
+<p><img src="/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/1.png" alt></p>
+<p>该缓冲区位于企业<strong>内部网络</strong>和<strong>外部网络</strong>之间的小网络区域内。放置一些必须<strong>公开的服务器设施</strong>，如企业Web服务器（<strong>攻击点</strong>） 、FTP服务器 和论坛等。</p>
+<p>有一些web服务器也放在内网，这样更加危险。</p>
+<p>另一方面，通过这样一个DMZ区域，更加有效地保护内部网络。因为这种网络部署，比起一般的防火墙方案，对来自外网的攻击者来说又多了一道关卡。</p>
+<h2 id="工作组-域环境">工作组&amp;域环境</h2>
+<p>工作组：地位平等，管理分散，<strong>没有集中管理</strong>。（范围小的计算机在局域网内）</p>
+<p>域环境：地位不平等，管理集中，<strong>实现集中管理</strong>。（共享文件，不需要每台计算机去配置用户进行访问，可以直接访问）</p>
+<p>域环境也可以简单的理解为工作组的升级版，更好管理。</p>
+<p>这里我们把域环境和工作组区分开来是因为他们的攻击手段不同。</p>
+<p>工作组中的攻击手法如<strong>DNS劫持</strong>、<strong>ARP欺骗</strong>在域环境下是没有作用的。有一些攻击手段需要一些条件，这些条件在域环境下没有，相应的攻击手段就会失效。</p>
+<h2 id="域控制器dc">域控制器DC</h2>
+<p>域控DC是这个域中的管理者，域里面的最高权限，判断是否拿下整个域，就是看你是否拿下这台域控制器（这里面dc就是域控制器）</p>
+<h2 id="ad活动目录">AD活动目录</h2>
+<p>是微软所提供的<strong>目录服务</strong>（查询，身份验证）,活动目录的核心包含了<strong>活动目录数据库</strong>。</p>
+<p>在活动目录数据库中包含了<strong>域中所有的对象</strong>（用户，计算机，组…），活动目录(Active Directory)是面向Windows Standard Server、Windows Enterprise Server 以及Windows Datacenter Server的目录服务。</p>
+<p>Active Directory储存了有关<strong>网络对象</strong>的信息，并且让<strong>管理员和用户</strong>能够轻松的<strong>查找和使用</strong>这些信息。</p>
+<h2 id="linux域渗透问题">Linux域渗透问题</h2>
+<p>AD域控制器只在windows server系统能做吗？Linux可以吗？</p>
+<p>linux上也有相应的<strong>活动目录</strong>的，不过要装<strong>LDAP</strong>环境，一般企很少会用LDAP来管理的，因为<strong>功能上不及域强大</strong>，而且用linux来管理的话要求技术人员门槛也比较高，Linux还是比较<strong>适合做服务器</strong>好一点。</p>
+<blockquote>
+<p>（就是说Linux上面的域环境需要环境支撑，而且功能没有windows上的域强大，所以大部分我们遇见的都是windows，这也是没有Linux的原因。当然，Linux这个操作系统也是可以加入域的，比如<strong>域内有Linux的操作系统</strong>，有Linux的服务器也行，只是很少）</p>
+</blockquote>
+<h2 id="局域网技术适用问题">局域网技术适用问题</h2>
+<p>不同的<strong>攻击技术手段适用面</strong>不同，这个我们要有所了解，比如arp欺骗适用于局域网，而不适用于域。</p>
+<h2 id="内网安全流程">内网安全流程</h2>
+<p>熟悉基础概念-<strong>信息收集</strong>-后续<strong>探针</strong>-<strong>权限提升</strong>-<strong>横向渗透</strong>-<strong>权限维持</strong></p>
+<h1>二、实战操作</h1>
+<h2 id="1-信息收集">1、信息收集</h2>
+<h3 id="基本信息收集">基本信息收集</h3>
+<p>旨在了解当前服务器的计算机基本信息，为后续判断服务器角色，网络环境等做准备</p>
+<ol>
+<li><strong>systeminfo</strong> //详细信息</li>
+<li><strong>net start</strong>  //启动服务</li>
+<li><strong>tasklist</strong>   //进程列表</li>
+<li><strong>schtasks</strong>   //计划任务</li>
+</ol>
+<h3 id="网络信息收集">网络信息收集</h3>
+<p>旨在了解当前服务器的网络接口信息，为判断当前角色，功能，网络架构做准备</p>
+<ol>
+<li>
+<p><strong>ipconfig /all</strong>	//判断存在域-dns</p>
+</li>
+<li>
+<p><strong>net view /domain</strong>	//判断存在域，若存在域，会显示出当前域</p>
+</li>
+<li>
+<p><strong>net time /domain</strong>	//判断主域（域控），会返回域控的计算机全名</p>
+<blockquote>
+<p>因为域成员计算机的时间一般会以域控制器为准，所以当执行net time /domain命令时，该计算机会去域控获取时间</p>
+</blockquote>
+</li>
+<li>
+<p><strong>netstat -ano</strong>	//当前网络端口开放</p>
+</li>
+<li>
+<p><strong>nslookup</strong>	//追踪来源地址，获取域控的IP地址（ping命令也可以）</p>
+</li>
+</ol>
+<h3 id="用户信息收集">用户信息收集</h3>
+<p>旨在了解当前计算机或域环境下的<strong>用户及用户组信息</strong>，便于后期<strong>利用凭据</strong>进行测试<br>
+系统默认常见用户身份：</p>
+<ol>
+<li><strong>Domain Admins</strong>：域管理员（默认对域控制器有完全控制权）</li>
+<li>Domain Computers：域内机器</li>
+<li><strong>Domain Controllers</strong>：域控制器</li>
+<li>Domain Guest：域访客，权限低</li>
+<li>Domain Users：域用户</li>
+<li>Enterprise Admins：企业系统管理员用户（默认对域控制器有完全控制权）</li>
+</ol>
+<p>相关用户收集操作命令：</p>
+<ol>
+<li>net config workstation  //登录信息</li>
+<li>net user   //本地用户</li>
+<li>net localgroup   //本地用户组</li>
+<li>net user /domain   //获取域用户信息</li>
+<li>net group /domain   //获取域用户组信息</li>
+<li>wmic useraccount get /all   //涉及域用户详细信息</li>
+<li>net group “domain admins” /domain   //查询域管理员账户</li>
+<li>net group “enterprise admins” /domain   //查询管理员用户组</li>
+<li>net group “domain controllers” /domain   //查询域控制器</li>
+<li>…</li>
+</ol>
+<h3 id="凭据信息收集">凭据信息收集</h3>
+<p>旨在收集各种密文，明文，口令等，为后续<strong>横向渗透</strong>做好测试准备</p>
+<p>计算机用户密码 HASH、明文获取：<strong>mimikatz</strong>(Windows)，<strong>mimipenguin</strong>(Linux)</p>
+<blockquote>
+<p>如果直接在Webserver的webadmin用户运行会报错（mimikatz运行需要域管理员权限，域用户无法运行，因为权限不够）</p>
+</blockquote>
+<p>计算机各种协议服务口令获取：<strong>LaZagne</strong>(all)，<strong>XenArmor</strong>(Windows)</p>
+<p>这两个软件主要是通过自动化翻找以下内容，从而获取凭据</p>
+<ol>
+<li>
+<p>站点源码备份文件、数据库备份文件等</p>
+</li>
+<li>
+<p>各类数据库 Web 管理入口，如 PHPMyAdmin</p>
+</li>
+<li>
+<p>浏览器保存密码、浏览器 Cookies</p>
+</li>
+<li>
+<p>其他用户会话、3389 和 ipc$连接记录、回收站内容</p>
+</li>
+<li>
+<p>Windows 保存的 WIFI 密码</p>
+</li>
+<li>
+<p>网络内部的各种帐号和密码，如：Email、VPN、FTP、OA 等探针主机域控架构服务操作演示</p>
+</li>
+</ol>
+<h3 id="探针主机域控架构服务">探针主机域控架构服务</h3>
+<p>为后续横向思路做准备，针对应用，协议等各类攻击手法（探针域内主机角色及服务信息，利用开放端口服务及计算机名判断）</p>
+<h4 id="探针域控制器名及地址信息">探针域控制器名及地址信息</h4>
+<ol>
+<li>
+<p>net time /domain</p>
+</li>
+<li>
+<p>nslookup</p>
+</li>
+<li>
+<p>ping</p>
+</li>
+</ol>
+<h4 id="探针域内存活-在线-主机及地址信息">探针域内存活（在线）主机及地址信息</h4>
+<p>nbtscan 192.168.3.0/24 第三方工具（类似于nmap，可能需要做免杀，不推荐）</p>
+<p><code>for /L %I in (1,1,254) DO @ping -w 1 -n 1 192.168.3.%I | findstr &quot;TTL=&quot;</code>（用for循环去ping1-254网段的主机，这是自带内部命令，不会被杀毒软件拦截）</p>
+<p>其它探针方式如：nmap（易拦截）、masscan、第三方PowerShell脚本（windows的脚本开发语言）、<strong>nishang</strong>（推荐）、empire（推荐）等</p>
+<blockquote>
+<p>NiShang简介：</p>
+<p>利用Powershell，攻击者可以在无需接触磁盘的情况下<strong>执行命令</strong>等，并且相较已经被广泛关注并防御的Cmd而言，Powershell并非那么的引人瞩目。</p>
+<p>Nishang是基于PowerShell的渗透测试专用工具。它集成了框架、脚本和各种payload，能够帮助渗透测试人员在对Windows目标的全过程检测中使用，是一款来源于作者实战经历的智慧结晶。（类似于MSF）</p>
+</blockquote>
+<p>nishang使用：</p>
+<ol>
+<li>
+<p>进入powershell，进入nishang目录</p>
+</li>
+<li>
+<p>设置执行策略（第一次运行先设置执行策略）：<code>Set-ExecutionPolicy RemoteSigned</code></p>
+<blockquote>
+<p>权限不够的话要以管理员身份运行powershell</p>
+</blockquote>
+</li>
+<li>
+<p>导入模块 nishang：<code>Import-Module .\nishang.psm1</code></p>
+</li>
+<li>
+<p>获取模块 nishang 的命令函数：<code> Get-Command -Module nishang</code>（每个参数对应一个功能模块）</p>
+</li>
+<li>
+<p>可以调用Invoke-Mimikatz的功能（查询本地Windows的账号密码）</p>
+</li>
+<li>
+<p>获取常规计算机信息：Get-Information</p>
+</li>
+<li>
+<p>端口扫描（查看目录对应文件有演示语法，其他函数同理）：<code>Invoke-PortScan -StartAddress 192.168.3.21 -EndAddress 192.168.3.31 -ResolveHost -ScanPort</code></p>
+</li>
+<li>
+<p>其他功能：<strong>删除补丁</strong>，<strong>反弹 Shell</strong>，<strong>凭据获取</strong>等</p>
+</li>
+</ol>
+<p>核心业务机器（渗透内网的第一条服务器的角色）:</p>
+<ol>
+<li>
+<p>高级管理人员、系统管理员、财务/人事/业务人员的个人计算机</p>
+</li>
+<li>
+<p>产品管理系统服务器</p>
+</li>
+<li>
+<p>办公系统服务器</p>
+</li>
+<li>
+<p>财务应用系统服务器</p>
+</li>
+<li>
+<p>核心产品源码服务器（自建 SVN、GIT）</p>
+</li>
+<li>
+<p>数据库服务器</p>
+</li>
+<li>
+<p>文件或网盘服务器、共享服务器</p>
+</li>
+<li>
+<p>电子邮件服务器</p>
+</li>
+<li>
+<p>网络监控系统服务器</p>
+</li>
+<li>
+<p>其他服务器（内部技术文档服务器、其他监控服务器等）</p>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://cgrona.github.io">cgrona</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://cgrona.github.io/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/">https://cgrona.github.io/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://cgrona.github.io" target="_blank">风清竹喧</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a><a class="post-meta__tags" href="/tags/learn/">learn</a></div><div class="post_share"><div class="social-share" data-image="/img/10.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/"><img class="prev-cover" src="/img/30.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">CFS三层靶机内网渗透</div></div></a></div><div class="next-post pull-right"><a href="/2022/10/07/VMnet/"><img class="next-cover" src="/img/18.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">桥接模式、NAT模式和仅主机模式</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/02/27/CFS%E4%B8%89%E5%B1%82%E9%9D%B6%E6%9C%BA/" title="CFS三层靶机内网渗透"><img class="cover" src="/img/30.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-02-27</div><div class="title">CFS三层靶机内网渗透</div></div></a></div><div><a href="/2022/06/08/Vulnhub-DC-1/" title="Vulnhub-DC-1渗透学习"><img class="cover" src="/img/23.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-08</div><div class="title">Vulnhub-DC-1渗透学习</div></div></a></div><div><a href="/2022/06/09/Vulnhub-DC-2/" title="Vulnhub-DC-2渗透学习"><img class="cover" src="/img/15.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-09</div><div class="title">Vulnhub-DC-2渗透学习</div></div></a></div><div><a href="/2022/06/11/Vulnhub-DC-3/" title="Vulnhub-DC-3渗透学习"><img class="cover" src="/img/26.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-11</div><div class="title">Vulnhub-DC-3渗透学习</div></div></a></div><div><a href="/2022/07/04/Vulnhub-DC-4/" title="Vulnhub-DC-4渗透学习"><img class="cover" src="/img/27.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-04</div><div class="title">Vulnhub-DC-4渗透学习</div></div></a></div><div><a href="/2022/07/07/Vulnhub-DC-5/" title="Vulnhub-DC-5渗透学习"><img class="cover" src="/img/5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-07</div><div class="title">Vulnhub-DC-5渗透学习</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">cgrona</div><div class="author-info__description">选择有时候比努力更重要</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cgrona"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/cgrona" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:1549692438@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎阅读😊</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">一、基本理论知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%94%E7%A6%BB%E5%8C%BA-dmz"><span class="toc-text">隔离区（DMZ）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E7%BB%84-%E5%9F%9F%E7%8E%AF%E5%A2%83"><span class="toc-text">工作组&amp;域环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8dc"><span class="toc-text">域控制器DC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ad%E6%B4%BB%E5%8A%A8%E7%9B%AE%E5%BD%95"><span class="toc-text">AD活动目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linux%E5%9F%9F%E6%B8%97%E9%80%8F%E9%97%AE%E9%A2%98"><span class="toc-text">Linux域渗透问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%80%E5%9F%9F%E7%BD%91%E6%8A%80%E6%9C%AF%E9%80%82%E7%94%A8%E9%97%AE%E9%A2%98"><span class="toc-text">局域网技术适用问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8%E6%B5%81%E7%A8%8B"><span class="toc-text">内网安全流程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">二、实战操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-text">1、信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-text">基本信息收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-text">网络信息收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-text">用户信息收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%AD%E6%8D%AE%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-text">凭据信息收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A2%E9%92%88%E4%B8%BB%E6%9C%BA%E5%9F%9F%E6%8E%A7%E6%9E%B6%E6%9E%84%E6%9C%8D%E5%8A%A1"><span class="toc-text">探针主机域控架构服务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A2%E9%92%88%E5%9F%9F%E6%8E%A7%E5%88%B6%E5%99%A8%E5%90%8D%E5%8F%8A%E5%9C%B0%E5%9D%80%E4%BF%A1%E6%81%AF"><span class="toc-text">探针域控制器名及地址信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A2%E9%92%88%E5%9F%9F%E5%86%85%E5%AD%98%E6%B4%BB-%E5%9C%A8%E7%BA%BF-%E4%B8%BB%E6%9C%BA%E5%8F%8A%E5%9C%B0%E5%9D%80%E4%BF%A1%E6%81%AF"><span class="toc-text">探针域内存活（在线）主机及地址信息</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/10/13/image-encryption/" title="图像加密"><img src="/img/35.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="图像加密"/></a><div class="content"><a class="title" href="/2023/10/13/image-encryption/" title="图像加密">图像加密</a><time datetime="2023-10-13T03:24:07.000Z" title="发表于 2023-10-13 11:24:07">2023-10-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/20/Regularization/" title="正则化"><img src="/img/33.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="正则化"/></a><div class="content"><a class="title" href="/2023/07/20/Regularization/" title="正则化">正则化</a><time datetime="2023-07-20T03:32:37.000Z" title="发表于 2023-07-20 11:32:37">2023-07-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/06/14/logistic-regression/" title="逻辑回归"><img src="/img/12.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="逻辑回归"/></a><div class="content"><a class="title" href="/2023/06/14/logistic-regression/" title="逻辑回归">逻辑回归</a><time datetime="2023-06-14T04:33:25.000Z" title="发表于 2023-06-14 12:33:25">2023-06-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/06/12/normal-equation/" title="正规方程"><img src="/img/32.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="正规方程"/></a><div class="content"><a class="title" href="/2023/06/12/normal-equation/" title="正规方程">正规方程</a><time datetime="2023-06-12T08:14:13.000Z" title="发表于 2023-06-12 16:14:13">2023-06-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/06/11/gradient-descent/" title="梯度下降"><img src="/img/31.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="梯度下降"/></a><div class="content"><a class="title" href="/2023/06/11/gradient-descent/" title="梯度下降">梯度下降</a><time datetime="2023-06-11T07:10:08.000Z" title="发表于 2023-06-11 15:10:08">2023-06-11</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2024 By cgrona</div><div class="icp"><a target="_blank" rel="noopener" href="http://beian.miit.gov.cn/"><img class="icp-icon" src="/img/2022002701.png"/><span>桂ICP备2022002701号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

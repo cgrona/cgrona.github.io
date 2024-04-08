@@ -1,0 +1,258 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>桥接模式、NAT模式和仅主机模式 | 风清竹喧</title><meta name="keywords" content="VMware,learn"><meta name="author" content="cgrona"><meta name="copyright" content="cgrona"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、VMware网络 在我们安装 VMware 虚拟机后，在 PC 网络连接中会多出两个虚拟网卡：  简单说明一下 VMware 的几个虚拟设备  VMnet0：用于虚拟桥接网络下的虚拟交换机 VMnet1：用于虚拟 Host-Only（仅主机）网络下的虚拟交换机 VMnet8：用于虚拟 NAT 网络下的虚拟交换机 VMware NetworkAdepter VMnet1：Host 用于与 Hos">
+<meta property="og:type" content="article">
+<meta property="og:title" content="桥接模式、NAT模式和仅主机模式">
+<meta property="og:url" content="https://cgrona.github.io/2022/10/07/VMnet/index.html">
+<meta property="og:site_name" content="风清竹喧">
+<meta property="og:description" content="一、VMware网络 在我们安装 VMware 虚拟机后，在 PC 网络连接中会多出两个虚拟网卡：  简单说明一下 VMware 的几个虚拟设备  VMnet0：用于虚拟桥接网络下的虚拟交换机 VMnet1：用于虚拟 Host-Only（仅主机）网络下的虚拟交换机 VMnet8：用于虚拟 NAT 网络下的虚拟交换机 VMware NetworkAdepter VMnet1：Host 用于与 Hos">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cgrona.github.io/img/18.jpg">
+<meta property="article:published_time" content="2022-10-07T05:29:04.000Z">
+<meta property="article:modified_time" content="2024-04-08T10:53:06.715Z">
+<meta property="article:author" content="cgrona">
+<meta property="article:tag" content="VMware">
+<meta property="article:tag" content="learn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cgrona.github.io/img/18.jpg"><link rel="shortcut icon" href="/img/logo.jpg"><link rel="canonical" href="https://cgrona.github.io/2022/10/07/VMnet/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"top-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '桥接模式、NAT模式和仅主机模式',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-04-08 18:53:06'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/mycss.css"><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="风清竹喧" type="application/atom+xml">
+<link href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css" rel="stylesheet" /></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/18.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">风清竹喧</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">桥接模式、NAT模式和仅主机模式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-10-07T05:29:04.000Z" title="发表于 2022-10-07 13:29:04">2022-10-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-08T10:53:06.715Z" title="更新于 2024-04-08 18:53:06">2024-04-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%92%8C%E7%AC%94%E8%AE%B0/">基础知识和笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">732</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>2分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="桥接模式、NAT模式和仅主机模式"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>一、VMware网络</h1>
+<p>在我们安装 VMware 虚拟机后，在 PC 网络连接中会多出两个虚拟网卡：</p>
+<p><img src="/2022/10/07/VMnet/1.png" alt></p>
+<p>简单说明一下 VMware 的几个虚拟设备</p>
+<ol>
+<li><strong>VMnet0</strong>：用于虚拟桥接网络下的虚拟交换机</li>
+<li><strong>VMnet1</strong>：用于虚拟 Host-Only（仅主机）网络下的虚拟交换机</li>
+<li><strong>VMnet8</strong>：用于虚拟 NAT 网络下的虚拟交换机</li>
+<li><strong>VMware NetworkAdepter VMnet1</strong>：Host 用于与 Host-Only 虚拟网络进行通信的虚拟网卡</li>
+<li><strong>VMware NetworkAdepter VMnet8</strong>：Host 用于与 NAT 虚拟网络进行通信的虚拟网卡</li>
+</ol>
+<h1>二、网络连接</h1>
+<h2 id="1-桥接模式-bridged-networking">1、桥接模式（Bridged Networking）</h2>
+<p>桥接模式是指本地物理网卡和虚拟网卡通过 VMnet0 虚拟交换机进行桥接，那么物理网卡和虚拟网卡就相当于处于同一个网段，因此该虚拟机和 PC 是处于同一网段的：</p>
+<p><img src="/2022/10/07/VMnet/2.png" alt></p>
+<p>因此该虚拟机中的虚拟网卡可以通过 PC 中的物理网卡直接访问到外部网络，就相当于在局域网中新增了一台计算机，它可以访问这个局域网内的所有主机，大致联网过程如下图：</p>
+<p><img src="/2022/10/07/VMnet/3.png" alt></p>
+<h2 id="2-nat模式">2、NAT模式</h2>
+<p>NAT（网络地址转换），使用 NAT 模式时，VMware 会通过 PC 中的 VMware NetworkAdepter VMnet8 虚拟网卡直接连接到 VMnet8 虚拟交换机上与虚拟网卡进行通信，但 VMware NetworkAdepter VMnet8 虚拟网卡仅作为 PC 和虚拟机通信的接口，虚拟机并不会通过它来联网。</p>
+<p>因此虚拟机会虚拟出一个虚拟 NAT 服务器，并将虚拟 NAT 设备和虚拟 DHCP 服务器连接到 VMnet8 虚拟交换机上，而物理网卡直接与虚拟 NAT 设备相连，这样就实现了虚拟机联网</p>
+<p><img src="/2022/10/07/VMnet/4.png" alt></p>
+<p>当虚拟机向互联网发送请求数据包时，都会经过虚拟 NAT 服务器进行处理，然后以 PC 的名义进行发送。而互联网发送的请求数据包也都会先被 PC 接收，然后交给虚拟 NAT 服务器进行处理并分发给对应的虚拟机。</p>
+<p>因此虚拟机在互联网中不必具有自己的 IP 地址，因为在互联网中，<strong>该 PC 和虚拟机是共享同一个 IP 地址</strong>，一般情况下，互联网设备也不能访问到该虚拟机。但同一个 PC 里的多个采用 NAT 模式连接的虚拟机之间是可以相互访问的，因为一台 PC 上只能够存在一个 NAT 模式的虚拟网络。</p>
+<h2 id="3-仅主机模式-host-only">3、仅主机模式（Host-Only）</h2>
+<p>该模式其实就是 NAT 模式去除虚拟 NAT 设备，然后使用 VMware NetworkAdepter VMnet1 虚拟网卡与 VMnet1 虚拟交换机进行连接来与虚拟机通信，仅主机模式模式将虚拟机与外网隔开，使得虚拟机成为一个独立的系统，只与主机相互通讯。</p>
+<p><img src="/2022/10/07/VMnet/5.png" alt></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://cgrona.github.io">cgrona</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://cgrona.github.io/2022/10/07/VMnet/">https://cgrona.github.io/2022/10/07/VMnet/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://cgrona.github.io" target="_blank">风清竹喧</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/VMware/">VMware</a><a class="post-meta__tags" href="/tags/learn/">learn</a></div><div class="post_share"><div class="social-share" data-image="/img/18.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/10/26/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/"><img class="prev-cover" src="/img/10.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">内网安全</div></div></a></div><div class="next-post pull-right"><a href="/2022/10/04/%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6%E8%BF%98%E5%8E%9F/"><img class="next-cover" src="/img/29.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">传输文件还原</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/07/29/WinDbg%E4%BD%BF%E7%94%A8%E5%AD%A6%E4%B9%A0/" title="WinDbg使用学习"><img class="cover" src="/img/4.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-29</div><div class="title">WinDbg使用学习</div></div></a></div><div><a href="/2022/01/22/read-1-3/" title="《计算机网络自顶向下方法》（计算机网络和因特网）（3）"><img class="cover" src="/img/22.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-01-22</div><div class="title">《计算机网络自顶向下方法》（计算机网络和因特网）（3）</div></div></a></div><div><a href="/2022/01/09/study-1/" title="git clone出错"><img class="cover" src="/img/17.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-01-09</div><div class="title">git clone出错</div></div></a></div><div><a href="/2022/01/09/study-2/" title="NTFS权限"><img class="cover" src="/img/18.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-01-09</div><div class="title">NTFS权限</div></div></a></div><div><a href="/2022/01/10/study-3/" title="Failed to load resource"><img class="cover" src="/img/19.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-01-10</div><div class="title">Failed to load resource</div></div></a></div><div><a href="/2022/01/09/study/" title="IP地址详解"><img class="cover" src="/img/16.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-01-09</div><div class="title">IP地址详解</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">cgrona</div><div class="author-info__description">选择有时候比努力更重要</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cgrona"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/cgrona" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:1549692438@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎阅读😊</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">一、VMware网络</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">二、网络连接</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F-bridged-networking"><span class="toc-text">1、桥接模式（Bridged Networking）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-nat%E6%A8%A1%E5%BC%8F"><span class="toc-text">2、NAT模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%BB%85%E4%B8%BB%E6%9C%BA%E6%A8%A1%E5%BC%8F-host-only"><span class="toc-text">3、仅主机模式（Host-Only）</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/10/13/image-encryption/" title="图像加密"><img src="/img/35.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="图像加密"/></a><div class="content"><a class="title" href="/2023/10/13/image-encryption/" title="图像加密">图像加密</a><time datetime="2023-10-13T03:24:07.000Z" title="发表于 2023-10-13 11:24:07">2023-10-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/20/Regularization/" title="正则化"><img src="/img/33.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="正则化"/></a><div class="content"><a class="title" href="/2023/07/20/Regularization/" title="正则化">正则化</a><time datetime="2023-07-20T03:32:37.000Z" title="发表于 2023-07-20 11:32:37">2023-07-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/06/14/logistic-regression/" title="逻辑回归"><img src="/img/12.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="逻辑回归"/></a><div class="content"><a class="title" href="/2023/06/14/logistic-regression/" title="逻辑回归">逻辑回归</a><time datetime="2023-06-14T04:33:25.000Z" title="发表于 2023-06-14 12:33:25">2023-06-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/06/12/normal-equation/" title="正规方程"><img src="/img/32.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="正规方程"/></a><div class="content"><a class="title" href="/2023/06/12/normal-equation/" title="正规方程">正规方程</a><time datetime="2023-06-12T08:14:13.000Z" title="发表于 2023-06-12 16:14:13">2023-06-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/06/11/gradient-descent/" title="梯度下降"><img src="/img/31.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="梯度下降"/></a><div class="content"><a class="title" href="/2023/06/11/gradient-descent/" title="梯度下降">梯度下降</a><time datetime="2023-06-11T07:10:08.000Z" title="发表于 2023-06-11 15:10:08">2023-06-11</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2024 By cgrona</div><div class="icp"><a target="_blank" rel="noopener" href="http://beian.miit.gov.cn/"><img class="icp-icon" src="/img/2022002701.png"/><span>桂ICP备2022002701号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
